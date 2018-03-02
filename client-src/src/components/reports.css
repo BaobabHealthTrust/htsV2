@@ -1,0 +1,29 @@
+.bold {
+    font-weight: bold;
+    color: #000;
+}
+
+.sectionButton {
+    width: 160px;
+    border: 1px solid #424db0;
+    height: 135px;
+    display: inline-block;
+    margin: 5px;
+    cursor: pointer;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0px;
+    user-select: none;
+    font-size: 13px;
+    color: #424db0;
+    padding-top: 5px;
+}
+
+.sectionButton:hover {
+    background-color: rgba(241,124,10,0.2);
+}
+
+.sectionButton:active {
+    background-color: rgba(241,124,10,1);
+    color: white;
+}

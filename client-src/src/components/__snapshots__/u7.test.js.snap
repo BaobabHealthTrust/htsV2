@@ -1,0 +1,184 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: U7 should match its empty snapshot 1`] = `
+<div
+  className="headTab"
+  id="tableDiv2"
+>
+  <table
+    cellPadding="1"
+    style={
+      Object {
+        "fontSize": "12px",
+      }
+    }
+    width="100%"
+  >
+    <tbody>
+      <tr>
+        <td
+          className="blueText"
+          style={
+            Object {
+              "fontWeight": "bold",
+              "textAlign": "right",
+              "width": "70px",
+            }
+          }
+        >
+          Gender
+        </td>
+        <td
+          style={
+            Object {
+              "textAlign": "center",
+              "width": "3px",
+            }
+          }
+        >
+          :
+        </td>
+        <td
+          align="left"
+          id="gender"
+        />
+      </tr>
+      <tr>
+        <td
+          className="blueText"
+          style={
+            Object {
+              "fontWeight": "bold",
+              "textAlign": "right",
+            }
+          }
+        >
+          Age
+        </td>
+        <td
+          style={
+            Object {
+              "textAlign": "center",
+              "width": "3px",
+            }
+          }
+        >
+          :
+        </td>
+        <td
+          align="left"
+          id="other_id"
+        />
+      </tr>
+      <tr>
+        <td
+          className="blueText"
+          style={
+            Object {
+              "fontWeight": "bold",
+              "textAlign": "right",
+            }
+          }
+        >
+          Address
+        </td>
+        <td
+          style={
+            Object {
+              "textAlign": "center",
+              "width": "3px",
+            }
+          }
+        >
+          :
+        </td>
+        <td
+          align="left"
+          id="addressl1"
+        />
+      </tr>
+      <tr>
+        <td
+          className="blueText"
+          style={
+            Object {
+              "fontWeight": "bold",
+              "textAlign": "right",
+            }
+          }
+        >
+           
+        </td>
+        <td
+          style={
+            Object {
+              "textAlign": "center",
+              "width": "3px",
+            }
+          }
+        >
+           
+        </td>
+        <td
+          align="left"
+          id="addressl2"
+        />
+      </tr>
+      <tr>
+        <td
+          className="blueText"
+          style={
+            Object {
+              "fontWeight": "bold",
+              "textAlign": "right",
+            }
+          }
+        >
+           
+        </td>
+        <td
+          style={
+            Object {
+              "textAlign": "center",
+              "width": "3px",
+            }
+          }
+        >
+           
+        </td>
+        <td
+          align="left"
+          id="addressl3"
+        />
+      </tr>
+      <tr>
+        <td
+          className="blueText"
+          style={
+            Object {
+              "fontWeight": "bold",
+              "textAlign": "right",
+            }
+          }
+        >
+          Phone
+        </td>
+        <td
+          style={
+            Object {
+              "textAlign": "center",
+              "width": "3px",
+            }
+          }
+        >
+          :
+        </td>
+        <td
+          align="left"
+          id="phone"
+        />
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;

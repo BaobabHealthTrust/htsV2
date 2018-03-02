@@ -1,0 +1,39 @@
+.u11 {
+    width: 100%;
+    padding: 0px;
+}
+
+.u11TabContent {
+    overflow: auto;
+    padding: 0;
+    width: 100%;
+    height: calc(100vh - 250px);
+}
+
+.selectItem {
+    cursor: pointer;
+    margin-bottom: 1px;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+}
+
+.selectItem:hover {
+    background-color: lightblue;
+}
+
+.selectLabel {
+    padding: 15px;
+    margin-bottom: 1px;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+}
+
+.selected {
+    background-color: #345db5;
+    color: white;
+}
+
+.disabled {
+    background-color: #cccccc;
+    color: #999999;
+}

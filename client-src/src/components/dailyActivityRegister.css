@@ -1,0 +1,15 @@
+.regularCell {
+    border: 1px solid #333333;
+    min-width: 30px;
+    font-style: italic;
+}
+
+.boldCell {
+    border: 2px solid #333333;
+    min-width: 30px;
+    font-style: italic;
+}
+
+.header {
+    vertical-align: bottom;
+}

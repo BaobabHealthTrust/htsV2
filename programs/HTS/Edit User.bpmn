@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bonitaConnector="http://www.bonitasoft.org/studio/connector/definition/6.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di_1="http://www.omg.org/spec/DD/20100524/DI" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:model="http://www.omg.org/spec/BPMN/20100524/MODEL" xsi:schemaLocation="schemaLocation http://www.omg.org/spec/BPMN/20100524/MODEL schemas/BPMN20.xsd" exporter="BonitaSoft" exporterVersion="7.3.2" expressionLanguage="http://groovy.codehaus.org/" targetNamespace="http://bonitasoft.com/_Ux03ABDHEei4ArhxIcjgdw">
+  <model:collaboration id="_Ux03ABDHEei4ArhxIcjgdw">
+    <model:participant id="_npoDcBDHEei4ArhxIcjgdw" name="Edit User" processRef="_Ux03ARDHEei4ArhxIcjgdw"/>
+    <model:participant id="_Ux03KhDHEei4ArhxIcjgdw" name="Employee actor">
+      <model:documentation>This is an example of actor that is mapped to any ACME users</model:documentation>
+    </model:participant>
+  </model:collaboration>
+  <model:process id="_Ux03ARDHEei4ArhxIcjgdw" name="Edit User">
+    <model:ioSpecification id="_nps78BDHEei4ArhxIcjgdw">
+      <model:inputSet id="_nptjABDHEei4ArhxIcjgdw"/>
+      <model:outputSet id="_nptjARDHEei4ArhxIcjgdw"/>
+    </model:ioSpecification>
+    <model:laneSet id="Edit User_laneSet">
+      <model:lane id="_Ux03AhDHEei4ArhxIcjgdw" name="Edit User lane">
+        <model:flowNodeRef>_Ux03AxDHEei4ArhxIcjgdw</model:flowNodeRef>
+        <model:flowNodeRef>_WGT9sBDHEei4ArhxIcjgdw</model:flowNodeRef>
+        <model:flowNodeRef>_ZA0nABDHEei4ArhxIcjgdw</model:flowNodeRef>
+        <model:flowNodeRef>_cfcqABDHEei4ArhxIcjgdw</model:flowNodeRef>
+        <model:flowNodeRef>_ehwgABDHEei4ArhxIcjgdw</model:flowNodeRef>
+        <model:flowNodeRef>_f21ckBDHEei4ArhxIcjgdw</model:flowNodeRef>
+      </model:lane>
+    </model:laneSet>
+    <model:startEvent id="_Ux03AxDHEei4ArhxIcjgdw" name="Start"/>
+    <model:task id="_WGT9sBDHEei4ArhxIcjgdw" name="First Name"/>
+    <model:task id="_ZA0nABDHEei4ArhxIcjgdw" name="Last Name"/>
+    <model:task id="_cfcqABDHEei4ArhxIcjgdw" name="Gender"/>
+    <model:task id="_ehwgABDHEei4ArhxIcjgdw" name="Role"/>
+    <model:endEvent id="_f21ckBDHEei4ArhxIcjgdw" name="End1"/>
+    <model:sequenceFlow id="_Ux03JxDHEei4ArhxIcjgdw" name="" sourceRef="_Ux03AxDHEei4ArhxIcjgdw" targetRef="_WGT9sBDHEei4ArhxIcjgdw"/>
+    <model:sequenceFlow id="_YoSLMBDHEei4ArhxIcjgdw" name="" sourceRef="_WGT9sBDHEei4ArhxIcjgdw" targetRef="_ZA0nABDHEei4ArhxIcjgdw"/>
+    <model:sequenceFlow id="_cNZ3wBDHEei4ArhxIcjgdw" name="" sourceRef="_ZA0nABDHEei4ArhxIcjgdw" targetRef="_cfcqABDHEei4ArhxIcjgdw"/>
+    <model:sequenceFlow id="_ePPzsBDHEei4ArhxIcjgdw" name="" sourceRef="_cfcqABDHEei4ArhxIcjgdw" targetRef="_ehwgABDHEei4ArhxIcjgdw"/>
+    <model:sequenceFlow id="_f28KQBDHEei4ArhxIcjgdw" name="" sourceRef="_ehwgABDHEei4ArhxIcjgdw" targetRef="_f21ckBDHEei4ArhxIcjgdw"/>
+  </model:process>
+  <di:BPMNDiagram name="Edit User">
+    <di:BPMNPlane id="plane__Ux03ABDHEei4ArhxIcjgdw" bpmnElement="_Ux03ABDHEei4ArhxIcjgdw">
+      <di:BPMNShape id="_Ux03RRDHEei4ArhxIcjgdw" bpmnElement="_npoDcBDHEei4ArhxIcjgdw" isHorizontal="true">
+        <dc:Bounds height="250.0" width="1295.0" x="30.0" y="30.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_Ux03SBDHEei4ArhxIcjgdw" bpmnElement="_Ux03AhDHEei4ArhxIcjgdw" isHorizontal="true">
+        <dc:Bounds height="250.0" width="1273.0" x="52.0" y="30.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_Ux03ThDHEei4ArhxIcjgdw" bpmnElement="_Ux03AxDHEei4ArhxIcjgdw">
+        <dc:Bounds height="30.0" width="30.0" x="112.0" y="98.0"/>
+        <di:BPMNLabel id="_npxNYBDHEei4ArhxIcjgdw" labelStyle="_nprt0BDHEei4ArhxIcjgdw">
+          <dc:Bounds height="15.0" width="27.0" x="114.0" y="133.0"/>
+        </di:BPMNLabel>
+      </di:BPMNShape>
+      <di:BPMNShape id="_WGVy4BDHEei4ArhxIcjgdw" bpmnElement="_WGT9sBDHEei4ArhxIcjgdw">
+        <dc:Bounds height="50.0" width="100.0" x="212.0" y="90.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_ZA1OGRDHEei4ArhxIcjgdw" bpmnElement="_ZA0nABDHEei4ArhxIcjgdw">
+        <dc:Bounds height="50.0" width="100.0" x="431.0" y="93.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_cfdRGRDHEei4ArhxIcjgdw" bpmnElement="_cfcqABDHEei4ArhxIcjgdw">
+        <dc:Bounds height="50.0" width="100.0" x="636.0" y="96.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_ehxHGRDHEei4ArhxIcjgdw" bpmnElement="_ehwgABDHEei4ArhxIcjgdw">
+        <dc:Bounds height="50.0" width="100.0" x="864.0" y="102.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_f2340BDHEei4ArhxIcjgdw" bpmnElement="_f21ckBDHEei4ArhxIcjgdw">
+        <dc:Bounds height="30.0" width="30.0" x="1082.0" y="114.0"/>
+        <di:BPMNLabel id="_npybgBDHEei4ArhxIcjgdw" labelStyle="_nprt0BDHEei4ArhxIcjgdw">
+          <dc:Bounds height="15.0" width="28.0" x="1083.0" y="149.0"/>
+        </di:BPMNLabel>
+      </di:BPMNShape>
+      <di:BPMNEdge id="_Ux03XRDHEei4ArhxIcjgdw" bpmnElement="_Ux03JxDHEei4ArhxIcjgdw">
+        <di_1:waypoint x="141.0" y="114.0"/>
+        <di_1:waypoint x="212.0" y="114.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="177.0" y="104.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_YoTZUBDHEei4ArhxIcjgdw" bpmnElement="_YoSLMBDHEei4ArhxIcjgdw">
+        <di_1:waypoint x="312.0" y="116.0"/>
+        <di_1:waypoint x="431.0" y="116.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="372.0" y="106.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_cNae0BDHEei4ArhxIcjgdw" bpmnElement="_cNZ3wBDHEei4ArhxIcjgdw">
+        <di_1:waypoint x="531.0" y="119.0"/>
+        <di_1:waypoint x="636.0" y="119.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="584.0" y="109.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_ePQawBDHEei4ArhxIcjgdw" bpmnElement="_ePPzsBDHEei4ArhxIcjgdw">
+        <di_1:waypoint x="736.0" y="124.0"/>
+        <di_1:waypoint x="864.0" y="124.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="800.0" y="114.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_f28xUBDHEei4ArhxIcjgdw" bpmnElement="_f28KQBDHEei4ArhxIcjgdw">
+        <di_1:waypoint x="964.0" y="128.0"/>
+        <di_1:waypoint x="1082.0" y="128.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="1023.0" y="118.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+    </di:BPMNPlane>
+    <di:BPMNLabelStyle id="_nprt0BDHEei4ArhxIcjgdw">
+      <dc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Ubuntu" size="9.0"/>
+    </di:BPMNLabelStyle>
+  </di:BPMNDiagram>
+</model:definitions>

@@ -1,0 +1,27 @@
+
+.normalFind {
+    border: 2px solid rgba(255,255,255,0);
+    border-radius: 25px;
+    height: 30px;
+    width: 40px;
+    padding-top: 10px;
+    padding-bottom: 0px;
+}
+
+.circledFind {
+    border: 2px solid #008500;
+    border-radius: 20px;
+    border-radius: 25px;
+    height: 30px;
+    width: 40px;
+    padding-top: 10px;
+    padding-bottom: 0px;
+}
+
+.mainContainerFind {
+    overflow: hidden;
+    width: calc(100% - 2.5px);
+    height: calc(100vh - 255px);
+    padding: 0px;
+    vertical-align: top;
+}

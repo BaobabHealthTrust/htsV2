@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: U4 should match its empty snapshot 1`] = `
+<div
+  className="u4"
+>
+  <table
+    border="1"
+    cellPadding="5"
+    cellSpacing="0"
+    style={
+      Object {
+        "border": "1px solid #345db5",
+        "borderCollapse": "collapse",
+        "width": "100%",
+      }
+    }
+  >
+    <tbody>
+      <tr
+        style={
+          Object {
+            "backgroundColor": "#345db5",
+          }
+        }
+      >
+        <td
+          style={
+            Object {
+              "color": "#fff",
+              "fontSize": "12px",
+              "fontWeight": "bold",
+              "paddingLeft": "10px",
+              "textAlign": "center",
+            }
+          }
+        >
+          ...
+        </td>
+      </tr>
+      <tr>
+        <td
+          style={
+            Object {
+              "padding": 0,
+            }
+          }
+        >
+          <div
+            className="u4TabContent"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;

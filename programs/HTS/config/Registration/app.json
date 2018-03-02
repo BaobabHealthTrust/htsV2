@@ -1,0 +1,155 @@
+{
+    "Age": {
+        "fieldType": "period",
+        "validationRule": "^[1-9][0-9]?[D|W|M|Y]$",
+        "validationMessage": "Expecting valid ages greater than 0 by units like 11D for 11 days!",
+        "hiddenButtons": ["clear", "/", ".", "-", "abc", "qwe", "Unknown"]
+    },
+    "First Name": {
+        "ajaxURL": "/dde/list_first_names?name=",
+        "fieldType": "text"
+    },
+    "Last Name": {
+        "ajaxURL": "/dde/list_last_names?name=",
+        "fieldType": "text"
+    },
+    "Gender": {
+        "options": [
+            "Female",
+            "Male"
+        ]
+    },
+    "Ask Middle Name?": {
+        "answer": "No",
+        "visible": false
+    },
+    "Ask Date of Birth?": {
+        "answer": "Yes",
+        "visible": false
+    },
+    "Ask Nationality?": {
+        "answer": "No",
+        "visible": false
+    },
+    "Ask Home District?": {
+        "answer": "Yes",
+        "visible": false
+    },
+    "Ask Current Residence?": {
+        "answer": "Yes",
+        "visible": false
+    },
+    "Ask Occupation?": {
+        "answer": "No",
+        "visible": false
+    },
+    "Ask Cellphone Number?": {
+        "answer": "Yes",
+        "visible": false
+    },
+    "Ask Home Phone Number?": {
+        "answer": "No",
+        "visible": false
+    },
+    "Ask Office Phone Number?": {
+        "answer": "No",
+        "visible": false
+    },
+    "Region of Origin": {
+        "ajaxURL": "/dde/search_by_region?name="
+    },
+    "Current Region": {
+        "ajaxURL": "/dde/search_by_region?name=",
+        "autoNext": true
+    },
+    "Year of Birth": {
+        "fieldType": "number",
+        "validationRule": "^\\d{4}$|Unknown",
+        "min": "thisYear - 120",
+        "max": "thisYear",
+        "validationMessage": "Expecting 4 numbers or unknown!",
+        "hiddenButtons": ["clear", "/", ".", "-", "abc", "qwe"]
+    },
+    "Year of Birth Unknown?": {
+        "visible": false,
+        "func": ["Year of Birth", "match", "Unknown"]
+    },
+    "Month of Birth": {
+        "options": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Unknown"],
+        "className": "longSelectList"
+    },
+    "Month of Birth Unknown?": {
+        "visible": false,
+        "func": ["Month of Birth", "match", "Unknown"]
+    },
+    "Date of Birth": {
+        "fieldType": "days",
+        "yearField": "Year of Birth",
+        "monthField": "Month of Birth"
+    },
+    "Date of Birth Unknown?": {
+        "visible": false,
+        "func": ["Date of Birth", "match", "Unknown"]
+    },
+    "Ask T/A of Origin?": {
+        "answer": "No",
+        "visible": false
+    },
+    "Ask Closest Landmark?": {
+        "answer": "No",
+        "visible": false
+    },
+    "Cell Phone Number": {
+        "fieldType": "number",
+        "validationRule": "^0\\d{7}$|Unknown|Not Available|^0\\d{9}$|^N\\/A$",
+        "validationMessage": "Expecting 10 digits or unknown!",
+        "hiddenButtons": ["clear", "/", ".", "-", "abc", "qwe"]
+    },
+    "District of Origin": {
+        "ajaxURL": "/dde/search_by_district?region=REGION&district=",
+        "ajaxURLDummies": {
+            "Region of Origin": "REGION",
+            "autoNext": true
+        },
+        "fieldType": "text"
+    },
+    "Current District": {
+        "ajaxURL": "/dde/search_by_district?region=REGION&district=",
+        "ajaxURLDummies": {
+            "Current Region": "REGION",
+            "autoNext": true
+        },
+        "fieldType": "text"
+    },
+    "Current T/A": {
+        "ajaxURL": "/dde/search_by_t_a?district=DISTRICT&ta=",
+        "ajaxURLDummies": {
+            "Current District": "DISTRICT",
+            "autoNext": true
+        },
+        "fieldType": "text"
+    },
+    "Current Village": {
+        "ajaxURL": "/dde/search_by_village?ta=TA&village=",
+        "ajaxURLDummies": {
+            "Current T/A": "TA",
+            "autoNext": true
+        },
+        "fieldType": "text"
+    },
+    "Patient Match Found?": {
+        "customComponent": "DDESearch",
+        "properties": {
+            "label": "Select or Create New Client"
+        }
+    },
+    "Scan barcode": {
+        "fieldType": "barcode",
+        "targetUrl": "/programs/scan/"
+    },
+    "Child?": {
+        "visible": false,
+        "func": ["age", "inRange", "0", "14", "Other"]
+    },
+    "action": "/programs/save_demographics"
+}

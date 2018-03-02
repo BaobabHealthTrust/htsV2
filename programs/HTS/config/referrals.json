@@ -1,0 +1,11 @@
+{
+    "Enroll in Exposed Infant Clinic. DBS at enrollment. Repeat rapid test at age 12+24 months": "Re-Test",
+    "Confirmatory test and start ART": "Confirmatory Test at HIV Clinic",
+    "Repeat test in 4 weeks to rule out new infection": "Re-Test",
+    "Start PEP and Retest in 4 weeks to rule out new infection": "Re-Test",
+    "Retest at least every 12 months": "Re-Test",
+    "No need for retesting unless: High risk event or risky behaviour in future": "No Re-Test needed",
+    "DBS sample to reflab. Give date for result. Keep on ART if Started. Indicate in Comments if DBS sample collected": "Re-Test",
+    "Collect DBS for confirmatory DNA-PCR and start ART. Indicate in Comments if DBS sample collected": "Confirmatory Test at HIV Clinic",
+    "Start ART": "No Re-Test needed"
+}

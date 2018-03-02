@@ -1,0 +1,232 @@
+{
+    "Client HTS Access Type": {
+        "options": [
+            "Routine HTS (PITC) within Health Service",
+            "Comes with HTS Family Referral Slip",
+            "Other (VCT, etc.)"
+        ],
+        "className": "longSelectList",
+        "autoNext": true
+    },
+    "HTS Access Type": {
+        "options": [
+            "Routine HTS (PITC) within Health Service",
+            "Comes with HTS Family Referral Slip",
+            "Other (VCT, etc.)"
+        ],
+        "className": "longSelectList",
+        "autoNext": true
+    },
+    "Last HIV Test Result": {
+        "options": [
+            "Never Tested",
+            "Last Negative",
+            "Last Positive",
+            "Last Inconclusive",
+            "Last Exposed infant"
+        ],
+        "className": "longSelectList",
+        "autoNext": true
+    },
+    "Client Risk Category": {
+        "options": [
+            "Low Risk",
+            "On-going Risk",
+            "High Risk Event in Last 3 months",
+            "Risk assessment Not Done"
+        ],
+        "className": "longSelectList",
+        "autoNext": true
+    },
+    "Appointment Date Given": {
+        "fieldType": "date",
+        "minDate": "today",
+        "maxDate": "today + 1year"
+    },
+    "HTS Family Referral Slips": {
+        "customComponent": "FamilyRefs",
+        "properties": {
+            "label": "HTS Family Referral Slips"
+        },
+        "optional": true
+    },
+    "Comments": {
+        "fieldType": "textarea",
+        "optional": true
+    },
+    "Client Last HIV Test Result": {
+        "options": [
+            "Never Tested",
+            "Last Negative",
+            "Last Positive",
+            "Last Inconclusive"
+        ],
+        "className": "longSelectList",
+        "autoNext": true
+    },
+    "Test result Positive or Inconclusive?": {
+        "visible": false,
+        "func": ["Result Given to Client", "match", "Positive|Inconclusive|New Exposed Infant", "Testing"]
+    },
+    "Search By": {
+        "autoNext": true
+    },
+    "Last Negative or Never Tested?": {
+        "visible": false,
+        "func": ["Last HIV Test Result", "match", "Last\\sNegative|Never\\sTested", "Pre-Test Counseling"]
+    },
+    "First Pass Test 1 Result": {
+        "customComponent": "SingleTestResult",
+        "properties": {
+            "label": "First Pass Test 1 Result",
+            "duration": "15 Minutes",
+            "test": "Determine HIV 1/2 Result"
+        }
+    },
+    "First Pass Test 1 Negative?": {
+        "visible": false,
+        "func": ["First Pass Test 1 Result", "equal", "Non-Reactive", "Testing"]
+    },
+    "First Pass Test 2 Result": {
+        "customComponent": "SingleTestResult",
+        "properties": {
+            "label": "First Pass Test 2 Result",
+            "duration": "10 Minutes",
+            "test": "Uni-Gold Result"
+        }
+    },
+    "First Pass Test 2 Negative?": {
+        "visible": false,
+        "func": ["First Pass Test 2 Result", "equal", "Non-Reactive", "Testing"]
+    },
+    "Immediate Parallel Repeat Test 1 & 2 Results": {
+        "customComponent": "ParallelTestResult",
+        "properties": {
+            "label": "Immediate Parallel Repeat Test 1 & 2 Results",
+            "duration": "15 Minutes",
+            "test": "Determine HIV 1/2 Result",
+            "duration2": "10 Minutes",
+            "test2": "Uni-Gold Result"
+        },
+        "optional": true
+    },
+    "Repeat Test 1 Negative?": {
+        "visible": false,
+        "func": ["Immediate Repeat Test 1 Result", "equal", "Non-Reactive", "Testing"]
+    },
+    "Repeat Test 2 Positive?": {
+        "visible": false,
+        "func": ["Immediate Repeat Test 2 Result", "equal", "Reactive", "Testing"]
+    },
+    "Repeat Test 2 Negative?": {
+        "visible": false,
+        "func": ["Immediate Repeat Test 2 Result", "equal", "Non-Reactive", "Testing"]
+    },
+    "Age Under 12 Months?": {
+        "visible": false,
+        "func": ["age", "lessThan", "12", "Testing", "Months"]
+    },
+    "HTS Family Slips Given": {
+        "fieldType": "number",
+        "hiddenButtons": ["clear", "/", ".", "-", "abc", "qwe", "Unknown"]
+    },
+    "First Pass Parallel Test 1 & 2 Results": {
+        "customComponent": "ParallelTestResult",
+        "properties": {
+            "label": "First Pass Parallel Test 1 & 2 Results",
+            "duration": "15 Minutes",
+            "test": "Determine HIV 1/2 Result",
+            "duration2": "10 Minutes",
+            "test2": "Uni-Gold Result"
+        },
+        "optional": true
+    },
+    "Last Positive?": {
+        "visible": false,
+        "func": ["Last HIV Test Result", "equal", "Last Positive", "Pre-Test Counseling"]
+    },
+    "FP Test 1 & 2 Negative?": {
+        "visible": false,
+        "func": [
+            ["First Pass Test 1 Result", "First Pass Test 2 Result"], "equal", "Non-Reactive", "Testing"
+        ]
+    },
+    "FP Test 1 & 2 Positive?": {
+        "visible": false,
+        "func": [
+            ["First Pass Test 1 Result", "First Pass Test 2 Result"], "equal", "Reactive", "Testing"
+        ]
+    },
+    "IR Test 1 & 2 Negative?": {
+        "visible": false,
+        "func": [
+            ["Immediate Repeat Test 1 Result", "Immediate Repeat Test 2 Result"], "equal", "Non-Reactive", "Testing"
+        ]
+    },
+    "IR Test 1 & 2 Positive?": {
+        "visible": false,
+        "func": [
+            ["Immediate Repeat Test 1 Result", "Immediate Repeat Test 2 Result"], "equal", "Reactive", "Testing"
+        ]
+    },
+    "Service Delivery Point": {
+        "options": [
+            "PITC Malnutrition Facilities",
+            "PITC PMTCT (ANC Only)",
+            "PITC TB Clinics",
+            "VMMC Services",
+            "Other PITC",
+            "VCT"
+        ],
+        "className": "longSelectList",
+        "autoNext": true
+    },
+    "Last HIV Test done?": {
+        "visible": false,
+        "func": ["Last HIV Test Result", "notEqual", "Never Tested", "Pre-Test Counseling"]
+    },
+    "Time since last HIV Test": {
+        "fieldType": "period",
+        "hiddenButtons": ["clear"],
+        "readOnly": true,
+        "minDuration": "age"
+    },
+    "Gender is Female?": {
+        "visible": false,
+        "func": ["gender", "equal", "Female", "Patient"]
+    },
+    "Child bearing age?": {
+        "visible": false,
+        "func": ["age", "inRange", "10", "45", "Patient"]
+    },
+    "Age less than 10?": {
+        "visible": false,
+        "func": ["age", "lessThan", "120", "Pre-Test Counseling", "months"]
+    },
+    "High risk event in last 3 months?": {
+        "visible": false,
+        "func": ["Client Risk Category", "equal", "High Risk Event in Last 3 months", "Pre-Test Counseling"]
+    },
+    "Ongoing risky behaviour?": {
+        "visible": false,
+        "func": ["Client Risk Category", "equal", "On-going Risk", "Pre-Test Counseling"]
+    },
+    "Age 12-23 months?": {
+        "visible": false,
+        "func": ["age", "inRange", "1", "2", "Patient"]
+    },
+    "Child?": {
+        "visible": false,
+        "func": ["age", "inRange", "0", "14", "Patient"]
+    },
+    "Partner HIV Status": {
+        "options": [
+            "No Partner",
+            "HIV Unknown",
+            "Partner Negative",
+            "Partner Positive"
+        ],
+        "className": "longSelectList"
+    },
+    "action": "/programs/save_encounters"
+}

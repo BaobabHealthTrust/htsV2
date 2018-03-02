@@ -1,0 +1,11 @@
+.u12 {
+    width: 100%;
+    padding: 0px;
+}
+
+.u12TabContent {
+    overflow: auto;
+    padding: 0;
+    width: 100%;
+    height: calc(100vh - 250px);
+}

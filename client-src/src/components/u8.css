@@ -1,0 +1,16 @@
+.headTab {
+    width: 100%;
+    box-shadow: 5px 2px 5px 0px rgba(0, 0, 0, 0.75);
+    overflow: hidden;
+    height: 120px;
+    border: 1px solid #004586;
+    color: #3c60b1;
+}
+
+.blueText {
+    color: #3c60b1;
+}
+
+.underline {
+    border-bottom: #004586 1px dotted;
+}

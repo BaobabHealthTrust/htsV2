@@ -1,0 +1,11 @@
+.label {
+    font-size:2.2em;
+}
+
+.viewPort {
+    width: 100%;
+    border: 1px solid #cccccc;
+    overflow: auto;
+    height: calc(100vh - 320px);
+    margin-left: -1px;
+}

@@ -1,0 +1,5 @@
+{
+  "Community": ["Mobile", "VCT", "Other community platform"],
+  "Health Facility": ["STI", "Inpatient", "Emergency", "VCT", "TB", "VMMC", "PMTCT (ANC)", "Pediatric", "Malnutrition", "Other PITC"],
+  "Standalone": ["Other"]
+}

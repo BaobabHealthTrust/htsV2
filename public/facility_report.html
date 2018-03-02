@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Facility Report</title>
+    <style>
+        th {
+            font-weight: normal;
+        }
+
+        .bold {
+            font-weight: bold;
+            color: #000;
+        }
+
+        body {
+            padding: 0px;
+            margin: 1px;
+            font: 18px "Lucida Grande", Helvetica, Arial, sans-serif;
+            overflow: auto;
+            -moz-user-select: none;
+        }
+
+        a {
+            color: #00B7FF;
+        }
+
+        button {
+            font-size: 22px !important;
+            padding: 15px;
+            min-width: 120px;
+            cursor: pointer;
+            min-height: 55px;
+            border-radius: 5px !important;
+            margin: 3px;
+        }
+
+        button:active {
+            background-color: #ffc579 !important;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#ffc579), to(#fb9d23)) !important;
+            background-image: -webkit-linear-gradient(top, #ffc579, #fb9d23) !important;
+            background-image: -moz-linear-gradient(top, #ffc579, #fb9d23) !important;
+            background-image: -ms-linear-gradient(top, #ffc579, #fb9d23) !important;
+            background-image: -o-linear-gradient(top, #ffc579, #fb9d23) !important;
+            background-image: linear-gradient(to bottom, #ffc579, #fb9d23);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#ffc579, endColorstr=#fb9d23) !important;
+        }
+
+        .button {
+            font-size: 18px !important;
+            padding: 15px;
+            min-width: 120px;
+            cursor: pointer;
+            min-height: 55px;
+            border-radius: 0px !important;
+            margin: 3px;
+           
+        }
+
+        .button:active {
+            color: white !important;
+            background-color: #ffc579 !important;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#ffc579), to(#fb9d23)) !important;
+            background-image: -webkit-linear-gradient(top, #ffc579, #fb9d23) !important;
+            background-image: -moz-linear-gradient(top, #ffc579, #fb9d23) !important;
+            background-image: -ms-linear-gradient(top, #ffc579, #fb9d23) !important;
+            background-image: -o-linear-gradient(top, #ffc579, #fb9d23) !important;
+            background-image: linear-gradient(to bottom, #ffc579, #fb9d23);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#ffc579, endColorstr=#fb9d23) !important;
+        }
+
+        .blue {
+            border: 1px solid #7eb9d0;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            font-size: 28px;
+            font-family: arial, helvetica, sans-serif;
+            padding: 10px 10px 10px 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            color: #FFFFFF;
+            background-color: #a7cfdf;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
+            background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
+            background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
+            background-image: -ms-linear-gradient(top, #a7cfdf, #23538a);
+            background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
+            background-image: linear-gradient(to bottom, #a7cfdf, #23538a);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a7cfdf, endColorstr=#23538a);
+        }
+
+        .blue:hover {
+            border: 1px solid #5ca6c4;
+            background-color: #82bbd1;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#82bbd1), to(#193b61));
+            background-image: -webkit-linear-gradient(top, #82bbd1, #193b61);
+            background-image: -moz-linear-gradient(top, #82bbd1, #193b61);
+            background-image: -ms-linear-gradient(top, #82bbd1, #193b61);
+            background-image: -o-linear-gradient(top, #82bbd1, #193b61);
+            background-image: linear-gradient(to bottom, #82bbd1, #193b61);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#82bbd1, endColorstr=#193b61);
+        }
+
+        .green {
+            border: 1px solid #34740e;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            font-size: 28px;
+            font-family: arial, helvetica, sans-serif;
+            padding: 10px 10px 10px 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            color: #FFFFFF;
+            background-color: #4ba614;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#4ba614), to(#008c00));
+            background-image: -webkit-linear-gradient(top, #4ba614, #008c00);
+            background-image: -moz-linear-gradient(top, #4ba614, #008c00);
+            background-image: -ms-linear-gradient(top, #4ba614, #008c00);
+            background-image: -o-linear-gradient(top, #4ba614, #008c00);
+            background-image: linear-gradient(to bottom, #4ba614, #008c00);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#4ba614, endColorstr=#008c00);
+        }
+
+        .green:hover {
+            border: 1px solid #224b09;
+            background-color: #36780f;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#36780f), to(#005900));
+            background-image: -webkit-linear-gradient(top, #36780f, #005900);
+            background-image: -moz-linear-gradient(top, #36780f, #005900);
+            background-image: -ms-linear-gradient(top, #36780f, #005900);
+            background-image: -o-linear-gradient(top, #36780f, #005900);
+            background-image: linear-gradient(to bottom, #36780f, #005900);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#36780f, endColorstr=#005900);
+        }
+
+        .red {
+            border: 1px solid #72021c;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            font-size: 28px;
+            font-family: arial, helvetica, sans-serif;
+            padding: 10px 10px 10px 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            color: #FFFFFF;
+            background-color: #a90329;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#a90329), to(#6d0019));
+            background-image: -webkit-linear-gradient(top, #a90329, #6d0019);
+            background-image: -moz-linear-gradient(top, #a90329, #6d0019);
+            background-image: -ms-linear-gradient(top, #a90329, #6d0019);
+            background-image: -o-linear-gradient(top, #a90329, #6d0019);
+            background-image: linear-gradient(to bottom, #a90329, #6d0019);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#a90329, endColorstr=#6d0019);
+        }
+
+        .red:hover {
+            border: 1px solid #450111;
+            background-color: #77021d;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#77021d), to(#3a000d));
+            background-image: -webkit-linear-gradient(top, #77021d, #3a000d);
+            background-image: -moz-linear-gradient(top, #77021d, #3a000d);
+            background-image: -ms-linear-gradient(top, #77021d, #3a000d);
+            background-image: -o-linear-gradient(top, #77021d, #3a000d);
+            background-image: linear-gradient(to bottom, #77021d, #3a000d);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#77021d, endColorstr=#3a000d);
+        }
+
+        .gray {
+            border: 1px solid #ccc;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            font-size: 28px;
+            font-family: arial, helvetica, sans-serif;
+            padding: 10px 10px 10px 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            color: #FFFFFF;
+            background-color: #ccc;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#999));
+            background-image: -webkit-linear-gradient(top, #ccc, #999);
+            background-image: -moz-linear-gradient(top, #ccc, #999);
+            background-image: -ms-linear-gradient(top, #ccc, #999);
+            background-image: -o-linear-gradient(top, #ccc, #999);
+            background-image: linear-gradient(to bottom, #ccc, #999);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#ccc, endColorstr=#999);
+        }
+
+        .gray:hover {
+            border: 1px solid #ccc;
+            background-color: #ddd;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#333), to(#ccc));
+            background-image: -webkit-linear-gradient(top, #333, #ccc);
+            background-image: -moz-linear-gradient(top, #333, #ccc);
+            background-image: -ms-linear-gradient(top, #333, #ccc);
+            background-image: -o-linear-gradient(top, #333, #ccc);
+            background-image: linear-gradient(to bottom, #333, #ccc);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#333, endColorstr=#ccc);
+        }
+
+        .textbox {
+            padding: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
+
+        .table {
+            display: table;
+            border-spacing: 1px;
+        }
+
+        .row {
+            display: table-row;
+        }
+
+        .cell {
+            display: table-cell;
+        }
+
+        .bold {
+            font-weight: bold;
+            color: #284b38;
+        }
+
+        .label_cell {
+            font-size: 1.2em;
+            padding: 5px;
+            text-align: right;
+            border-bottom: 1px dotted #999;
+            border-right: 1px dotted #999;
+            width: 25%;
+        }
+
+        .input_cell {
+            font-size: 1.5em;
+            padding: 5px;
+            border-bottom: 1px dotted #999;
+        }
+
+        .no_bottom {
+            border-bottom: none;
+        }
+
+        .arrow-up {
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            cursor: pointer;
+            border-bottom: 30px solid #3465a4;
+        }
+
+        .arrow-up-gray {
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            cursor: pointer;
+            border-bottom: 30px solid #ccc;
+        }
+
+        .arrow-up:hover {
+            border-bottom: 30px solid #5ca6c4;
+        }
+
+        .arrow-up:active {
+            border-bottom: 30px solid #ef8544;
+        }
+
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            cursor: pointer;
+            border-top: 30px solid #3465a4;
+        }
+
+        .arrow-down-gray {
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            cursor: pointer;
+            border-top: 30px solid #ccc;
+        }
+
+        .arrow-down:hover {
+            border-top: 30px solid #5ca6c4;
+        }
+
+        .arrow-down:active {
+            border-top: 30px solid #ef8544;
+        }
+
+        .listing {
+            overflow: auto;
+            height: 100%;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            padding-left: 0px;
+        }
+
+        .listing li {
+            color: black;
+            list-style: none;
+            padding: 10px;
+            padding-left: 20px;
+            padding-right: 10px;
+            margin-top: 1px;
+            margin-bottom: 1px;
+            font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+            font-size: 2.5em;
+        }
+
+        .selected {
+            background-color: lightblue !important;
+        }
+
+        .odd {
+            background-color: #eee;
+        }
+
+        .element {
+            border: 1px solid #999;
+            background-color: #cadcd3;
+            color: #000;
+            padding: 3px;
+            margin: 3px;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 10px
+        }
+
+    </style>
+</head>
+<body oncontextmenu="return false;" style="margin: 20px; font-size: 14px;">
+
+<table width="100%" style="border-collapse: collapse" cellpadding="8">
+<tr>
+    <th style="font-size: 13px; width: 100px; text-align: left;" colspan="2" class="bold">
+        M<span style="font-size: 12px">ALAWI</span> HTS R<span style="font-size: 11px">EGISTER</span><br/>
+        V<span style="font-size: 10px">ERSION</span> 3
+    </th>
+    <th style="font-size: 20px" colspan="4" class="bold">
+        HIV T<span style="font-size: 18px">ESTING AND</span> C<span style="font-size: 18px">OUNSELLING</span> - M<span
+            style="font-size: 18px">ONTHLY</span> S<span style="font-size: 18px">ITE</span> R<span
+            style="font-size: 18px">EPORT</span><br/>
+
+        <div style="font-size: 16px; font-weight: normal; margin-top: -1px; font-style: italic;">F<span
+                style="font-size: 13px">ILL</span> S<span style="font-size:
+            13px">EPARATE</span> R<span style="font-size: 13px">EPORT</span> F<span style="font-size: 13px">OR
+            </span> E<span style="font-size: 13px">ACH</span> D<span style="font-size: 13px">IFFERENT</span> HTS
+            L<span style="font-size: 13px">OCATION AT THIS</span> S<span style="font-size: 13px">ITE</span></div>
+    </th>
+    <th style="font-size: 13px; width: 180px; text-align: right; font-style: italic; font-weight: normal;" id="month-year">
+        May<br/>2014
+    </th>
+</tr>
+<tr>
+    <td>
+        &nbsp;
+    </td>
+    <td style="border-left: 1px solid #333; border-top: 1px solid #333; width: 150px;">
+        Facility/Site
+    </td>
+    <td style="border-left: 1px solid #333; border-top: 1px solid #333; border-right: 1px solid #333;" colspan="5" id="lblFacility">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td>
+        &nbsp;
+    </td>
+    <td style="border-left: 1px solid #333;">
+        Reporting Year
+    </td>
+    <td style="border: 1px solid #333;" id="lblYear">
+        &nbsp;
+    </td>
+    <td style="border-top: 1px solid #333; width: 120px;" align="center">
+        Month
+    </td>
+    <td style="border: 1px solid #333;" id="lblMonth">
+        &nbsp;
+    </td>
+    <td style="border-top: 1px solid #333; width: 120px;" align="center">
+        HTS Location<sup>1</sup>
+    </td>
+    <td style="border: 1px solid #333; min-width: 25%;" id="lblLocation">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td>
+        &nbsp;
+    </td>
+    <td style="border-left: 1px solid #333; border-bottom: 1px solid #333;" colspan="5">
+        Was any client served at this site/location during this month?<span style="font-size: 11px"> If no, still
+            submit report</span>
+    </td>
+    <td style="border: 1px solid #333;" id="lblClientsServed">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+<td colspan="7">
+<table width="100%" cellpadding="8" style="border-collapse: collapse;">
+<tr>
+    <td>
+        &nbsp;
+    </td>
+    <th align="left" colspan="3" class="bold">
+        Sex/Pregnancy
+    </th>
+    <th align="left" colspan="3" class="bold">
+        Last HIV Test
+    </th>
+    <th align="left" colspan="2" style=" min-width: 300px;" class="bold">
+        Outcome Summary (HIV Test)
+    </th>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        1
+    </td>
+    <td style="border-top: 1px solid #333; border-left: 1px solid #333;">
+        Male
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="M">
+        &nbsp;
+    </td>
+    <td align="right">
+        11
+    </td>
+    <td style="border-top: 1px solid #333; border-left: 1px solid #333;">
+        Never Tested
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="LNEV">
+        &nbsp;
+    </td>
+    <td align="right">
+        17
+    </td>
+    <td style="border-top: 1px solid #333; border-left: 1px solid #333;">
+        Single Negative
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="N">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        2
+    </td>
+    <td style="border-left: 1px solid #333;">
+        Female Non-Pregnant
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="FNP">
+        &nbsp;
+    </td>
+    <td align="right">
+        12
+    </td>
+    <td style="border-left: 1px solid #333;">
+        Prev Negative
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="LN">
+        &nbsp;
+    </td>
+    <td align="right">
+        18
+    </td>
+    <td style="border-left: 1px solid #333;">
+        Single Positive
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="P">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        3
+    </td>
+    <td style="border-left: 1px solid #333; border-bottom: 1px solid #333;">
+        Female Pregnant
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="FP">
+        &nbsp;
+    </td>
+    <td align="right">
+        13
+    </td>
+    <td style="border-left: 1px solid #333;">
+        Prev Positive
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="LP">
+        &nbsp;
+    </td>
+    <td align="right">
+        19
+    </td>
+    <td style="border-left: 1px solid #333;">
+        Test 1&2 negative
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="T12N">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        &nbsp;
+    </td>
+    <td style="text-align: right; font-style: italic;">
+        Tot. clients (check)
+    </td>
+    <td style="border: 2px solid #333; width: 80px; text-align: right;" id="sex_pregnancy">
+        &nbsp;
+    </td>
+    <td align="right">
+        14
+    </td>
+    <td style="border-left: 1px solid #333;">
+        Prev Exposed infant
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="LEX">
+        &nbsp;
+    </td>
+    <td align="right">
+        20
+    </td>
+    <td style="border-left: 1px solid #333;">
+        Test 1&2 positive
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="T12P">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        &nbsp;
+    </td>
+    <td style="text-align: left; font-weight: bold;">
+        Age Groups
+    </td>
+    <td style="">
+        &nbsp;
+    </td>
+    <td align="right">
+        15
+    </td>
+    <td style="border-left: 1px solid #333; border-bottom: 1px solid #333;">
+        Prev Inconclusive
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="LIN">
+        &nbsp;
+    </td>
+    <td align="right">
+        21
+    </td>
+    <td style="border-left: 1px solid #333; border-bottom: 1px solid #333;">
+        Test 1&2 discordant
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="T12D">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        4
+    </td>
+    <td style="border-top: 1px solid #333; border-left: 1px solid #333;">
+        A: 0-11 months
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="0_11M">
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td style="font-style: italic; text-align: right;">
+        Tot. clients (check)
+    </td>
+    <td style="border: 2px solid #333; width: 80px; text-align: right;" id="last_hiv_test">
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td style="font-style: italic; text-align: right; min-width: 200px;">
+        Tot. clients (check)
+    </td>
+    <td style="border: 2px solid #333; width: 80px; text-align: right;" id="outcome_summary">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        5
+    </td>
+    <td style="border-left: 1px solid #333;">
+        B: 1-14 years
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="1_14Y">
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td style="font-weight: bold;">
+        Partner Present
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td style="font-weight: bold;" colspan="3">
+        Result Given to Client
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        6
+    </td>
+    <td style="border-left: 1px solid #333;">
+        C: 15-24 years
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="15_24Y">
+        &nbsp;
+    </td>
+    <td align="right">
+        16
+    </td>
+    <td style="border-left: 1px solid #333; border-top: 1px solid #333;">
+        Partner Present
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="PPY">
+        &nbsp;
+    </td>
+    <td align="right">
+        22
+    </td>
+    <td style="border-left: 1px solid #333; border-top: 1px solid #333; width: 80px;">
+        New negative
+    </td>
+    <td style="width: 80px; border: 1px solid #333; text-align: right;" id="RGTCNN">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        7
+    </td>
+    <td style="border-left: 1px solid #333; border-bottom: 1px solid #333;">
+        D: 25+ years
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="25P">
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td style="border-left: 1px solid #333;  border-bottom: 1px solid #333;">
+        Partner not present
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="PPN">
+        &nbsp;
+    </td>
+    <td align="right">
+        23
+    </td>
+    <td style="border-left: 1px solid #333; width: 80px;">
+        New positive
+    </td>
+    <td style="width: 80px; border: 1px solid #333; text-align: right;" id="RGTCNP">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        &nbsp;
+    </td>
+    <td style="text-align: right; font-style: italic;">
+        Tot. clients (check)
+    </td>
+    <td style="border: 2px solid #333; width: 80px; text-align: right;" id="age_group">
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td style="text-align: right; font-style: italic;">
+        Tot. clients (check)
+    </td>
+    <td style="border: 2px solid #333; width: 80px; text-align: right;" id="partner_present">
+        &nbsp;
+    </td>
+    <td align="right">
+        24
+    </td>
+    <td style="border-left: 1px solid #333; width: 80px;">
+        New exposed infant
+    </td>
+    <td style="width: 80px; border: 1px solid #333; text-align: right;" id="RGTCNEX">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        &nbsp;
+    </td>
+    <td style="text-align: left; font-weight: bold;">
+        HTS Access Type
+    </td>
+    <td style="">
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td align="right">
+        25
+    </td>
+    <td style="border-left: 1px solid #333;">
+        New inconclusive
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="RGTCNI">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        8
+    </td>
+    <td style="border-top: 1px solid #333; border-left: 1px solid #333;">
+        PITC
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="PITC">
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td align="right">
+        26
+    </td>
+    <td style="border-left: 1px solid #333;">
+        Confirmatory positive
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="RGTCCP">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        9
+    </td>
+    <td style="border-left: 1px solid #333;">
+        FRS
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="FRS">
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td align="right">
+        27
+    </td>
+    <td style="border-left: 1px solid #333; border-bottom: 1px solid #333;">
+        Confirmatory Inconclusive
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="RGTCIN">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        10
+    </td>
+    <td style="border-left: 1px solid #333; border-bottom: 1px solid #333;">
+        Other (VCT, etc.)
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="VCT">
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td style="text-align: right; font-style: italic;">
+        Tot. clients (check)
+    </td>
+    <td style="border: 2px solid #333; width: 80px; text-align: right;" id="result_given_to_client">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td style="text-align: right; font-style: italic;">
+        Tot. clients (check)
+    </td>
+    <td style="border: 2px solid #333; width: 80px; text-align: right;" id="htc_access_type">
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td style="font-weight: bold;" colspan="2">
+        Partner HTS Slips Given
+    </td>
+</tr>
+<tr>
+    <td style="width: 30px; text-align: right;">
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td align="right">
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td>
+        &nbsp;
+    </td>
+    <td align="right">
+        28
+    </td>
+    <td style="border: 1px solid #333;">
+        Sum of all slips
+    </td>
+    <td style="border: 1px solid #333; width: 80px; text-align: right;" id="PHSG">
+        &nbsp;
+    </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td colspan="7">
+<table width="100%" cellpadding="8" style="border-collapse: collapse;">
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <th align="left" colspan="2" class="bold">
+        Test Kit Use Summary
+    </th>
+    <td style="width: 10px;">
+    </td>
+    <th style=" width: 150px;" class="bold">
+        Test 1
+    </th>
+    <td style="width: 10px;">
+    </td>
+    <th style=" width: 150px;" class="bold">
+        Test 2
+    </th>
+    <td style=" width: 150px;">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <td align="left" style="border-left: 1px solid #333; border-top: 1px solid #333;">
+        Add from <i>DAILY ACTIVITY REGISTER</i>, separate for each
+    </td>
+    <td style=" border-top: 1px solid #333;">
+        Kit Name
+    </td>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; font-weight: normal;" id="test_1_kit_name">
+        &nbsp;
+    </th>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; font-weight: normal;" id="test_2_kit_name">
+        &nbsp;
+    </th>
+    <td style=" width: 150px; border: 1px solid #333;">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <td align="left" style="border-left: 1px solid #333;">
+        Total tests in testing rooms at start of 1<sup>st</sup> day of reporting month
+    </td>
+    <td>
+        Opening
+    </td>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_1_opening">
+        &nbsp;
+    </th>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_2_opening">
+        &nbsp;
+    </th>
+    <td style=" width: 150px; border: 1px solid #333;">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <td align="left" style="border-left: 1px solid #333;">
+        Total tests received at this location during this month
+    </td>
+    <td>
+        Receipts
+    </td>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        +
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_1_receipts">
+        &nbsp;
+    </th>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        +
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_2_receipts">
+        &nbsp;
+    </th>
+    <td style=" width: 150px; border: 1px solid #333;">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <td align="left" style="border-left: 1px solid #333;">
+        Total tests used for testing clients
+    </td>
+    <td>
+        Used for Clients
+    </td>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        -
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_1_used_for_clients">
+        &nbsp;
+    </th>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        -
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_2_used_for_clients">
+        &nbsp;
+    </th>
+    <td style=" width: 150px; border: 1px solid #333;">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <td align="left" style="border-left: 1px solid #333;">
+        Total tests used for other purposes (QC, PT, training)
+    </td>
+    <td>
+        Used for Other
+    </td>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        -
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_1_for_other">
+        &nbsp;
+    </th>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        -
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_2_for_other">
+        &nbsp;
+    </th>
+    <td style=" width: 150px; border: 1px solid #333;">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <td align="left" style="border-left: 1px solid #333;">
+        Total tests expired / disposed, etc.
+    </td>
+    <td>
+        Losses
+    </td>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        -
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_1_disposals">
+        &nbsp;
+    </th>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        -
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_2_disposals">
+        &nbsp;
+    </th>
+    <td style=" width: 150px; border: 1px solid #333;">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <td align="left" style="border-left: 1px solid #333;">
+        Expected Remaining Balance
+    </td>
+    <td>
+        Balance
+    </td>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        =
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_1_balance">
+        &nbsp;
+    </th>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        =
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_2_balance">
+        &nbsp;
+    </th>
+    <td style=" width: 150px; border: 1px solid #333;">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <td align="left" style="border-left: 1px solid #333;">
+        Physical tests in testing rooms at end of last day of month
+    </td>
+    <td>
+        Closing
+    </td>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        -
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_1_in_rooms">
+        &nbsp;
+    </th>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        -
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_2_in_rooms">
+        &nbsp;
+    </th>
+    <td style=" width: 150px; border: 1px solid #333;">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <td align="left" style="border-left: 1px solid #333;  border-bottom: 1px solid #333;">
+        Excess tests / tests unaccounted for (write + or -)
+    </td>
+    <td style=" border-bottom: 1px solid #333;">
+        Difference
+    </td>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        =
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_1_difference">
+        &nbsp;
+    </th>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+        =
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;" id="test_2_difference">
+        &nbsp;
+    </th>
+    <td style=" width: 150px; border: 1px solid #333;">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td colspan="6"></td>
+</tr>
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <td align="left" style="border-left: 1px solid #333; border-top: 1px solid #333;">
+        From <i>STOCK CARD</i> in pharmacy / drug store
+    </td>
+    <td style=" border-top: 1px solid #333;">
+        Opening
+    </td>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;">
+        &nbsp;
+    </th>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;">
+        &nbsp;
+    </th>
+    <td style=" width: 150px; border: 1px solid #333;">
+        &nbsp;
+    </td>
+</tr>
+<tr>
+    <td style=" width: 30px;">
+        &nbsp;
+    </td>
+    <td align="left" style="border-left: 1px solid #333; border-bottom: 1px solid #333;">
+        &nbsp;
+    </td>
+    <td style=" border-bottom: 1px solid #333;">
+        Closing
+    </td>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-bottom: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;">
+        &nbsp;
+    </th>
+    <td style="width: 10px; border: 1px solid #333; border-right: none;">
+    </td>
+    <th style=" width: 150px; border: 1px solid #333; border-bottom: 1px solid #333; border-left: none; padding-right: 15px; text-align: right;">
+        &nbsp;
+    </th>
+    <td style=" width: 150px; border: 1px solid #333; border-bottom: 1px solid #333;">
+        &nbsp;
+    </td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+    <td colspan="7">
+        <table width="100%" cellpadding="8" style="border-collapse: collapse;">
+            <tr>
+                <td style=" width: 30px;">
+                    &nbsp;
+                </td>
+                <th align="left" style="width: 40px;">
+                    &nbsp;
+                </th>
+                <td align="center">
+                    Date
+                </td>
+                <td align="center">
+                    Name
+                </td>
+                <td align="center" colspan="2">
+                    Phone
+                </td>
+                <td align="center" colspan="2">
+                    Notes
+                </td>
+            </tr>
+            <tr>
+                <td style=" width: 30px;">
+                    &nbsp;
+                </td>
+                <th align="left" style="width: 40px;" class="bold">
+                    Filled
+                </th>
+                <td align="center" style="border: 1px solid #333;">
+                    &nbsp;
+                </td>
+                <td align="center" style="border: 1px solid #333;">
+                    &nbsp;
+                </td>
+                <td align="center" style="border: 1px solid #333; border-bottom: none;" colspan="2">
+                    &nbsp;
+                </td>
+                <td align="center" style="border: 1px solid #333; border-bottom: none;" colspan="2">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td style=" width: 30px;">
+                    &nbsp;
+                </td>
+                <th align="left" style="width: 40px;" class="bold">
+                    Recvd
+                </th>
+                <td align="center" style="border: 1px solid #333;">
+                    &nbsp;
+                </td>
+                <td align="center" style="border: 1px solid #333;">
+                    &nbsp;
+                </td>
+                <td align="center" style="border: 1px solid #333; border-top: none;" colspan="2">
+                    &nbsp;
+                </td>
+                <td align="center" style="border: 1px solid #333; border-top: none;" colspan="2">
+                    &nbsp;
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="8">
+        &nbsp;
+    </td>
+</tr>
+</table>
+</body>
+</html>

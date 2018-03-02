@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: U11 should match its empty snapshot 1`] = `
+<div
+  className="u11"
+>
+  <table
+    border="1"
+    cellPadding="5"
+    cellSpacing="0"
+    style={
+      Object {
+        "border": "1px solid #345db5",
+        "borderCollapse": "collapse",
+        "width": "100%",
+      }
+    }
+  >
+    <tbody>
+      <tr
+        style={
+          Object {
+            "backgroundColor": "#345db5",
+          }
+        }
+      >
+        <td
+          style={
+            Object {
+              "color": "#fff",
+              "fontSize": "12px",
+              "fontWeight": "bold",
+              "paddingLeft": "10px",
+              "textAlign": "center",
+            }
+          }
+        >
+          Visits
+        </td>
+      </tr>
+      <tr>
+        <td
+          style={
+            Object {
+              "padding": 0,
+            }
+          }
+        >
+          <div
+            className="u11TabContent"
+          >
+            <ul
+              style={
+                Object {
+                  "listStyle": "none",
+                  "margin": "0px",
+                  "padding": "0px",
+                  "width": "100%",
+                }
+              }
+            />
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;

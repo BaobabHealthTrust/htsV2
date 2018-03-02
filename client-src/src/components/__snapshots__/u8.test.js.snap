@@ -1,0 +1,157 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: U8 should match its empty snapshot 1`] = `
+<div
+  className="headTab"
+  id="tableDiv2"
+>
+  <table
+    cellPadding="1"
+    style={
+      Object {
+        "fontSize": "12px",
+      }
+    }
+    width="100%"
+  >
+    <tbody>
+      <tr>
+        <td
+          className="blueText"
+          style={
+            Object {
+              "fontWeight": "bold",
+              "textAlign": "right",
+              "width": "70px",
+            }
+          }
+        >
+          BP
+        </td>
+        <td
+          style={
+            Object {
+              "textAlign": "center",
+              "width": "3px",
+            }
+          }
+        >
+          :
+        </td>
+        <td
+          align="left"
+          id="bp"
+        />
+      </tr>
+      <tr>
+        <td
+          className="blueText"
+          style={
+            Object {
+              "fontWeight": "bold",
+              "textAlign": "right",
+            }
+          }
+        >
+          Temperature
+        </td>
+        <td
+          style={
+            Object {
+              "textAlign": "center",
+              "width": "3px",
+            }
+          }
+        >
+          :
+        </td>
+        <td
+          align="left"
+          id="temperature"
+        />
+      </tr>
+      <tr>
+        <td
+          className="blueText"
+          style={
+            Object {
+              "fontWeight": "bold",
+              "textAlign": "right",
+            }
+          }
+        >
+          BMI
+        </td>
+        <td
+          style={
+            Object {
+              "textAlign": "center",
+              "width": "3px",
+            }
+          }
+        >
+          :
+        </td>
+        <td
+          align="left"
+          id="bmi"
+        />
+      </tr>
+      <tr>
+        <td
+          className="blueText"
+          style={
+            Object {
+              "fontWeight": "bold",
+              "textAlign": "right",
+            }
+          }
+        >
+          Weight
+        </td>
+        <td
+          style={
+            Object {
+              "textAlign": "center",
+              "width": "3px",
+            }
+          }
+        >
+          :
+        </td>
+        <td
+          align="left"
+          id="weight"
+        />
+      </tr>
+      <tr>
+        <td
+          className="blueText"
+          style={
+            Object {
+              "fontWeight": "bold",
+              "textAlign": "right",
+            }
+          }
+        >
+          Allergies
+        </td>
+        <td
+          style={
+            Object {
+              "textAlign": "center",
+              "width": "3px",
+            }
+          }
+        >
+          :
+        </td>
+        <td
+          align="left"
+          id="allergies"
+        />
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;

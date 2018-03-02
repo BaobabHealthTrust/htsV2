@@ -1,0 +1,98 @@
+.panel {
+    height: calc(100vh - 350px);
+    background-color: #eeeeee;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    width: calc(50vw - 80px);
+    padding: 10px;
+    text-align: center;
+    overflow: auto;
+}
+
+.mini-panel {
+    height: calc(100vh - 350px);
+    background-color: #eeeeee;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    width: calc(25vw - 80px);
+    padding: 10px;
+    text-align: center;
+    overflow: auto;
+}
+
+.arrow-up-disabled {
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    cursor: pointer;
+    border-bottom: 30px solid #cccccc;
+}
+
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    cursor: pointer;
+    border-bottom: 30px solid #3465a4;
+}
+
+.arrow-up:hover {
+    border-bottom: 30px solid #5ca6c4;
+}
+
+.arrow-up:active {
+    border-bottom: 30px solid #ef8544;
+}
+
+.arrow-down-disabled {
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    cursor: pointer;
+    border-top: 30px solid #cccccc;
+}
+
+.arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    cursor: pointer;
+    border-top: 30px solid #3465a4;
+}
+
+.arrow-down:hover {
+    border-top: 30px solid #5ca6c4;
+}
+
+.arrow-down:active {
+    border-top: 30px solid #ef8544;
+}
+
+.selectListLi {
+    font-size: 1.8em;
+    background-color: #dddddd;
+    padding: 10px;
+    margin: 8px;
+    cursor: pointer;
+}
+
+.selectedListLi {
+    font-size: 1.8em;
+    background-color: orange;
+    padding: 10px;
+    margin: 8px;
+    cursor: pointer;
+}
+
+.selectListLi:hover {
+    background-color: lightblue;
+}
+
+.selectListLi:active {
+    background-color: orange;
+}
+

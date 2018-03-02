@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bonitaConnector="http://www.bonitasoft.org/studio/connector/definition/6.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di_1="http://www.omg.org/spec/DD/20100524/DI" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:model="http://www.omg.org/spec/BPMN/20100524/MODEL" xsi:schemaLocation="schemaLocation http://www.omg.org/spec/BPMN/20100524/MODEL schemas/BPMN20.xsd" exporter="BonitaSoft" exporterVersion="7.3.2" expressionLanguage="http://groovy.codehaus.org/" targetNamespace="http://bonitasoft.com/_6rlfkPisEees0onZYrMMzA">
+  <model:collaboration id="_6rlfkPisEees0onZYrMMzA">
+    <model:participant id="_T98NQPiwEees0onZYrMMzA" name="Pool16" processRef="_6rlfkfisEees0onZYrMMzA"/>
+    <model:participant id="_6rlfuvisEees0onZYrMMzA" name="Employee actor">
+      <model:documentation>This is an example of actor that is mapped to any ACME users</model:documentation>
+    </model:participant>
+  </model:collaboration>
+  <model:process id="_6rlfkfisEees0onZYrMMzA" name="Pool16">
+    <model:ioSpecification id="_T98NQ_iwEees0onZYrMMzA">
+      <model:inputSet id="_T98NRPiwEees0onZYrMMzA"/>
+      <model:outputSet id="_T98NRfiwEees0onZYrMMzA"/>
+    </model:ioSpecification>
+    <model:laneSet id="Pool16_laneSet">
+      <model:lane id="_6rlfkvisEees0onZYrMMzA" name="Employee lane">
+        <model:flowNodeRef>_6rlfk_isEees0onZYrMMzA</model:flowNodeRef>
+        <model:flowNodeRef>_8yBAkPisEees0onZYrMMzA</model:flowNodeRef>
+        <model:flowNodeRef>__06J0PisEees0onZYrMMzA</model:flowNodeRef>
+        <model:flowNodeRef>_CXkT0PitEees0onZYrMMzA</model:flowNodeRef>
+        <model:flowNodeRef>_YSw_0PitEees0onZYrMMzA</model:flowNodeRef>
+        <model:flowNodeRef>_ZQbh8PitEees0onZYrMMzA</model:flowNodeRef>
+      </model:lane>
+    </model:laneSet>
+    <model:startEvent id="_6rlfk_isEees0onZYrMMzA" name="Start"/>
+    <model:task id="_8yBAkPisEees0onZYrMMzA" name="Register Number"/>
+    <model:task id="__06J0PisEees0onZYrMMzA" name="Location Type"/>
+    <model:task id="_CXkT0PitEees0onZYrMMzA" name="Service Delivery Point"/>
+    <model:serviceTask id="_YSw_0PitEees0onZYrMMzA" name="Save "/>
+    <model:endEvent id="_ZQbh8PitEees0onZYrMMzA" name="End1"/>
+    <model:sequenceFlow id="_6rlft_isEees0onZYrMMzA" name="" sourceRef="_6rlfk_isEees0onZYrMMzA" targetRef="_8yBAkPisEees0onZYrMMzA"/>
+    <model:sequenceFlow id="__fRRAPisEees0onZYrMMzA" name="" sourceRef="_8yBAkPisEees0onZYrMMzA" targetRef="__06J0PisEees0onZYrMMzA"/>
+    <model:sequenceFlow id="_B_1JQPitEees0onZYrMMzA" name="" sourceRef="__06J0PisEees0onZYrMMzA" targetRef="_CXkT0PitEees0onZYrMMzA"/>
+    <model:sequenceFlow id="_YS1RQPitEees0onZYrMMzA" name="" sourceRef="_CXkT0PitEees0onZYrMMzA" targetRef="_YSw_0PitEees0onZYrMMzA"/>
+    <model:sequenceFlow id="_ZQfMUPitEees0onZYrMMzA" name="" sourceRef="_YSw_0PitEees0onZYrMMzA" targetRef="_ZQbh8PitEees0onZYrMMzA"/>
+  </model:process>
+  <di:BPMNDiagram name="HTS Registers">
+    <di:BPMNPlane id="plane__6rlfkPisEees0onZYrMMzA" bpmnElement="_6rlfkPisEees0onZYrMMzA">
+      <di:BPMNShape id="_6rlf1fisEees0onZYrMMzA" bpmnElement="_T98NQPiwEees0onZYrMMzA" isHorizontal="true">
+        <dc:Bounds height="250.0" width="1265.0" x="30.0" y="30.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_6rlf2PisEees0onZYrMMzA" bpmnElement="_6rlfkvisEees0onZYrMMzA" isHorizontal="true">
+        <dc:Bounds height="250.0" width="1273.0" x="52.0" y="30.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_6rlf3visEees0onZYrMMzA" bpmnElement="_6rlfk_isEees0onZYrMMzA">
+        <dc:Bounds height="30.0" width="30.0" x="112.0" y="98.0"/>
+        <di:BPMNLabel id="_T98NR_iwEees0onZYrMMzA" labelStyle="_T98NQfiwEees0onZYrMMzA">
+          <dc:Bounds height="15.0" width="27.0" x="114.0" y="133.0"/>
+        </di:BPMNLabel>
+      </di:BPMNShape>
+      <di:BPMNShape id="_8yCOsPisEees0onZYrMMzA" bpmnElement="_8yBAkPisEees0onZYrMMzA">
+        <dc:Bounds height="50.0" width="100.0" x="212.0" y="90.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="__06w4PisEees0onZYrMMzA" bpmnElement="__06J0PisEees0onZYrMMzA">
+        <dc:Bounds height="50.0" width="100.0" x="473.0" y="92.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_CXk64PitEees0onZYrMMzA" bpmnElement="_CXkT0PitEees0onZYrMMzA">
+        <dc:Bounds height="60.0" width="120.0" x="772.0" y="89.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_YSyN8PitEees0onZYrMMzA" bpmnElement="_YSw_0PitEees0onZYrMMzA">
+        <dc:Bounds height="50.0" width="100.0" x="1032.0" y="94.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_ZQcwEPitEees0onZYrMMzA" bpmnElement="_ZQbh8PitEees0onZYrMMzA">
+        <dc:Bounds height="30.0" width="30.0" x="1197.0" y="101.0"/>
+        <di:BPMNLabel id="_T980VPiwEees0onZYrMMzA" labelStyle="_T98NQfiwEees0onZYrMMzA">
+          <dc:Bounds height="15.0" width="28.0" x="1198.0" y="136.0"/>
+        </di:BPMNLabel>
+      </di:BPMNShape>
+      <di:BPMNEdge id="_6rlf7fisEees0onZYrMMzA" bpmnElement="_6rlft_isEees0onZYrMMzA">
+        <di_1:waypoint x="141.0" y="114.0"/>
+        <di_1:waypoint x="212.0" y="114.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="177.0" y="104.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="__fR4EPisEees0onZYrMMzA" bpmnElement="__fRRAPisEees0onZYrMMzA">
+        <di_1:waypoint x="312.0" y="116.0"/>
+        <di_1:waypoint x="473.0" y="116.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="392.0" y="106.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_B_1wUPitEees0onZYrMMzA" bpmnElement="_B_1JQPitEees0onZYrMMzA">
+        <di_1:waypoint x="573.0" y="118.0"/>
+        <di_1:waypoint x="772.0" y="118.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="672.0" y="108.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_YS14UPitEees0onZYrMMzA" bpmnElement="_YS1RQPitEees0onZYrMMzA">
+        <di_1:waypoint x="892.0" y="119.0"/>
+        <di_1:waypoint x="1032.0" y="119.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="962.0" y="109.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_ZQfzYvitEees0onZYrMMzA" bpmnElement="_ZQfMUPitEees0onZYrMMzA">
+        <di_1:waypoint x="1132.0" y="117.0"/>
+        <di_1:waypoint x="1197.0" y="117.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="1165.0" y="107.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+    </di:BPMNPlane>
+    <di:BPMNLabelStyle id="_T98NQfiwEees0onZYrMMzA">
+      <dc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Ubuntu" size="9.0"/>
+    </di:BPMNLabelStyle>
+  </di:BPMNDiagram>
+</model:definitions>

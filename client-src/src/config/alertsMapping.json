@@ -1,0 +1,74 @@
+{
+  "Missing Outcome Summary": {
+    "message": "Missing Outcome Summary",
+    "category": "Outcome Summary"
+  },
+  "Invalid Outcome Summary": {
+    "message": "Invalid Outcome Summary",
+    "category": "Outcome Summary"
+  },
+  "Missing Result Given to Client": {
+    "message": "Missing Result Given to Client",
+    "category": "Result Given to Client"
+  },
+  "Invalid Result Given to Client": {
+    "message": "Invalid Result Given to Client",
+    "category": "Result Given to Client"
+  },
+  "Missing Client Risk Category": {
+    "message": "Missing Client Risk Category",
+    "category": "Client Risk Category"
+  },
+  "Invalid Referral for Re-Testing": {
+    "message": "Invalid Referral for Re-Testing",
+    "category": "Referral for Re-Testing"
+  },
+  "Missing or invalid Age": {
+    "message": "Missing or invalid Age",
+    "category": "Age"
+  },
+  "Missing 'First Pass: Test 2' result": {
+    "message": "Missing 'First Pass: Test 2' result",
+    "category": "HIV Rapid Test Outcomes"
+  },
+  "Missing 'Immediate Repeat' results": {
+    "message": "Missing 'Immediate Repeat' results",
+    "category": "HIV Rapid Test Outcomes"
+  },
+  "Other error!": {
+    "message": "Other error!",
+    "category": "HTS Provider ID"
+  },
+  "Missing 'First Pass: Test 1' result": {
+    "message": "Missing 'First Pass: Test 1' result",
+    "category": "HIV Rapid Test Outcomes"
+  },
+  "Missing 'First Pass' result(s)": {
+    "message": "Missing 'First Pass' result(s)",
+    "category": "HIV Rapid Test Outcomes"
+  },
+  "Missing 'HIV Rapid Test Outcomes'": {
+    "message": "Missing 'HIV Rapid Test Outcomes'",
+    "category": "HIV Rapid Test Outcomes"
+  },
+  "Incomplete 'First Pass' result(s)": {
+    "message": "Incomplete 'First Pass' result(s)",
+    "category": "HIV Rapid Test Outcomes"
+  },
+  "Missing 'Last HIV Test'": {
+    "message": "Missing 'Last HIV Test'",
+    "category": "Last HIV Test"
+  },
+  "'Time Since Last Test' duration invalid!": {
+      "message": "'Time Since Last Test' duration invalid!",
+      "category": "Last HIV Test"
+  },
+  "Missing Referral for Re-Testing": {
+    "message": "Missing Referral for Re-Testing",
+    "category": "Referral for Re-Testing"
+  },
+  "Sex/Pregnancy does not match entered age": {
+    "message": "Sex/Pregnancy does not match entered age",
+    "category": "Sex/Pregnancy"
+  }
+}

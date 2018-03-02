@@ -1,0 +1,12 @@
+{
+  "accessType": "EXECUTE",
+  "principalType": "ROLE",
+  "principalId": "admin",
+  "permission": "ALLOW",
+  "property": "find",
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

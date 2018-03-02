@@ -1,0 +1,23 @@
+{
+    "admin": [{
+        "label": "Overview",
+        "url": "/overview",
+        "done": false
+    }, {
+        "label": "My Account",
+        "url": "/my_account",
+        "done": false
+    }, {
+        "label": "Add User",
+        "url": "/add_user",
+        "done": false
+    }, {
+        "label": "Block User",
+        "url": "/block_user",
+        "done": false
+    }, {
+        "label": "Activate User",
+        "url": "/activate_user",
+        "done": false
+    }]
+}

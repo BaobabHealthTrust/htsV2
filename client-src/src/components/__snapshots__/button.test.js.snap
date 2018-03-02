@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: Button should match its empty snapshot 1`] = `
+<button
+  className={undefined}
+  id={undefined}
+  onMouseDown={undefined}
+  style={undefined}
+/>
+`;

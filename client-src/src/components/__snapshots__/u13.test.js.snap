@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: U13 should match its empty snapshot 1`] = `
+<div
+  className="nav"
+/>
+`;

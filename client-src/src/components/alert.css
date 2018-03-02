@@ -1,0 +1,30 @@
+.shield {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(128, 128, 128, 0.4);
+    z-index: 1001;
+}
+
+.alertContent {
+    width: 30vw;
+    height: 20vh;
+    overflow: auto;
+    border: 2px inset #dddddd;
+    padding: 20px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.popup {
+    position: absolute;
+    top: 5vh;
+    left: 35vw;
+    background-color: #eeeeee;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border: 2px outset #eeeeee;
+    z-index: 1005;
+}

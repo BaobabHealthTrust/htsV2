@@ -1,0 +1,17 @@
+{
+    "name": "seeder",
+    "version": "1.0.0",
+    "description": "",
+    "main": "seed.js",
+    "dependencies": {
+        "knex": "^0.11.1",
+        "mysql": "^2.10.2",
+        "node-uuid": "^1.4.7",
+        "async": "^1.4.2"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Chimwemwe Kachaje <chimwemwe.kachaje@baobabhealthtrust.org>",
+    "license": "MIT"
+}

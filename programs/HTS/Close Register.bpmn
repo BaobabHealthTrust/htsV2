@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bonitaConnector="http://www.bonitasoft.org/studio/connector/definition/6.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di_1="http://www.omg.org/spec/DD/20100524/DI" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:model="http://www.omg.org/spec/BPMN/20100524/MODEL" xsi:schemaLocation="schemaLocation http://www.omg.org/spec/BPMN/20100524/MODEL schemas/BPMN20.xsd" exporter="BonitaSoft" exporterVersion="7.3.2" expressionLanguage="http://groovy.codehaus.org/" targetNamespace="http://bonitasoft.com/_OeLgUPitEees0onZYrMMzA">
+  <model:collaboration id="_OeLgUPitEees0onZYrMMzA">
+    <model:participant id="_W7cnkPitEees0onZYrMMzA" name="Pool17" processRef="_OeLgUfitEees0onZYrMMzA"/>
+    <model:participant id="_OeLgevitEees0onZYrMMzA" name="Employee actor">
+      <model:documentation>This is an example of actor that is mapped to any ACME users</model:documentation>
+    </model:participant>
+  </model:collaboration>
+  <model:process id="_OeLgUfitEees0onZYrMMzA" name="Pool17">
+    <model:ioSpecification id="_W7dOovitEees0onZYrMMzA">
+      <model:inputSet id="_W7dOo_itEees0onZYrMMzA"/>
+      <model:outputSet id="_W7dOpPitEees0onZYrMMzA"/>
+    </model:ioSpecification>
+    <model:laneSet id="Pool17_laneSet">
+      <model:lane id="_OeLgUvitEees0onZYrMMzA" name="Employee lane">
+        <model:flowNodeRef>_OeLgU_itEees0onZYrMMzA</model:flowNodeRef>
+        <model:flowNodeRef>_PzefUPitEees0onZYrMMzA</model:flowNodeRef>
+        <model:flowNodeRef>_SaaFUPitEees0onZYrMMzA</model:flowNodeRef>
+        <model:flowNodeRef>_UiUNAPitEees0onZYrMMzA</model:flowNodeRef>
+      </model:lane>
+    </model:laneSet>
+    <model:startEvent id="_OeLgU_itEees0onZYrMMzA" name="Start"/>
+    <model:task id="_PzefUPitEees0onZYrMMzA" name="Register Number"/>
+    <model:serviceTask id="_SaaFUPitEees0onZYrMMzA" name="Close Register"/>
+    <model:endEvent id="_UiUNAPitEees0onZYrMMzA" name="End1"/>
+    <model:sequenceFlow id="_OeLgd_itEees0onZYrMMzA" name="" sourceRef="_OeLgU_itEees0onZYrMMzA" targetRef="_PzefUPitEees0onZYrMMzA">
+      <model:conditionExpression xsi:type="model:tFormalExpression" id="_W7qC8PitEees0onZYrMMzA" evaluatesToTypeRef="java:java.lang.Boolean" language="http://www.w3.org/1999/XPath"></model:conditionExpression>
+    </model:sequenceFlow>
+    <model:sequenceFlow id="_SadvsPitEees0onZYrMMzA" name="" sourceRef="_PzefUPitEees0onZYrMMzA" targetRef="_SaaFUPitEees0onZYrMMzA"/>
+    <model:sequenceFlow id="_UiYecPitEees0onZYrMMzA" name="" sourceRef="_SaaFUPitEees0onZYrMMzA" targetRef="_UiUNAPitEees0onZYrMMzA"/>
+  </model:process>
+  <di:BPMNDiagram name="Close Register">
+    <di:BPMNPlane id="plane__OeLgUPitEees0onZYrMMzA" bpmnElement="_OeLgUPitEees0onZYrMMzA">
+      <di:BPMNShape id="_OeLglfitEees0onZYrMMzA" bpmnElement="_W7cnkPitEees0onZYrMMzA" isHorizontal="true">
+        <dc:Bounds height="250.0" width="1265.0" x="30.0" y="30.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_OeLgmPitEees0onZYrMMzA" bpmnElement="_OeLgUvitEees0onZYrMMzA" isHorizontal="true">
+        <dc:Bounds height="250.0" width="1243.0" x="52.0" y="30.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_OeLgnvitEees0onZYrMMzA" bpmnElement="_OeLgU_itEees0onZYrMMzA">
+        <dc:Bounds height="30.0" width="30.0" x="112.0" y="98.0"/>
+        <di:BPMNLabel id="_W7dOpvitEees0onZYrMMzA" labelStyle="_W7dOoPitEees0onZYrMMzA">
+          <dc:Bounds height="15.0" width="27.0" x="114.0" y="133.0"/>
+        </di:BPMNLabel>
+      </di:BPMNShape>
+      <di:BPMNShape id="_PzfGYPitEees0onZYrMMzA" bpmnElement="_PzefUPitEees0onZYrMMzA">
+        <dc:Bounds height="50.0" width="100.0" x="212.0" y="90.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_SaasYPitEees0onZYrMMzA" bpmnElement="_SaaFUPitEees0onZYrMMzA">
+        <dc:Bounds height="50.0" width="100.0" x="438.0" y="91.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_UiVbIPitEees0onZYrMMzA" bpmnElement="_UiUNAPitEees0onZYrMMzA">
+        <dc:Bounds height="30.0" width="30.0" x="647.0" y="100.0"/>
+        <di:BPMNLabel id="_W7pb4fitEees0onZYrMMzA" labelStyle="_W7dOoPitEees0onZYrMMzA">
+          <dc:Bounds height="15.0" width="28.0" x="648.0" y="135.0"/>
+        </di:BPMNLabel>
+      </di:BPMNShape>
+      <di:BPMNEdge id="_OeLgrfitEees0onZYrMMzA" bpmnElement="_OeLgd_itEees0onZYrMMzA">
+        <di_1:waypoint x="141.0" y="114.0"/>
+        <di_1:waypoint x="212.0" y="114.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="177.0" y="104.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_SaeWwfitEees0onZYrMMzA" bpmnElement="_SadvsPitEees0onZYrMMzA">
+        <di_1:waypoint x="312.0" y="115.0"/>
+        <di_1:waypoint x="438.0" y="115.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="375.0" y="105.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_UiZFgPitEees0onZYrMMzA" bpmnElement="_UiYecPitEees0onZYrMMzA">
+        <di_1:waypoint x="538.0" y="115.0"/>
+        <di_1:waypoint x="647.0" y="115.0"/>
+        <di:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="593.0" y="105.0"/>
+        </di:BPMNLabel>
+      </di:BPMNEdge>
+    </di:BPMNPlane>
+    <di:BPMNLabelStyle id="_W7dOoPitEees0onZYrMMzA">
+      <dc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Ubuntu" size="9.0"/>
+    </di:BPMNLabelStyle>
+  </di:BPMNDiagram>
+</model:definitions>

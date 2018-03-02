@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: U2 should match its empty snapshot 1`] = `
+<div
+  className="headTab"
+  id="modApp"
+  style={
+    Object {
+      "cursor": "pointer",
+      "textAlign": "center",
+    }
+  }
+>
+  <table
+    border="0"
+    cellPadding="5"
+    style={
+      Object {
+        "borderCollapse": "collapse",
+        "margin": "auto",
+      }
+    }
+  >
+    <tbody>
+      <tr>
+        <td
+          style={
+            Object {
+              "textAlign": "right",
+              "width": "40px",
+            }
+          }
+        >
+          <img
+            alt=""
+            height="110"
+            src={undefined}
+          />
+        </td>
+        <td
+          style={
+            Object {
+              "color": "#345db5",
+              "fontSize": "30px",
+            }
+          }
+        />
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;

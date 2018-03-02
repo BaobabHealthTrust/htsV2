@@ -1,0 +1,15 @@
+.field1 {
+    width: 150px;
+    text-align: center;
+    border: 2px solid #cccccc;
+}
+
+.field2 {
+    width: 100px;
+    text-align: center;
+    border: 2px solid #cccccc;
+}
+
+.activeField {
+    border: 2px solid #c50000;
+}

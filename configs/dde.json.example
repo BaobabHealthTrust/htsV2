@@ -1,0 +1,15 @@
+{
+  "default": {
+    "username": "",
+    "password": ""
+  },
+  "app": {
+    "username": "",
+    "password": "",
+    "application": "",
+    "site_code": ""
+  },
+  "host": "",
+  "protocol": "",
+  "port": ""
+}

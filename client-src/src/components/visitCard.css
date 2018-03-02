@@ -1,0 +1,53 @@
+.headTab {
+    width: 100%;
+    box-shadow: 5px 2px 5px 0px rgba(0, 0, 0, 0.75);
+    overflow: hidden;
+    height: 120px;
+    border: 1px solid #004586;
+    color: #3c60b1;
+}
+
+.blueText {
+    color: #3c60b1;
+}
+
+.visitCardContainer {
+    width: 100%;
+    overflow: auto;
+    text-align: center;
+}
+
+.visitCard {
+    display: inline-block;
+    border: 1px solid #619d30;
+    width: calc(50% - 20px);
+    margin: 5px;
+}
+
+.visitCardHeader {
+    background-color: #619d30;
+    color: white;
+    padding: 5px;
+    overflow: hidden;
+    height: 16px;
+    font-size: 14px;
+}
+
+.visitCardContent {
+    height: 150px;  
+    overflow: auto; 
+    padding: 5px; 
+}
+
+.expandedVisitCard {
+    display: inline-block;
+    border: 1px solid #619d30;
+    margin: 5px;
+    width: calc(100% - 30px);
+}
+
+.expandedVisitCardContent {
+    height: 400px;
+    overflow: auto; 
+    padding: 5px; 
+}

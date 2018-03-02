@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Set Date</title>
+    <!--script type="text/javascript" language="javascript" src="/touchscreentoolkit/lib/javascripts/touchScreenToolkit.js" defer></script-->
+
+    <style>
+
+        #today, #Unknown {
+            display: none;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div id='inputFrame'>
+    <!--form action="javascript:window.parent.landing.setDate()" >
+        <table>
+            <tr>
+                <td>
+                    Set Date
+                </td>
+                <td>
+                    <input type="text" field_type="date" name="set_date" id="set_date" helpText="Set Date"
+                           tt_onUnload="document.forms[0].setAttribute('action',
+                           'javascript:window.parent.landing.setDate(\'' + __$('touchscreenInput').value + '\')')" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Summaries
+                </td>
+                <td>
+                    <input type="text" field_type="text" name="set_date" id="Summary" helpText="Summaries" tt_onLoad="summary()" tt_pageStyleClass ="NoControls NoKeyboard" />
+                </td>
+            <tr>
+        </table>
+    </form-->
+    </div>
+<script>
+
+    //tt_cancel_destination = (window.parent.user.settings.defaultPath ? window.parent.user.settings.defaultPath : "/");
+    //tt_cancel_show = (window.parent.user.settings.defaultPath ? window.parent.user.settings.defaultPath : "/");
+
+    function padZeros(number, positions) {
+        var zeros = parseInt(positions) - String(number).length;
+        var padded = "";
+
+        for (var i = 0; i < zeros; i++) {
+            padded += "0";
+        }
+
+        padded += String(number);
+
+        return padded;
+    }
+
+    function verticalText(text, parent) {
+
+    if (!parent)
+        return;
+
+    var div = document.createElement("div");
+    div.style.height = "120px";
+    div.style.fontSize = "12px";
+    div.style.width = "30px";
+
+    parent.appendChild(div);
+
+    var child = document.createElement("div");
+    child.style.transform = "rotate(-90deg)";
+    child.style.transformOrigin = "right bottom 0";
+    child.style.marginLeft = "-65px";
+
+    child.innerHTML = text;
+
+    div.appendChild(child);
+
+    }
+
+    function __$(id) {
+
+        return document.getElementById(id);
+
+    }
+
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = padZeros((today.getMonth() + 1), 2);
+
+    tstCurrentDate = year + "-" + month + "-" + padZeros(today.getDate(), 2);
+
+    function __$(id) {
+      return document.getElementById(id);
+    }
+
+    function summary(){
+            if (__$("inputFrame")) {
+                __$("inputFrame").style.overflow = "auto";
+                __$("inputFrame").style.overflowX ="scroll"
+
+                var table = document.createElement("table");
+                table.style.borderCollapse = "collapse";
+                table.style.margin = "auto";
+                table.style.marginTop = "20px";
+                table.style.color = "#333";
+                table.cellPadding = "10px";
+                table.border = 0;
+
+                __$("inputFrame").appendChild(table);
+
+                var tr = document.createElement("tr");
+
+                table.appendChild(tr);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                td.style.borderBottom = "1px solid #333";
+                td.style.borderTop = "3px solid #333";
+                td.innerHTML = "&nbsp;";
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+
+                tr.appendChild(td);
+
+
+                var th = document.createElement("th");
+                th.innerHTML = "HTC Provider ID";
+                th.style.borderLeft = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.style.borderBottom = "1px solid #333";
+                th.style.borderRight = "3px solid #333";
+                th.rowSpan = 3;
+
+                tr.appendChild(th)
+
+                var th = document.createElement("th");
+                th.innerHTML = "Client Name";
+                th.style.borderTop = "3px solid #333";
+                
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "Phone/Physical Address";
+                th.style.borderTop = "3px solid #333";
+
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "Sex/Pregnancy";
+                th.style.borderLeft = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.style.borderRight = "1px solid #333";
+                th.colSpan = 3;
+
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "Age";
+                th.style.borderLeft = "1px solid #333";
+                th.style.borderRight = "1px solid #333";
+                th.style.borderBottom = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.rowSpan = 3;
+
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "Age Group";
+                th.style.borderTop = "3px solid #333";
+                th.colSpan = 4;
+
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "HTS Access Type";
+                th.style.borderLeft = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.colSpan = 3;
+
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "Last HIV Test";
+                th.style.borderLeft = "1px solid #333";
+                th.style.borderRight = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.colSpan = 5;
+
+                tr.appendChild(th);
+
+                var th = document.createElement("td");
+                th.innerHTML = "<b>Time<br/>Since Last<br/>Test</b><br/><br/><span style='font-size: 12px;'>No. of<br/>Days" +
+                    "<br/>Weeks<br/>Months or<br/>Years</span>";
+                th.style.borderTop = "3px solid #333";
+                th.style.borderBottom = "1px solid #333";
+                th.rowSpan = 3;
+
+                tr.appendChild(th);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                td.style.borderLeft = "1px solid #333";
+                td.style.borderTop = "3px solid #333";
+                td.innerHTML = "<b>Partner Present</b><br/><span style='font-size: 11px;'>at this session</span>";
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.colSpan = 2;
+
+                tr.appendChild(td);
+
+                var th = document.createElement("th");
+                th.innerHTML = "HIV Rapid Test Outcomes";
+                th.style.borderLeft = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.colSpan = "4"
+                tr.appendChild(th);
+
+
+
+                var th = document.createElement("th");
+                th.innerHTML = "Outcome Summary";
+                th.style.borderLeft = "1px solid #333";
+                th.style.borderRight = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.colSpan = 5;
+
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "Result Given to Client";
+                th.style.borderTop = "3px solid #333";
+                th.colSpan = 6;
+
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "Partner Status";
+                th.style.borderLeft = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.style.borderRight = "1px solid #333";
+                th.colSpan = 4;
+                th.rowSpan = 2;
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "Client Risk Category";
+                th.style.borderLeft = "1px solid #333";
+                th.style.borderRight = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.colSpan = 4;
+                th.rowSpan = 2;
+
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "Referral for Re-Testing";
+                th.style.padding = "10px";
+                th.style.borderLeft = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.style.verticalAlign = "top";
+                th.colSpan = 4;
+                th.rowSpan = 2;
+
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "Number of Items<br />Given";
+                th.style.padding = "10px";
+                th.style.borderLeft = "1px solid #333";
+                th.style.borderRight = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.style.verticalAlign = "top";
+                th.colSpan = 3;
+
+                tr.appendChild(th);
+
+                var th = document.createElement("th");
+                th.innerHTML = "Comments";
+                th.style.padding = "10px";
+                th.style.borderRight = "1px solid #333";
+                th.style.borderTop = "3px solid #333";
+                th.style.verticalAlign = "top";
+
+                tr.appendChild(th);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                th.style.borderLeft = "1px solid #333";
+                td.style.borderTop = "3px solid #333";
+                td.innerHTML = "&nbsp;";
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+
+                tr.appendChild(td);
+
+                var tr = document.createElement("tr");
+
+                table.appendChild(tr);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "2px solid #333";
+                td.innerHTML = "<i>Fill name and contact details<br/><u>only</u> if client gives consent to be contacted</i>";
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.colSpan = 2;
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderLeft = "1px solid #333";
+                td.style.borderBottom = "2px solid #333";
+                verticalText("Male", td);
+                td.style.width = "30px";
+                td.style.height = "70px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "2px solid #333";
+                verticalText("Female<i style='color: #eee'>_</i>Non-Preg.", td);
+                td.style.width = "30px";
+                td.style.height = "100px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                td.style.borderBottom = "2px solid #333";
+                verticalText("Female<i style='color: #eee'>_</i>Pregnant", td);
+                td.style.width = "30px";
+                td.style.height = "100px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderLeft = "1px solid #333";
+                td.style.borderBottom = "1px solid #333";
+                verticalText("0-11<i style='color: #eee'>_</i>months", td);
+                td.style.width = "30px";
+                td.style.height = "100px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("1-14<i style='color: #eee'>_</i>years", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("15-24<i style='color: #eee'>_</i>years", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                td.style.borderBottom = "1px solid #333";
+                verticalText("25+<i style='color: #eee'>_</i>years", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderLeft = "1px solid #333";
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Routine<i style='color: #eee'>_</i>HTS<i style='color: #eee'>_</i>within Health Service", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 2;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderLeft = "1px solid #333";
+                verticalText("Comes<i style='color: #eee'>_</i>with<i style='color: #eee'>_</i>HTS Family<i style='color: #eee'>_</i>Ref.<i style='color: #eee'>_</i>Slip", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Other<i style='color: #eee'>_</i>(VCT, etc.)<i style='color: #eee'>________________________</i>", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderLeft = "1px solid #333";
+                td.style.borderBottom = "4px solid #333";
+                verticalText("Never Tested", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Last Negative", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Last Positive", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Last<i style='color: #eee'>_</i>Expos.<i style='color: #eee'>_</i>Infant", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Last Inconclusive", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderLeft = "1px solid #333";
+                td.style.borderBottom = "1px solid #333";
+                verticalText("No", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Yes", td);
+                td.style.width = "30px";
+                td.style.height = "50px";
+                td.rowSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.innerHTML = "First pass";
+                td.colSpan = 2;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.innerHTML = "Immediate pass";
+                td.style.borderRight = "1px solid #333";
+                td.colSpan = 2;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.innerHTML = "Only Test 1 used";
+                td.colSpan = 2;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.innerHTML = "Test 1 & Test 2<br/>Used ± Repeat";
+                td.style.borderRight = "1px solid #333";
+                td.colSpan = 3;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.innerHTML = "&nbsp;";
+                td.colSpan = 4;
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.innerHTML = "Confirmatory<br/>Results for<br/>Clients Last +";
+                td.style.borderRight = "1px solid #333";
+                td.colSpan = 2;
+                tr.appendChild(td);
+
+                
+
+
+
+
+
+                
+                var td = document.createElement("td");
+                td.style.verticalAlign = "top";
+                td.align = "center";
+                td.innerHTML = "<b>HTS<br/>Family<br/>Ref Slips</b>";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "2px solid #333";
+                td.style.verticalAlign = "top";
+                td.colSpan = 2;
+                td.align = "center";
+                td.innerHTML = "<b>Condoms</b>";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                td.style.verticalAlign = "top";
+                td.innerHTML = "<i>Specimen ID for DBS<br />samples sent to lab.</i><br/>";
+
+                tr.appendChild(td);
+
+                var tr = document.createElement("tr");
+
+                table.appendChild(tr);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                td.innerHTML = "Test 1";
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                td.innerHTML = "Test 2";
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                td.innerHTML = "Test 1";
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                td.style.borderRight = "1px solid #333";
+                td.innerHTML = "Test 2";
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Single<i style='color: #eee'>_</i>Neg", td);
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Single<i style='color: #eee'>_</i>Pos", td);
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Test<i style='color: #eee'>_</i>1&2<i style='color: #eee'>_</i>Neg", td);
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Test<i style='color: #eee'>_</i>1&2<i style='color: #eee'>_</i>Pos", td);
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                td.style.borderRight = "1px solid #333";
+                verticalText("Test<i style='color: #eee'>_</i>1&2<i style='color: #eee'>_</i>disc.", td);
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("New<i style='color: #eee'>_</i>Negative", td);
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("New<i style='color: #eee'>_</i>Positive", td);
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("New<i style='color: #eee'>_</i>Exp.<i style='color: #eee'>_</i>Infant", td);
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("New<i style='color: #eee'>_</i>Inconclusive", td);
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Conf.<i style='color: #eee'>_</i>Positive", td);
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                td.style.borderRight = "1px solid #333";
+                verticalText("Inconclusive", td);
+                td.align = "center";
+                td.style.fontStyle = "italic";
+                td.style.fontSize = "12px";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderLeft = "1px solid #333";
+                td.style.borderBottom = "1px solid #333";
+                verticalText("No Partner", td);
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                verticalText("HIV Unknown", td);
+                td.style.borderBottom = "1px solid #333";
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                verticalText("Partner Neg.", td);
+                td.style.borderBottom = "1px solid #333";
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                verticalText("Partner Pos.", td);
+                td.style.borderBottom = "1px solid #333";
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                verticalText("Low<i style='color: #eee'>_</i>Risk", td);
+                td.style.borderBottom = "1px solid #333";
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                verticalText("On-going<i style='color: #eee'>_</i>Risk", td);
+                td.style.borderBottom = "1px solid #333";
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                verticalText("High<i style='color: #eee'>_</i>Risk<i style='color: #eee'>_</i>Event<i style='color: #eee'>_</i>" +
+                "in<br/>last<i style='color: #eee'>_</i>3<i style='color: #eee'>_</i>months", td);
+                td.style.borderBottom = "1px solid #333";
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                verticalText("Risk<i style='color: #eee'>_</i>assessment<br/>Not<i style='color: #eee'>_</i>Done", td);
+                td.style.borderBottom = "1px solid #333";
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                verticalText("No Re-Test Needed", td)
+                td.style.borderBottom = "1px solid #333";
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                verticalText("Re-Test", td);
+                td.style.borderBottom = "1px solid #333";
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                verticalText("Confirmatory Test at HIV Clinic", td);
+                td.style.borderBottom = "1px solid #333";
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                td.innerHTML = "Appointment<br/>Date Given";
+                td.style.borderBottom = "1px solid #333";
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                td.style.borderBottom = "1px solid #333";
+                td.style.verticalAlign = "bottom";
+                td.align = "center";
+                td.innerHTML = "<i>1 Slip for each<br/>partner+ each<br/>U5 child with<br/>unk. status</i>";
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                verticalText("Male", td);
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderBottom = "1px solid #333";
+                td.style.borderRight = "1px solid #333";
+                verticalText("Female", td);
+
+                tr.appendChild(td);
+
+                var td = document.createElement("td");
+                td.style.borderRight = "1px solid #333";
+                td.style.borderBottom = "1px solid #333";
+                td.style.verticalAlign = "top";
+                td.innerHTML = "<i>Follow-up outcome for<br/>clients referred, etc.</i>";
+
+                tr.appendChild(td);
+
+
+
+
+
+    }
+}
+
+summary();
+
+</script>
+</body>
+</html>

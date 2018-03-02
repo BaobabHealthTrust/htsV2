@@ -1,0 +1,514 @@
+{
+  "Community": {
+    "Mobile": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Community",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "Any": {
+            "HTS Setting": "Community",
+            "HTS Modality": "Mobile"
+          }
+        },
+        "Partner Positive": {
+          "Any": {
+            "HTS Setting": "Community",
+            "HTS Modality": "Index"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Community",
+            "HTS Modality": "Mobile"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Community",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    },
+    "Other": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Community",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "Any": {
+            "HTS Setting": "Community",
+            "HTS Modality": "Other community platform"
+          }
+        },
+        "Partner Positive": {
+          "Any": {
+            "HTS Setting": "Community",
+            "HTS Modality": "Index"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Community",
+            "HTS Modality": "Other community platform"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Community",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    }
+  },
+  "Health Facility": {
+    "ANC": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "PMTCT (ANC)"
+          }
+        },
+        "Partner Positive": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "PMTCT (ANC)"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    },
+    "Inpatient": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Inpatient"
+          }
+        },
+        "Partner Positive": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Inpatient"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    },
+    "Malnutrition": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "0-4Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Malnutrition"
+          },
+          "5Y+": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Other PITC"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "0-4Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Malnutrition"
+          },
+          "5Y+": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Other PITC"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "0-4Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          },
+          "5Y+": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    },
+    "Maternity": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Other PITC"
+          }
+        },
+        "Partner Positive": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Other PITC"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    },
+    "OPD": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Emergency"
+          }
+        },
+        "Partner Positive": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Emergency"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    },
+    "Other": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Other PITC"
+          }
+        },
+        "Partner Positive": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Other PITC"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    },
+    "Pediatric": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "0-4Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Pediatric"
+          },
+          "5Y+": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Other PITC"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "0-4Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Pediatric"
+          },
+          "5Y+": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Other PITC"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "0-4Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          },
+          "5Y+": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    },
+    "STI": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "STI"
+          }
+        },
+        "Partner Positive": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "STI"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    },
+    "TB": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "TB"
+          }
+        },
+        "Partner Positive": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "TB"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    },
+    "VMMC": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VMMC"
+          }
+        },
+        "Partner Positive": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VMMC"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    }
+  },
+  "Stand-alone HTS Facility": {
+    "Other": {
+      "FRS/Index": {
+        "Any": {
+          "0-13Y": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        },
+        "Any other": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Other PITC"
+          }
+        },
+        "Partner Positive": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Index"
+          }
+        }
+      },
+      "PITC": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "Other PITC"
+          }
+        }
+      },
+      "VCT/Other": {
+        "Any": {
+          "Any": {
+            "HTS Setting": "Facility",
+            "HTS Modality": "VCT"
+          }
+        }
+      }
+    }
+  }
+}

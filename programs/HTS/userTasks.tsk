@@ -1,0 +1,49 @@
+{
+    "Admin": [{
+        "label": "Overview",
+        "url": "/overview",
+        "done": false
+    }, {
+        "label": "My Account",
+        "url": "/my_account",
+        "done": false
+    }, {
+        "label": "Reports",
+        "url": "/reports",
+        "done": false
+    }, {
+        "label": "Administration",
+        "url": "/admin",
+        "done": false
+    }],
+    "HTS Coordinator": [{
+        "label": "Overview",
+        "url": "/overview",
+        "done": false
+    }, {
+        "label": "My Account",
+        "url": "/my_account",
+        "done": false
+    }, {
+        "label": "Reports",
+        "url": "/reports",
+        "done": false
+    }, {
+        "label": "Administration",
+        "url": "/admin",
+        "done": false
+    }],
+    "regular": [{
+        "label": "Overview",
+        "url": "/overview",
+        "done": false
+    }, {
+        "label": "My Account",
+        "url": "/my_account",
+        "done": false
+    }, {
+        "label": "Reports",
+        "url": "/reports",
+        "done": false
+    }]
+}

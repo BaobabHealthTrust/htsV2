@@ -1,0 +1,31 @@
+.u9 {
+    width: 100%;
+    padding: 0px;
+}
+
+.u9TabContent {
+    overflow: auto;
+    padding: 0;
+    width: 100%;
+    height: calc(50vh - 145px);
+}
+
+.selectItem {
+    cursor: pointer;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+}
+
+.selectItem:hover {
+    background-color: lightblue;
+    color: black;
+}
+
+.selected {
+    background-color: #345db5;
+    color: white;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+}

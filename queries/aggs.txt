@@ -1,0 +1,38 @@
+GET omrs/visit/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "visitDate": {
+              "gte": "2018-01-01",
+              "lte": "2018-01-31"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "observation": {
+      "terms": {
+        "field": "observation.keyword"
+      },
+      "aggs": {
+        "site": {
+          "terms": {
+            "field": "location.keyword"
+          },
+          "aggs": {
+            "value": {
+              "terms": {
+                "field": "observationValue.keyword"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

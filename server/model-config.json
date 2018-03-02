@@ -1,0 +1,445 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "hts",
+    "options": {
+      "emailVerificationRequired": false
+    }
+  },
+  "AccessToken": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "hts",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "active_list": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "active_list_allergy": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "active_list_problem": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "active_list_type": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "cohort": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "cohort_member": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_answer": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_class": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_complex": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_datatype": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_derived": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_description": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_map": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_name": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_name_tag": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_name_tag_map": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_numeric": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_proposal": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_proposal_tag_map": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_set": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_set_derived": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_source": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_state_conversion": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_synonym": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "concept_word": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "district": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "drug": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "drug_ingredient": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "drug_order": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "drug_substance": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "encounter": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "encounter_type": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "external_source": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "field": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "field_answer": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "field_type": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "form": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "formentry_archive": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "formentry_error": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "formentry_queue": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "formentry_xsn": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "form_field": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "global_property": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "hl7_in_archive": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "hl7_in_error": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "hl7_in_queue": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "hl7_source": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "htmlformentry_html_form": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "hts_register": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "hts_register_encounter_mapping": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "hts_register_location_type": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "hts_register_service_delivery_point": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "liquibasechangelog": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "liquibasechangeloglock": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "location": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "location_tag": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "location_tag_map": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "logic_rule_definition": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "logic_rule_token": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "logic_rule_token_tag": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "logic_token_registration": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "logic_token_registration_tag": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "nationality": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "note": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "notification_alert": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "notification_alert_recipient": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "notification_template": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "obs": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "orders": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "order_type": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "patient": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "patient_identifier": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "patient_identifier_type": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "patient_program": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "patient_state": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "person": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "person_address": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "person_attribute": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "person_attribute_type": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "person_name": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "privilege": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "program": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "program_workflow": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "program_workflow_state": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "region": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "relationship": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "relationship_type": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "report_object": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "report_schema_xml": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "role_privilege": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "role_role": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "scheduler_task_config": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "scheduler_task_config_property": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "serialized_object": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "traditional_authority": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "tribe": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "user_property": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "user_role": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "users": {
+    "dataSource": "hts",
+    "public": false
+  },
+  "village": {
+    "dataSource": "hts",
+    "public": false
+  }
+}

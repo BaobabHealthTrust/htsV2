@@ -1,0 +1,114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: U6 should match its empty snapshot 1`] = `
+<div
+  className="headTab"
+  id="tableDiv1"
+>
+  <table
+    cellPadding="1"
+    width="100%"
+  >
+    <tbody>
+      <tr>
+        <th
+          className="blueText"
+          id="patient_name"
+          style={
+            Object {
+              "fontSize": "24px",
+              "fontWeight": "normal",
+              "overflow": "hidden",
+              "padding": "5px",
+              "textAlign": "left",
+              "width": "100%",
+            }
+          }
+        />
+      </tr>
+      <tr>
+        <th
+          className="blueText"
+          style={
+            Object {
+              "borderBottom": "1px solid #004586",
+              "fontSize": "14px",
+              "paddingLeft": "5px",
+              "textAlign": "left",
+            }
+          }
+        >
+          Identifiers
+        </th>
+      </tr>
+      <tr>
+        <td>
+          <table
+            style={
+              Object {
+                "fontSize": "12px",
+              }
+            }
+            width="100%"
+          >
+            <tbody>
+              <tr>
+                <td
+                  className="blueText"
+                  id="primary_id_label"
+                  style={
+                    Object {
+                      "fontWeight": "bold",
+                      "textAlign": "right",
+                    }
+                  }
+                />
+                <td
+                  style={
+                    Object {
+                      "textAlign": "center",
+                      "width": "3px",
+                    }
+                  }
+                >
+                  :
+                </td>
+                <td
+                  align="left"
+                  id="primary_id"
+                />
+              </tr>
+              <tr>
+                <td
+                  className="blueText"
+                  id="other_id_label"
+                  style={
+                    Object {
+                      "fontWeight": "bold",
+                      "textAlign": "right",
+                    }
+                  }
+                />
+                <td
+                  style={
+                    Object {
+                      "textAlign": "center",
+                      "width": "3px",
+                    }
+                  }
+                >
+                  :
+                </td>
+                <td
+                  align="left"
+                  id="other_id"
+                />
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;

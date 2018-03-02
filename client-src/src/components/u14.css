@@ -1,0 +1,74 @@
+.shortSelectList {
+    margin: 10px;
+    margin-top: 2px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0px;
+    background-color: #dcdcdc;
+    overflow: auto;
+    height: calc(100vh - 620px);
+}
+
+.selectLi {
+    font-size: 1.8em;
+    background-color: #eeeeee;
+    padding: 10px;
+    margin: 8px;
+    cursor: pointer;
+}
+
+.selectedLi {
+    font-size: 1.8em;
+    background-color: orange;
+    padding: 10px;
+    margin: 8px;
+    cursor: pointer;
+}
+
+.selectLi:hover {
+    background-color: lightblue;
+}
+
+.selectLi:active {
+    background-color: orange;
+}
+
+.selectUl {
+    margin: 0;
+}
+
+.sectionHeader {
+    background-color: #0065fd;
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.pleaseWait {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 2em;
+    padding-top: calc(50vh - 110px - 0.6em);
+    padding-bottom: calc(50vh - 110px - 0.6em);
+    color: blue;
+}
+
+.longSelectList {
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0px;
+    background-color: #dcdcdc;
+    overflow: auto;
+    height: calc(100vh - 330px);
+}
+
+.bdeSectionHeader {
+    background-color: #c50000;
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    font-size: 14px;
+}
+
