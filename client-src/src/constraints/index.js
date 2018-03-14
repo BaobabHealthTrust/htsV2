@@ -44,42 +44,49 @@ const firstPassTest1Negative = (data, alertsMapping, categories) => {
 
     result.error = true;
     result.message = alertsMapping["Missing Outcome Summary"].message;
+    result.title = alertsMapping["Missing Outcome Summary"].title;
     result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
   } else if (data["Outcome Summary"] !== "Single Negative") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Outcome Summary"].message;
+    result.title = alertsMapping["Invalid Outcome Summary"].title;
     result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
   } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Result Given to Client"].message;
+    result.title = alertsMapping["Missing Result Given to Client"].title;
     result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
   } else if (data["Result Given to Client"] !== "New Negative") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Result Given to Client"].message;
+    result.title = alertsMapping["Invalid Result Given to Client"].title;
     result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
   } else if (Object.keys(data).indexOf("Client Risk Category") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Client Risk Category"].message;
+    result.title = alertsMapping["Missing Client Risk Category"].title;
     result.group = categories[alertsMapping["Missing Client Risk Category"].category];
 
   } else if (data["Client Risk Category"] === "Low Risk" && data["Referral for Re-Testing"] !== "No Re-Test needed") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+    result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
   } else if (["On-going Risk", "High Risk Event in last 3 months"].indexOf(data["Client Risk Category"]) >= 0 && data["Referral for Re-Testing"] !== "Re-Test") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+    result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
   }
@@ -102,6 +109,7 @@ const test1And2Positive = (data, alertsMapping, categories) => {
     result.error = true;
     result.message = alertsMapping["Missing or invalid Age"].message;
     result.group = categories[alertsMapping["Missing or invalid Age"].category];
+    result.title = "Missing data";
 
   } else {
 
@@ -111,36 +119,42 @@ const test1And2Positive = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Missing Outcome Summary"].message;
+        result.title = alertsMapping["Missing Outcome Summary"].title;
         result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
       } else if (data["Outcome Summary"] !== "Test 1 & 2 Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Outcome Summary"].message;
+        result.title = alertsMapping["Invalid Outcome Summary"].title;
         result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
       } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Result Given to Client"].message;
+        result.title = alertsMapping["Missing Result Given to Client"].title;
         result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
       } else if (data["Result Given to Client"] !== "New Exposed Infant") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Result Given to Client"].message;
+        result.title = alertsMapping["Invalid Result Given to Client"].title;
         result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+        result.title = alertsMapping["Missing Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
       } else if (data["Referral for Re-Testing"] !== "Confirmatory Test at HIV Clinic") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+        result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
       }
@@ -151,36 +165,42 @@ const test1And2Positive = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Missing Outcome Summary"].message;
+        result.title = alertsMapping["Missing Outcome Summary"].title;
         result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
       } else if (data["Outcome Summary"] !== "Test 1 & 2 Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Outcome Summary"].message;
+        result.title = alertsMapping["Invalid Outcome Summary"].title;
         result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
       } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Result Given to Client"].message;
+        result.title = alertsMapping["Missing Result Given to Client"].title;
         result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
       } else if (data["Result Given to Client"] !== "New Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Result Given to Client"].message;
+        result.title = alertsMapping["Invalid Result Given to Client"].title;
         result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+        result.title = alertsMapping["Missing Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
       } else if (data["Referral for Re-Testing"] !== "Confirmatory Test at HIV Clinic") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+        result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
       }
@@ -204,42 +224,49 @@ const test1And2Negative = (data, alertsMapping, categories) => {
 
     result.error = true;
     result.message = alertsMapping["Missing Outcome Summary"].message;
+    result.title = alertsMapping["Missing Outcome Summary"].title;
     result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
   } else if (data["Outcome Summary"] !== "Test 1 & 2 Negative") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Outcome Summary"].message;
+    result.title = alertsMapping["Invalid Outcome Summary"].title;
     result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
   } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Result Given to Client"].message;
+    result.title = alertsMapping["Missing Result Given to Client"].title;
     result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
   } else if (data["Result Given to Client"] !== "New Negative") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Result Given to Client"].message;
+    result.title = alertsMapping["Invalid Result Given to Client"].title;
     result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
   } else if (Object.keys(data).indexOf("Client Risk Category") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Client Risk Category"].message;
+    result.title = alertsMapping["Missing Client Risk Category"].title;
     result.group = categories[alertsMapping["Missing Client Risk Category"].category];
 
   } else if (data["Client Risk Category"] === "Low Risk" && data["Referral for Re-Testing"] !== "No Re-Test needed") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+    result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
   } else if (["On-going Risk", "High Risk Event in last 3 months"].indexOf(data["Client Risk Category"]) >= 0 && data["Referral for Re-Testing"] !== "Re-Test") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+    result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
   }
@@ -259,36 +286,42 @@ const test1And2Discordant = (data, alertsMapping, categories) => {
 
     result.error = true;
     result.message = alertsMapping["Missing Outcome Summary"].message;
+    result.title = alertsMapping["Missing Outcome Summary"].title;
     result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
   } else if (data["Outcome Summary"] !== "Test 1 & 2 Discordant") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Outcome Summary"].message;
+    result.title = alertsMapping["Invalid Outcome Summary"].title;
     result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
   } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Result Given to Client"].message;
+    result.title = alertsMapping["Missing Result Given to Client"].title;
     result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
   } else if (data["Result Given to Client"] !== "New Inconclusive") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Result Given to Client"].message;
+    result.title = alertsMapping["Invalid Result Given to Client"].title;
     result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
   } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+    result.title = alertsMapping["Missing Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
   } else if (data["Referral for Re-Testing"] !== "Re-Test") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+    result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
   }
@@ -310,7 +343,9 @@ const firstPassTest1Positive = (data, alertsMapping, categories) => {
 
       result.error = true;
       result.message = alertsMapping["Missing 'First Pass: Test 2' result"].message;
+      result.title = alertsMapping["Missing 'First Pass: Test 2' result"].title;
       result.group = categories[alertsMapping["Missing 'First Pass: Test 2' result"].category];
+      result.title = alertsMapping["Missing 'First Pass: Test 2' result"].title;
 
     } else if (data["HIV Rapid Test Outcomes"]["First Pass"]["Test 2"] === "Reactive") {
 
@@ -340,6 +375,7 @@ const firstPassTest1Positive = (data, alertsMapping, categories) => {
 
           result.error = true;
           result.message = alertsMapping["Missing 'Immediate Repeat' results"].message;
+          result.title = alertsMapping["Missing 'Immediate Repeat' results"].title;
           result.group = categories[alertsMapping["Missing 'Immediate Repeat' results"].category];
 
         }
@@ -348,6 +384,7 @@ const firstPassTest1Positive = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Missing 'Immediate Repeat' results"].message;
+        result.title = alertsMapping["Missing 'Immediate Repeat' results"].title;
         result.group = categories[alertsMapping["Missing 'Immediate Repeat' results"].category];
 
       }
@@ -359,6 +396,7 @@ const firstPassTest1Positive = (data, alertsMapping, categories) => {
     result.error = true;
 
     result.message = alertsMapping["Missing 'First Pass: Test 2' result"].message;
+    result.title = alertsMapping["Missing 'First Pass: Test 2' result"].title;
 
     result.group = categories[alertsMapping["Missing 'First Pass: Test 2' result"].category];
 
@@ -379,36 +417,42 @@ const confirmatoryInconclusive = (data, category, alertsMapping, categories) => 
 
     result.error = true;
     result.message = alertsMapping["Missing Outcome Summary"].message;
+    result.title = alertsMapping["Missing Outcome Summary"].title;
     result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
   } else if (data["Outcome Summary"] !== "Test 1 & 2 " + category) {
 
     result.error = true;
     result.message = alertsMapping["Invalid Outcome Summary"].message;
+    result.title = alertsMapping["Invalid Outcome Summary"].title;
     result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
   } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Result Given to Client"].message;
+    result.title = alertsMapping["Missing Result Given to Client"].title;
     result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
   } else if (data["Result Given to Client"] !== "Confirmatory Inconclusive") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Result Given to Client"].message;
+    result.title = alertsMapping["Invalid Result Given to Client"].title;
     result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
   } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+    result.title = alertsMapping["Missing Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
   } else if (data["Referral for Re-Testing"] !== "Re-Test") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+    result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
   }
@@ -430,6 +474,7 @@ const confirmatoryPositive = (data, alertsMapping, categories) => {
 
     result.error = true;
     result.message = alertsMapping["Missing or invalid Age"].message;
+    result.title = alertsMapping["Missing or invalid Age"].title;
     result.group = categories[alertsMapping["Missing or invalid Age"].category];
 
   } else {
@@ -440,36 +485,42 @@ const confirmatoryPositive = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Missing Outcome Summary"].message;
+        result.title = alertsMapping["Missing Outcome Summary"].title;
         result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
       } else if (data["Outcome Summary"] !== "Test 1 & 2 Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Outcome Summary"].message;
+        result.title = alertsMapping["Invalid Outcome Summary"].title;
         result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
       } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Result Given to Client"].message;
+        result.title = alertsMapping["Missing Result Given to Client"].title;
         result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
       } else if (data["Result Given to Client"] !== "New Exposed Infant") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Result Given to Client"].message;
+        result.title = alertsMapping["Invalid Result Given to Client"].title;
         result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+        result.title = alertsMapping["Missing Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
       } else if (data["Referral for Re-Testing"] !== "Confirmatory Test at HIV Clinic") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+        result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
       }
@@ -480,36 +531,42 @@ const confirmatoryPositive = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Missing Outcome Summary"].message;
+        result.title = alertsMapping["Missing Outcome Summary"].title;
         result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
       } else if (data["Outcome Summary"] !== "Test 1 & 2 Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Outcome Summary"].message;
+        result.title = alertsMapping["Invalid Outcome Summary"].title;
         result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
       } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Result Given to Client"].message;
+        result.title = alertsMapping["Missing Result Given to Client"].title;
         result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
       } else if (data["Result Given to Client"] !== "Confirmatory Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Result Given to Client"].message;
+        result.title = alertsMapping["Invalid Result Given to Client"].title;
         result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+        result.title = alertsMapping["Missing Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
       } else if (data["Referral for Re-Testing"] !== "Confirmatory Test at HIV Clinic") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+        result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
       }
@@ -520,36 +577,42 @@ const confirmatoryPositive = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Missing Outcome Summary"].message;
+        result.title = alertsMapping["Missing Outcome Summary"].title;
         result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
       } else if (data["Outcome Summary"] !== "Test 1 & 2 Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Outcome Summary"].message;
+        result.title = alertsMapping["Invalid Outcome Summary"].title;
         result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
       } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Result Given to Client"].message;
+        result.title = alertsMapping["Missing Result Given to Client"].title;
         result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
       } else if (data["Result Given to Client"] !== "Confirmatory Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Result Given to Client"].message;
+        result.title = alertsMapping["Invalid Result Given to Client"].title;
         result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+        result.title = alertsMapping["Missing Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
       } else if (data["Referral for Re-Testing"] !== "No Re-Test needed") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+        result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
       }
@@ -573,36 +636,42 @@ const lastPositiveTest1And2Negative = (data, alertsMapping, categories) => {
 
     result.error = true;
     result.message = alertsMapping["Missing Outcome Summary"].message;
+    result.title = alertsMapping["Missing Outcome Summary"].title;
     result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
   } else if (data["Outcome Summary"] !== "Test 1 & 2 Negative") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Outcome Summary"].message;
+    result.title = alertsMapping["Invalid Outcome Summary"].title;
     result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
   } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Result Given to Client"].message;
+    result.title = alertsMapping["Missing Result Given to Client"].title;
     result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
   } else if (data["Result Given to Client"] !== "Confirmatory Inconclusive") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Result Given to Client"].message;
+    result.title = alertsMapping["Invalid Result Given to Client"].title;
     result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
   } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+    result.title = alertsMapping["Missing Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
   } else if (data["Referral for Re-Testing"] !== "Re-Test") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+    result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
   }
@@ -640,6 +709,7 @@ const lastPositiveTest1And2Discordant = (data, alertsMapping, categories) => {
 
       result.error = true;
       result.message = alertsMapping["Missing 'Immediate Repeat' results"].message;
+      result.title = alertsMapping["Missing 'Immediate Repeat' results"].title;
       result.group = categories[alertsMapping["Missing 'Immediate Repeat' results"].category];
 
     }
@@ -648,6 +718,7 @@ const lastPositiveTest1And2Discordant = (data, alertsMapping, categories) => {
 
     result.error = true;
     result.message = alertsMapping["Missing 'Immediate Repeat' results"].message;
+    result.title = alertsMapping["Missing 'Immediate Repeat' results"].title;
     result.group = categories[alertsMapping["Missing 'Immediate Repeat' results"].category];
 
   }
@@ -669,6 +740,7 @@ const lastInconclusiveNewPositive = (data, alertsMapping, categories) => {
 
     result.error = true;
     result.message = alertsMapping["Missing or invalid Age"].message;
+    result.title = alertsMapping["Missing or invalid Age"].title;
     result.group = categories[alertsMapping["Missing or invalid Age"].category];
 
   } else {
@@ -679,36 +751,42 @@ const lastInconclusiveNewPositive = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Missing Outcome Summary"].message;
+        result.title = alertsMapping["Missing Outcome Summary"].title;
         result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
       } else if (data["Outcome Summary"] !== "Test 1 & 2 Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Outcome Summary"].message;
+        result.title = alertsMapping["Invalid Outcome Summary"].title;
         result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
       } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Result Given to Client"].message;
+        result.title = alertsMapping["Missing Result Given to Client"].title;
         result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
       } else if (data["Result Given to Client"] !== "New Exposed Infant") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Result Given to Client"].message;
+        result.title = alertsMapping["Invalid Result Given to Client"].title;
         result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+        result.title = alertsMapping["Missing Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
       } else if (data["Referral for Re-Testing"] !== "Confirmatory Test at HIV Clinic") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+        result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
       }
@@ -719,36 +797,42 @@ const lastInconclusiveNewPositive = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Missing Outcome Summary"].message;
+        result.title = alertsMapping["Missing Outcome Summary"].title;
         result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
       } else if (data["Outcome Summary"] !== "Test 1 & 2 Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Outcome Summary"].message;
+        result.title = alertsMapping["Invalid Outcome Summary"].title;
         result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
       } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Result Given to Client"].message;
+        result.title = alertsMapping["Missing Result Given to Client"].title;
         result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
       } else if (data["Result Given to Client"] !== "New Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Result Given to Client"].message;
+        result.title = alertsMapping["Invalid Result Given to Client"].title;
         result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+        result.title = alertsMapping["Missing Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
       } else if (data["Referral for Re-Testing"] !== "Confirmatory Test at HIV Clinic") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+        result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
       }
@@ -759,36 +843,42 @@ const lastInconclusiveNewPositive = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Missing Outcome Summary"].message;
+        result.title = alertsMapping["Missing Outcome Summary"].title;
         result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
       } else if (data["Outcome Summary"] !== "Test 1 & 2 Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Outcome Summary"].message;
+        result.title = alertsMapping["Invalid Outcome Summary"].title;
         result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
       } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Result Given to Client"].message;
+        result.title = alertsMapping["Missing Result Given to Client"].title;
         result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
       } else if (data["Result Given to Client"] !== "New Positive") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Result Given to Client"].message;
+        result.title = alertsMapping["Invalid Result Given to Client"].title;
         result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
         result.error = true;
         result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+        result.title = alertsMapping["Missing Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
       } else if (data["Referral for Re-Testing"] !== "No Re-Test needed") {
 
         result.error = true;
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+        result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
       }
@@ -826,6 +916,7 @@ const neverTestedOrLastNegative = (data, alertsMapping, categories) => {
 
           result.error = true;
           result.message = alertsMapping["Other error!"].message;
+          result.title = alertsMapping["Other error!"].title;
           result.group = categories[alertsMapping["Other error!"].category];
 
         }
@@ -834,6 +925,7 @@ const neverTestedOrLastNegative = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Missing 'First Pass: Test 1' result"].message;
+        result.title = alertsMapping["Missing 'First Pass: Test 1' result"].title;
         result.group = categories[alertsMapping["Missing 'First Pass: Test 1' result"].category];
 
       }
@@ -842,6 +934,7 @@ const neverTestedOrLastNegative = (data, alertsMapping, categories) => {
 
       result.error = true;
       result.message = alertsMapping["Missing 'First Pass' result(s)"].message;
+      result.title = alertsMapping["Missing 'First Pass' result(s)"].title;
       result.group = categories[alertsMapping["Missing 'First Pass' result(s)"].category];
 
     }
@@ -850,6 +943,7 @@ const neverTestedOrLastNegative = (data, alertsMapping, categories) => {
 
     result.error = true;
     result.message = alertsMapping["Missing 'HIV Rapid Test Outcomes'"].message;
+    result.title = alertsMapping["Missing 'HIV Rapid Test Outcomes'"].title;
     result.group = categories[alertsMapping["Missing 'HIV Rapid Test Outcomes'"].category];
 
   }
@@ -889,6 +983,7 @@ const lastPositive = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Incomplete 'First Pass' result(s)"].message;
+        result.title = alertsMapping["Incomplete 'First Pass' result(s)"].title;
         result.group = categories[alertsMapping["Incomplete 'First Pass' result(s)"].category];
 
       }
@@ -897,6 +992,7 @@ const lastPositive = (data, alertsMapping, categories) => {
 
       result.error = true;
       result.message = alertsMapping["Missing 'First Pass' result(s)"].message;
+      result.title = alertsMapping["Missing 'First Pass' result(s)"].title;
       result.group = categories[alertsMapping["Missing 'First Pass' result(s)"].category];
 
     }
@@ -905,6 +1001,7 @@ const lastPositive = (data, alertsMapping, categories) => {
 
     result.error = true;
     result.message = alertsMapping["Missing 'HIV Rapid Test Outcomes'"].message;
+    result.title = alertsMapping["Missing 'HIV Rapid Test Outcomes'"].title;
     result.group = categories[alertsMapping["Missing 'HIV Rapid Test Outcomes'"].category];
 
   }
@@ -924,36 +1021,42 @@ const newInconclusive = (data, category, alertsMapping, categories) => {
 
     result.error = true;
     result.message = alertsMapping["Missing Outcome Summary"].message;
+    result.title = alertsMapping["Missing Outcome Summary"].title;
     result.group = categories[alertsMapping["Missing Outcome Summary"].category];
 
   } else if (data["Outcome Summary"] !== "Test 1 & 2 " + category) {
 
     result.error = true;
     result.message = alertsMapping["Invalid Outcome Summary"].message;
+    result.title = alertsMapping["Invalid Outcome Summary"].title;
     result.group = categories[alertsMapping["Invalid Outcome Summary"].category];
 
   } else if (Object.keys(data).indexOf("Result Given to Client") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Result Given to Client"].message;
+    result.title = alertsMapping["Missing Result Given to Client"].title;
     result.group = categories[alertsMapping["Missing Result Given to Client"].category];
 
   } else if (data["Result Given to Client"] !== "New Inconclusive") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Result Given to Client"].message;
+    result.title = alertsMapping["Invalid Result Given to Client"].title;
     result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
 
   } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
     result.error = true;
     result.message = alertsMapping["Missing Referral for Re-Testing"].message;
+    result.title = alertsMapping["Missing Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
   } else if (data["Referral for Re-Testing"] !== "Re-Test") {
 
     result.error = true;
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
+    result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
 
   }
@@ -993,6 +1096,7 @@ const lastInconclusive = (data, alertsMapping, categories) => {
 
         result.error = true;
         result.message = alertsMapping["Incomplete 'First Pass' result(s)"].message;
+        result.title = alertsMapping["Incomplete 'First Pass' result(s)"].title;
         result.group = categories[alertsMapping["Incomplete 'First Pass' result(s)"].category];
 
       }
@@ -1001,6 +1105,7 @@ const lastInconclusive = (data, alertsMapping, categories) => {
 
       result.error = true;
       result.message = alertsMapping["Missing 'First Pass' result(s)"].message;
+      result.title = alertsMapping["Missing 'First Pass' result(s)"].title;
       result.group = categories[alertsMapping["Missing 'First Pass' result(s)"].category];
 
     }
@@ -1009,6 +1114,7 @@ const lastInconclusive = (data, alertsMapping, categories) => {
 
     result.error = true;
     result.message = alertsMapping["Missing 'HIV Rapid Test Outcomes'"].message;
+    result.title = alertsMapping["Missing 'HIV Rapid Test Outcomes'"].title;
     result.group = categories[alertsMapping["Missing 'HIV Rapid Test Outcomes'"].category];
 
   }
@@ -1026,27 +1132,18 @@ module.exports.validate = (data = {}, alertsMapping = {}, categories = {}) => {
 
   const age = fetchAge(data);
 
-  console.log("******************");
-
-  console.log(age);
-
-  console.log(10 * 365);
-
-  console.log(45 * 365);
-
-  console.log("******************");
-
   if ((age < 10 * 365 || age > 45 * 365) && data["Sex/Pregnancy"] === "Female Pregnant") {
 
     result.error = true;
     result.message = alertsMapping["Sex/Pregnancy does not match entered age"].message;
+    result.title = alertsMapping["Sex/Pregnancy does not match entered age"].title;
     result.group = categories[alertsMapping["Sex/Pregnancy does not match entered age"].category];
 
   } else if (Object.keys(data).indexOf("Last HIV Test") >= 0) {
 
     switch (data["Last HIV Test"]) {
 
-        // eslint-disable-next-line
+      // eslint-disable-next-line
       case "Never Tested":
       case "Last Negative":
 
@@ -1068,6 +1165,7 @@ module.exports.validate = (data = {}, alertsMapping = {}, categories = {}) => {
 
     result.error = true;
     result.message = alertsMapping["Missing 'Last HIV Test'"].message;
+    result.title = alertsMapping["Missing 'Last HIV Test'"].title;
     result.group = categories[alertsMapping["Missing 'Last HIV Test'"].category];
 
   }

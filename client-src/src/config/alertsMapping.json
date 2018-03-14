@@ -24,12 +24,14 @@
     "category": "Referral for Re-Testing"
   },
   "Missing or invalid Age": {
-    "message": "Missing or invalid Age",
-    "category": "Age"
+    "message": "Age \n must be entered",
+    "category": "Age",
+    "title": "Missing data"
   },
   "Missing 'First Pass: Test 2' result": {
-    "message": "Missing 'First Pass: Test 2' result",
-    "category": "HIV Rapid Test Outcomes"
+    "message": "Test 2 result \n must be entered",
+    "category": "HIV Rapid Test Outcomes",
+    "title": "Missing data"
   },
   "Missing 'Immediate Repeat' results": {
     "message": "Missing 'Immediate Repeat' results",
@@ -40,12 +42,14 @@
     "category": "HTS Provider ID"
   },
   "Missing 'First Pass: Test 1' result": {
-    "message": "Missing 'First Pass: Test 1' result",
-    "category": "HIV Rapid Test Outcomes"
+    "message": "Test 1 result \n must be entered",
+    "category": "HIV Rapid Test Outcomes",
+    "title": "Missing data"
   },
   "Missing 'First Pass' result(s)": {
-    "message": "Missing 'First Pass' result(s)",
-    "category": "HIV Rapid Test Outcomes"
+    "message": "Test result(s) \n must be entered",
+    "category": "HIV Rapid Test Outcomes",
+    "title": "Missing data"
   },
   "Missing 'HIV Rapid Test Outcomes'": {
     "message": "Missing 'HIV Rapid Test Outcomes'",

@@ -351,7 +351,7 @@ class BackdataEntry extends Component {
 
         this
           .props
-          .showErrorMsg("Invalid Data", "Missing units for Age");
+          .showErrorMsg("Missing Data", "Number and time units \n (days, weeks, months, years) \n must be entered");
 
         setTimeout(() => {
 
@@ -443,7 +443,7 @@ class BackdataEntry extends Component {
 
         this
           .props
-          .showErrorMsg("Invalid Data", "Invalid Age Group for the provided Age selected");
+          .showErrorMsg("Invalid Entry", "Age Group \n does not match entered age");
 
         setTimeout(() => {
 
@@ -461,7 +461,7 @@ class BackdataEntry extends Component {
 
         this
           .props
-          .showErrorMsg("Missing Data", "Missing 'Time Since Last Test' as client ever tested");
+          .showErrorMsg("Missing Data", "Time since last test \n must be entered \n if client was previously tested");
 
         setTimeout(() => {
 
@@ -477,7 +477,7 @@ class BackdataEntry extends Component {
 
         this
           .props
-          .showErrorMsg("Invalid Data", "Expecting 'Time Since Last Test' to be a number with a unit");
+          .showErrorMsg("Missing Data", "Number and time units \n (days, weeks, months, years) \n must be entered");
 
         setTimeout(() => {
 
@@ -521,7 +521,7 @@ class BackdataEntry extends Component {
 
         this
           .props
-          .showErrorMsg("Invalid Data", result.message);
+          .showErrorMsg((result.title ? result.title : "Invalid Data"), result.message);
 
         if (result.group) {
 
@@ -589,7 +589,7 @@ class BackdataEntry extends Component {
 
       return this
         .props
-        .showErrorMsg("Missing Data", "Missing required fields: " + missingFields.join(", "));
+        .showErrorMsg("Missing Data", missingFields.join(", ") + "\n must be entered");
 
     }
 
