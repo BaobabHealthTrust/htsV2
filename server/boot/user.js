@@ -190,7 +190,8 @@ module.exports = function (app) {
             ? json.realm
             : 'bht',
           username: json.Username,
-          password: json.Password
+          password: json.Password,
+          email: ''
         }
       ], function (err, users) {
 

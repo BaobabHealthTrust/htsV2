@@ -68,7 +68,8 @@ ds.automigrate(lbTables, function (er) {
               {
                 realm: 'bht',
                 username: 'CP6K',
-                password: 'test'
+                password: 'test',
+                email: ''
               }
             ], function (err, users) {
 
