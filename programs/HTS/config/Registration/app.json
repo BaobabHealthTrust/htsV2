@@ -67,7 +67,7 @@
         "validationRule": "^\\d{4}$|Unknown",
         "min": "thisYear - 120",
         "max": "thisYear",
-        "validationMessage": "Expecting 4 numbers or unknown!",
+        "validationMessage": "Birth year \n must be (current year - 110) to (current year)",
         "hiddenButtons": ["clear", "/", ".", "-", "abc", "qwe"]
     },
     "Year of Birth Unknown?": {
@@ -76,7 +76,9 @@
     },
     "Month of Birth": {
         "options": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Unknown"],
-        "className": "longSelectList"
+        "className": "longSelectList",
+        "title": "Missing Data",
+        "message": "Month of birth \n must be selected"
     },
     "Month of Birth Unknown?": {
         "visible": false,
@@ -85,7 +87,11 @@
     "Date of Birth": {
         "fieldType": "days",
         "yearField": "Year of Birth",
-        "monthField": "Month of Birth"
+        "monthField": "Month of Birth",
+        "title": "Missing Data",
+        "message": "Date of birth \n must be entered",
+        "validationRule": "^\\d+$|^Unknown$",
+        "validationMessage": "Date of birth \n must be entered"
     },
     "Date of Birth Unknown?": {
         "visible": false,
@@ -150,6 +156,14 @@
     "Child?": {
         "visible": false,
         "func": ["age", "inRange", "0", "14", "Other"]
+    },
+    "Client consents to be contacted": {
+        "title": "Missing Data",
+        "message": "Client consent \n Select Yes or No"
+    },
+    "Search by name?": {
+        "title": "Missing Data",
+        "message": "Search by name \n Select Yes or No"
     },
     "action": "/programs/save_demographics"
 }
