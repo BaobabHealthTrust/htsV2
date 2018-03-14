@@ -499,7 +499,7 @@ class FindEnteredRecord extends Component {
 
     this
       .props
-      .showConfirmMsg("Confirmation", "Do you really want to clear this row?", "Clear", () => {
+      .showConfirmMsg("Confirm Action", "You are about to clear changes on this record. \n Do you want to continue?", "Clear", () => {
 
         this.setState({data: {}});
 

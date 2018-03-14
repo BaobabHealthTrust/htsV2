@@ -658,7 +658,7 @@ class BackdataEntry extends Component {
 
     this
       .props
-      .showConfirmMsg("Confirmation", "Do you really want to clear this row?", "Clear", () => {
+      .showConfirmMsg("Confirm Action", "You are about to delete this record. \n Do you want to continue?", "Delete", () => {
 
         this.setState({ data: {} });
 
@@ -2818,7 +2818,7 @@ class BackdataEntry extends Component {
                               .handleSave
                               .bind(this)} />
                           <Button
-                            label="Clear"
+                            label="Delete"
                             handleMouseDown={this
                               .handleClear
                               .bind(this)} />
