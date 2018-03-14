@@ -758,7 +758,7 @@ class App extends Component {
 
         this
           .props
-          .showErrorMsg("Error!", valid.message);
+          .showErrorMsg("Invalid Entry", valid.message);
 
       } else if ((this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
         ? this.props.wf[this.state.currentWorkflow].currentNode.type
@@ -1730,7 +1730,7 @@ class App extends Component {
           "Set Date": {
             fieldType: "date",
             validationRule: "^\\d+\\s[A-Za-z]+\\s\\d{4}$",
-            validationMessage: "Expecting date in format 'd mmm YYYY'",
+            validationMessage: "Enter valid date (day, month, year)",
             hiddenButtons: [
               "clear",
               "/",
@@ -2584,7 +2584,7 @@ class App extends Component {
 
       this
         .props
-        .showErrorMsg("Error", "Login failed");
+        .showErrorMsg("Login Error", "Wrong username or password");
 
     }
 

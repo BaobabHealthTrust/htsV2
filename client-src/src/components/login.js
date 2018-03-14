@@ -91,7 +91,7 @@ class Login extends Component {
               .catch(e => {
                 this
                   .props
-                  .showErrorMsg("Error", "Location not found!");
+                  .showErrorMsg("Login Error", "Workstation location not recognized");
               });
 
           }
