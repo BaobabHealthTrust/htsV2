@@ -271,7 +271,7 @@ export function validated(props, state) {
 
     if (props.data.indexOf(currentValue) < 0) {
 
-      return {valid: false, message: "Please select only values from the provided list"};
+      return {valid: false, message: "Select register number from list", title: "Missing Data"};
 
     }
 

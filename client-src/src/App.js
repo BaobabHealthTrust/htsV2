@@ -758,7 +758,7 @@ class App extends Component {
 
         this
           .props
-          .showErrorMsg("Invalid Entry", valid.message);
+          .showErrorMsg((valid.title ? valid.title : "Invalid Entry"), valid.message);
 
       } else if ((this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
         ? this.props.wf[this.state.currentWorkflow].currentNode.type

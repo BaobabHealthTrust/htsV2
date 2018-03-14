@@ -262,7 +262,7 @@ class FindEnteredRecord extends Component {
 
         this
           .props
-          .showErrorMsg("Invalid Data", "Invalid user ID format");
+          .showErrorMsg("Invalid Entry", "HTS Provider ID \n does not exist");
 
         return reject();
 
