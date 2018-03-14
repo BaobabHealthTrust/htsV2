@@ -4,8 +4,9 @@
     "category": "Outcome Summary"
   },
   "Invalid Outcome Summary": {
-    "message": "Invalid Outcome Summary",
-    "category": "Outcome Summary"
+    "message": "Outcome Summary \n does not match Test 1 / Test 2 results",
+    "category": "Outcome Summary",
+    "title": "Invalid Entry"
   },
   "Missing Result Given to Client": {
     "message": "Missing Result Given to Client",
@@ -21,7 +22,9 @@
   },
   "Invalid Referral for Re-Testing": {
     "message": "Invalid Referral for Re-Testing",
-    "category": "Referral for Re-Testing"
+    "category": "Referral for Re-Testing",
+    "title": "Invalid Entry",
+    "allowContinue": true
   },
   "Missing or invalid Age": {
     "message": "Age \n must be entered",
@@ -34,8 +37,9 @@
     "title": "Missing data"
   },
   "Missing 'Immediate Repeat' results": {
-    "message": "Missing 'Immediate Repeat' results",
-    "category": "HIV Rapid Test Outcomes"
+    "message": "Combination of test results \n is not plausible",
+    "category": "HIV Rapid Test Outcomes",
+    "title": "Invalid Entry"
   },
   "Other error!": {
     "message": "Other error!",
