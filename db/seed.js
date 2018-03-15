@@ -19,6 +19,14 @@ String.prototype.toUnderScore = function () {
   });
 };
 
+const debug = (msg) => {
+
+  if (String(process.env.DEBUG_APP) === 'true') {
+    console.log(msg);
+  }
+
+}
+
 const runCmd = (cmd) => {
 
   return new Promise((resolve, reject) => {
@@ -35,13 +43,11 @@ const runCmd = (cmd) => {
 
           console.log(stderr);
 
-          resolve(stderr);
+          reject(stderr);
 
         } else {
 
-          if (String(process.env.DEBUG_APP) === 'true') {
-            console.log(stdout);
-          }
+          debug(stdout);
 
           resolve(stdout);
 
@@ -69,17 +75,23 @@ const user = connection[env].user;
 const password = connection[env].password;
 const database = connection[env].database;
 
-const loadDataType = async(dataType, data) => {
+const loadDataType = async (dataType, data) => {
 
   for (let e of data) {
 
     let result;
 
-    result = await runCmd("mysql -h " + host + " -u " + user + " -p" + password + " " + database + " -e 'SELECT * FROM " + dataType + " WHERE name = \"" + e[0] + "\" LIMIT 1'");
+    debug("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT * FROM " + dataType + " WHERE name = \"" + e[0] + "\" LIMIT 1'");
+
+    result = await runCmd("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT * FROM " + dataType + " WHERE name = \"" + e[0] + "\" LIMIT 1'").catch(e => { console.log(e) });
+
+    debug(result);
 
     if (result.length <= 0) {
 
-      result = await runCmd("mysql -h " + host + " -u " + user + " -p" + password + " " + database + " -e 'INSERT INTO " + dataType + " (name, description, creator, date_created, uuid) VALUES (\"" + e[0] + "\", \"" + e[1] + "\", (SELECT user_id FROM users LIMIT 1), NOW(), (SELECT UUID()))'");
+      debug("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'INSERT INTO " + dataType + " (name, description, creator, date_created, uuid) VALUES (\"" + e[0] + "\", \"" + e[1] + "\", (SELECT user_id FROM users LIMIT 1), NOW(), (SELECT UUID()))'");
+
+      result = await runCmd("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'INSERT INTO " + dataType + " (name, description, creator, date_created, uuid) VALUES (\"" + e[0] + "\", \"" + e[1] + "\", (SELECT user_id FROM users LIMIT 1), NOW(), (SELECT UUID()))'").catch(e => { console.log(e) });
 
       console.log("Added " + dataType + ":" + e[0]);
 
@@ -89,21 +101,25 @@ const loadDataType = async(dataType, data) => {
 
 }
 
-const loadConceptNames = async(data) => {
+const loadConceptNames = async (data) => {
 
   for (let e of data) {
 
     let result;
+    
+    debug("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT * FROM concept_name WHERE name = \"" + e + "\" LIMIT 1'");
 
-    result = await runCmd("mysql -h " + host + " -u " + user + " -p" + password + " " + database + " -e 'SELECT * FROM concept_name WHERE name = \"" + e + "\" LIMIT 1'");
+    result = await runCmd("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT * FROM concept_name WHERE name = \"" + e + "\" LIMIT 1'").catch(e => { console.log(e) });
+
+    debug(result);
 
     if (result.length <= 0) {
 
-      let conceptId = await runCmd("mysql -h " + host + " -u " + user + " -p" + password + " " + database + " -e 'INSERT INTO concept (retired, datatype_id, class_id, creator, date_created," +
-          " uuid) VALUES (0, 4, 11, 1, NOW(), (SELECT UUID())); SELECT @id := LAST_INSERT_I" +
-          "D(); INSERT INTO concept_name (concept_id, name, locale, creator, date_created, " +
-          "voided, uuid, concept_name_type) VALUES (@id, \"" + e + "\", \"en\", (SELECT user_id FROM users LIMIT 1), NOW(), 0, (SELECT UUID()), \"FU" +
-          "LLY_SPECIFIED\")'");
+      let conceptId = await runCmd("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'INSERT INTO concept (retired, datatype_id, class_id, creator, date_created," +
+        " uuid) VALUES (0, 4, 11, 1, NOW(), (SELECT UUID())); SELECT @id := LAST_INSERT_I" +
+        "D(); INSERT INTO concept_name (concept_id, name, locale, creator, date_created, " +
+        "voided, uuid, concept_name_type) VALUES (@id, \"" + e + "\", \"en\", (SELECT user_id FROM users LIMIT 1), NOW(), 0, (SELECT UUID()), \"FU" +
+        "LLY_SPECIFIED\")'").catch(e => { console.log(e) });
 
       console.log("Added concept:" + e);
 
@@ -113,27 +129,31 @@ const loadConceptNames = async(data) => {
 
 }
 
-const loadProgramNames = async(data) => {
+const loadProgramNames = async (data) => {
 
   for (let e of data) {
 
     let result;
 
-    result = await runCmd("mysql -h " + host + " -u " + user + " -p" + password + " " + database + " -e 'SELECT * FROM program WHERE name = \"" + e + "\" LIMIT 1'");
+    debug("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT * FROM program WHERE name = \"" + e + "\" LIMIT 1'");
+
+    result = await runCmd("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT * FROM program WHERE name = \"" + e + "\" LIMIT 1'").catch(e => { console.log(e) });
+
+    debug(result);
 
     if (result.length <= 0) {
 
-      result = await runCmd("mysql -h " + host + " -u " + user + " -p" + password + " " + database + " -e 'SELECT * FROM concept_name WHERE name = \"" + e + "\" LIMIT 1'");
+      result = await runCmd("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT * FROM concept_name WHERE name = \"" + e + "\" LIMIT 1'").catch(e => { console.log(e) });
 
       if (result.length <= 0) {
 
-        let conceptId = await runCmd("mysql -h " + host + " -u " + user + " -p" + password + " " + database + " -e 'INSERT INTO concept (retired, datatype_id, class_id, creator, date_created," +
-            " uuid) VALUES (0, 4, 11, 1, NOW(), (SELECT UUID())); SELECT @concept_id := LAST_" +
-            "INSERT_ID(); INSERT INTO concept_name (concept_id, name, locale, creator, date_c" +
-            "reated, voided, uuid, concept_name_type) VALUES (@concept_id, \"" + e + "\", \"en\", (SELECT user_id FROM users LIMIT 1), NOW(), 0, (SELECT UUID()), \"FU" +
-            "LLY_SPECIFIED\"); INSERT INTO program (concept_id, creator, date_created, retire" +
-            "d, name, uuid) VALUES (@concept_id, (SELECT user_id FROM users LIMIT 1), NOW(), " +
-            "0, \"" + e + "\", (SELECT UUID()))'");
+        let conceptId = await runCmd("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'INSERT INTO concept (retired, datatype_id, class_id, creator, date_created," +
+          " uuid) VALUES (0, 4, 11, 1, NOW(), (SELECT UUID())); SELECT @concept_id := LAST_" +
+          "INSERT_ID(); INSERT INTO concept_name (concept_id, name, locale, creator, date_c" +
+          "reated, voided, uuid, concept_name_type) VALUES (@concept_id, \"" + e + "\", \"en\", (SELECT user_id FROM users LIMIT 1), NOW(), 0, (SELECT UUID()), \"FU" +
+          "LLY_SPECIFIED\"); INSERT INTO program (concept_id, creator, date_created, retire" +
+          "d, name, uuid) VALUES (@concept_id, (SELECT user_id FROM users LIMIT 1), NOW(), " +
+          "0, \"" + e + "\", (SELECT UUID()))'").catch(e => { console.log(e) });
 
         console.log("Added program:" + e);
 
@@ -145,9 +165,9 @@ const loadProgramNames = async(data) => {
 
 }
 
-const loadDataTypes = async() => {
+const loadDataTypes = async () => {
 
-  for (let dataType of["encounter_type",
+  for (let dataType of ["encounter_type",
     "patient_identifier_type",
     "person_attribute_type"]) {
 
@@ -157,7 +177,7 @@ const loadDataTypes = async() => {
 
 }
 
-const loadSeedData = async() => {
+const loadSeedData = async () => {
 
   let commands = [
     {
@@ -188,10 +208,10 @@ const loadSeedData = async() => {
     }, {
       message: "Initializing user admin...",
       cmd: "mysql -h " + connection[env].host + " -u " + connection[env].user + " -p" + connection[env].password + " " + connection[env].database + " -e 'DELETE FROM person_attribute WHERE person_id = 1; INSERT INTO person_attrib" +
-          "ute (person_id, value, person_attribute_type_id, creator, date_created, uuid) VA" +
-          "LUES((SELECT person_id FROM person LIMIT 1), \"HTS-0001\", (SELECT person_attrib" +
-          "ute_type_id FROM person_attribute_type WHERE name = \"HTS Provider ID\" LIMIT 1)" +
-          ", (SELECT user_id FROM users LIMIT 1), NOW(), \"" + uuid.v1() + "\")'"
+        "ute (person_id, value, person_attribute_type_id, creator, date_created, uuid) VA" +
+        "LUES((SELECT person_id FROM person LIMIT 1), \"HTS-0001\", (SELECT person_attrib" +
+        "ute_type_id FROM person_attribute_type WHERE name = \"HTS Provider ID\" LIMIT 1)" +
+        ", (SELECT user_id FROM users LIMIT 1), NOW(), \"" + uuid.v1() + "\")'"
     }, {
       message: "Resetting Elasticsearch ...",
       cmd: "curl -H \"Content-Type: application/json\" -X DELETE \"" + es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "\""
@@ -210,8 +230,8 @@ const loadSeedData = async() => {
   if (locations) {
 
     [...new Set(Array.prototype.concat.apply([], Object.keys(locations).map((e) => {
-        return locations[e]
-      })))]
+      return locations[e]
+    })))]
       .sort()
       .forEach((e) => {
         commands.push({
@@ -355,7 +375,7 @@ const loadSeedData = async() => {
 
     console.log(cmd.message);
 
-    await runCmd(cmd.cmd);
+    await runCmd(cmd.cmd).catch(e => { console.log(e) });
 
   }
 
