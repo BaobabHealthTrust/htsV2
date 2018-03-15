@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './findEnteredRecord.css';
 import Keyboard from './keyboard';
 import icoSave from '../images/save.js';
@@ -90,10 +90,10 @@ class FindEnteredRecord extends Component {
       const label = (category
         ? category
         : "") + (field
-        ? ":" + field
-        : "") + (subField
-        ? ":" + subField
-        : "");
+          ? ":" + field
+          : "") + (subField
+            ? ":" + subField
+            : "");
 
       newState.label = label;
 
@@ -101,24 +101,24 @@ class FindEnteredRecord extends Component {
 
       newState.configs = {};
 
-      if (!newState.data[category]) 
+      if (!newState.data[category])
         newState.data[category] = {};
-      
-      if (!newState.data[category][field]) 
+
+      if (!newState.data[category][field])
         newState.data[category][field] = {};
-      
-      if (!newState.data[category][field][subField]) 
+
+      if (!newState.data[category][field][subField])
         newState.data[category][field][subField] = {};
-      
+
       newState.data[category][field][subField] = subSubField;
 
       setTimeout(() => {
 
-        if (coords[group]) 
+        if (coords[group])
           this.$("bdScroller").scrollLeft = coords[group];
 
-        }
-      , scrollDelay)
+      }
+        , scrollDelay)
 
       this.setState(newState);
 
@@ -131,8 +131,8 @@ class FindEnteredRecord extends Component {
       const label = (category
         ? category
         : "") + (field
-        ? ":" + field
-        : "");
+          ? ":" + field
+          : "");
 
       newState.label = label;
 
@@ -140,18 +140,18 @@ class FindEnteredRecord extends Component {
 
       newState.configs = {};
 
-      if (!newState.data[category]) 
+      if (!newState.data[category])
         newState.data[category] = {};
-      
+
       newState.data[category][field] = subField;
 
       setTimeout(() => {
 
-        if (coords[group]) 
+        if (coords[group])
           this.$("bdScroller").scrollLeft = coords[group];
 
-        }
-      , scrollDelay)
+      }
+        , scrollDelay)
 
       this.setState(newState);
 
@@ -173,11 +173,11 @@ class FindEnteredRecord extends Component {
 
       setTimeout(() => {
 
-        if (coords[group]) 
+        if (coords[group])
           this.$("bdScroller").scrollLeft = coords[group];
 
-        }
-      , scrollDelay)
+      }
+        , scrollDelay)
 
       this.setState(newState);
 
@@ -190,10 +190,10 @@ class FindEnteredRecord extends Component {
       const label = (category
         ? category
         : "") + (field
-        ? ":" + field
-        : "") + (subField
-        ? ":" + subField
-        : "");
+          ? ":" + field
+          : "") + (subField
+            ? ":" + subField
+            : "");
 
       newState.label = label;
 
@@ -439,10 +439,10 @@ class FindEnteredRecord extends Component {
 
         })
 
-      if (!found) 
+      if (!found)
         missingFields.push(field);
 
-      }
+    }
     )
 
     if (missingFields.length > 0) {
@@ -466,9 +466,9 @@ class FindEnteredRecord extends Component {
               ? this.props.app.activeUser
               : null)
           })
-          .then(async() => {
+          .then(async () => {
 
-            await this.setState({data: {}});
+            await this.setState({ data: {} });
 
             this
               .props
@@ -501,7 +501,7 @@ class FindEnteredRecord extends Component {
       .props
       .showConfirmMsg("Confirm Action", "You are about to clear changes on this record. \n Do you want to continue?", "Clear", () => {
 
-        this.setState({data: {}});
+        this.setState({ data: {} });
 
         if (this.$("bdScroller")) {
 
@@ -543,7 +543,7 @@ class FindEnteredRecord extends Component {
 
     this
       .props
-      .updateApp({sectionHeader: "Edit Entered Record"});
+      .updateApp({ sectionHeader: "Edit Entered Record" });
 
   }
 
@@ -1123,1600 +1123,1600 @@ class FindEnteredRecord extends Component {
                 <div
                   id="bdScroller"
                   style={{
-                  width: "calc(100vw - 200px)",
-                  borderRight: "1px solid #333333",
-                  height: "calc(100vh - 260px)",
-                  overflow: "auto",
-                  padding: "0px"
-                }}>
+                    width: "calc(100vw - 200px)",
+                    borderRight: "1px solid #333333",
+                    height: "calc(100vh - 260px)",
+                    overflow: "auto",
+                    padding: "0px"
+                  }}>
                   <table
                     cellPadding="5px"
                     style={{
-                    borderCollapse: "collapse",
-                    color: "rgb(51, 51, 51)"
-                  }}>
+                      borderCollapse: "collapse",
+                      color: "rgb(51, 51, 51)"
+                    }}>
                     <tbody>
                       <tr>
                         <th
                           rowSpan="4"
                           style={{
-                          borderRight: "1px solid rgb(51, 51, 51)",
-                          borderBottom: "1px solid rgb(51, 51, 51)",
-                          width: "100px",
-                          verticalAlign: "top",
-                          height: "50px"
-                        }}
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "100px",
+                            verticalAlign: "top",
+                            height: "50px"
+                          }}
                           className="boldRight">Entry Code</th>
                         <th
                           rowSpan="4"
                           style={{
-                          borderRight: "1px solid rgb(51, 51, 51)",
-                          borderBottom: "1px solid rgb(51, 51, 51)",
-                          borderColor: "rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            borderColor: "rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">HTS Provider ID</th>
                         <th
                           colSpan="3"
                           style={{
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          borderRight: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">Sex/Pregnancy</th>
                         <th
                           rowSpan="4"
                           style={{
-                          borderRight: "1px solid rgb(51, 51, 51)",
-                          borderBottom: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">Age</th>
                         <th
                           colSpan="4"
                           style={{
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">Age Group</th>
                         <th
                           colSpan="3"
                           style={{
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">HTS Access Type</th>
                         <th
                           colSpan="5"
                           style={{
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}>Last HIV Test</th>
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}>Last HIV Test</th>
                         <td
                           rowSpan="4"
                           style={{
-                          borderBottom: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">
-                          <b>Time<br/>Since Last<br/>Test</b><br/>
-                          <br/>
+                          <b>Time<br />Since Last<br />Test</b><br />
+                          <br />
                           <span
                             style={{
-                            fontSize: "12px"
-                          }}>No.of<br/>Days<br/>Weeks<br/>Months or<br/>Years</span>
+                              fontSize: "12px"
+                            }}>No.of<br />Days<br />Weeks<br />Months or<br />Years</span>
                         </td>
                         <td
                           colSpan="2"
                           style={{
-                          borderRight: "1px solid rgb(51, 51, 51)",
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          width: "30px",
-                          height: "50px",
-                          verticalAlign: "top",
-                          textAlign: "center",
-                          fontSize: "14px"
-                        }}
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px",
+                            verticalAlign: "top",
+                            textAlign: "center",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">
-                          <b>Partner Present</b><br/>
+                          <b>Partner Present</b><br />
                           <span
                             style={{
-                            fontSize: "11px"
-                          }}>at this session</span>
+                              fontSize: "11px"
+                            }}>at this session</span>
                         </td>
                         <th
                           colSpan="8"
                           style={{
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">HIV Rapid Test Outcomes</th>
                         <th
                           colSpan="5"
                           style={{
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          borderRight: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">Outcome Summary</th>
                         <th
                           colSpan="6"
                           style={{
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">Result Given to Client</th>
                         <th
                           colSpan="4"
                           rowSpan="2"
                           style={{
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          borderRight: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">Partner HIV Status</th>
                         <th
                           colSpan="4"
                           rowSpan="2"
                           style={{
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          borderRight: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">Client Risk Category</th>
                         <th
                           colSpan="4"
                           rowSpan="2"
                           style={{
-                          padding: "10px",
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            padding: "10px",
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">Referral for Re - Testing</th>
                         <th
                           colSpan="3"
                           style={{
-                          padding: "10px",
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          borderRight: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          fontSize: "14px"
-                        }}
+                            padding: "10px",
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">Number of Items
-                          <br/>Given</th>
+                          <br />Given</th>
                         <th
                           style={{
-                          padding: "10px",
-                          borderRight: "1px solid rgb(51, 51, 51)",
-                          verticalAlign: "top",
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          fontSize: "14px"
-                        }}
+                            padding: "10px",
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            fontSize: "14px"
+                          }}
                           className="boldRight">Comments</th>
                         <td
                           rowSpan="4"
                           colSpan="2"
                           style={{
-                          borderBottom: "1px solid rgb(51, 51, 51)",
-                          width: "30px",
-                          height: "50px"
-                        }}>&nbsp;</td>
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}>&nbsp;</td>
                       </tr>
                       <tr>
                         <td
                           rowSpan="3"
                           style={{
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          borderBottom: "1px solid rgb(51, 51, 51)",
-                          height: "70px"
-                        }}>
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            height: "70px"
+                          }}>
                           <div
                             style={{
-                            height: "120px",
-                            fontSize: "12px",
-                            width: "30px"
-                          }}>
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
                             <div
                               style={{
-                              transform: "rotate(-90deg)",
-                              transformOrigin: "right bottom 0px",
-                              marginLeft: "-100px"
-                            }}>Male</div>
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>Male</div>
                           </div>
                         </td>
                         <td
                           rowSpan="3"
                           style={{
-                          borderBottom: "1px solid rgb(51, 51, 51)",
-                          width: "30px",
-                          height: "100px"
-                        }}>
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "100px"
+                          }}>
                           <div
                             style={{
-                            height: "120px",
-                            fontSize: "12px",
-                            width: "30px"
-                          }}>
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
                             <div
                               style={{
-                              transform: "rotate(-90deg)",
-                              transformOrigin: "right bottom 0px",
-                              marginLeft: "-100px"
-                            }}>Female
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>Female
                               <i
                                 style={{
-                                color: "#fff"
-                              }}>_</i>Non-Preg.</div >
+                                  color: "#fff"
+                                }}>_</i>Non-Preg.</div >
                           </div>
                         </td>
                         <td
                           rowSpan="3"
                           style={{
-                          borderRight: "3px solid rgb(0,0,0)",
-                          borderBottom: "1px solid rgb(51, 51, 51)",
-                          width: "30px",
-                          height: "100px"
-                        }}>
+                            borderRight: "3px solid rgb(0,0,0)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "100px"
+                          }}>
                           <div
                             style={{
-                            height: "120px",
-                            fontSize: "12px",
-                            width: "30px"
-                          }}>
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
                             <div
                               style={{
-                              transform: "rotate(-90deg)",
-                              transformOrigin: "right bottom 0px",
-                              marginLeft: "-100px"
-                            }}>Female
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>Female
                               <i
                                 style={{
-                                color: "#fff"
-                              }}>_</i>Pregnant</div >
+                                  color: "#fff"
+                                }}>_</i>Pregnant</div >
                           </div>
                         </td>
                         <td
                           rowSpan="3"
                           style={{
-                          borderLeft: "1px solid rgb(51, 51, 51)",
-                          borderBottom: "1px solid rgb(51, 51, 51)",
-                          width: "30px",
-                          height: "100px"
-                        }}>
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "100px"
+                          }}>
                           <div
                             style={{
-                            height: "120px",
-                            fontSize: "12px",
-                            width: "30px"
-                          }}>
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
                             <div
                               style={{
-                              transform: "rotate(-90deg)",
-                              transformOrigin: "right bottom 0px",
-                              marginLeft: "-100px"
-                            }}>0 - 11
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>0 - 11
                               <i
                                 style={{
+                                  color: "#fff"
+                                }}>_</i>months</div >
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}>
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>1 - 14
+                              <i
+                                style={{
+                                  color: "#fff"
+                                }}>_</i>years</div >
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}>
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>15 - 24 < i style={{
                                 color: "#fff"
+                              }}
+                              >_</i>years</div >
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}
+                          className="boldRight">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>25 +
+                            <i
+                                style={{
+                                  color: "#fff"
+                                }}>_</i>years</div >
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}>
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-85px"
+                              }}>Routine
+                            <i
+                                style={{
+                                  color: "#fff"
+                                }}>_</i>HTS
+                            <i
+                                style={{
+                                  color: "#fff"
+                                }}>_</i>within Health<i style={{
+                                  color: "#fff"
+                                }}>_</i>Service</div >
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}>
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-85px"
+                              }}>Comes<i style={{
+                                color: "#fff"
+                              }}>_</i>with<i style={{
+                                color: "#fff"
+                              }}>_</i>HTS Family<i style={{
+                                color: "#fff"
+                              }}>_</i>Ref.<i style={{
+                                color: "#fff"
+                              }}>_</i>Slip</div >
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}
+                          className="boldRight">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>Other<i style={{
+                                color: "#fff"
+                              }}>_</i>(VCT,etc.)<i style={{
+                                color: "#fff"
+                              }}>________________________</i>
+                            </div>
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}>
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>Never Tested</div>
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}>
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>Last Negative</div>
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}>
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>Last Positive</div>
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}>
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-85px"
+                              }}>Last
+                            <i
+                                style={{
+                                  color: "#fff"
+                                }}>_</i>Expos. < i style={{
+                                  color: "#fff"
+                                }}
+                                >_</i>Infant</div >
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}>
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>Last Inconclusive</div>
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}>
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>No</div>
+                          </div>
+                        </td>
+                        <td
+                          rowSpan="3"
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            width: "30px",
+                            height: "50px"
+                          }}
+                          className="boldRight">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-100px"
+                              }}>Yes</div>
+                          </div>
+                        </td>
+                        <td
+                          colSpan="8"
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)"
+                          }}
+                          className="boldRight"></td>
+                        <td
+                          colSpan="2"
+                          style={{
+                            fontSize: "12px",
+                            textAlign: "center"
+                          }}>Only Test 1 used</td>
+                        <td
+                          colSpan="3"
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            fontSize: "12px",
+                            textAlign: "center"
+                          }}
+                          className="boldRight">Test 1 &amp; Test 2
+                      <br />Used± Repeat</td>
+                        <td colSpan="4">&nbsp;</td>
+                        <td
+                          colSpan="2"
+                          style={{
+                            borderRight: "3px solid rgb(0,0,0)",
+                            borderBottom: "1px dotted rgb(51, 51, 51)",
+                            fontSize: "12px",
+                            textAlign: "center",
+                            verticalAlign: "bottom"
+                          }}>Confirmatory
+                      <br />Results for
+                      <br />Clients Last +</td>
+                        <td
+                          align="center"
+                          style={{
+                            verticalAlign: "top",
+                            fontSize: "12px"
+                          }}>
+                          <b>HTS
+                        <br />Family
+                        <br />Ref Slips</b>
+                        </td>
+                        <td
+                          colSpan="2"
+                          align="center"
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "12px"
+                          }}
+                          className="boldRight">
+                          <b>Condoms</b>
+                        </td>
+                        <td
+                          style={{
+                            borderRight: "3px solid rgb(0,0,0)",
+                            verticalAlign: "top",
+                            fontSize: "12px",
+                            textAlign: "center"
+                          }}>
+                          <i >Specimen ID for DBS
+                        <br />samples sent to lab.</i><br />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          colSpan="4"
+                          style={{
+                            fontSize: "12px",
+                            textAlign: "center",
+                            verticalAlign: "bottom"
+                          }}>First Pass</td>
+                        <td
+                          colSpan="4"
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            fontSize: "12px",
+                            textAlign: "center",
+                            verticalAlign: "bottom"
+                          }}
+                          className="boldRight">Immediate Repeat</td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: "right bottom 0px",
+                                marginLeft: "-89px"
+                              }}>Single
+                          <i
+                                style={{
+                                  color: "#fff"
+                                }}>_</i>Neg</div >
+                          </div>
+                        </td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-95px"
+                              }}>Single
+                          <i
+                                style={{
+                                  color: " #fff"
+                                }}>_</i>Pos</div >
+                          </div>
+                        </td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-70px"
+                              }}>Test
+                          <i
+                                style={{
+                                  color: " #fff"
+                                }}>_</i>1&amp;2 < i style={{
+                                  color: " #fff"
+                                }}
+                                >_</i>Neg</div >
+                          </div>
+                        </td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-70px"
+                              }}>Test < i style={{
+                                color: " #fff"
+                              }}
+                              >_</i>1&amp;2 < i style={{
+                                color: " #fff"
+                              }}
+                              >_</i>Pos</div >
+                          </div>
+                        </td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2"
+                          className="boldRight">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-70px"
+                              }}>Test
+                    <i style={{
+                                color: " #fff"
+                              }}>_</i>1&amp;2
+                    <i style={{
+                                color: " #fff"
+                              }}>_</i>disc.</div >
+                          </div>
+                        </td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: "rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-75px"
+                              }}>New
+                    <i style={{
+                                color: " #fff"
+                              }}>_</i>Negative</div >
+                          </div>
+                        </td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-85px"
+                              }}>New
+                    <i style={{
+                                color: " #fff"
+                              }}>_</i>Positive</div >
+                          </div>
+                        </td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-67px"
+                              }}>New
+                    <i style={{
+                                color: " #fff"
+                              }}>_</i>Exp.
+                    <i style={{
+                                color: " #fff"
+                              }}>_</i>Infant</div >
+                          </div>
+                        </td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-67px"
+                              }}>New
+                    <i style={{
+                                color: " #fff"
+                              }}>_</i>Inconclusive</div >
+                          </div>
+                        </td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-80px"
+                              }}>Conf.
+                    <i style={{
+                                color: " #fff"
+                              }}>_</i>Positive</div >
+                          </div>
+                        </td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2"
+                          className="boldRight">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-90px"
+                              }}>Inconclusive</div>
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            borderLeft: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-70px"
+                              }}>No Partner</div>
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-70px"
+                              }}>HIV Unknown</div>
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-70px"
+                              }}>Partner Neg.</div>
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2"
+                          className="boldRight">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-70px"
+                              }}>Partner Pos.</div>
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-70px"
+                              }}>Low
+                    <i style={{
+                                color: " #fff"
+                              }}>_</i>Risk</div >
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-70px"
+                              }}>On - going
+                    <i style={{
+                                color: " #fff"
+                              }}>_</i>Risk</div >
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-56px"
+                              }}>High<i style={{
+                                color: " #fff"
+                              }}>_</i>Risk<i style={{
+                                color: " #fff"
+                              }}>_</i>Event<i style={{
+                                color: " #fff"
+                              }}>_</i>in<br />last<i style={{
+                                color: " #fff"
+                              }}>_</i>3<i style={{
+                                color: " #fff"
                               }}>_</i>months</div >
                           </div>
                         </td>
                         <td
-                          rowSpan="3"
                           style={{
-                          borderBottom: "1px solid rgb(51, 51, 51)",
-                          width: "30px",
-                          height: "50px"
-                        }}>
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2"
+                          className="boldRight">
                           <div
                             style={{
-                            height: "120px",
-                            fontSize: "12px",
-                            width: "30px"
-                          }}>
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
                             <div
                               style={{
-                              transform: "rotate(-90deg)",
-                              transformOrigin: "right bottom 0px",
-                              marginLeft: "-100px"
-                            }}>1 - 14
-                              <i
-                                style={{
-                                color: "#fff"
-                              }}>_</i>years</div >
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-57px"
+                              }}>Risk<i style={{
+                                color: " #fff"
+                              }}>_</i>assessment<br />Not<i style={{
+                                color: " #fff"
+                              }}>_</i>Done</div >
                           </div>
                         </td>
                         <td
-                          rowSpan="3"
                           style={{
-                          borderBottom: "1px solid rgb(51, 51, 51)",
-                          width: "30px",
-                          height: "50px"
-                        }}>
+                            borderBottom: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2">
                           <div
                             style={{
-                            height: "120px",
-                            fontSize: "12px",
-                            width: "30px"
-                          }}>
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
                             <div
                               style={{
-                              transform: "rotate(-90deg)",
-                              transformOrigin: "right bottom 0px",
-                              marginLeft: "-100px"
-                            }}>15 - 24 < i style={{
-                                color: "#fff"
-                              }}
-                              >_</i>years</div >
-                        </div>
-                      </td>
-                      <td
-                        rowSpan="3"
-                        style={{
-                        borderRight: "1px solid rgb(51, 51, 51)",
-                        borderBottom: "1px solid rgb(51, 51, 51)",
-                        width: "30px",
-                        height: "50px"
-                      }}
-                        className="boldRight">
-                        <div
-                          style={{
-                          height: "120px",
-                          fontSize: "12px",
-                          width: "30px"
-                        }}>
-                          <div
-                            style={{
-                            transform: "rotate(-90deg)",
-                            transformOrigin: "right bottom 0px",
-                            marginLeft: "-100px"
-                          }}>25 +
-                            <i
-                              style={{
-                              color: "#fff"
-                            }}>_</i>years</div >
-                        </div>
-                      </td>
-                      <td
-                        rowSpan="3"
-                        style={{
-                        borderLeft: "1px solid rgb(51, 51, 51)",
-                        borderBottom: "1px solid rgb(51, 51, 51)",
-                        width: "30px",
-                        height: "50px"
-                      }}>
-                        <div
-                          style={{
-                          height: "120px",
-                          fontSize: "12px",
-                          width: "30px"
-                        }}>
-                          <div
-                            style={{
-                            transform: "rotate(-90deg)",
-                            transformOrigin: "right bottom 0px",
-                            marginLeft: "-85px"
-                          }}>Routine
-                            <i
-                              style={{
-                              color: "#fff"
-                            }}>_</i>HTS
-                            <i
-                              style={{
-                              color: "#fff"
-                            }}>_</i>within Health<i style={{
-        color: "#fff"
-      }}>_</i>Service</div >
-                        </div>
-                      </td>
-                      <td
-                        rowSpan="3"
-                        style={{
-                        borderBottom: "1px solid rgb(51, 51, 51)",
-                        width: "30px",
-                        height: "50px"
-                      }}>
-                        <div
-                          style={{
-                          height: "120px",
-                          fontSize: "12px",
-                          width: "30px"
-                        }}>
-                          <div
-                            style={{
-                            transform: "rotate(-90deg)",
-                            transformOrigin: "right bottom 0px",
-                            marginLeft: "-85px"
-                          }}>Comes<i style={{
-        color: "#fff"
-      }}>_</i>with<i style={{
-        color: "#fff"
-      }}>_</i>HTS Family<i style={{
-        color: "#fff"
-      }}>_</i>Ref.<i style={{
-        color: "#fff"
-      }}>_</i>Slip</div >
-                        </div>
-                      </td>
-                      <td
-                        rowSpan="3"
-                        style={{
-                        borderRight: "1px solid rgb(51, 51, 51)",
-                        borderBottom: "1px solid rgb(51, 51, 51)",
-                        width: "30px",
-                        height: "50px"
-                      }}
-                        className="boldRight">
-                        <div
-                          style={{
-                          height: "120px",
-                          fontSize: "12px",
-                          width: "30px"
-                        }}>
-                          <div
-                            style={{
-                            transform: "rotate(-90deg)",
-                            transformOrigin: "right bottom 0px",
-                            marginLeft: "-100px"
-                          }}>Other<i style={{
-        color: "#fff"
-      }}>_</i>(VCT,etc.)<i style={{
-        color: "#fff"
-      }}>________________________</i>
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-55px"
+                              }}>No Re - Test needed</div>
                           </div>
-                        </div>
-                      </td>
-                      <td
-                        rowSpan="3"
-                        style={{
-                        borderLeft: "1px solid rgb(51, 51, 51)",
-                        borderBottom: "1px solid rgb(51, 51, 51)",
-                        width: "30px",
-                        height: "50px"
-                      }}>
-                        <div
+                        </td>
+                        <td
                           style={{
-                          height: "120px",
-                          fontSize: "12px",
-                          width: "30px"
-                        }}>
-                          <div
-                            style={{
-                            transform: "rotate(-90deg)",
-                            transformOrigin: "right bottom 0px",
-                            marginLeft: "-100px"
-                          }}>Never Tested</div>
-                        </div>
-                      </td>
-                      <td
-                        rowSpan="3"
-                        style={{
-                        borderBottom: "1px solid rgb(51, 51, 51)",
-                        width: "30px",
-                        height: "50px"
-                      }}>
-                        <div
-                          style={{
-                          height: "120px",
-                          fontSize: "12px",
-                          width: "30px"
-                        }}>
-                          <div
-                            style={{
-                            transform: "rotate(-90deg)",
-                            transformOrigin: "right bottom 0px",
-                            marginLeft: "-100px"
-                          }}>Last Negative</div>
-                        </div>
-                      </td>
-                      <td
-                        rowSpan="3"
-                        style={{
-                        borderBottom: "1px solid rgb(51, 51, 51)",
-                        width: "30px",
-                        height: "50px"
-                      }}>
-                        <div
-                          style={{
-                          height: "120px",
-                          fontSize: "12px",
-                          width: "30px"
-                        }}>
-                          <div
-                            style={{
-                            transform: "rotate(-90deg)",
-                            transformOrigin: "right bottom 0px",
-                            marginLeft: "-100px"
-                          }}>Last Positive</div>
-                        </div>
-                      </td>
-                      <td
-                        rowSpan="3"
-                        style={{
-                        borderBottom: "1px solid rgb(51, 51, 51)",
-                        width: "30px",
-                        height: "50px"
-                      }}>
-                        <div
-                          style={{
-                          height: "120px",
-                          fontSize: "12px",
-                          width: "30px"
-                        }}>
-                          <div
-                            style={{
-                            transform: "rotate(-90deg)",
-                            transformOrigin: "right bottom 0px",
-                            marginLeft: "-85px"
-                          }}>Last
-                            <i
-                              style={{
-                              color: "#fff"
-                            }}>_</i>Expos. < i style={{
-                              color: "#fff"
-                            }}
-                            >_</i>Infant</div >
-                      </div>
-                    </td>
-                    <td
-                      rowSpan="3"
-                      style={{
-                      borderBottom: "1px solid rgb(51, 51, 51)",
-                      width: "30px",
-                      height: "50px"
-                    }}>
-                      <div
-                        style={{
-                        height: "120px",
-                        fontSize: "12px",
-                        width: "30px"
-                      }}>
-                        <div
-                          style={{
-                          transform: "rotate(-90deg)",
-                          transformOrigin: "right bottom 0px",
-                          marginLeft: "-100px"
-                        }}>Last Inconclusive</div>
-                      </div>
-                    </td>
-                    <td
-                      rowSpan="3"
-                      style={{
-                      borderLeft: "1px solid rgb(51, 51, 51)",
-                      borderBottom: "1px solid rgb(51, 51, 51)",
-                      width: "30px",
-                      height: "50px"
-                    }}>
-                      <div
-                        style={{
-                        height: "120px",
-                        fontSize: "12px",
-                        width: "30px"
-                      }}>
-                        <div
-                          style={{
-                          transform: "rotate(-90deg)",
-                          transformOrigin: "right bottom 0px",
-                          marginLeft: "-100px"
-                        }}>No</div>
-                      </div>
-                    </td>
-                    <td
-                      rowSpan="3"
-                      style={{
-                      borderRight: "1px solid rgb(51, 51, 51)",
-                      borderBottom: "1px solid rgb(51, 51, 51)",
-                      width: "30px",
-                      height: "50px"
-                    }}
-                      className="boldRight">
-                      <div
-                        style={{
-                        height: "120px",
-                        fontSize: "12px",
-                        width: "30px"
-                      }}>
-                        <div
-                          style={{
-                          transform: "rotate(-90deg)",
-                          transformOrigin: "right bottom 0px",
-                          marginLeft: "-100px"
-                        }}>Yes</div>
-                      </div>
-                    </td>
-                    <td
-                      colSpan="8"
-                      style={{
-                      borderRight: "1px solid rgb(51, 51, 51)"
-                    }}
-                      className="boldRight"></td>
-                    <td
-                      colSpan="2"
-                      style={{
-                      fontSize: "12px",
-                      textAlign: "center"
-                    }}>Only Test 1 used</td>
-                    <td
-                      colSpan="3"
-                      style={{
-                      borderRight: "1px solid rgb(51, 51, 51)",
-                      fontSize: "12px",
-                      textAlign: "center"
-                    }}
-                      className="boldRight">Test 1 &amp; Test 2
-                      <br/>Used± Repeat</td>
-                    <td colSpan="4">&nbsp;</td>
-                    <td
-                      colSpan="2"
-                      style={{
-                      borderRight: "3px solid rgb(0,0,0)",
-                      borderBottom: "1px dotted rgb(51, 51, 51)",
-                      fontSize: "12px",
-                      textAlign: "center",
-                      verticalAlign: "bottom"
-                    }}>Confirmatory
-                      <br/>Results for
-                      <br/>Clients Last +</td>
-                    <td
-                      align="center"
-                      style={{
-                      verticalAlign: "top",
-                      fontSize: "12px"
-                    }}>
-                      <b>HTS
-                        <br/>Family
-                        <br/>Ref Slips</b>
-                    </td>
-                    <td
-                      colSpan="2"
-                      align="center"
-                      style={{
-                      borderRight: "1px solid rgb(51, 51, 51)",
-                      verticalAlign: "top",
-                      fontSize: "12px"
-                    }}
-                      className="boldRight">
-                      <b>Condoms</b>
-                    </td>
-                    <td
-                      style={{
-                      borderRight: "3px solid rgb(0,0,0)",
-                      verticalAlign: "top",
-                      fontSize: "12px",
-                      textAlign: "center"
-                    }}>
-                      <i >Specimen ID for DBS
-                        <br/>samples sent to lab.</i><br/>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      colSpan="4"
-                      style={{
-                      fontSize: "12px",
-                      textAlign: "center",
-                      verticalAlign: "bottom"
-                    }}>First Pass</td>
-                    <td
-                      colSpan="4"
-                      style={{
-                      borderRight: "1px solid rgb(51, 51, 51)",
-                      fontSize: "12px",
-                      textAlign: "center",
-                      verticalAlign: "bottom"
-                    }}
-                      className="boldRight">Immediate Repeat</td>
-                    <td
-                      align="center"
-                      style={{
-                      borderBottom: "1px solid rgb(51, 51, 51)",
-                      fontStyle: "italic",
-                      fontSize: "12px"
-                    }}
-                      rowSpan="2">
-                      <div
-                        style={{
-                        height: "120px",
-                        fontSize: "12px",
-                        width: "30px"
-                      }}>
-                        <div
-                          style={{
-                          transform: "rotate(-90deg)",
-                          transformOrigin: "right bottom 0px",
-                          marginLeft: "-89px"
-                        }}>Single
-                          <i
-                            style={{
-                            color: "#fff"
-                          }}>_</i>Neg</div >
-                      </div>
-                    </td>
-                    <td
-                      align="center"
-                      style={{
-                      borderBottom: "1px solid rgb(51, 51, 51)",
-                      fontStyle: "italic",
-                      fontSize: "12px"
-                    }}
-                      rowSpan="2">
-                      <div
-                        style={{
-                        height: "120px",
-                        fontSize: "12px",
-                        width: "30px"
-                      }}>
-                        <div
-                          style={{
-                          transform: " rotate(-90deg)",
-                          transformOrigin: " right bottom 0px",
-                          marginLeft: "-95px"
-                        }}>Single
-                          <i
-                            style={{
-                            color: " #fff"
-                          }}>_</i>Pos</div >
-                      </div>
-                    </td>
-                    <td
-                      align="center"
-                      style={{
-                      borderBottom: "1px solid rgb(51, 51, 51)",
-                      fontStyle: "italic",
-                      fontSize: "12px"
-                    }}
-                      rowSpan="2">
-                      <div
-                        style={{
-                        height: "120px",
-                        fontSize: "12px",
-                        width: "30px"
-                      }}>
-                        <div
-                          style={{
-                          transform: " rotate(-90deg)",
-                          transformOrigin: " right bottom 0px",
-                          marginLeft: "-70px"
-                        }}>Test
-                          <i
-                            style={{
-                            color: " #fff"
-                          }}>_</i>1&amp;2 < i style={{
-                            color: " #fff"
+                            borderBottom: "1px solid rgb(51, 51, 51)"
                           }}
-                          >_</i>Neg</div >
-                    </div>
-                  </td>
-                  <td
-                    align="center"
-                    style={{
-                    borderBottom: "1px solid rgb(51, 51, 51)",
-                    fontStyle: "italic",
-                    fontSize: "12px"
-                  }}
-                    rowSpan="2">
-                    <div
-                      style={{
-                      height: "120px",
-                      fontSize: "12px",
-                      width: "30px"
-                    }}>
-                      <div
-                        style={{
-                        transform: " rotate(-90deg)",
-                        transformOrigin: " right bottom 0px",
-                        marginLeft: "-70px"
-                      }}>Test < i style={{
-                          color: " #fff"
-                        }}
-                        >_</i>1&amp;2 < i style={{
-                        color: " #fff"
-                      }}
-                      >_</i>Pos</div >
-                </div>
-              </td>
-              <td
-                align="center"
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                borderRight: "1px solid rgb(51, 51, 51)",
-                fontStyle: "italic",
-                fontSize: "12px"
-              }}
-                rowSpan="2"
-                className="boldRight">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-70px"
-                  }}>Test
-                    <i style={{
-                      color: " #fff"
-                    }}>_</i>1&amp;2
-                    <i style={{
-                      color: " #fff"
-                    }}>_</i>disc.</div >
-                </div>
-              </td>
-              <td
-                align="center"
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                fontStyle: "italic",
-                fontSize: "12px"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: "rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-75px"
-                  }}>New
-                    <i style={{
-                      color: " #fff"
-                    }}>_</i>Negative</div >
-                </div>
-              </td>
-              <td
-                align="center"
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                fontStyle: "italic",
-                fontSize: "12px"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-85px"
-                  }}>New
-                    <i style={{
-                      color: " #fff"
-                    }}>_</i>Positive</div >
-                </div>
-              </td>
-              <td
-                align="center"
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                fontStyle: "italic",
-                fontSize: "12px"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-67px"
-                  }}>New
-                    <i style={{
-                      color: " #fff"
-                    }}>_</i>Exp.
-                    <i style={{
-                      color: " #fff"
-                    }}>_</i>Infant</div >
-                </div>
-              </td>
-              <td
-                align="center"
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                fontStyle: "italic",
-                fontSize: "12px"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-67px"
-                  }}>New
-                    <i style={{
-                      color: " #fff"
-                    }}>_</i>Inconclusive</div >
-                </div>
-              </td>
-              <td
-                align="center"
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                fontStyle: "italic",
-                fontSize: "12px"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-80px"
-                  }}>Conf.
-                    <i style={{
-                      color: " #fff"
-                    }}>_</i>Positive</div >
-                </div>
-              </td>
-              <td
-                align="center"
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                borderRight: "1px solid rgb(51, 51, 51)",
-                fontStyle: "italic",
-                fontSize: "12px"
-              }}
-                rowSpan="2"
-                className="boldRight">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-90px"
-                  }}>Inconclusive</div>
-                </div>
-              </td>
-              <td
-                style={{
-                borderLeft: "1px solid rgb(51, 51, 51)",
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-70px"
-                  }}>No Partner</div>
-                </div>
-              </td>
-              <td
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-70px"
-                  }}>HIV Unknown</div>
-                </div>
-              </td>
-              <td
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-70px"
-                  }}>Partner Neg.</div>
-                </div>
-              </td>
-              <td
-                style={{
-                borderRight: "1px solid rgb(51, 51, 51)",
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2"
-                className="boldRight">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-70px"
-                  }}>Partner Pos.</div>
-                </div>
-              </td>
-              <td
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-70px"
-                  }}>Low
-                    <i style={{
-                      color: " #fff"
-                    }}>_</i>Risk</div >
-                </div>
-              </td>
-              <td
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-70px"
-                  }}>On - going
-                    <i style={{
-                      color: " #fff"
-                    }}>_</i>Risk</div >
-                </div>
-              </td>
-              <td
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-56px"
-                  }}>High<i style={{
-        color: " #fff"
-      }}>_</i>Risk<i style={{
-        color: " #fff"
-      }}>_</i>Event<i style={{
-        color: " #fff"
-      }}>_</i>in<br/>last<i style={{
-        color: " #fff"
-      }}>_</i>3<i style={{
-        color: " #fff"
-      }}>_</i>months</div >
-                </div>
-              </td>
-              <td
-                style={{
-                borderRight: "1px solid rgb(51, 51, 51)",
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2"
-                className="boldRight">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-57px"
-                  }}>Risk<i style={{
-        color: " #fff"
-      }}>_</i>assessment<br/>Not<i style={{
-        color: " #fff"
-      }}>_</i>Done</div >
-                </div>
-              </td>
-              <td
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-55px"
-                  }}>No Re - Test needed</div>
-                </div>
-              </td>
-              <td
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-70px"
-                  }}>Re - Test</div>
-                </div>
-              </td>
-              <td
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-40px"
-                  }}>Confirmatory Test at HIV Clinic</div>
-                </div>
-              </td>
-              <td
-                style={{
-                borderRight: "1px solid rgb(51, 51, 51)",
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                fontSize: "12px",
-                verticalAlign: "bottom"
-              }}
-                rowSpan="2"
-                className="boldRight">Appointment
-                <br/>Date Given</td>
-              <td
-                align="center"
-                style={{
-                borderRight: "1px solid rgb(51, 51, 51)",
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                verticalAlign: "bottom",
-                fontSize: "12px"
-              }}
-                rowSpan="2"
-                className="boldRight">
-                <i>1 Slip for each
-                  <br/>partner + each
-                  <br/>U5 child with
-                  <br/>unk.status</i>
-              </td>
-              <td
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-65px"
-                  }}>Male</div>
-                </div>
-              </td>
-              <td
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                borderRight: "1px solid rgb(51, 51, 51)"
-              }}
-                rowSpan="2"
-                className="boldRight">
-                <div
-                  style={{
-                  height: "120px",
-                  fontSize: "12px",
-                  width: "30px"
-                }}>
-                  <div
-                    style={{
-                    transform: " rotate(-90deg)",
-                    transformOrigin: " right bottom 0px",
-                    marginLeft: "-65px"
-                  }}>Female</div>
-                </div>
-              </td>
-              <td
-                style={{
-                borderRight: "3px solid rgb(0,0,0)",
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                verticalAlign: "top",
-                fontSize: "12px",
-                textAlign: "center"
-              }}
-                rowSpan="2">
-                <i>Follow - up outcome for
-                  <br/>clients referred, etc.</i>
-              </td>
-            </tr>
-            <tr>
-              <td
-                align="center"
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                fontStyle: "italic",
-                fontSize: "12px"
-              }}
-                colSpan="2">Test 1</td>
-              <td
-                align="center"
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                fontStyle: "italic",
-                fontSize: "12px"
-              }}
-                colSpan="2">Test 2</td>
-              <td
-                align="center"
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                fontStyle: "italic",
-                fontSize: "12px"
-              }}
-                colSpan="2">Test 1</td>
-              <td
-                align="center"
-                style={{
-                borderBottom: "1px solid rgb(51, 51, 51)",
-                borderRight: "3px solid rgb(0,0,0)",
-                fontStyle: "italic",
-                fontSize: "12px"
-              }}
-                colSpan="2">Test 2</td>
-            </tr>
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-70px"
+                              }}>Re - Test</div>
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-40px"
+                              }}>Confirmatory Test at HIV Clinic</div>
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontSize: "12px",
+                            verticalAlign: "bottom"
+                          }}
+                          rowSpan="2"
+                          className="boldRight">Appointment
+                <br />Date Given</td>
+                        <td
+                          align="center"
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "bottom",
+                            fontSize: "12px"
+                          }}
+                          rowSpan="2"
+                          className="boldRight">
+                          <i>1 Slip for each
+                  <br />partner + each
+                  <br />U5 child with
+                  <br />unk.status</i>
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-65px"
+                              }}>Male</div>
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            borderRight: "1px solid rgb(51, 51, 51)"
+                          }}
+                          rowSpan="2"
+                          className="boldRight">
+                          <div
+                            style={{
+                              height: "120px",
+                              fontSize: "12px",
+                              width: "30px"
+                            }}>
+                            <div
+                              style={{
+                                transform: " rotate(-90deg)",
+                                transformOrigin: " right bottom 0px",
+                                marginLeft: "-65px"
+                              }}>Female</div>
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            borderRight: "3px solid rgb(0,0,0)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "12px",
+                            textAlign: "center"
+                          }}
+                          rowSpan="2">
+                          <i>Follow - up outcome for
+                  <br />clients referred, etc.</i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          colSpan="2">Test 1</td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          colSpan="2">Test 2</td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          colSpan="2">Test 1</td>
+                        <td
+                          align="center"
+                          style={{
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            borderRight: "3px solid rgb(0,0,0)",
+                            fontStyle: "italic",
+                            fontSize: "12px"
+                          }}
+                          colSpan="2">Test 2</td>
+                      </tr>
 
-            {Array(2)
-              .fill()
-              .map((_, j) => {
+                      {Array(2)
+                        .fill()
+                        .map((_, j) => {
 
-                return (
-                  <tr
-                    id={"row" + j}
-                    key={"row" + j}
-                    style={{
-                    border: (j === 1
-                      ? "4px solid orange"
-                      : ""),
-                    cursor: "pointer"
-                  }}>
+                          return (
+                            <tr
+                              id={"row" + j}
+                              key={"row" + j}
+                              style={{
+                                border: (j === 1
+                                  ? "4px solid orange"
+                                  : ""),
+                                cursor: "pointer"
+                              }}>
 
-                    {Array(56)
-                      .fill()
-                      .map((_, i) => {
+                              {Array(56)
+                                .fill()
+                                .map((_, i) => {
 
-                        return (
-                          <td
-                            id={"cell" + j + "_" + i}
-                            key={"cell" + j + "_" + i}
-                            className={"bdcell" + ([
-                            0,
-                            1,
-                            4,
-                            5,
-                            9,
-                            12,
-                            17,
-                            18,
-                            20,
-                            22,
-                            24,
-                            26,
-                            28,
-                            33,
-                            39,
-                            43,
-                            47,
-                            50,
-                            51,
-                            52,
-                            54,
-                            55
-                          ].indexOf(i) >= 0
-                            ? " boldRight"
-                            : "")}
-                            onMouseDown=
-                            { j === 1 ? (this.handleCellClick.bind(this, fieldTypes[i], (fieldNames[i] && fieldNames[i].category ? fieldNames[i].category : null), (fieldNames[i] && fieldNames[i].field ? fieldNames[i].field : null), (fieldNames[i] && fieldNames[i].subField ? fieldNames[i].subField : null), (fieldNames[i] && fieldNames[i].subSubField ? fieldNames[i].subSubField : null), j, i, (fieldNames[i] && fieldNames[i].group ? fieldNames[i].group : null))) : () =>{} }>{fields[i]
-                              ? (j === 1
-                                ? <div
-                                    id={"circle" + j + "_" + i}
-                                    className={(fieldNames[i] && fieldNames[i].category && fieldNames[i].field && fieldNames[i].subField && fieldNames[i].subSubField && this.state.data[fieldNames[i].category] && this.state.data[fieldNames[i].category][fieldNames[i].field] && this.state.data[fieldNames[i].category][fieldNames[i].field][fieldNames[i].subField] === fieldNames[i].subSubField)
-                                    ? "circled"
-                                    : ((this.props.current && fieldNames[i] && fieldNames[i].category && fieldNames[i].field && fieldNames[i].subField && ((fieldNames[i].subSubField && this.props.current[fieldNames[i].category] && this.props.current[fieldNames[i].category][fieldNames[i].field] && this.props.current[fieldNames[i].category][fieldNames[i].field][fieldNames[i].subField] === fieldNames[i].subSubField) || (this.props.current[fieldNames[i].category] === fieldNames[i].field)))
-                                      ? "circledFind"
-                                      : (fieldNames[i] && fieldNames[i].category && fieldNames[i].field && this.state.data[fieldNames[i].category] === fieldNames[i].field
-                                        ? "circled"
-                                        : (fieldNames[i] && fieldNames[i].category && fieldNames[i].field && this.props.current[fieldNames[i].category] === fieldNames[i].field && !this.state.data[fieldNames[i].category]
-                                          ? "circledFind"
-                                          : "normal")))}>{fields[i]
-                                      ? fields[i]
-                                      : ""}</div>
-                                : (j === 0
-                                  ? <div
-                                      id={"circle" + j + "_" + i}
-                                      className={this.props.previous && fieldNames[i] && fieldNames[i].category && fieldNames[i].field && fieldNames[i].subField && ((fieldNames[i].subSubField && this.props.previous[fieldNames[i].category] && this.props.previous[fieldNames[i].category][fieldNames[i].field] && this.props.previous[fieldNames[i].category][fieldNames[i].field][fieldNames[i].subField] === fieldNames[i].subSubField) || (this.props.previous[fieldNames[i].category] === fieldNames[i].field))
-                                      ? "circled"
-                                      : (fieldNames[i] && fieldNames[i].category && fieldNames[i].field && this.props.previous[fieldNames[i].category] === fieldNames[i].field
-                                        ? "circled"
-                                        : "normal")}>{fields[i]
-                                        ? fields[i]
-                                        : ""}</div>
-                                  : <div id={"circle" + j + "_" + i} className="normal">{fields[i]
-                                      ? fields[i]
-                                      : ""}</div>))
-                              : (j === 0
-                                ? <div
-                                    id={"circle" + j + "_" + i}
-                                    className={this.props.previous && fieldNames[i] && fieldNames[i].category && fieldNames[i].field && fieldNames[i].subField && ((fieldNames[i].subSubField && this.props.previous[fieldNames[i].category] && this.props.previous[fieldNames[i].category][fieldNames[i].field] && this.props.previous[fieldNames[i].category][fieldNames[i].field][fieldNames[i].subField] === fieldNames[i].subSubField) || (this.props.previous[fieldNames[i].category] === fieldNames[i].field))
-                                    ? "circled"
-                                    : (fieldNames[i] && fieldNames[i].category && fieldNames[i].field && this.props.previous[fieldNames[i].category] === fieldNames[i].field
-                                      ? "circled"
-                                      : "normal")}
-                                    style={{
-                                    color: "#c50000",
-                                    fontSize: "16px",
-                                    width: (i === 0
-                                      ? "135px"
-                                      : (i === 51
-                                        ? "100px"
-                                        : ""))
-                                  }}>{fields[i]
-                                      ? fields[i]
-                                      : (i === 0 && this.props.previous && this.props.previous.id
-                                        ? this.props.previous.id
-                                        : (this.props.previous && fieldNames[i] && this.props.previous[(fieldNames[i].category
-                                            ? fieldNames[i].category
-                                            : "") + (fieldNames[i].field
-                                            ? ":" + fieldNames[i].field
-                                            : "") + (fieldNames[i].subField
-                                            ? ":" + fieldNames[i].subField
-                                            : "")]
-                                          ? this.props.previous[(fieldNames[i].category
-                                              ? fieldNames[i].category
-                                              : "") + (fieldNames[i].field
-                                              ? ":" + fieldNames[i].field
-                                              : "") + (fieldNames[i].subField
-                                              ? ":" + fieldNames[i].subField
-                                              : "")]
-                                          : ""))}</div >
-                                : (j === 1
-                                  ? (i === 56
-                                    ? <img src={icoSave} height="45" alt="" onMouseDown= { () => this.handleSave() }/>
-                                    : (i === 57
-                                      ? < img src = {
-                                        icoClose
-                                      }
-                                      height = "45" alt = "" onMouseDown = {
-                                        () => this.handleClear()
-                                      } />: <div
-                                        id={"circle" + j + "_" + i}
-                                        className=
-                                        { (fields[i] ? "normal" : (fieldNames[i] && this.state.label === (fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "") ? "active" : "inactive")) }
-                                        style=
-                                        { { color: ([0, 1,5, 18, 51, 52, 53, 54].indexOf(i) >= 0 ? (fieldNames[i] && this.state.data && this.state.data[(fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "")] ? "#c50000" : "#008500") : "#c50000"), fontSize: "16px", width: ([0, 51].indexOf(i) >= 0 ? "150px" : "60px"), marginLeft: ([0].indexOf(i) >= 0 ? "10px !important" : "") } }>
-                                        {fields[i]
-                                          ? fields[i]
-                                          : (fieldNames[i] && this.state.label === (fieldNames[i].category
-                                            ? fieldNames[i].category
-                                            : "") + (fieldNames[i].field
-                                            ? ":" + fieldNames[i].field
-                                            : "") + (fieldNames[i].subField
-                                            ? ":" + fieldNames[i].subField
-                                            : "")
-                                            ? this.state.currentString
-                                            : (fieldNames[i] && this.state.data && this.state.data[(fieldNames[i].category
-                                                ? fieldNames[i].category
-                                                : "") + (fieldNames[i].field
-                                                ? ":" + fieldNames[i].field
-                                                : "") + (fieldNames[i].subField
-                                                ? ":" + fieldNames[i].subField
-                                                : "")]
-                                              ? this.state.data[(fieldNames[i].category
+                                  return (
+                                    <td
+                                      id={"cell" + j + "_" + i}
+                                      key={"cell" + j + "_" + i}
+                                      className={"bdcell" + ([
+                                        0,
+                                        1,
+                                        4,
+                                        5,
+                                        9,
+                                        12,
+                                        17,
+                                        18,
+                                        20,
+                                        22,
+                                        24,
+                                        26,
+                                        28,
+                                        33,
+                                        39,
+                                        43,
+                                        47,
+                                        50,
+                                        51,
+                                        52,
+                                        54,
+                                        55
+                                      ].indexOf(i) >= 0
+                                        ? " boldRight"
+                                        : "")}
+                                      onMouseDown=
+                                      {j === 1 ? (this.handleCellClick.bind(this, fieldTypes[i], (fieldNames[i] && fieldNames[i].category ? fieldNames[i].category : null), (fieldNames[i] && fieldNames[i].field ? fieldNames[i].field : null), (fieldNames[i] && fieldNames[i].subField ? fieldNames[i].subField : null), (fieldNames[i] && fieldNames[i].subSubField ? fieldNames[i].subSubField : null), j, i, (fieldNames[i] && fieldNames[i].group ? fieldNames[i].group : null))) : () => { }}>{fields[i]
+                                        ? (j === 1
+                                          ? <div
+                                            id={"circle" + j + "_" + i}
+                                            className={(fieldNames[i] && fieldNames[i].category && fieldNames[i].field && fieldNames[i].subField && fieldNames[i].subSubField && this.state.data[fieldNames[i].category] && this.state.data[fieldNames[i].category][fieldNames[i].field] && this.state.data[fieldNames[i].category][fieldNames[i].field][fieldNames[i].subField] === fieldNames[i].subSubField)
+                                              ? "circled"
+                                              : ((this.props.current && fieldNames[i] && fieldNames[i].category && fieldNames[i].field && fieldNames[i].subField && ((fieldNames[i].subSubField && this.props.current[fieldNames[i].category] && this.props.current[fieldNames[i].category][fieldNames[i].field] && this.props.current[fieldNames[i].category][fieldNames[i].field][fieldNames[i].subField] === fieldNames[i].subSubField) || (this.props.current[fieldNames[i].category] === fieldNames[i].field)))
+                                                ? "circledFind"
+                                                : (fieldNames[i] && fieldNames[i].category && fieldNames[i].field && this.state.data[fieldNames[i].category] === fieldNames[i].field
+                                                  ? "circled"
+                                                  : (fieldNames[i] && fieldNames[i].category && fieldNames[i].field && this.props.current[fieldNames[i].category] === fieldNames[i].field && !this.state.data[fieldNames[i].category]
+                                                    ? "circledFind"
+                                                    : "normal")))}>{fields[i]
+                                                      ? fields[i]
+                                                      : ""}</div>
+                                          : (j === 0
+                                            ? <div
+                                              id={"circle" + j + "_" + i}
+                                              className={this.props.previous && fieldNames[i] && fieldNames[i].category && fieldNames[i].field && fieldNames[i].subField && ((fieldNames[i].subSubField && this.props.previous[fieldNames[i].category] && this.props.previous[fieldNames[i].category][fieldNames[i].field] && this.props.previous[fieldNames[i].category][fieldNames[i].field][fieldNames[i].subField] === fieldNames[i].subSubField) || (this.props.previous[fieldNames[i].category] === fieldNames[i].field))
+                                                ? "circled"
+                                                : (fieldNames[i] && fieldNames[i].category && fieldNames[i].field && this.props.previous[fieldNames[i].category] === fieldNames[i].field
+                                                  ? "circled"
+                                                  : "normal")}>{fields[i]
+                                                    ? fields[i]
+                                                    : ""}</div>
+                                            : <div id={"circle" + j + "_" + i} className="normal">{fields[i]
+                                              ? fields[i]
+                                              : ""}</div>))
+                                        : (j === 0
+                                          ? <div
+                                            id={"circle" + j + "_" + i}
+                                            className={this.props.previous && fieldNames[i] && fieldNames[i].category && fieldNames[i].field && fieldNames[i].subField && ((fieldNames[i].subSubField && this.props.previous[fieldNames[i].category] && this.props.previous[fieldNames[i].category][fieldNames[i].field] && this.props.previous[fieldNames[i].category][fieldNames[i].field][fieldNames[i].subField] === fieldNames[i].subSubField) || (this.props.previous[fieldNames[i].category] === fieldNames[i].field))
+                                              ? "circled"
+                                              : (fieldNames[i] && fieldNames[i].category && fieldNames[i].field && this.props.previous[fieldNames[i].category] === fieldNames[i].field
+                                                ? "circled"
+                                                : "normal")}
+                                            style={{
+                                              color: "#c50000",
+                                              fontSize: "16px",
+                                              width: (i === 0
+                                                ? "135px"
+                                                : (i === 51
+                                                  ? "100px"
+                                                  : ""))
+                                            }}>{fields[i]
+                                              ? fields[i]
+                                              : (i === 0 && this.props.previous && this.props.previous.id
+                                                ? this.props.previous.id
+                                                : (this.props.previous && fieldNames[i] && this.props.previous[(fieldNames[i].category
                                                   ? fieldNames[i].category
                                                   : "") + (fieldNames[i].field
-                                                  ? ":" + fieldNames[i].field
-                                                  : "") + (fieldNames[i].subField
-                                                  ? ":" + fieldNames[i].subField
-                                                  : "")]
-                                              : (i === 0 && this.props.current && this.props.current.id
-                                                ? this.props.current.id
-                                                : (fieldNames[i] && this.props.current && this.props.current[(fieldNames[i].category
-                                                    ? fieldNames[i].category
-                                                    : "") + (fieldNames[i].field
                                                     ? ":" + fieldNames[i].field
                                                     : "") + (fieldNames[i].subField
-                                                    ? ":" + fieldNames[i].subField
-                                                    : "")]
-                                                  ? this.props.current[(fieldNames[i].category
-                                                      ? fieldNames[i].category
-                                                      : "") + (fieldNames[i].field
-                                                      ? ":" + fieldNames[i].field
-                                                      : "") + (fieldNames[i].subField
                                                       ? ":" + fieldNames[i].subField
                                                       : "")]
-                                                  : ""))))}
-                                      </div>))
-                                  : ""))}</td>
-                        )
-                      })}
+                                                  ? this.props.previous[(fieldNames[i].category
+                                                    ? fieldNames[i].category
+                                                    : "") + (fieldNames[i].field
+                                                      ? ":" + fieldNames[i].field
+                                                      : "") + (fieldNames[i].subField
+                                                        ? ":" + fieldNames[i].subField
+                                                        : "")]
+                                                  : ""))}</div >
+                                          : (j === 1
+                                            ? (i === 56
+                                              ? <img src={icoSave} height="45" alt="" onMouseDown={() => this.handleSave()} />
+                                              : (i === 57
+                                                ? < img src={
+                                                  icoClose
+                                                }
+                                                  height="45" alt="" onMouseDown={
+                                                    () => this.handleClear()
+                                                  } /> : <div
+                                                    id={"circle" + j + "_" + i}
+                                                    className=
+                                                    {(fields[i] ? "normal" : (fieldNames[i] && this.state.label === (fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "") ? "active" : "inactive"))}
+                                                    style=
+                                                    {{ color: ([0, 1, 5, 18, 51, 52, 53, 54].indexOf(i) >= 0 ? (fieldNames[i] && this.state.data && this.state.data[(fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "")] ? "#c50000" : "#008500") : "#c50000"), fontSize: "16px", width: ([0, 51].indexOf(i) >= 0 ? "150px" : "60px"), marginLeft: ([0].indexOf(i) >= 0 ? "10px !important" : "") }}>
+                                                  {fields[i]
+                                                    ? fields[i]
+                                                    : (fieldNames[i] && this.state.label === (fieldNames[i].category
+                                                      ? fieldNames[i].category
+                                                      : "") + (fieldNames[i].field
+                                                        ? ":" + fieldNames[i].field
+                                                        : "") + (fieldNames[i].subField
+                                                          ? ":" + fieldNames[i].subField
+                                                          : "")
+                                                      ? this.state.currentString
+                                                      : (fieldNames[i] && this.state.data && this.state.data[(fieldNames[i].category
+                                                        ? fieldNames[i].category
+                                                        : "") + (fieldNames[i].field
+                                                          ? ":" + fieldNames[i].field
+                                                          : "") + (fieldNames[i].subField
+                                                            ? ":" + fieldNames[i].subField
+                                                            : "")]
+                                                        ? this.state.data[(fieldNames[i].category
+                                                          ? fieldNames[i].category
+                                                          : "") + (fieldNames[i].field
+                                                            ? ":" + fieldNames[i].field
+                                                            : "") + (fieldNames[i].subField
+                                                              ? ":" + fieldNames[i].subField
+                                                              : "")]
+                                                        : (i === 0 && this.props.current && this.props.current.id
+                                                          ? this.props.current.id
+                                                          : (fieldNames[i] && this.props.current && this.props.current[(fieldNames[i].category
+                                                            ? fieldNames[i].category
+                                                            : "") + (fieldNames[i].field
+                                                              ? ":" + fieldNames[i].field
+                                                              : "") + (fieldNames[i].subField
+                                                                ? ":" + fieldNames[i].subField
+                                                                : "")]
+                                                            ? this.props.current[(fieldNames[i].category
+                                                              ? fieldNames[i].category
+                                                              : "") + (fieldNames[i].field
+                                                                ? ":" + fieldNames[i].field
+                                                                : "") + (fieldNames[i].subField
+                                                                  ? ":" + fieldNames[i].subField
+                                                                  : "")]
+                                                            : ""))))}
+                                                </div>))
+                                            : ""))}</td>
+                                  )
+                                })}
 
-                  </tr>
-                )
+                            </tr>
+                          )
 
-              })}
+                        })}
 
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+              <td>
+                <div
+                  style={{
+                    width: "180px",
+                    height: "calc(100vh - 222px)",
+                    overflow: "hidden",
+                    padding: "0px"
+                  }}>
+                  <table width="100%">
+                    <tbody>
+                      <tr>
+                        <td
+                          style={{
+                            height: "266px",
+                            borderBottom: "1px solid #333333"
+                          }}>
+                          &nbsp;
+              </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={{
+                            height: "64px",
+                            borderBottom: "3px solid orange"
+                          }}>
+                          &nbsp;
+              </td>
+                      </tr>
+                      <tr>
+                        <td
+                          align="center"
+                          style={{
+                            height: "66px",
+                            borderBottom: "3px solid orange"
+                          }}>
+                          <Button
+                            label="Save"
+                            handleMouseDown={this
+                              .handleSave
+                              .bind(this)} />
+                          <Button
+                            label="Clear"
+                            handleMouseDown={this
+                              .handleClear
+                              .bind(this)} />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
+        <div
+          style={{
+            position: "absolute",
+            zIndex: "100",
+            textAlign: "center",
+            width: "700px",
+            bottom: "10px",
+            left: "calc(50vw - 350px)",
+            backgroundColor: "rgba(255,255,255,0.9)",
+            borderRadius: "5px",
+            border: "1px solid #cccccc"
+          }}>
+          <Keyboard
+            onChangeHandler={this
+              .onChangeHandler
+              .bind(this)}
+            currentString={this.state.currentString}
+            configs={this.state.configs}
+            options={this.props.options}
+            label={this.state.label}
+            responses={this.props.responses}
+            fieldType={this.state.fieldType}
+            smallButtons={true} /></div>
       </div>
-    </td>
-    <td>
-      <div
-        style={{
-        width: "180px",
-        height: "calc(100vh - 222px)",
-        overflow: "hidden",
-        padding: "0px"
-      }}>
-        <table width="100%">
-          <tbody>
-            <tr>
-              <td
-                style={{
-                height: "266px",
-                borderBottom: "1px solid #333333"
-              }}>
-                &nbsp;
-              </td>
-            </tr>
-            <tr>
-              <td
-                style={{
-                height: "64px",
-                borderBottom: "3px solid orange"
-              }}>
-                &nbsp;
-              </td>
-            </tr>
-            <tr>
-              <td
-                align="center"
-                style={{
-                height: "66px",
-                borderBottom: "3px solid orange"
-              }}>
-                <Button
-                  label="Save"
-                  handleMouseDown={this
-                  .handleSave
-                  .bind(this)}/>
-                <Button
-                  label="Clear"
-                  handleMouseDown={this
-                  .handleClear
-                  .bind(this)}/>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </td>
-  </tr>
-</tbody>
-</table>
-<div
-style={{
-      position: "absolute",
-      zIndex: "100",
-      textAlign: "center",
-      width: "700px",
-      bottom: "10px",
-      left: "calc(50vw - 350px)",
-      backgroundColor: "rgba(255,255,255,0.9)",
-      borderRadius: "5px",
-      border: "1px solid #cccccc"
-    }}>
-<Keyboard
-        onChangeHandler={this
-        .onChangeHandler
-        .bind(this)}
-        currentString={this.state.currentString}
-        configs={this.state.configs}
-        options={this.props.options}
-        label={this.state.label}
-        responses={this.props.responses}
-        fieldType={this.state.fieldType}
-        smallButtons={true}/></div>
-</div>
 
     )
 
