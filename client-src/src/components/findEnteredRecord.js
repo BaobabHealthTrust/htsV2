@@ -484,7 +484,7 @@ class FindEnteredRecord extends Component {
       "Referral for Re-Testing"
     ];
 
-    if(this.state.data && this.state.data['Referral for Re-Testing'] && ["Confirmatory Test at HIV Clinic", "Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
+    if (this.state.data && this.state.data['Referral for Re-Testing'] && ["Confirmatory Test at HIV Clinic", "Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
 
       requiredFields.push('Appointment Date Given');
 
@@ -518,9 +518,11 @@ class FindEnteredRecord extends Component {
 
     if (missingFields.length > 0) {
 
+      let fields = missingFields.map((e) => { return e === "Number of Items Given:HTS Family Referral Slips" ? "Number of FRS given" : e });
+
       return this
         .props
-        .showErrorMsg("Missing Data", missingFields.join(", ") + "\n must be entered");
+        .showErrorMsg("Missing Data", fields.join(", ") + "\n must be entered");
 
     }
 

@@ -631,7 +631,8 @@ class BackdataEntry extends Component {
       "Outcome Summary",
       "Result Given to Client",
       "Client Risk Category",
-      "Referral for Re-Testing"
+      "Referral for Re-Testing",
+      "Number of Items Given:HTS Family Referral Slips"
     ];
 
     if (this.state.data && this.state.data['Referral for Re-Testing'] && ["Confirmatory Test at HIV Clinic", "Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
@@ -665,9 +666,11 @@ class BackdataEntry extends Component {
 
     if (missingFields.length > 0) {
 
+      let fields = missingFields.map((e) => { return e === "Number of Items Given:HTS Family Referral Slips" ? "Number of FRS given" : e });
+
       return this
         .props
-        .showErrorMsg("Missing Data", missingFields.join(", ") + "\n must be entered");
+        .showErrorMsg("Missing Data", fields.join(", ") + "\n must be entered");
 
     }
 
@@ -681,8 +684,8 @@ class BackdataEntry extends Component {
       if (appointmentDate < minDate || appointmentDate > maxDate) {
 
         return this
-        .props
-        .showErrorMsg("Invalid Entry", "Appointment date for Re-Test \n must be between 1 week and 1 year from current test date");
+          .props
+          .showErrorMsg("Invalid Entry", "Appointment date for Re-Test \n must be between 1 week and 1 year from current test date");
 
       }
 
@@ -698,8 +701,8 @@ class BackdataEntry extends Component {
       if (appointmentDate < minDate || appointmentDate > maxDate) {
 
         return this
-        .props
-        .showErrorMsg("Invalid Entry", "Appointment date for Confirmatory Test \n must be between same day and 3 months from current test date");
+          .props
+          .showErrorMsg("Invalid Entry", "Appointment date for Confirmatory Test \n must be between same day and 3 months from current test date");
 
       }
 
