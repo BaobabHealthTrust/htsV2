@@ -672,6 +672,12 @@ class BackdataEntry extends Component {
         .props
         .showErrorMsg("Missing Data", fields.join(", ") + "\n must be entered");
 
+    } else if(this.state.data && !String(this.state.data['Number of Items Given:HTS Family Referral Slips']).match(/^[0-9]$|^[1][0-5]$/)) {
+
+      return this
+      .props
+      .showErrorMsg("Invalid Entry", "Number of FRS given \n must be between 0-15");
+
     }
 
     if (this.state.data && this.state.data['Referral for Re-Testing'] && ["Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
