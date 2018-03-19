@@ -469,7 +469,7 @@ class FindEnteredRecord extends Component {
 
   async handleSave() {
 
-    const requiredFields = [
+    let requiredFields = [
       "HTS Provider ID",
       "Sex/Pregnancy",
       "Age",
@@ -482,6 +482,12 @@ class FindEnteredRecord extends Component {
       "Result Given to Client",
       "Client Risk Category"
     ];
+
+    if(this.state.data && this.state.data['Referral for Re-Testing'] && ["Confirmatory Test at HIV Clinic", "Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
+
+      requiredFields.push('Appointment Date Given');
+
+    }
 
     let workingData = Object.assign({}, this.props.current, this.state.data);
 

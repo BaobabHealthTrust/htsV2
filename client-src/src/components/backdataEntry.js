@@ -317,7 +317,7 @@ class BackdataEntry extends Component {
 
         this
           .props
-          .showErrorMsg("Invalid Data", "Missing HTS Provider ID");
+          .showErrorMsg("Missing Data", "HTS Provider ID \n must be entered");
 
         setTimeout(() => {
 
@@ -619,7 +619,7 @@ class BackdataEntry extends Component {
 
   async handleSave() {
 
-    const requiredFields = [
+    let requiredFields = [
       "HTS Provider ID",
       "Sex/Pregnancy",
       "Age",
@@ -630,8 +630,15 @@ class BackdataEntry extends Component {
       "HIV Rapid Test Outcomes",
       "Outcome Summary",
       "Result Given to Client",
-      "Client Risk Category"
+      "Client Risk Category",
+      "Referral for Re-Testing"
     ];
+
+    if(this.state.data && this.state.data['Referral for Re-Testing'] && ["Confirmatory Test at HIV Clinic", "Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
+
+      requiredFields.push('Appointment Date Given');
+
+    }
 
     let missingFields = [];
 
