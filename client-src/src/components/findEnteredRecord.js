@@ -480,7 +480,8 @@ class FindEnteredRecord extends Component {
       "HIV Rapid Test Outcomes",
       "Outcome Summary",
       "Result Given to Client",
-      "Client Risk Category"
+      "Client Risk Category",
+      "Referral for Re-Testing"
     ];
 
     if(this.state.data && this.state.data['Referral for Re-Testing'] && ["Confirmatory Test at HIV Clinic", "Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
@@ -522,6 +523,40 @@ class FindEnteredRecord extends Component {
         .showErrorMsg("Missing Data", missingFields.join(", ") + "\n must be entered");
 
     }
+
+    /*if (this.state.data && this.state.data['Referral for Re-Testing'] && ["Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
+
+      let captureDate = new Date(this.props.app.selectedVisit);
+      let appointmentDate = new Date(this.state.data["Appointment Date Given"]);
+      let minDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate() + 7)));
+      let maxDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate() + 365)));
+
+      if (appointmentDate < minDate || appointmentDate > maxDate) {
+
+        return this
+        .props
+        .showErrorMsg("Invalid Entry", "Appointment date for Re-Test \n must be between 1 week and 1 year from current test date");
+
+      }
+
+    }
+
+    if (this.state.data && this.state.data['Referral for Re-Testing'] && ["Confirmatory Test at HIV Clinic"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
+
+      let captureDate = new Date(this.props.app.selectedVisit);
+      let appointmentDate = new Date(this.state.data["Appointment Date Given"]);
+      let maxDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate() + 90)));
+      let minDate = (new Date(captureDate));
+
+      if (appointmentDate < minDate || appointmentDate > maxDate) {
+
+        return this
+        .props
+        .showErrorMsg("Invalid Entry", "Appointment date for Confirmatory Test \n must be between same day and 3 months from current test date");
+
+      }
+
+    }*/
 
     this
       .validated(workingData)
