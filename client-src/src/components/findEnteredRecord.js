@@ -276,6 +276,70 @@ class FindEnteredRecord extends Component {
 
         return reject();
 
+      } else if (String(data.Age).trim().match(/\d+D$/i) && !String(data.Age).trim().match(/^[1-9]D$|^[1-2][0-9]D$|^30D$/)) {
+
+        this
+          .props
+          .showErrorMsg("Invalid Entry", "Number of days between 1 and 30 \n must be entered");
+
+        setTimeout(() => {
+
+          if (this.coords[this.categories["Age"]])
+            this.$("bdScroller").scrollLeft = this.coords[this.categories["Age"]];
+
+        }
+          , this.scrollDelay)
+
+        return reject();
+
+      } else if (String(data.Age).trim().match(/\d+W$/i) && !String(data.Age).trim().match(/^[1-9]W$|^[1][0-9]W$|^[2][0-6]W$/)) {
+
+        this
+          .props
+          .showErrorMsg("Invalid Entry", "Number of weeks between 1 and 26 \n must be entered");
+
+        setTimeout(() => {
+
+          if (this.coords[this.categories["Age"]])
+            this.$("bdScroller").scrollLeft = this.coords[this.categories["Age"]];
+
+        }
+          , this.scrollDelay)
+
+        return reject();
+
+      } else if (String(data.Age).trim().match(/\d+M$/i) && !String(data.Age).trim().match(/^[1-9]M$|^[1][0-9]M$|^[2][0-9]M$|^[3][0-6]M$/)) {
+
+        this
+          .props
+          .showErrorMsg("Invalid Entry", "Number of months between 1 and 36 \n must be entered");
+
+        setTimeout(() => {
+
+          if (this.coords[this.categories["Age"]])
+            this.$("bdScroller").scrollLeft = this.coords[this.categories["Age"]];
+
+        }
+          , this.scrollDelay)
+
+        return reject();
+
+      } else if (String(data.Age).trim().match(/\d+Y$/i) && !String(data.Age).trim().match(/^[1-9]Y$|^[1-9][0-9]Y$|^[1][0][0-9]Y$|^110Y$/)) {
+
+        this
+          .props
+          .showErrorMsg("Invalid Entry", "Number of years between 1 and 110 \n must be entered");
+
+        setTimeout(() => {
+
+          if (this.coords[this.categories["Age"]])
+            this.$("bdScroller").scrollLeft = this.coords[this.categories["Age"]];
+
+        }
+          , this.scrollDelay)
+
+        return reject();
+
       }
 
       let age;
