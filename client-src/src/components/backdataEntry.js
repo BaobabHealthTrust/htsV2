@@ -632,7 +632,9 @@ class BackdataEntry extends Component {
       "Result Given to Client",
       "Client Risk Category",
       "Referral for Re-Testing",
-      "Number of Items Given:HTS Family Referral Slips"
+      "Number of Items Given:HTS Family Referral Slips",
+      "Number of Items Given:Condoms:Male",
+      "Number of Items Given:Condoms:Female"
     ];
 
     if (this.state.data && this.state.data['Referral for Re-Testing'] && ["Confirmatory Test at HIV Clinic", "Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
@@ -666,7 +668,7 @@ class BackdataEntry extends Component {
 
     if (missingFields.length > 0) {
 
-      let fields = missingFields.map((e) => { return e === "Number of Items Given:HTS Family Referral Slips" ? "Number of FRS given" : e });
+      let fields = missingFields.map((e) => { return e === "Number of Items Given:HTS Family Referral Slips" ? "Number of FRS given" : e === "Number of Items Given:Condoms:Male" ? "Number of male condoms given" : e === "Number of Items Given:Condoms:Female" ? "Number of female condoms given" : e });
 
       return this
         .props
@@ -677,6 +679,18 @@ class BackdataEntry extends Component {
       return this
       .props
       .showErrorMsg("Invalid Entry", "Number of FRS given \n must be between 0-15");
+
+    } else if(this.state.data && !String(this.state.data['Number of Items Given:Condoms:Male']).match(/^[0-9]$|^[1-9][0-9]$|^[1-4][0-9][0-9]$|^500$/)) {
+
+      return this
+      .props
+      .showErrorMsg("Invalid Entry", "Number of male condoms given \n must be between 0-500");
+
+    } else if(this.state.data && !String(this.state.data['Number of Items Given:Condoms:Female']).match(/^[0-9]$|^[1-9][0-9]$|^[1-4][0-9][0-9]$|^500$/)) {
+
+      return this
+      .props
+      .showErrorMsg("Invalid Entry", "Number of female condoms given \n must be between 0-500");
 
     }
 
