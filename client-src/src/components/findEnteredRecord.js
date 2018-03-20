@@ -526,7 +526,7 @@ class FindEnteredRecord extends Component {
 
     }
 
-    if (this.state.data && !String(this.state.data['Number of Items Given:HTS Family Referral Slips']).match(/^[0-9]$|^[1][0-5]$/)) {
+    /*if (this.state.data && !String(this.state.data['Number of Items Given:HTS Family Referral Slips']).match(/^[0-9]$|^[1][0-5]$/)) {
 
       return this
         .props
@@ -534,7 +534,7 @@ class FindEnteredRecord extends Component {
 
     }
 
-    /*if (this.state.data && this.state.data['Referral for Re-Testing'] && ["Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
+    if (this.state.data && this.state.data['Referral for Re-Testing'] && ["Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
 
       let captureDate = new Date(this.props.app.selectedVisit);
       let appointmentDate = new Date(this.state.data["Appointment Date Given"]);
