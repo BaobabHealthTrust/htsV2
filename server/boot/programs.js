@@ -2717,7 +2717,11 @@ module.exports = function (app) {
 
       if (result && result.aggregations && result.aggregations.kits && result.aggregations.kits.buckets && result.aggregations.kits.buckets.length > 0 && result.hits && result.hits.hits && result.hits.hits.length > 0) {
 
+        debug(JSON.stringify(result.aggregations));
+
         const entryCode = result.aggregations.kits.buckets[0].key;
+
+        debug(entryCode);
 
         result
           .hits
@@ -2728,6 +2732,9 @@ module.exports = function (app) {
           .forEach(data => {
 
             const row = data._source;
+
+            debug(row);
+            debug(json);
 
             if (!json["HTS Provider ID"]) {
               json["HTS Provider ID"] = row.provider;
@@ -4112,6 +4119,7 @@ module.exports = function (app) {
                           program,
                           location,
                           user: activeUser,
+                          provider: activeUser,
                           encounterId,
                           dateOfBirth,
                           registerNumber,
@@ -4278,6 +4286,7 @@ module.exports = function (app) {
                     program,
                     location,
                     user: activeUser,
+                    provider: activeUser,
                     encounterId,
                     dateOfBirth,
                     registerNumber,
@@ -4370,6 +4379,7 @@ module.exports = function (app) {
                     program,
                     location,
                     user: activeUser,
+                    provider: activeUser,
                     encounterId,
                     dateOfBirth,
                     registerNumber,
