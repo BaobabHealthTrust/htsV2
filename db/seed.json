@@ -172,6 +172,8 @@
       "HTS Referral Slips Recipients",
       "HTS Entry Code",
       "HTS Setting",
-      "HTS Modality"
+      "HTS Modality",
+      "Number of female condoms given",
+      "Number of male condoms given"
   ]
 }

@@ -106,7 +106,7 @@ const loadConceptNames = async (data) => {
   for (let e of data) {
 
     let result;
-    
+
     debug("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT * FROM concept_name WHERE name = \"" + e + "\" LIMIT 1'");
 
     result = await runCmd("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT * FROM concept_name WHERE name = \"" + e + "\" LIMIT 1'").catch(e => { console.log(e) });
@@ -186,28 +186,28 @@ const loadSeedData = async () => {
     },
     {
       message: "Dropping '" + connection[env].database + "' database...",
-      cmd: "mysql -h " + connection[env].host + " -u " + connection[env].user + " -p" + connection[env].password + " -e 'DROP SCHEMA IF EXISTS " + connection[env].database + "'"
+      cmd: "export MYSQL_PWD=" + connection[env].password + " && mysql -h " + connection[env].host + " -u " + connection[env].user + " -e 'DROP SCHEMA IF EXISTS " + connection[env].database + "'"
     }, {
       message: "Creating '" + connection[env].database + "' database...",
-      cmd: "mysql -h " + connection[env].host + " -u " + connection[env].user + " -p" + connection[env].password + " -e 'CREATE SCHEMA " + connection[env].database + "'"
+      cmd: "export MYSQL_PWD=" + connection[env].password + " && mysql -h " + connection[env].host + " -u " + connection[env].user + " -e 'CREATE SCHEMA " + connection[env].database + "'"
     }, {
       message: "Loading '" + connection[env].database + "' Metadata...",
-      cmd: "mysql -h " + connection[env].host + " -u " + connection[env].user + " -p" + connection[env].password + " " + connection[env].database + " < openmrs_1_7_2_concept_server_full_db.sql"
+      cmd: "export MYSQL_PWD=" + connection[env].password + " && mysql -h " + connection[env].host + " -u " + connection[env].user + " " + connection[env].database + " < openmrs_1_7_2_concept_server_full_db.sql"
     }, {
       message: "Loading 'HTS Roles' seed data...",
-      cmd: "mysql -h " + connection[env].host + " -u " + connection[env].user + " -p" + connection[env].password + " " + connection[env].database + " < htc.roles.sql"
+      cmd: "export MYSQL_PWD=" + connection[env].password + " && mysql -h " + connection[env].host + " -u " + connection[env].user + " " + connection[env].database + " < htc.roles.sql"
     }, {
       message: "Loading 'HTS Locations' seed data...",
-      cmd: "mysql -h " + connection[env].host + " -u " + connection[env].user + " -p" + connection[env].password + " " + connection[env].database + " < locations.sql"
+      cmd: "export MYSQL_PWD=" + connection[env].password + " && mysql -h " + connection[env].host + " -u " + connection[env].user + " " + connection[env].database + " < locations.sql"
     }, {
       message: "Loading 'Nationalities' seed data...",
-      cmd: "mysql -h " + connection[env].host + " -u " + connection[env].user + " -p" + connection[env].password + " " + connection[env].database + " < nationalities.sql"
+      cmd: "export MYSQL_PWD=" + connection[env].password + " && mysql -h " + connection[env].host + " -u " + connection[env].user + " " + connection[env].database + " < nationalities.sql"
     }, {
       message: "Loading 'HTS Register' tables and data...",
-      cmd: "mysql -h " + connection[env].host + " -u " + connection[env].user + " -p" + connection[env].password + " " + connection[env].database + " < hts_registers.sql"
+      cmd: "export MYSQL_PWD=" + connection[env].password + " && mysql -h " + connection[env].host + " -u " + connection[env].user + " " + connection[env].database + " < hts_registers.sql"
     }, {
       message: "Initializing user admin...",
-      cmd: "mysql -h " + connection[env].host + " -u " + connection[env].user + " -p" + connection[env].password + " " + connection[env].database + " -e 'DELETE FROM person_attribute WHERE person_id = 1; INSERT INTO person_attrib" +
+      cmd: "export MYSQL_PWD=" + connection[env].password + " && mysql -h " + connection[env].host + " -u " + connection[env].user + " " + connection[env].database + " -e 'DELETE FROM person_attribute WHERE person_id = 1; INSERT INTO person_attrib" +
         "ute (person_id, value, person_attribute_type_id, creator, date_created, uuid) VA" +
         "LUES((SELECT person_id FROM person LIMIT 1), \"HTS-0001\", (SELECT person_attrib" +
         "ute_type_id FROM person_attribute_type WHERE name = \"HTS Provider ID\" LIMIT 1)" +
@@ -236,7 +236,7 @@ const loadSeedData = async () => {
       .forEach((e) => {
         commands.push({
           message: "Adding location " + e,
-          cmd: "mysql -h " + connection[env].host + " -u " + connection[env].user + " -p" + connection[env].password + " " + connection[env].database + " -e 'INSERT INTO hts_register_service_delivery_point (name) VALUES (\"" + e + "\")'"
+          cmd: "export MYSQL_PWD=" + connection[env].password + " && mysql -h " + connection[env].host + " -u " + connection[env].user + " " + connection[env].database + " -e 'INSERT INTO hts_register_service_delivery_point (name) VALUES (\"" + e + "\")'"
         })
       });
 

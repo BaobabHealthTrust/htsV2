@@ -148,6 +148,14 @@ class Transcribe extends Component {
 
                     visitDetails["Number of Items Given:HTS Family Ref Slips"] = visit[this.props.app.selectedVisit][entryCode][encounter][concept];
 
+                  } else if (concept === "Number of female condoms given") {
+
+                    visitDetails["Number of Items Given:Condoms:Female"] = visit[this.props.app.selectedVisit][entryCode][encounter][concept];
+
+                  } else if (concept === "Number of male condoms given") {
+
+                    visitDetails["Number of Items Given:Condoms:Male"] = visit[this.props.app.selectedVisit][entryCode][encounter][concept];
+
                   } else {
 
                     visitDetails[concept] = visit[this.props.app.selectedVisit][entryCode][encounter][concept];
