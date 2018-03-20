@@ -64,9 +64,9 @@ const firstPassTest1Negative = (data, alertsMapping, categories) => {
   } else if (data["Result Given to Client"] !== "New Negative") {
 
     result.error = true;
-    result.message = alertsMapping["Invalid Result Given to Client"].message;
-    result.title = alertsMapping["Invalid Result Given to Client"].title;
-    result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+    result.message = alertsMapping["New Negative"].message;
+    result.title = alertsMapping["New Negative"].title;
+    result.group = categories[alertsMapping["New Negative"].category];
 
   } else if (Object.keys(data).indexOf("Client Risk Category") < 0) {
 
@@ -139,9 +139,9 @@ const test1And2Positive = (data, alertsMapping, categories) => {
       } else if (data["Result Given to Client"] !== "New Exposed Infant") {
 
         result.error = true;
-        result.message = alertsMapping["Invalid Result Given to Client"].message;
-        result.title = alertsMapping["Invalid Result Given to Client"].title;
-        result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+        result.message = alertsMapping["New Exposed Infant"].message;
+        result.title = alertsMapping["New Exposed Infant"].title;
+        result.group = categories[alertsMapping["New Exposed Infant"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
@@ -185,9 +185,9 @@ const test1And2Positive = (data, alertsMapping, categories) => {
       } else if (data["Result Given to Client"] !== "New Positive") {
 
         result.error = true;
-        result.message = alertsMapping["Invalid Result Given to Client"].message;
-        result.title = alertsMapping["Invalid Result Given to Client"].title;
-        result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+        result.message = alertsMapping["New Positive"].message;
+        result.title = alertsMapping["New Positive"].title;
+        result.group = categories[alertsMapping["New Positive"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
@@ -244,9 +244,9 @@ const test1And2Negative = (data, alertsMapping, categories) => {
   } else if (data["Result Given to Client"] !== "New Negative") {
 
     result.error = true;
-    result.message = alertsMapping["Invalid Result Given to Client"].message;
-    result.title = alertsMapping["Invalid Result Given to Client"].title;
-    result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+    result.message = alertsMapping["New Negative"].message;
+    result.title = alertsMapping["New Negative"].title;
+    result.group = categories[alertsMapping["New Negative"].category];
 
   } else if (Object.keys(data).indexOf("Client Risk Category") < 0) {
 
@@ -306,9 +306,9 @@ const test1And2Discordant = (data, alertsMapping, categories) => {
   } else if (data["Result Given to Client"] !== "New Inconclusive") {
 
     result.error = true;
-    result.message = alertsMapping["Invalid Result Given to Client"].message;
-    result.title = alertsMapping["Invalid Result Given to Client"].title;
-    result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+    result.message = alertsMapping["New Inconclusive"].message;
+    result.title = alertsMapping["New Inconclusive"].title;
+    result.group = categories[alertsMapping["New Inconclusive"].category];
 
   } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
@@ -437,9 +437,9 @@ const confirmatoryInconclusive = (data, category, alertsMapping, categories) => 
   } else if (data["Result Given to Client"] !== "Confirmatory Inconclusive") {
 
     result.error = true;
-    result.message = alertsMapping["Invalid Result Given to Client"].message;
-    result.title = alertsMapping["Invalid Result Given to Client"].title;
-    result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+    result.message = alertsMapping["Confirmatory Inconclusive"].message;
+    result.title = alertsMapping["Confirmatory Inconclusive"].title;
+    result.group = categories[alertsMapping["Confirmatory Inconclusive"].category];
 
   } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
@@ -505,9 +505,9 @@ const confirmatoryPositive = (data, alertsMapping, categories) => {
       } else if (data["Result Given to Client"] !== "New Exposed Infant") {
 
         result.error = true;
-        result.message = alertsMapping["Invalid Result Given to Client"].message;
-        result.title = alertsMapping["Invalid Result Given to Client"].title;
-        result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+        result.message = alertsMapping["New Exposed Infant"].message;
+        result.title = alertsMapping["New Exposed Infant"].title;
+        result.group = categories[alertsMapping["New Exposed Infant"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
@@ -551,9 +551,9 @@ const confirmatoryPositive = (data, alertsMapping, categories) => {
       } else if (data["Result Given to Client"] !== "Confirmatory Positive") {
 
         result.error = true;
-        result.message = alertsMapping["Invalid Result Given to Client"].message;
-        result.title = alertsMapping["Invalid Result Given to Client"].title;
-        result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+        result.message = alertsMapping["Confirmatory Positive"].message;
+        result.title = alertsMapping["Confirmatory Positive"].title;
+        result.group = categories[alertsMapping["Confirmatory Positive"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
@@ -597,9 +597,9 @@ const confirmatoryPositive = (data, alertsMapping, categories) => {
       } else if (data["Result Given to Client"] !== "Confirmatory Positive") {
 
         result.error = true;
-        result.message = alertsMapping["Invalid Result Given to Client"].message;
-        result.title = alertsMapping["Invalid Result Given to Client"].title;
-        result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+        result.message = alertsMapping["Confirmatory Positive"].message;
+        result.title = alertsMapping["Confirmatory Positive"].title;
+        result.group = categories[alertsMapping["Confirmatory Positive"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
@@ -656,9 +656,9 @@ const lastPositiveTest1And2Negative = (data, alertsMapping, categories) => {
   } else if (data["Result Given to Client"] !== "Confirmatory Inconclusive") {
 
     result.error = true;
-    result.message = alertsMapping["Invalid Result Given to Client"].message;
-    result.title = alertsMapping["Invalid Result Given to Client"].title;
-    result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+    result.message = alertsMapping["Confirmatory Inconclusive"].message;
+    result.title = alertsMapping["Confirmatory Inconclusive"].title;
+    result.group = categories[alertsMapping["Confirmatory Inconclusive"].category];
 
   } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
@@ -771,9 +771,9 @@ const lastInconclusiveNewPositive = (data, alertsMapping, categories) => {
       } else if (data["Result Given to Client"] !== "New Exposed Infant") {
 
         result.error = true;
-        result.message = alertsMapping["Invalid Result Given to Client"].message;
-        result.title = alertsMapping["Invalid Result Given to Client"].title;
-        result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+        result.message = alertsMapping["New Exposed Infant"].message;
+        result.title = alertsMapping["New Exposed Infant"].title;
+        result.group = categories[alertsMapping["New Exposed Infant"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
@@ -817,9 +817,9 @@ const lastInconclusiveNewPositive = (data, alertsMapping, categories) => {
       } else if (data["Result Given to Client"] !== "New Positive") {
 
         result.error = true;
-        result.message = alertsMapping["Invalid Result Given to Client"].message;
-        result.title = alertsMapping["Invalid Result Given to Client"].title;
-        result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+        result.message = alertsMapping["New Positive"].message;
+        result.title = alertsMapping["New Positive"].title;
+        result.group = categories[alertsMapping["New Positive"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
@@ -863,9 +863,9 @@ const lastInconclusiveNewPositive = (data, alertsMapping, categories) => {
       } else if (data["Result Given to Client"] !== "New Positive") {
 
         result.error = true;
-        result.message = alertsMapping["Invalid Result Given to Client"].message;
-        result.title = alertsMapping["Invalid Result Given to Client"].title;
-        result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+        result.message = alertsMapping["New Positive"].message;
+        result.title = alertsMapping["New Positive"].title;
+        result.group = categories[alertsMapping["New Positive"].category];
 
       } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 
@@ -1041,9 +1041,9 @@ const newInconclusive = (data, category, alertsMapping, categories) => {
   } else if (data["Result Given to Client"] !== "New Inconclusive") {
 
     result.error = true;
-    result.message = alertsMapping["Invalid Result Given to Client"].message;
-    result.title = alertsMapping["Invalid Result Given to Client"].title;
-    result.group = categories[alertsMapping["Invalid Result Given to Client"].category];
+    result.message = alertsMapping["New Inconclusive"].message;
+    result.title = alertsMapping["New Inconclusive"].title;
+    result.group = categories[alertsMapping["New Inconclusive"].category];
 
   } else if (Object.keys(data).indexOf("Referral for Re-Testing") < 0) {
 

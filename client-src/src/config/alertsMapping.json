@@ -9,8 +9,9 @@
     "title": "Invalid Entry"
   },
   "Missing Result Given to Client": {
-    "message": "Missing Result Given to Client",
-    "category": "Result Given to Client"
+    "message": "Result Given to Client \n must be entered",
+    "category": "Result Given to Client",
+    "title": "Missing data"
   },
   "Invalid Result Given to Client": {
     "message": "Invalid Result Given to Client",
@@ -78,5 +79,35 @@
   "Sex/Pregnancy does not match entered age": {
     "message": "Sex/Pregnancy does not match entered age",
     "category": "Sex/Pregnancy"
+  },
+  "New Negative": {
+    "message": "Result given to client \n must be New Negative",
+    "category": "Result Given to Client",
+    "title": "Invalid Entry"
+  },
+  "New Exposed Infant": {
+    "message": "Result given to client \n must be New Exposed Infant",
+    "category": "Result Given to Client",
+    "title": "Invalid Entry"
+  },
+  "New Inconclusive": {
+    "message": "Result given to client \n must be New Inconclusive",
+    "category": "Result Given to Client",
+    "title": "Invalid Entry"
+  },
+  "Confirmatory Inconclusive": {
+    "message": "Result given to client \n must be Confirmatory Inconclusive",
+    "category": "Result Given to Client",
+    "title": "Invalid Entry"
+  },
+  "Confirmatory Positive": {
+    "message": "Result given to client \n must be Confirmatory Positive",
+    "category": "Result Given to Client",
+    "title": "Invalid Entry"
+  },
+  "New Positive": {
+    "message": "Result given to client \n must be New Positive",
+    "category": "Result Given to Client",
+    "title": "Invalid Entry"
   }
 }
