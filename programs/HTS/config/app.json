@@ -352,5 +352,17 @@
         ],
         "className": "longSelectList"
     },
+    "Number of male condoms given": {
+        "fieldType": "number",
+        "validationRule": "^[0-9]$|^[1-9][0-9]$|^[1-4][0-9][0-9]$|^500$",
+        "validationMessage": "Number of male condoms given \n must be between 0-500",
+        "hiddenButtons": ["clear", "/", ".", "-", "abc", "qwe", "Unknown"]
+    },
+    "Number of female condoms given": {
+        "fieldType": "number",
+        "validationRule": "^[0-9]$|^[1-9][0-9]$|^[1-4][0-9][0-9]$|^500$",
+        "validationMessage": "Number of female condoms given \n must be between 0-500",
+        "hiddenButtons": ["clear", "/", ".", "-", "abc", "qwe", "Unknown"]
+    },
     "action": "/programs/save_encounters"
 }
