@@ -1855,7 +1855,7 @@ class App extends Component {
 
         this
           .props
-          .showInfoMsg("Unsaved Data", "You have unsaved data. Please save or clear to proceed!");
+          .showInfoMsg("Unsaved Data", "You have unsaved data. Please save or " + (this.props.app.selectedTask === "Backdata Entry" ? "delete" : "clear") + " to proceed!");
 
       } else {
 
