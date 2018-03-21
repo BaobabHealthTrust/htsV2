@@ -347,7 +347,23 @@ class BackdataEntry extends Component {
 
       }
 
-      if (!String(this.state.data.Age).trim().match(/\d+[D|W|M|Y]$/i)) {
+      if (!this.state.data.Age || (this.state.data.Age && String(this.state.data.Age).trim().length <= 0)) {
+
+        this
+          .props
+          .showErrorMsg("Missing Data", "Age \n must be entered");
+
+        setTimeout(() => {
+
+          if (this.coords[this.categories["Age"]])
+            this.$("bdScroller").scrollLeft = this.coords[this.categories["Age"]];
+
+        }
+          , this.scrollDelay)
+
+        return reject();
+
+      } else if (!String(this.state.data.Age).trim().match(/\d+[D|W|M|Y]$/i)) {
 
         this
           .props
