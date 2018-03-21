@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {connect} from "react-redux";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import Topbar from "./components/topbar";
 import U13 from "./components/u13";
 import Container from "./components/container";
@@ -22,10 +22,10 @@ import {
   activateUser,
   loadData
 } from "./actions/appAction";
-import {fetchData, clearCache} from "./actions/fetchDataAction";
-import {ClipLoader} from "react-spinners";
-import {loadWorkflow, goForward, clearWorkflow, goBackward, handleInputChange} from "./actions/wfActions";
-import {fetchLastBDRow, saveBDRow, fetchEditRow, saveEditRow} from "./actions/bdAction";
+import { fetchData, clearCache } from "./actions/fetchDataAction";
+import { ClipLoader } from "react-spinners";
+import { loadWorkflow, goForward, clearWorkflow, goBackward, handleInputChange } from "./actions/wfActions";
+import { fetchLastBDRow, saveBDRow, fetchEditRow, saveEditRow, resetErrorMessage } from "./actions/bdAction";
 import {
   searchByIdentifier,
   searchByNameAndGender,
@@ -40,7 +40,7 @@ import {
 } from "./actions/ddeActions";
 import Alert from "./components/alert";
 import Dialog from "./components/dialog";
-import {showInfoMsg, showErrorMsg, showConfirmMsg, closeMsg} from "./actions/alertActions";
+import { showInfoMsg, showErrorMsg, showConfirmMsg, closeMsg } from "./actions/alertActions";
 import ReportsViewer from "./components/reportsViewer";
 import {
   showDialog,
@@ -65,11 +65,11 @@ import {
   fetchPepfarData,
   resetPepfarData
 } from "./actions/reportsActions";
-import {processes} from './processes';
-import {barcode} from './validations/barcodeEvents';
-import {updateClient} from './validations/updateClient';
-import {switches} from "./validations/switches";
-import {validated} from './validations/validated';
+import { processes } from './processes';
+import { barcode } from './validations/barcodeEvents';
+import { updateClient } from './validations/updateClient';
+import { switches } from "./validations/switches";
+import { validated } from './validations/validated';
 import UsersViewer from './components/usersViewer';
 import algorithm from './lib/dhaAlgorithm.js';
 import Login from './components/login';
@@ -128,13 +128,13 @@ class App extends Component {
 
     let accessToken = this.getCookie('accessToken');
 
-    if (accessToken.trim().length <= 0) 
+    if (accessToken.trim().length <= 0)
       return;
-    
+
     this
       .props
       .sessionValid(accessToken)
-      .then(async() => {
+      .then(async () => {
 
         accessToken = this.getCookie('accessToken');
         const username = this.getCookie('username');
@@ -181,10 +181,10 @@ class App extends Component {
     processes(this.props, this.state, this, (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].configs
       ? this.props.app.data[this.props.app.module]["PatientRegistration"].configs
       : {}), (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-      ? this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-      : {}), tests, (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module].referrals
-      ? this.props.app.data[this.props.app.module].referrals
-      : {}));
+        ? this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
+        : {}), tests, (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module].referrals
+          ? this.props.app.data[this.props.app.module].referrals
+          : {}));
 
     switches(this.props, this.state);
 
@@ -194,9 +194,9 @@ class App extends Component {
       .tasks
       .forEach(task => {
 
-        if (this.processedConfigs[task.label]) 
+        if (this.processedConfigs[task.label])
           return;
-        
+
         this.processedConfigs[task.label] = true;
 
         this
@@ -217,6 +217,20 @@ class App extends Component {
 
     }
 
+    if (!this.state.busy && this.props.bd.errorMessage !== null) {
+
+      await this.setState({ busy: true });
+
+      const message = this.props.bd.errorMessage;
+
+      await this.props.resetErrorMessage();
+
+      this.props.showErrorMsg("Invalid Entry", message);
+
+      await this.setState({ busy: false });
+
+    }
+
   }
 
   $(id) {
@@ -227,7 +241,7 @@ class App extends Component {
 
   async searchById(id) {
 
-    await this.setState({currentWorkflow: "primary", scanID: id});
+    await this.setState({ currentWorkflow: "primary", scanID: id });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -257,12 +271,12 @@ class App extends Component {
 
     await this
       .props
-      .updateApp({ignore: true, scanID: id});
+      .updateApp({ ignore: true, scanID: id });
 
     await this
       .props
       .searchByIdentifier(id)
-      .then(async() => {
+      .then(async () => {
 
         await this
           .props
@@ -283,13 +297,13 @@ class App extends Component {
 
         await this
           .props
-          .setConfig({ignore: false});
+          .setConfig({ ignore: false });
 
         setTimeout(() => {
 
           this
             .props
-            .updateApp({ignore: false, silentProcessing: false});
+            .updateApp({ ignore: false, silentProcessing: false });
 
         }, 3000)
 
@@ -471,9 +485,9 @@ class App extends Component {
 
   async navigateToRoute(task, url, group) {
 
-    if (!this.props.app.data[this.props.app.module][task]) 
+    if (!this.props.app.data[this.props.app.module][task])
       return;
-    
+
     await this.setState({
       currentWorkflow: group
         ? group
@@ -554,7 +568,7 @@ class App extends Component {
   navigateToVisit(visit) {
     this
       .props
-      .updateApp({selectedVisit: visit});
+      .updateApp({ selectedVisit: visit });
   }
 
   async switchPage(target) {
@@ -585,7 +599,7 @@ class App extends Component {
             return this
               .props
               .showInfoMsg("Transcribe in Register", "The current visit does not have a register number associated. Please enter in re" +
-                  "gister first to proceed!");
+                "gister first to proceed!");
 
           }
 
@@ -608,9 +622,9 @@ class App extends Component {
       ignore: false
     };
 
-    if (nextPage) 
+    if (nextPage)
       payload.currentSection = nextPage;
-    
+
     if (nextPage === "home") {
 
       await this
@@ -661,26 +675,26 @@ class App extends Component {
 
   queryOptions(value) {
     if (this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-        ? this.props.wf[this.state.currentWorkflow].currentNode.label
-        : ""] && Object.keys(this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+      ? this.props.wf[this.state.currentWorkflow].currentNode.label
+      : ""] && Object.keys(this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
         ? this.props.wf[this.state.currentWorkflow].currentNode.label
         : ""]).indexOf("ajaxURL") >= 0) {
       let queryPath = this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-          ? this.props.wf[this.state.currentWorkflow].currentNode.label
-          : ""].ajaxURL;
+        ? this.props.wf[this.state.currentWorkflow].currentNode.label
+        : ""].ajaxURL;
 
       if (queryPath !== "" && this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-          ? this.props.wf[this.state.currentWorkflow].currentNode.label
-          : ""].ajaxURLDummies) {
+        ? this.props.wf[this.state.currentWorkflow].currentNode.label
+        : ""].ajaxURLDummies) {
         Object.keys(this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-            ? this.props.wf[this.state.currentWorkflow].currentNode.label
-            : ""].ajaxURLDummies).forEach(fieldName => {
-          if (this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][fieldName]) {
-            queryPath = queryPath.replace(this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+          ? this.props.wf[this.state.currentWorkflow].currentNode.label
+          : ""].ajaxURLDummies).forEach(fieldName => {
+            if (this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][fieldName]) {
+              queryPath = queryPath.replace(this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
                 ? this.props.wf[this.state.currentWorkflow].currentNode.label
                 : ""].ajaxURLDummies[fieldName], this.props.wf.responses[this.state.currentWorkflow][fieldName]);
-          }
-        });
+            }
+          });
       }
 
       this
@@ -735,8 +749,8 @@ class App extends Component {
       if ((this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
         ? this.props.wf[this.state.currentWorkflow].currentNode.type
         : "") && (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-        ? this.props.wf[this.state.currentWorkflow].currentNode.type
-        : "") !== "exit" && valid.valid) {
+          ? this.props.wf[this.state.currentWorkflow].currentNode.type
+          : "") !== "exit" && valid.valid) {
 
         await this
           .props
@@ -766,7 +780,7 @@ class App extends Component {
 
         this
           .props
-          .updateApp({formActive: false, selectedTask: ""});
+          .updateApp({ formActive: false, selectedTask: "" });
 
       }
     } else {
@@ -799,7 +813,7 @@ class App extends Component {
 
   async registerAnonymous() {
 
-    await this.setState({currentWorkflow: "primary"});
+    await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -834,10 +848,10 @@ class App extends Component {
 
   async cancelForm() {
 
-    if (this.$("btnNext")) 
+    if (this.$("btnNext"))
       this.$("btnNext").className = "green nav-buttons";
-    
-    await this.setState({busy: true});
+
+    await this.setState({ busy: true });
 
     if (this.props.app.dual) {
 
@@ -1075,15 +1089,15 @@ class App extends Component {
 
     }
 
-    await this.setState({busy: false, scanID: null});
+    await this.setState({ busy: false, scanID: null });
 
   }
 
   async cancelSession() {
 
-    if (this.$("btnNext")) 
+    if (this.$("btnNext"))
       this.$("btnNext").className = "green nav-buttons";
-    
+
     if (!this.props.app.formActive && this.props.app.dual && this.props.app.patientActivated && ((this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.clientId][this.props.app.module] && this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits && this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits.filter((e) => {
       return Object.keys(e)[0] === this.props.app.selectedVisit && Object
         .keys(e[this.props.app.selectedVisit])
@@ -1097,110 +1111,110 @@ class App extends Component {
       this
         .props
         .showConfirmMsg("Confirm", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
-            " want to delete them?",
-        "Delete", async() => {
+          " want to delete them?",
+          "Delete", async () => {
 
-          let ids = (!this.props.app.clientId
-            ? []
-            : (this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits.map((e) => {
-              return Object
-                .keys(e[this.props.app.selectedVisit])
-                .map((r) => {
-                  return e[this.props.app.selectedVisit][r].encounterId
-                })
-                .reduce((a, e, i) => {
-                  if (e) 
-                    a.push(e);
-                  return a;
-                }, [])
-            }).reduce((a, e, i) => {
-              if (e) 
-                a = e;
-              return a
-            }, []))).concat(!this.props.app.partnerId
-            ? []
-            : (this.props.app.patientData[this.props.app.partnerId][this.props.app.module].visits.map((e) => {
-              return Object
-                .keys(e[this.props.app.selectedVisit])
-                .map((r) => {
-                  return e[this.props.app.selectedVisit][r].encounterId
-                })
-                .reduce((a, e, i) => {
-                  if (e) 
-                    a.push(e);
-                  return a;
-                }, [])
-            }).reduce((a, e, i) => {
-              if (e) 
-                a = e;
-              return a
-            }, [])));
+            let ids = (!this.props.app.clientId
+              ? []
+              : (this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits.map((e) => {
+                return Object
+                  .keys(e[this.props.app.selectedVisit])
+                  .map((r) => {
+                    return e[this.props.app.selectedVisit][r].encounterId
+                  })
+                  .reduce((a, e, i) => {
+                    if (e)
+                      a.push(e);
+                    return a;
+                  }, [])
+              }).reduce((a, e, i) => {
+                if (e)
+                  a = e;
+                return a
+              }, []))).concat(!this.props.app.partnerId
+                ? []
+                : (this.props.app.patientData[this.props.app.partnerId][this.props.app.module].visits.map((e) => {
+                  return Object
+                    .keys(e[this.props.app.selectedVisit])
+                    .map((r) => {
+                      return e[this.props.app.selectedVisit][r].encounterId
+                    })
+                    .reduce((a, e, i) => {
+                      if (e)
+                        a.push(e);
+                      return a;
+                    }, [])
+                }).reduce((a, e, i) => {
+                  if (e)
+                    a = e;
+                  return a
+                }, [])));
 
-          await this
-            .props
-            .voidMultipleEncounters("/programs/void_multiple_encounters", {
-              encounterIds: ids,
-              id: this.props.app.clientId,
-              partnerId: this.props.app.partnerId,
-              visitDate: this.props.app.selectedVisit
+            await this
+              .props
+              .voidMultipleEncounters("/programs/void_multiple_encounters", {
+                encounterIds: ids,
+                id: this.props.app.clientId,
+                partnerId: this.props.app.partnerId,
+                visitDate: this.props.app.selectedVisit
+              });
+
+            await this
+              .props
+              .clearCache();
+
+            await this
+              .props
+              .clearDataStructs();
+
+            ["primary", "secondary"].forEach(workflow => {
+              this
+                .props
+                .clearWorkflow(workflow);
             });
 
-          await this
-            .props
-            .clearCache();
+            let nextPage = !this.props.app.patientActivated
+              ? "patient"
+              : "home";
 
-          await this
-            .props
-            .clearDataStructs();
+            let payload = {
+              patientActivated: false,
+              selectedVisit: new Date().format("d mmm YYYY"),
+              currentId: null,
+              formActive: false,
+              selectedTask: "",
+              fieldPos: 0,
+              configs: {},
+              summaryIgnores: [],
+              dual: false,
+              currentTab: null,
+              activeReport: null,
+              clientId: null,
+              partnerId: null,
+              currentPatient: {},
+              partner: {},
+              scanID: null,
+              primary: {},
+              secondary: {},
+              isDirty: false
+            };
 
-          ["primary", "secondary"].forEach(workflow => {
+            if (nextPage)
+              payload.currentSection = nextPage;
+
+            if (this.props.app.currentSection === "reports") {
+              payload.currentSection = "home";
+            }
+
+            payload.currentPatient = {};
+            payload.partner = {};
+            payload.dual = false;
+
             this
               .props
-              .clearWorkflow(workflow);
+              .updateApp(payload);
+
           });
-
-          let nextPage = !this.props.app.patientActivated
-            ? "patient"
-            : "home";
-
-          let payload = {
-            patientActivated: false,
-            selectedVisit: new Date().format("d mmm YYYY"),
-            currentId: null,
-            formActive: false,
-            selectedTask: "",
-            fieldPos: 0,
-            configs: {},
-            summaryIgnores: [],
-            dual: false,
-            currentTab: null,
-            activeReport: null,
-            clientId: null,
-            partnerId: null,
-            currentPatient: {},
-            partner: {},
-            scanID: null,
-            primary: {},
-            secondary: {},
-            isDirty: false
-          };
-
-          if (nextPage) 
-            payload.currentSection = nextPage;
-          
-          if (this.props.app.currentSection === "reports") {
-            payload.currentSection = "home";
-          }
-
-          payload.currentPatient = {};
-          payload.partner = {};
-          payload.dual = false;
-
-          this
-            .props
-            .updateApp(payload);
-
-        });
 
     } else if (!this.props.app.formActive && this.props.app.patientActivated && this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.currentId][this.props.app.module] && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits.filter((e) => {
       return Object.keys(e)[0] === this.props.app.selectedVisit && Object
@@ -1211,96 +1225,96 @@ class App extends Component {
       this
         .props
         .showConfirmMsg("Confirm", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
-            " want to delete them?",
-        "Delete", async() => {
+          " want to delete them?",
+          "Delete", async () => {
 
-          let ids = this
-            .props
-            .app
-            .patientData[this.props.app.currentId][this.props.app.module]
-            .visits
-            .map((e) => {
-              return Object
-                .keys(e[this.props.app.selectedVisit])
-                .map((r) => {
-                  return e[this.props.app.selectedVisit][r].encounterId
-                })
-                .reduce((a, e, i) => {
-                  if (e) 
-                    a.push(e);
-                  return a;
-                }, [])
-            })
-            .reduce((a, e, i) => {
-              if (e) 
-                a = e;
-              return a
-            }, []);
+            let ids = this
+              .props
+              .app
+              .patientData[this.props.app.currentId][this.props.app.module]
+              .visits
+              .map((e) => {
+                return Object
+                  .keys(e[this.props.app.selectedVisit])
+                  .map((r) => {
+                    return e[this.props.app.selectedVisit][r].encounterId
+                  })
+                  .reduce((a, e, i) => {
+                    if (e)
+                      a.push(e);
+                    return a;
+                  }, [])
+              })
+              .reduce((a, e, i) => {
+                if (e)
+                  a = e;
+                return a
+              }, []);
 
-          await this
-            .props
-            .voidMultipleEncounters("/programs/void_multiple_encounters", {
-              encounterIds: ids,
-              id: this.props.app.currentId,
-              visitDate: this.props.app.selectedVisit
+            await this
+              .props
+              .voidMultipleEncounters("/programs/void_multiple_encounters", {
+                encounterIds: ids,
+                id: this.props.app.currentId,
+                visitDate: this.props.app.selectedVisit
+              });
+
+            await this
+              .props
+              .clearCache();
+
+            await this
+              .props
+              .clearDataStructs();
+
+            ["primary", "secondary"].forEach(workflow => {
+              this
+                .props
+                .clearWorkflow(workflow);
             });
 
-          await this
-            .props
-            .clearCache();
+            let nextPage = !this.props.app.patientActivated
+              ? "patient"
+              : "home";
 
-          await this
-            .props
-            .clearDataStructs();
+            let payload = {
+              patientActivated: false,
+              selectedVisit: new Date().format("d mmm YYYY"),
+              currentId: null,
+              formActive: false,
+              selectedTask: "",
+              fieldPos: 0,
+              configs: {},
+              summaryIgnores: [],
+              dual: false,
+              currentTab: null,
+              activeReport: null,
+              clientId: null,
+              partnerId: null,
+              currentPatient: {},
+              partner: {},
+              scanID: null,
+              primary: {},
+              secondary: {},
+              isDirty: false
+            };
 
-          ["primary", "secondary"].forEach(workflow => {
+            if (nextPage)
+              payload.currentSection = nextPage;
+
+            if (this.props.app.currentSection === "reports") {
+              payload.currentSection = "home";
+            }
+
+            payload.currentPatient = {};
+            payload.partner = {};
+            payload.dual = false;
+
             this
               .props
-              .clearWorkflow(workflow);
+              .updateApp(payload);
+
           });
-
-          let nextPage = !this.props.app.patientActivated
-            ? "patient"
-            : "home";
-
-          let payload = {
-            patientActivated: false,
-            selectedVisit: new Date().format("d mmm YYYY"),
-            currentId: null,
-            formActive: false,
-            selectedTask: "",
-            fieldPos: 0,
-            configs: {},
-            summaryIgnores: [],
-            dual: false,
-            currentTab: null,
-            activeReport: null,
-            clientId: null,
-            partnerId: null,
-            currentPatient: {},
-            partner: {},
-            scanID: null,
-            primary: {},
-            secondary: {},
-            isDirty: false
-          };
-
-          if (nextPage) 
-            payload.currentSection = nextPage;
-          
-          if (this.props.app.currentSection === "reports") {
-            payload.currentSection = "home";
-          }
-
-          payload.currentPatient = {};
-          payload.partner = {};
-          payload.dual = false;
-
-          this
-            .props
-            .updateApp(payload);
-
-        });
 
     } else {
 
@@ -1344,9 +1358,9 @@ class App extends Component {
         isDirty: false
       };
 
-      if (nextPage) 
+      if (nextPage)
         payload.currentSection = nextPage;
-      
+
       if (this.props.app.currentSection === "reports") {
         payload.currentSection = "home";
 
@@ -1444,15 +1458,15 @@ class App extends Component {
             [currentEncounter]: this.props.wf.responses[this.state.currentWorkflow]
           }
           : this.props.wf.responses[this.state.currentWorkflow], {
-          primaryId: this.props.app.currentId,
-          date: this.props.app.selectedVisit && new Date(this.props.app.selectedVisit)
-            ? new Date(this.props.app.selectedVisit).getTime()
-            : new Date().getTime(),
-          program: this.props.app.module,
-          group: this.state.currentWorkflow,
-          location: this.props.app.activeLocation,
-          user: this.props.app.activeUser
-        }))
+            primaryId: this.props.app.currentId,
+            date: this.props.app.selectedVisit && new Date(this.props.app.selectedVisit)
+              ? new Date(this.props.app.selectedVisit).getTime()
+              : new Date().getTime(),
+            program: this.props.app.module,
+            group: this.state.currentWorkflow,
+            location: this.props.app.activeLocation,
+            user: this.props.app.activeUser
+          }))
         .catch((e) => {
           this
             .props
@@ -1462,7 +1476,7 @@ class App extends Component {
       await this
         .props
         .clearWorkflow(this.state.currentWorkflow)
-        .then(async() => {
+        .then(async () => {
 
           await this.autoReroute(this.state.currentWorkflow, currentEncounter);
 
@@ -1562,7 +1576,7 @@ class App extends Component {
 
     this
       .props
-      .showConfirmMsg("Confirmation", "Do you really want to delete '" + encounter + "'?", "Delete", async() => {
+      .showConfirmMsg("Confirmation", "Do you really want to delete '" + encounter + "'?", "Delete", async () => {
 
         await this
           .props
@@ -1582,7 +1596,7 @@ class App extends Component {
 
   async findOrRegisterPatient() {
 
-    await this.setState({currentWorkflow: "primary"});
+    await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -1624,7 +1638,7 @@ class App extends Component {
 
       const activeWorkflow = this.state.currentWorkflow;
 
-      await this.setState({suspendedWorkflow: activeWorkflow, currentWorkflow: targetWorkflow});
+      await this.setState({ suspendedWorkflow: activeWorkflow, currentWorkflow: targetWorkflow });
 
       let currentId;
       let payload = {};
@@ -1642,7 +1656,7 @@ class App extends Component {
           "summaryIgnores"
         ].forEach(field => {
 
-          if (this.props.app.secondary[field]) 
+          if (this.props.app.secondary[field])
             payload[field] = this.props.app.secondary[field]
 
         })
@@ -1662,7 +1676,7 @@ class App extends Component {
           "summaryIgnores"
         ].forEach(field => {
 
-          if (this.props.app.primary[field]) 
+          if (this.props.app.primary[field])
             payload[field] = this.props.app.primary[field]
 
         })
@@ -1673,9 +1687,9 @@ class App extends Component {
 
       payload.currentId = currentId;
 
-      if (!payload.selectedVisit) 
+      if (!payload.selectedVisit)
         payload.selectedVisit = (new Date()).format("d mmm YYYY");
-      
+
       payload.currentPatient = this.props.app.patientData[currentId]
 
       if (payload.sectionHeader === "Find Client By Name") {
@@ -1706,7 +1720,7 @@ class App extends Component {
 
   async backdataEntry() {
 
-    await this.setState({currentWorkflow: "primary"});
+    await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -1792,9 +1806,9 @@ class App extends Component {
 
   async handleNextButtonClicks() {
 
-    if (this.$("btnNext").className.match(/gray/i)) 
+    if (this.$("btnNext").className.match(/gray/i))
       return;
-    
+
     if (this.props.wf && this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label && this.props.app.configs && this.props.app.configs[this.props.wf[this.state.currentWorkflow].currentNode.label] && Object.keys(this.props.app.configs[this.props.wf[this.state.currentWorkflow].currentNode.label]).indexOf("onUnLoad") >= 0) {
 
       this
@@ -1814,19 +1828,19 @@ class App extends Component {
           : "", (this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
             ? this.props.wf[this.state.currentWorkflow].currentNode.label
             : ""]
-          ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+            ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
               ? this.props.wf[this.state.currentWorkflow].currentNode.label
               : ""]
-          : ""), this.state.currentWorkflow);
+            : ""), this.state.currentWorkflow);
 
       await this
         .props
         .goForward(this.state.currentWorkflow, (this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+          ? this.props.wf[this.state.currentWorkflow].currentNode.label
+          : "Yes"]
+          ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
             ? this.props.wf[this.state.currentWorkflow].currentNode.label
             : "Yes"]
-          ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-              ? this.props.wf[this.state.currentWorkflow].currentNode.label
-              : "Yes"]
           : "Yes"));
 
     } else if (this.props.app.formActive && (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
@@ -1846,11 +1860,11 @@ class App extends Component {
       } else {
 
         this.navNext(this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+          ? this.props.wf[this.state.currentWorkflow].currentNode.label
+          : ""]
+          ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
             ? this.props.wf[this.state.currentWorkflow].currentNode.label
             : ""]
-          ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-              ? this.props.wf[this.state.currentWorkflow].currentNode.label
-              : ""]
           : "");
 
       }
@@ -2134,7 +2148,7 @@ class App extends Component {
 
     await this
       .props
-      .updateApp({ignore: true});
+      .updateApp({ ignore: true });
 
     await this
       .props
@@ -2156,7 +2170,7 @@ class App extends Component {
 
     await this
       .props
-      .updateApp({ignore: false});
+      .updateApp({ ignore: false });
 
   }
 
@@ -2216,9 +2230,9 @@ class App extends Component {
 
     const module = this.props.app.module;
 
-    if (!this.props.app.patientData || (this.props.app.patientData && !this.props.app.patientData[currentId]) || (this.props.app.patientData[currentId] && !this.props.app.patientData[currentId][module]) || (this.props.app.patientData[currentId][module] && !this.props.app.patientData[currentId][module].visits)) 
+    if (!this.props.app.patientData || (this.props.app.patientData && !this.props.app.patientData[currentId]) || (this.props.app.patientData[currentId] && !this.props.app.patientData[currentId][module]) || (this.props.app.patientData[currentId][module] && !this.props.app.patientData[currentId][module].visits))
       return [];
-    
+
     let entryCodes = this
       .props
       .app
@@ -2237,7 +2251,7 @@ class App extends Component {
 
   async transcribe(entryCode) {
 
-    await this.setState({currentWorkflow: this.state.currentWorkflow});
+    await this.setState({ currentWorkflow: this.state.currentWorkflow });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -2247,7 +2261,7 @@ class App extends Component {
 
     await this
       .props
-      .updateApp({entryCode});
+      .updateApp({ entryCode });
 
     const configs = {
       "Register Number (from cover)": {
@@ -2314,7 +2328,7 @@ class App extends Component {
 
   async addRegister() {
 
-    await this.setState({currentWorkflow: "primary"});
+    await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -2358,8 +2372,8 @@ class App extends Component {
               if (this.props.app.configs && Object.keys(this.props.app.configs).indexOf("Service Delivery Point") >= 0) {
 
                 this.props.app.configs["Service Delivery Point"].options = locations[(this.props.wf && this.state.currentWorkflow && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Location Type"]
-                    ? this.props.wf.responses[this.state.currentWorkflow]["Location Type"]
-                    : "")].sort();
+                  ? this.props.wf.responses[this.state.currentWorkflow]["Location Type"]
+                  : "")].sort();
 
               }
 
@@ -2367,8 +2381,8 @@ class App extends Component {
           },
           "Service Delivery Point": {
             options: locations[this.props.wf && this.state.currentWorkflow && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Location Type"]
-                ? this.props.wf.responses[this.state.currentWorkflow]["Location Type"]
-                : ""],
+              ? this.props.wf.responses[this.state.currentWorkflow]["Location Type"]
+              : ""],
             className: "longSelectList"
           },
           action: "/programs/add_register"
@@ -2386,7 +2400,7 @@ class App extends Component {
 
   async closeRegister() {
 
-    await this.setState({currentWorkflow: "primary"});
+    await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -2443,7 +2457,7 @@ class App extends Component {
 
   async findEnteredRecord() {
 
-    await this.setState({currentWorkflow: "primary"});
+    await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -2485,7 +2499,7 @@ class App extends Component {
 
   async addUser() {
 
-    await this.setState({currentWorkflow: "primary"});
+    await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -2570,7 +2584,7 @@ class App extends Component {
       .login(this.props.wf && this.props.wf.responses && this.props.wf.responses['primary']
         ? this.props.wf.responses['primary']
         : {})
-      .catch(e => {});
+      .catch(e => { });
 
     if (this.props.app.activeUser && this.props.app.activeUser !== "") {
 
@@ -2607,7 +2621,7 @@ class App extends Component {
 
   async editUser(username, firstName, lastName, gender, role) {
 
-    await this.setState({currentWorkflow: "primary"});
+    await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -2684,7 +2698,7 @@ class App extends Component {
 
   async changePassword(username) {
 
-    await this.setState({currentWorkflow: "primary"});
+    await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -2726,7 +2740,7 @@ class App extends Component {
 
   async filterReport() {
 
-    await this.setState({currentWorkflow: "primary"});
+    await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -2825,8 +2839,8 @@ class App extends Component {
             className: "longSelectList",
             options: (locations && Object.keys(locations).length > 0
               ? [...new Set(Array.prototype.concat.apply([], Object.keys(locations).map((e) => {
-                  return locations[e]
-                })))].sort()
+                return locations[e]
+              })))].sort()
               : null)
           },
           "Ask Test?": {
@@ -2853,7 +2867,7 @@ class App extends Component {
 
   async printLabel() {
 
-    await this.setState({currentWorkflow: "primary"});
+    await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
       loaded: Object.assign({}, this.state.loaded, {
@@ -2897,10 +2911,10 @@ class App extends Component {
     const text = "\nN\nq801\nQ329,026\nZT\nB50,180,0,1,5,15,120,N,\"" + data.npid + "\"\nA40,50,0,2,2,2,N,\"" + data.first_name + " " + data.family_name + "\"\nA40,96,0,2,2,2,N,\"" + data
       .npid
       .replace(/\B(?=([A-Za-z0-9]{3})+(?![A-Za-z0-9]))/g, "-") + " " + (parseInt(data.date_of_birth_estimated, 10) === 1
-      ? "~"
-      : "") + (String((new Date(data.date_of_birth))) !== "Invalid Date"
-      ? (new Date(data.date_of_birth)).format("dd/mmm/YYYY")
-      : "") + "(" + data.gender + ")\"\nA40,142,0,2,2,2,N,\"" + data.residence + "\"\nP1\n";
+        ? "~"
+        : "") + (String((new Date(data.date_of_birth))) !== "Invalid Date"
+          ? (new Date(data.date_of_birth)).format("dd/mmm/YYYY")
+          : "") + "(" + data.gender + ")\"\nA40,142,0,2,2,2,N,\"" + data.residence + "\"\nP1\n";
 
     const uri = 'data:application/label; charset=utf-8; filename=' + uuid.v4() + '.lbl; disposition=inline,' + encodeURIComponent(text);
 
@@ -2948,12 +2962,12 @@ class App extends Component {
         buttonClass: "red nav-buttons",
         onMouseDown: () => {
 
-          if (this.props.app.working) 
+          if (this.props.app.working)
             return;
-          
-          if (this.props.app.selectedTask === "Report Filter") 
-            return this.props.updateApp({selectedTask: "reports", formActive: false, configs: {}});
-          
+
+          if (this.props.app.selectedTask === "Report Filter")
+            return this.props.updateApp({ selectedTask: "reports", formActive: false, configs: {} });
+
           this.props.app.currentSection === "home" && !this.props.app.formActive
             ? this.logout()
             : this.props.app.formActive && this.props.app.currentSection !== "reports"
@@ -2987,11 +3001,11 @@ class App extends Component {
               : "") === "exit" || (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "Enter Data")
               ? "Finish"
               : "Next" : "Realtime Data Entry" : this.props.app.formActive
-                ? (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-                  ? this.props.wf[this.state.currentWorkflow].currentNode.type
-                  : "") === "exit"
-                  ? "Finish"
-                  : "Next" : "Finish",
+            ? (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
+              ? this.props.wf[this.state.currentWorkflow].currentNode.type
+              : "") === "exit"
+              ? "Finish"
+              : "Next" : "Finish",
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px",
@@ -3223,40 +3237,40 @@ class App extends Component {
         <div
           id="progressShield"
           style={{
-          position: "absolute",
-          left: "0px",
-          top: "0px",
-          width: "100vw",
-          height: "100vh",
-          backgroundColor: "rgba(128, 128, 128, 0.1)",
-          zIndex: "1001",
-          display: (this.props.dde.processing || this.props.app.processing || this.props.reports.processing
-            ? "block"
-            : "none")
-        }}/>
+            position: "absolute",
+            left: "0px",
+            top: "0px",
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(128, 128, 128, 0.1)",
+            zIndex: "1001",
+            display: (this.props.dde.processing || this.props.app.processing || this.props.reports.processing
+              ? "block"
+              : "none")
+          }} />
         <div
           style={{
-          position: "absolute",
-          left: "calc(50vw - 20px)",
-          top: "calc(50vh - 20px)"
-        }}>
+            position: "absolute",
+            left: "calc(50vw - 20px)",
+            top: "calc(50vh - 20px)"
+          }}>
           <ClipLoader
             color={"#123abc"}
             loading={this.props.dde.processing || this.props.app.processing || this.props.reports.processing}
-            size={50}/>
+            size={50} />
         </div>
         <Alert
           alerts={this.props.alerts}
           close={this
-          .props
-          .closeMsg
-          .bind(this)}/>
+            .props
+            .closeMsg
+            .bind(this)} />
         <Dialog
           dialog={this.props.dialog}
           close={this
-          .props
-          .closeDialog
-          .bind(this)}
+            .props
+            .closeDialog
+            .bind(this)}
           incrementReportMonth={this.props.incrementReportMonth}
           incrementReportYear={this.props.incrementReportYear}
           decrementReportMonth={this.props.decrementReportMonth}
@@ -3266,82 +3280,82 @@ class App extends Component {
           scrollTestUp={this.props.scrollTestUp}
           scrollTestDown={this.props.scrollTestDown}
           setReportingPeriod={this
-          .setReportingPeriod
-          .bind(this)}
-          app={this.props.app}/>{" "} {!this.props.app.activeUser || !this.props.app.location
-          ? <Login
+            .setReportingPeriod
+            .bind(this)}
+          app={this.props.app} />{" "} {!this.props.app.activeUser || !this.props.app.location
+            ? <Login
               handleDirectInputChange={this.props.handleInputChange}
               app={this.props.app}
               responses={this.props.wf.responses}
               label="Scan Workstation Location"
               queryOptions={this
-              .queryOptions
-              .bind(this)}
+                .queryOptions
+                .bind(this)}
               group="primary"
               setLocation={this
-              .props
-              .setLocation
-              .bind(this)}
+                .props
+                .setLocation
+                .bind(this)}
               showErrorMsg={this
-              .props
-              .showErrorMsg
-              .bind(this)}/>
-          : this.props.app.currentSection === "reports"
-            ? (<ReportsViewer
-              activeReport={this.props.app.activeReport}
-              reports={this.props.reports}
-              setDataHeaders={this
-              .props
-              .setDataHeaders
-              .bind(this)}
-              app={this.props.app}
-              dialog={this.props.dialog}
-              responses={this.props.wf.responses}
-              configs={this.props.app.configs}
-              label={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-              ? this.props.wf[this.state.currentWorkflow].currentNode.label
-              : ""}
-              selectedTask={this.props.app.selectedTask}
-              sectionHeader={this.props.app.sectionHeader}
-              handleDirectInputChange={this.props.handleInputChange}
-              queryOptions={this
-              .queryOptions
-              .bind(this)}
-              group={this.state.currentWorkflow}
-              navNext={this
-              .navNext
-              .bind(this)}
-              data={this.props.data}
-              options={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.options
-              ? this.props.wf[this.state.currentWorkflow].currentNode.options
-              : null}
-              scrollPepfarData={this
-              .scrollPepfarData
-              .bind(this)}/>)
-            : this.props.app.userManagementActive === true
-              ? <UsersViewer
+                .props
+                .showErrorMsg
+                .bind(this)} />
+            : this.props.app.currentSection === "reports"
+              ? (<ReportsViewer
+                activeReport={this.props.app.activeReport}
+                reports={this.props.reports}
+                setDataHeaders={this
+                  .props
+                  .setDataHeaders
+                  .bind(this)}
+                app={this.props.app}
+                dialog={this.props.dialog}
+                responses={this.props.wf.responses}
+                configs={this.props.app.configs}
+                label={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+                  ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                  : ""}
+                selectedTask={this.props.app.selectedTask}
+                sectionHeader={this.props.app.sectionHeader}
+                handleDirectInputChange={this.props.handleInputChange}
+                queryOptions={this
+                  .queryOptions
+                  .bind(this)}
+                group={this.state.currentWorkflow}
+                navNext={this
+                  .navNext
+                  .bind(this)}
+                data={this.props.data}
+                options={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.options
+                  ? this.props.wf[this.state.currentWorkflow].currentNode.options
+                  : null}
+                scrollPepfarData={this
+                  .scrollPepfarData
+                  .bind(this)} />)
+              : this.props.app.userManagementActive === true
+                ? <UsersViewer
                   editUser={this
-                  .editUser
-                  .bind(this)}
+                    .editUser
+                    .bind(this)}
                   activateUser={this
-                  .props
-                  .activateUser
-                  .bind(this)}
+                    .props
+                    .activateUser
+                    .bind(this)}
                   blockUser={this
-                  .props
-                  .blockUser
-                  .bind(this)}
+                    .props
+                    .blockUser
+                    .bind(this)}
                   activeSection={this.props.app.currentSection}
                   handleSwitchProgram={this
-                  .switchProgram
-                  .bind(this)}
+                    .switchProgram
+                    .bind(this)}
                   handleVisitUrl={this
-                  .navigateToVisit
-                  .bind(this)}
+                    .navigateToVisit
+                    .bind(this)}
                   programs={this.props.app.programs}
                   handleNavigateToUrl={this
-                  .navigateToRoute
-                  .bind(this)}
+                    .navigateToRoute
+                    .bind(this)}
                   module={this.props.app.module}
                   selectedVisit={this.props.app.selectedVisit}
                   tasks={this.props.app.tasks}
@@ -3350,115 +3364,115 @@ class App extends Component {
                   formActive={this.props.app.formActive}
                   responses={this.props.wf.responses}
                   label={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                  ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                  : ""}
+                    ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                    : ""}
                   handleDirectInputChange={this.props.handleInputChange}
                   configs={this.props.app.configs}
                   value={this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
                     ? this.props.wf[this.state.currentWorkflow].currentNode.label
                     : ""]
-                  ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+                    ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
                       ? this.props.wf[this.state.currentWorkflow].currentNode.label
                       : ""]
-                  : ""}
+                    : ""}
                   type={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-                  ? this.props.wf[this.state.currentWorkflow].currentNode.type
-                  : ""}
+                    ? this.props.wf[this.state.currentWorkflow].currentNode.type
+                    : ""}
                   summaryIgnores={this.props.app.summaryIgnores}
                   sectionHeader={this.props.app.sectionHeader}
                   processing={this.props.app.processing}
                   options={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.options
-                  ? this.props.wf[this.state.currentWorkflow].currentNode.options
-                  : null}
+                    ? this.props.wf[this.state.currentWorkflow].currentNode.options
+                    : null}
                   order={this.props.app.order}
                   fieldType={this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
                     ? this.props.wf[this.state.currentWorkflow].currentNode.label
                     : ""] && this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                    ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                    : ""].fieldType
-                  ? this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
                       ? this.props.wf[this.state.currentWorkflow].currentNode.label
                       : ""].fieldType
-                  : "text"}
+                    ? this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+                      ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                      : ""].fieldType
+                    : "text"}
                   visits={this.props.app.patientData && this.props.app.currentId && this.props.app.today && this.props.app.module && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId][this.props.app.module] && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits
-                  ? this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits
-                  : []}
+                    ? this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits
+                    : []}
                   handleVoidEncounter={this
-                  .voidEncounter
-                  .bind(this)}
+                    .voidEncounter
+                    .bind(this)}
                   handleInputChange={this
-                  .handleInputChange
-                  .bind(this)}
+                    .handleInputChange
+                    .bind(this)}
                   queryOptions={this
-                  .queryOptions
-                  .bind(this)}
+                    .queryOptions
+                    .bind(this)}
                   data={this.props.data}
                   navNext={this
-                  .navNext
-                  .bind(this)}
+                    .navNext
+                    .bind(this)}
                   dual={this.props.app.dual}
                   group={this.state.currentWorkflow}
                   fetchPatientData={this
-                  .props
-                  .fetchPatientData
-                  .bind(this)}
+                    .props
+                    .fetchPatientData
+                    .bind(this)}
                   goForward={this
-                  .props
-                  .goForward
-                  .bind(this)}
+                    .props
+                    .goForward
+                    .bind(this)}
                   activeWorkflow={this.state.currentWorkflow}
                   switchWorkflow={this
-                  .switchWorkflow
-                  .bind(this)}
+                    .switchWorkflow
+                    .bind(this)}
                   wf={this.props.wf}
                   cancelForm={this
-                  .cancelForm
-                  .bind(this)}
+                    .cancelForm
+                    .bind(this)}
                   currentPatient={this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId]
-                  ? this.props.app.patientData[this.props.app.currentId]
-                  : {}}
+                    ? this.props.app.patientData[this.props.app.currentId]
+                    : {}}
                   nextBDRow={(this.props.bd && this.props.bd.lastRow
-                  ? this.props.bd.lastRow
-                  : null)}
+                    ? this.props.bd.lastRow
+                    : null)}
                   currentEditRow={(this.props.bd && this.props.bd.currentRow
-                  ? this.props.bd.currentRow
-                  : {})}
+                    ? this.props.bd.currentRow
+                    : {})}
                   fetchLastBDRow={this
-                  .props
-                  .fetchLastBDRow
-                  .bind(this)}
+                    .props
+                    .fetchLastBDRow
+                    .bind(this)}
                   saveBDRow={this
-                  .props
-                  .saveBDRow
-                  .bind(this)}
+                    .props
+                    .saveBDRow
+                    .bind(this)}
                   fetchEditRow={this
-                  .props
-                  .fetchEditRow
-                  .bind(this)}
+                    .props
+                    .fetchEditRow
+                    .bind(this)}
                   saveEditRow={this
-                  .props
-                  .saveEditRow
-                  .bind(this)}
+                    .props
+                    .saveEditRow
+                    .bind(this)}
                   ddeResults={this.props.dde.matches.hits}
                   ddeCurrentPatient={this.props.dde.currentPatient}
                   searchByNameAndGender={this
-                  .props
-                  .searchByNameAndGender
-                  .bind(this)}
+                    .props
+                    .searchByNameAndGender
+                    .bind(this)}
                   selectPatient={this
-                  .selectPatient
-                  .bind(this)}
+                    .selectPatient
+                    .bind(this)}
                   updateApp={this
-                  .props
-                  .updateApp
-                  .bind(this)}
+                    .props
+                    .updateApp
+                    .bind(this)}
                   showErrorMsg={this
-                  .props
-                  .showErrorMsg
-                  .bind(this)}
+                    .props
+                    .showErrorMsg
+                    .bind(this)}
                   handleNextButtonClicks={this
-                  .handleNextButtonClicks
-                  .bind(this)}
+                    .handleNextButtonClicks
+                    .bind(this)}
                   icon={this.props.app.icon}
                   currentTab={this.props.app.currentTab}
                   app={this.props.app}
@@ -3466,266 +3480,266 @@ class App extends Component {
                   firstSummary={this.props.app.firstSummary}
                   secondSummary={this.props.app.secondSummary}
                   client={this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId]
-                  ? this.props.app.patientData[this.props.app.clientId]
-                  : {}}
+                    ? this.props.app.patientData[this.props.app.clientId]
+                    : {}}
                   partner={this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId]
-                  ? this.props.app.patientData[this.props.app.partnerId]
-                  : {}}
+                    ? this.props.app.patientData[this.props.app.partnerId]
+                    : {}}
                   showConfirmMsg={this
-                  .props
-                  .showConfirmMsg
-                  .bind(this)}
-                  showInfoMsg={this
-                  .props
-                  .showInfoMsg
-                  .bind(this)}
-                  addRegister={this
-                  .addRegister
-                  .bind(this)}
-                  closeRegister={this
-                  .closeRegister
-                  .bind(this)}
-                  fetchRegisterStats={this
-                  .props
-                  .fetchRegisterStats
-                  .bind(this)}
-                  fetchVisitSummaries={this
-                  .props
-                  .fetchVisitSummaries
-                  .bind(this)}
-                  reports={this.props.reports}
-                  fetchUsers={this
-                  .props
-                  .fetchUsers
-                  .bind(this)}/>
-              : (
-                <div>
-                  <Topbar
-                    patientActivated={this.props.app.patientActivated}
-                    module={this.props.app.module}
-                    icon={this.props.app.icon}
-                    handleCheckBarcode={this
-                    .checkBarcode
-                    .bind(this)}
-                    today={this.props.app.today}
-                    facility={this.props.app.facility}
-                    user={this.props.app.user}
-                    location={this.props.app.location}
-                    data={{}}
-                    age={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].age
-                    ? this.props.app.patientData[this.props.app.currentId].age
-                    : ""}
-                    primaryId={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].npid
-                    ? this.props.app.patientData[this.props.app.currentId].npid
-                    : ""}
-                    otherId={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].otherId
-                    ? this.props.app.patientData[this.props.app.currentId].otherId
-                    : ""}
-                    otherIdLabel={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].otherIdType
-                    ? this.props.app.patientData[this.props.app.currentId].otherIdType
-                    : ""}
-                    gender={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].gender
-                    ? this.props.app.patientData[this.props.app.currentId].gender
-                    : ""}
-                    patientName={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].patientName
-                    ? this.props.app.patientData[this.props.app.currentId].patientName
-                    : ""}
-                    patientData={this.props.app.patientData}
-                    currentId={this.props.app.currentId}
-                    title={this.props.wf && this.props.wf.currentNode && this.props.wf.currentNode.label
-                    ? this.props.wf.currentNode.label
-                    : ""}
-                    switchWorkflow={this
-                    .switchWorkflow
-                    .bind(this)}
-                    selectedTask={this.props.app.selectedTask}
-                    app={this.props.app}
-                    activeWorkflow={this.state.currentWorkflow}
-                    client={this.props.app.dual === true && this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId]
-                    ? this.props.app.patientData[this.props.app.partnerId]
-                    : (!this.props.app.dual && this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId]
-                      ? this.props.app.patientData[this.props.app.currentId]
-                      : {})}
-                    partner={this.props.app.dual === true && this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId]
-                    ? this.props.app.patientData[this.props.app.clientId]
-                    : {}}
-                    wf={this.props.wf}/>
-                  <Container
-                    activeSection={this.props.app.currentSection}
-                    handleSwitchProgram={this
-                    .switchProgram
-                    .bind(this)}
-                    handleVisitUrl={this
-                    .navigateToVisit
-                    .bind(this)}
-                    programs={this.props.app.programs}
-                    handleNavigateToUrl={this
-                    .navigateToRoute
-                    .bind(this)}
-                    module={this.props.app.module}
-                    selectedVisit={this.props.app.selectedVisit}
-                    tasks={this.props.app.tasks}
-                    selectedTask={this.props.app.selectedTask}
-                    userDashTasks={this.props.app.userDashTasks}
-                    formActive={this.props.app.formActive}
-                    responses={this.props.wf.responses}
-                    label={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                    ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                    : ""}
-                    handleDirectInputChange={this.props.handleInputChange}
-                    configs={this.props.app.configs}
-                    value={this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                      ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                      : ""]
-                    ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                        ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                        : ""]
-                    : ""}
-                    type={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-                    ? this.props.wf[this.state.currentWorkflow].currentNode.type
-                    : ""}
-                    summaryIgnores={this.props.app.summaryIgnores}
-                    sectionHeader={this.props.app.sectionHeader}
-                    processing={this.props.app.processing}
-                    options={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.options
-                    ? this.props.wf[this.state.currentWorkflow].currentNode.options
-                    : null}
-                    order={this.props.app.order}
-                    fieldType={this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                      ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                      : ""] && this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                      ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                      : ""].fieldType
-                    ? this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                        ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                        : ""].fieldType
-                    : "text"}
-                    visits={this.props.app.patientData && this.props.app.currentId && this.props.app.today && this.props.app.module && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId][this.props.app.module] && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits
-                    ? this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits
-                    : []}
-                    handleVoidEncounter={this
-                    .voidEncounter
-                    .bind(this)}
-                    handleInputChange={this
-                    .handleInputChange
-                    .bind(this)}
-                    queryOptions={this
-                    .queryOptions
-                    .bind(this)}
-                    data={this.props.data}
-                    navNext={this
-                    .navNext
-                    .bind(this)}
-                    dual={this.props.app.dual}
-                    group={this.state.currentWorkflow}
-                    fetchPatientData={this
-                    .props
-                    .fetchPatientData
-                    .bind(this)}
-                    goForward={this
-                    .props
-                    .goForward
-                    .bind(this)}
-                    activeWorkflow={this.state.currentWorkflow}
-                    switchWorkflow={this
-                    .switchWorkflow
-                    .bind(this)}
-                    wf={this.props.wf}
-                    cancelForm={this
-                    .cancelForm
-                    .bind(this)}
-                    currentPatient={this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId]
-                    ? this.props.app.patientData[this.props.app.currentId]
-                    : {}}
-                    nextBDRow={(this.props.bd && this.props.bd.lastRow
-                    ? this.props.bd.lastRow
-                    : null)}
-                    currentEditRow={(this.props.bd && this.props.bd.currentRow
-                    ? this.props.bd.currentRow
-                    : {})}
-                    fetchLastBDRow={this
-                    .props
-                    .fetchLastBDRow
-                    .bind(this)}
-                    saveBDRow={this
-                    .props
-                    .saveBDRow
-                    .bind(this)}
-                    fetchEditRow={this
-                    .props
-                    .fetchEditRow
-                    .bind(this)}
-                    saveEditRow={this
-                    .props
-                    .saveEditRow
-                    .bind(this)}
-                    ddeResults={this.props.dde.matches.hits}
-                    ddeCurrentPatient={this.props.dde.currentPatient}
-                    searchByNameAndGender={this
-                    .props
-                    .searchByNameAndGender
-                    .bind(this)}
-                    selectPatient={this
-                    .selectPatient
-                    .bind(this)}
-                    updateApp={this
-                    .props
-                    .updateApp
-                    .bind(this)}
-                    showErrorMsg={this
-                    .props
-                    .showErrorMsg
-                    .bind(this)}
-                    handleNextButtonClicks={this
-                    .handleNextButtonClicks
-                    .bind(this)}
-                    icon={this.props.app.icon}
-                    currentTab={this.props.app.currentTab}
-                    app={this.props.app}
-                    searchByIdentifier={this.props.searchByIdentifier}
-                    firstSummary={this.props.app.firstSummary}
-                    secondSummary={this.props.app.secondSummary}
-                    client={this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId]
-                    ? this.props.app.patientData[this.props.app.clientId]
-                    : {}}
-                    partner={this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId]
-                    ? this.props.app.patientData[this.props.app.partnerId]
-                    : {}}
-                    showConfirmMsg={this
                     .props
                     .showConfirmMsg
                     .bind(this)}
-                    showInfoMsg={this
+                  showInfoMsg={this
                     .props
                     .showInfoMsg
                     .bind(this)}
-                    addRegister={this
+                  addRegister={this
                     .addRegister
                     .bind(this)}
-                    closeRegister={this
+                  closeRegister={this
                     .closeRegister
                     .bind(this)}
-                    fetchRegisterStats={this
+                  fetchRegisterStats={this
                     .props
                     .fetchRegisterStats
                     .bind(this)}
-                    fetchVisitSummaries={this
+                  fetchVisitSummaries={this
                     .props
                     .fetchVisitSummaries
                     .bind(this)}
-                    reports={this.props.reports}
-                    changePassword={this
-                    .changePassword
-                    .bind(this)}
-                    transcribe={this
-                    .transcribe
-                    .bind(this)}
-                    printLabel={this
-                    .printLabel
-                    .bind(this)}/>
-                </div>
-              )}
-        <U13 buttons={buttons}/>
+                  reports={this.props.reports}
+                  fetchUsers={this
+                    .props
+                    .fetchUsers
+                    .bind(this)} />
+                : (
+                  <div>
+                    <Topbar
+                      patientActivated={this.props.app.patientActivated}
+                      module={this.props.app.module}
+                      icon={this.props.app.icon}
+                      handleCheckBarcode={this
+                        .checkBarcode
+                        .bind(this)}
+                      today={this.props.app.today}
+                      facility={this.props.app.facility}
+                      user={this.props.app.user}
+                      location={this.props.app.location}
+                      data={{}}
+                      age={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].age
+                        ? this.props.app.patientData[this.props.app.currentId].age
+                        : ""}
+                      primaryId={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].npid
+                        ? this.props.app.patientData[this.props.app.currentId].npid
+                        : ""}
+                      otherId={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].otherId
+                        ? this.props.app.patientData[this.props.app.currentId].otherId
+                        : ""}
+                      otherIdLabel={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].otherIdType
+                        ? this.props.app.patientData[this.props.app.currentId].otherIdType
+                        : ""}
+                      gender={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].gender
+                        ? this.props.app.patientData[this.props.app.currentId].gender
+                        : ""}
+                      patientName={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].patientName
+                        ? this.props.app.patientData[this.props.app.currentId].patientName
+                        : ""}
+                      patientData={this.props.app.patientData}
+                      currentId={this.props.app.currentId}
+                      title={this.props.wf && this.props.wf.currentNode && this.props.wf.currentNode.label
+                        ? this.props.wf.currentNode.label
+                        : ""}
+                      switchWorkflow={this
+                        .switchWorkflow
+                        .bind(this)}
+                      selectedTask={this.props.app.selectedTask}
+                      app={this.props.app}
+                      activeWorkflow={this.state.currentWorkflow}
+                      client={this.props.app.dual === true && this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId]
+                        ? this.props.app.patientData[this.props.app.partnerId]
+                        : (!this.props.app.dual && this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId]
+                          ? this.props.app.patientData[this.props.app.currentId]
+                          : {})}
+                      partner={this.props.app.dual === true && this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId]
+                        ? this.props.app.patientData[this.props.app.clientId]
+                        : {}}
+                      wf={this.props.wf} />
+                    <Container
+                      activeSection={this.props.app.currentSection}
+                      handleSwitchProgram={this
+                        .switchProgram
+                        .bind(this)}
+                      handleVisitUrl={this
+                        .navigateToVisit
+                        .bind(this)}
+                      programs={this.props.app.programs}
+                      handleNavigateToUrl={this
+                        .navigateToRoute
+                        .bind(this)}
+                      module={this.props.app.module}
+                      selectedVisit={this.props.app.selectedVisit}
+                      tasks={this.props.app.tasks}
+                      selectedTask={this.props.app.selectedTask}
+                      userDashTasks={this.props.app.userDashTasks}
+                      formActive={this.props.app.formActive}
+                      responses={this.props.wf.responses}
+                      label={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+                        ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                        : ""}
+                      handleDirectInputChange={this.props.handleInputChange}
+                      configs={this.props.app.configs}
+                      value={this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+                        ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                        : ""]
+                        ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+                          ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                          : ""]
+                        : ""}
+                      type={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
+                        ? this.props.wf[this.state.currentWorkflow].currentNode.type
+                        : ""}
+                      summaryIgnores={this.props.app.summaryIgnores}
+                      sectionHeader={this.props.app.sectionHeader}
+                      processing={this.props.app.processing}
+                      options={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.options
+                        ? this.props.wf[this.state.currentWorkflow].currentNode.options
+                        : null}
+                      order={this.props.app.order}
+                      fieldType={this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+                        ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                        : ""] && this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+                          ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                          : ""].fieldType
+                        ? this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+                          ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                          : ""].fieldType
+                        : "text"}
+                      visits={this.props.app.patientData && this.props.app.currentId && this.props.app.today && this.props.app.module && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId][this.props.app.module] && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits
+                        ? this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits
+                        : []}
+                      handleVoidEncounter={this
+                        .voidEncounter
+                        .bind(this)}
+                      handleInputChange={this
+                        .handleInputChange
+                        .bind(this)}
+                      queryOptions={this
+                        .queryOptions
+                        .bind(this)}
+                      data={this.props.data}
+                      navNext={this
+                        .navNext
+                        .bind(this)}
+                      dual={this.props.app.dual}
+                      group={this.state.currentWorkflow}
+                      fetchPatientData={this
+                        .props
+                        .fetchPatientData
+                        .bind(this)}
+                      goForward={this
+                        .props
+                        .goForward
+                        .bind(this)}
+                      activeWorkflow={this.state.currentWorkflow}
+                      switchWorkflow={this
+                        .switchWorkflow
+                        .bind(this)}
+                      wf={this.props.wf}
+                      cancelForm={this
+                        .cancelForm
+                        .bind(this)}
+                      currentPatient={this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId]
+                        ? this.props.app.patientData[this.props.app.currentId]
+                        : {}}
+                      nextBDRow={(this.props.bd && this.props.bd.lastRow
+                        ? this.props.bd.lastRow
+                        : null)}
+                      currentEditRow={(this.props.bd && this.props.bd.currentRow
+                        ? this.props.bd.currentRow
+                        : {})}
+                      fetchLastBDRow={this
+                        .props
+                        .fetchLastBDRow
+                        .bind(this)}
+                      saveBDRow={this
+                        .props
+                        .saveBDRow
+                        .bind(this)}
+                      fetchEditRow={this
+                        .props
+                        .fetchEditRow
+                        .bind(this)}
+                      saveEditRow={this
+                        .props
+                        .saveEditRow
+                        .bind(this)}
+                      ddeResults={this.props.dde.matches.hits}
+                      ddeCurrentPatient={this.props.dde.currentPatient}
+                      searchByNameAndGender={this
+                        .props
+                        .searchByNameAndGender
+                        .bind(this)}
+                      selectPatient={this
+                        .selectPatient
+                        .bind(this)}
+                      updateApp={this
+                        .props
+                        .updateApp
+                        .bind(this)}
+                      showErrorMsg={this
+                        .props
+                        .showErrorMsg
+                        .bind(this)}
+                      handleNextButtonClicks={this
+                        .handleNextButtonClicks
+                        .bind(this)}
+                      icon={this.props.app.icon}
+                      currentTab={this.props.app.currentTab}
+                      app={this.props.app}
+                      searchByIdentifier={this.props.searchByIdentifier}
+                      firstSummary={this.props.app.firstSummary}
+                      secondSummary={this.props.app.secondSummary}
+                      client={this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId]
+                        ? this.props.app.patientData[this.props.app.clientId]
+                        : {}}
+                      partner={this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId]
+                        ? this.props.app.patientData[this.props.app.partnerId]
+                        : {}}
+                      showConfirmMsg={this
+                        .props
+                        .showConfirmMsg
+                        .bind(this)}
+                      showInfoMsg={this
+                        .props
+                        .showInfoMsg
+                        .bind(this)}
+                      addRegister={this
+                        .addRegister
+                        .bind(this)}
+                      closeRegister={this
+                        .closeRegister
+                        .bind(this)}
+                      fetchRegisterStats={this
+                        .props
+                        .fetchRegisterStats
+                        .bind(this)}
+                      fetchVisitSummaries={this
+                        .props
+                        .fetchVisitSummaries
+                        .bind(this)}
+                      reports={this.props.reports}
+                      changePassword={this
+                        .changePassword
+                        .bind(this)}
+                      transcribe={this
+                        .transcribe
+                        .bind(this)}
+                      printLabel={this
+                        .printLabel
+                        .bind(this)} />
+                  </div>
+                )}
+        <U13 buttons={buttons} />
       </div>
     );
   }
@@ -4065,32 +4079,35 @@ const mapDispatchToProps = dispatch => {
         resolve();
       })
     },
-    login: async(payload) => {
+    login: async (payload) => {
       return await dispatch(login(payload));
     },
-    setLocation: async(location, token) => {
+    setLocation: async (location, token) => {
       return await dispatch(setLocation(location, token));
     },
-    sessionValid: async(token) => {
+    sessionValid: async (token) => {
       return await dispatch(sessionValid(token));
     },
-    fetchUsers: async(page = 1, pageSize = 10) => {
+    fetchUsers: async (page = 1, pageSize = 10) => {
       return await dispatch(fetchUsers(page, pageSize));
     },
-    blockUser: async(username) => {
+    blockUser: async (username) => {
       return await dispatch(blockUser(username));
     },
-    activateUser: async(username) => {
+    activateUser: async (username) => {
       return await dispatch(activateUser(username));
     },
-    fetchPepfarData: async(baseUrl, sMonth, sYear, eMonth, eYear, startPos, endPos) => {
+    fetchPepfarData: async (baseUrl, sMonth, sYear, eMonth, eYear, startPos, endPos) => {
       return await dispatch(fetchPepfarData(baseUrl, sMonth, sYear, eMonth, eYear, startPos, endPos));
     },
-    resetPepfarData: async() => {
+    resetPepfarData: async () => {
       return await dispatch(resetPepfarData());
     },
-    loadData: async(group, subGroup, configs, ignores, data) => {
+    loadData: async (group, subGroup, configs, ignores, data) => {
       return await dispatch(loadData(group, subGroup, configs, ignores, data));
+    },
+    resetErrorMessage: async () => {
+      return await dispatch(resetErrorMessage());
     }
   };
 };

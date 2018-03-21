@@ -1,6 +1,7 @@
 export default function bdReducer(state = {
   lastRow: {},
-  currentRow: {}
+  currentRow: {},
+  errorMessage: null
 }, action) {
 
   let newState;
@@ -9,13 +10,19 @@ export default function bdReducer(state = {
 
     case "FETCH_LAST_BD_ROW_FULFILLED":
 
-      newState = Object.assign({}, state, {lastRow: action.payload.data});
+      newState = Object.assign({}, state, { lastRow: action.payload.data });
 
       return newState;
 
     case "SAVE_BD_ROW_FULFILLED":
 
-      newState = Object.assign({}, state, {lastRow: action.payload.data});
+      newState = Object.assign({}, state, { lastRow: action.payload.data, errorMessage: null });
+
+      return newState;
+
+    case "SAVE_BD_ROW_REJECTED":
+
+      newState = Object.assign({}, state, { errorMessage: action.payload.response.data.message });
 
       return newState;
 
@@ -32,13 +39,19 @@ export default function bdReducer(state = {
 
     case "SAVE_EDIT_ROW_FULFILLED":
 
-      newState = Object.assign({}, state, {currentRow: action.payload.data});
+      newState = Object.assign({}, state, { currentRow: action.payload.data });
 
       return newState;
 
     case "SAVE_EDIT_ROW_REJECTED":
 
       newState = Object.assign({}, state);
+
+      return newState;
+
+    case "RESET_ERROR_MESSAGE":
+
+      newState = Object.assign({}, state, { errorMessage: null });
 
       return newState;
 

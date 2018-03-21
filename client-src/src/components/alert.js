@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './alert.css';
 import Button from './button';
+import uuid from 'uuid';
 
 class Alert extends Component {
 
@@ -49,8 +50,10 @@ class Alert extends Component {
               </tr>
               <tr>
                 <td>
-                  <div className="alertContent" id="alertContent">{(this.props.alerts.msg || '').split('\n').map(i => { return <span>{i}<br />
-                  </span> })}</div>
+                  <div className="alertContent" id="alertContent">{(this.props.alerts.msg || '').split('\n').map(i => {
+                    return <span key={uuid.v4()}>{i}<br />
+                    </span>
+                  })}</div>
                 </td>
               </tr>
               <tr>

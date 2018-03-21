@@ -2123,6 +2123,12 @@ module.exports = function (app) {
 
     debug("$$$$$$$$$$$$$$$$$$$$$$$$$");
 
+    if(!provider) {
+
+      return res.status(400).json({error: true, message: "HTS Provider ID \n not registered at this site"});
+
+    }
+
     let providerId = (provider ? provider.personId : null);
 
     let name = "Register Number (from cover)";

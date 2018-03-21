@@ -690,23 +690,23 @@ class BackdataEntry extends Component {
         .props
         .showErrorMsg("Missing Data", fields.join(", ") + "\n must be entered");
 
-    } else if(this.state.data && !String(this.state.data['Number of Items Given:HTS Family Referral Slips']).match(/^[0-9]$|^[1][0-5]$/)) {
+    } else if (this.state.data && !String(this.state.data['Number of Items Given:HTS Family Referral Slips']).match(/^[0-9]$|^[1][0-5]$/)) {
 
       return this
-      .props
-      .showErrorMsg("Invalid Entry", "Number of FRS given \n must be between 0-15");
+        .props
+        .showErrorMsg("Invalid Entry", "Number of FRS given \n must be between 0-15");
 
-    } else if(this.state.data && !String(this.state.data['Number of Items Given:Condoms:Male']).match(/^[0-9]$|^[1-9][0-9]$|^[1-4][0-9][0-9]$|^500$/)) {
-
-      return this
-      .props
-      .showErrorMsg("Invalid Entry", "Number of male condoms given \n must be between 0-500");
-
-    } else if(this.state.data && !String(this.state.data['Number of Items Given:Condoms:Female']).match(/^[0-9]$|^[1-9][0-9]$|^[1-4][0-9][0-9]$|^500$/)) {
+    } else if (this.state.data && !String(this.state.data['Number of Items Given:Condoms:Male']).match(/^[0-9]$|^[1-9][0-9]$|^[1-4][0-9][0-9]$|^500$/)) {
 
       return this
-      .props
-      .showErrorMsg("Invalid Entry", "Number of female condoms given \n must be between 0-500");
+        .props
+        .showErrorMsg("Invalid Entry", "Number of male condoms given \n must be between 0-500");
+
+    } else if (this.state.data && !String(this.state.data['Number of Items Given:Condoms:Female']).match(/^[0-9]$|^[1-9][0-9]$|^[1-4][0-9][0-9]$|^500$/)) {
+
+      return this
+        .props
+        .showErrorMsg("Invalid Entry", "Number of female condoms given \n must be between 0-500");
 
     }
 
@@ -768,7 +768,7 @@ class BackdataEntry extends Component {
 
             this
               .props
-              .showInfoMsg("Write in 'Comments' Entry Code", id);
+              .showInfoMsg("Write this  Entry Code in 'Comments'", id);
 
             const count = this.state.count + 1;
 
