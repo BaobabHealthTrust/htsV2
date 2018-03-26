@@ -77,36 +77,37 @@
     "category": "Referral for Re-Testing"
   },
   "Sex/Pregnancy does not match entered age": {
-    "message": "Sex/Pregnancy does not match entered age",
-    "category": "Sex/Pregnancy"
+    "message": "Pregnancy is not plausible \n for the entered age",
+    "category": "Sex/Pregnancy",
+    "title": "Invalid Entry"
   },
   "New Negative": {
-    "message": "Result given to client \n must be New Negative",
+    "message": "Combination of test results \n is not plausible",
     "category": "Result Given to Client",
     "title": "Invalid Entry"
   },
   "New Exposed Infant": {
-    "message": "Result given to client \n must be New Exposed Infant",
+    "message": "Combination of test results \n is not plausible",
     "category": "Result Given to Client",
     "title": "Invalid Entry"
   },
   "New Inconclusive": {
-    "message": "Result given to client \n must be New Inconclusive",
+    "message": "Combination of test results \n is not plausible",
     "category": "Result Given to Client",
     "title": "Invalid Entry"
   },
   "Confirmatory Inconclusive": {
-    "message": "Result given to client \n must be Confirmatory Inconclusive",
+    "message": "Combination of test results \n is not plausible",
     "category": "Result Given to Client",
     "title": "Invalid Entry"
   },
   "Confirmatory Positive": {
-    "message": "Result given to client \n must be Confirmatory Positive",
+    "message": "Combination of test results \n is not plausible",
     "category": "Result Given to Client",
     "title": "Invalid Entry"
   },
   "New Positive": {
-    "message": "Result given to client \n must be New Positive",
+    "message": "Combination of test results \n is not plausible",
     "category": "Result Given to Client",
     "title": "Invalid Entry"
   }

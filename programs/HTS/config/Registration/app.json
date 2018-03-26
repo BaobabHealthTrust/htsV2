@@ -107,8 +107,8 @@
     },
     "Cell Phone Number": {
         "fieldType": "number",
-        "validationRule": "^0[2|8|9]\\d{8}$|Unknown|Not Available|^N\\/A$",
-        "validationMessage": "Cellphone number \n must start with 02,08 or 09 \n followed by 8 digits",
+        "validationRule": "^0[1|2|8|9]\\d{8}$|Unknown|Not Available|^N\\/A$",
+        "validationMessage": "Cellphone number \n must start with 01, 02,08 or 09 \n followed by 8 digits",
         "hiddenButtons": ["clear", "/", ".", "-", "abc", "qwe"]
     },
     "District of Origin": {

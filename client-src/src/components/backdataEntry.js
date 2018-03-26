@@ -575,11 +575,11 @@ class BackdataEntry extends Component {
 
         const absoluteMin = ((new Date()).getFullYear() - 1998) * 365;
 
-        if (duration > age || duration > absoluteMin) {
+        if (duration > age || duration > absoluteMin || (duration > (age - 12 * 30) && String(this.state.data["Last HIV Test"]).trim() === "Last Positive")) {
 
           this
             .props
-            .showErrorMsg("Invalid Data", alertsMapping["'Time Since Last Test' duration invalid!"].message);
+            .showErrorMsg("Invalid Entry", "Time Since Last Test \n entered not plausible");
 
           setTimeout(() => {
 
@@ -592,6 +592,25 @@ class BackdataEntry extends Component {
           return reject();
 
         }
+
+      }
+
+      if (Object.keys(this.state.data).indexOf("HIV Rapid Test Outcomes") >= 0 && Object.keys(this.state.data["HIV Rapid Test Outcomes"]).indexOf("Immediate Repeat") >= 0 && ((Object.keys(this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length > 0 && Object.keys(this.state.data["HIV Rapid Test Outcomes"]["First Pass"]).length < 2) || (Object.keys(this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length > 0 && this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length < 2)) {
+
+        this
+          .props
+          .showErrorMsg("Invalid Entry", "Test results \n entered not plausible");
+
+        setTimeout(() => {
+
+          if (this.coords[this.categories["HIV Rapid Test Outcomes"]])
+            this.$("bdScroller").scrollLeft = this.coords[this.categories["HIV Rapid Test Outcomes"]];
+
+        }
+          , this.scrollDelay)
+
+        return reject();
+
 
       }
 
