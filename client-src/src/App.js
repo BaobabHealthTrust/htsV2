@@ -3920,9 +3920,9 @@ const mapDispatchToProps = dispatch => {
         resolve();
       });
     },
-    showConfirmMsg: (msg, topic, nextAction, callback, deletePrompt, deleteLabel, deleteAction) => {
+    showConfirmMsg: (title, msg, label, action) => {
       return new Promise(resolve => {
-        dispatch(showConfirmMsg(msg, topic, nextAction, callback, deletePrompt, deleteLabel, deleteAction));
+        dispatch(showConfirmMsg(title, msg, label, action));
         resolve();
       });
     },

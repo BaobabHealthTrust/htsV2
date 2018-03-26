@@ -81,6 +81,7 @@ const firstPassTest1Negative = (data, alertsMapping, categories) => {
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
     result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+    result.allowContinue = true;
 
   } else if (["On-going Risk", "High Risk Event in last 3 months"].indexOf(data["Client Risk Category"]) >= 0 && data["Referral for Re-Testing"] !== "Re-Test") {
 
@@ -88,6 +89,7 @@ const firstPassTest1Negative = (data, alertsMapping, categories) => {
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
     result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+    result.allowContinue = true;
 
   }
 
@@ -156,6 +158,7 @@ const test1And2Positive = (data, alertsMapping, categories) => {
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
         result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+        result.allowContinue = true;
 
       }
 
@@ -202,6 +205,7 @@ const test1And2Positive = (data, alertsMapping, categories) => {
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
         result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+        result.allowContinue = true;
 
       }
 
@@ -268,6 +272,7 @@ const test1And2Negative = (data, alertsMapping, categories) => {
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
     result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+    result.allowContinue = true;
 
   }
 
@@ -323,6 +328,7 @@ const test1And2Discordant = (data, alertsMapping, categories) => {
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
     result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+    result.allowContinue = true;
 
   }
 
@@ -454,6 +460,7 @@ const confirmatoryInconclusive = (data, category, alertsMapping, categories) => 
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
     result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+    result.allowContinue = true;
 
   }
 
@@ -522,6 +529,7 @@ const confirmatoryPositive = (data, alertsMapping, categories) => {
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
         result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+        result.allowContinue = true;
 
       }
 
@@ -568,6 +576,7 @@ const confirmatoryPositive = (data, alertsMapping, categories) => {
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
         result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+        result.allowContinue = true;
 
       }
 
@@ -614,6 +623,7 @@ const confirmatoryPositive = (data, alertsMapping, categories) => {
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
         result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+        result.allowContinue = true;
 
       }
 
@@ -673,6 +683,7 @@ const lastPositiveTest1And2Negative = (data, alertsMapping, categories) => {
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
     result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+    result.allowContinue = true;
 
   }
 
@@ -788,6 +799,7 @@ const lastInconclusiveNewPositive = (data, alertsMapping, categories) => {
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
         result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+        result.allowContinue = true;
 
       }
 
@@ -834,6 +846,7 @@ const lastInconclusiveNewPositive = (data, alertsMapping, categories) => {
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
         result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+        result.allowContinue = true;
 
       }
 
@@ -880,6 +893,7 @@ const lastInconclusiveNewPositive = (data, alertsMapping, categories) => {
         result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
         result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
         result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+        result.allowContinue = true;
 
       }
 
@@ -1058,6 +1072,7 @@ const newInconclusive = (data, category, alertsMapping, categories) => {
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
     result.title = alertsMapping["Invalid Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Invalid Referral for Re-Testing"].category];
+    result.allowContinue = true;
 
   }
 

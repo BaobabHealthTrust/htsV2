@@ -22,7 +22,7 @@
     "category": "Client Risk Category"
   },
   "Invalid Referral for Re-Testing": {
-    "message": "Invalid Referral for Re-Testing",
+    "message": "Referral for Re-Testing \n Selected option is not recommended for \n the result given and the entered risk category. \n Do you want to continue?",
     "category": "Referral for Re-Testing",
     "title": "Invalid Entry",
     "allowContinue": true
@@ -73,7 +73,7 @@
       "category": "Last HIV Test"
   },
   "Missing Referral for Re-Testing": {
-    "message": "Missing Referral for Re-Testing",
+    "message": "Referral for Re-Testing \n must be entered",
     "category": "Referral for Re-Testing"
   },
   "Sex/Pregnancy does not match entered age": {

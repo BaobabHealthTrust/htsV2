@@ -309,6 +309,54 @@ class BackdataEntry extends Component {
 
   }
 
+  async saveData() {
+
+    let newState = Object.assign({}, this.state.data, {
+      "Set Date": this.props.responses["Set Date"],
+      "Current Location": (this.props.app && this.props.app.currentLocation
+        ? this.props.app.currentLocation
+        : null),
+      "Register Number (from cover)": this.props.responses["Register Number (from cover)"],
+      "Current User": (this.props.app && this.props.app.activeUser
+        ? this.props.app.activeUser
+        : null)
+    })
+
+    this
+      .props
+      .saveBDRow("/programs/save_bd_data", newState)
+      .then(async () => {
+
+        let id = this.props.previous.id;
+
+        this
+          .props
+          .showInfoMsg("Write this  Entry Code in 'Comments'", id);
+
+        const count = this.state.count + 1;
+
+        this.setState({ data: {}, count: count, label: null, currentString: "", fieldType: "" });
+
+        if (this.$("bdScroller")) {
+
+          this
+            .$("bdScroller")
+            .scrollLeft = 0;
+
+        }
+
+        await this
+          .props
+          .updateApp({ isDirty: false });
+
+        this
+          .props
+          .handleDirectInputChange("Total Captured Entries", count, this.props.group);
+
+      });
+
+  }
+
   validated() {
 
     return new Promise((resolve, reject) => {
@@ -618,17 +666,17 @@ class BackdataEntry extends Component {
 
       if (result.error) {
 
-        /*if (result.allowContinue) {
+        if (result.allowContinue) {
 
-          this.props.showConfirmMsg((result.title ? result.title : "Invalid Data"), result.message, () => { });
+          return this.props.showConfirmMsg((result.title ? result.title : "Invalid Data"), result.message, "Continue", () => { this.saveData(); });
 
-        } else {*/
+        } else {
 
-        this
-          .props
-          .showErrorMsg((result.title ? result.title : "Invalid Data"), result.message);
+          this
+            .props
+            .showErrorMsg((result.title ? result.title : "Invalid Data"), result.message);
 
-        // }
+        }
 
         if (result.group) {
 
@@ -767,49 +815,7 @@ class BackdataEntry extends Component {
       .validated()
       .then(() => {
 
-        let newState = Object.assign({}, this.state.data, {
-          "Set Date": this.props.responses["Set Date"],
-          "Current Location": (this.props.app && this.props.app.currentLocation
-            ? this.props.app.currentLocation
-            : null),
-          "Register Number (from cover)": this.props.responses["Register Number (from cover)"],
-          "Current User": (this.props.app && this.props.app.activeUser
-            ? this.props.app.activeUser
-            : null)
-        })
-
-        this
-          .props
-          .saveBDRow("/programs/save_bd_data", newState)
-          .then(async () => {
-
-            let id = this.props.previous.id;
-
-            this
-              .props
-              .showInfoMsg("Write this  Entry Code in 'Comments'", id);
-
-            const count = this.state.count + 1;
-
-            this.setState({ data: {}, count: count, label: null, currentString: "", fieldType: "" });
-
-            if (this.$("bdScroller")) {
-
-              this
-                .$("bdScroller")
-                .scrollLeft = 0;
-
-            }
-
-            await this
-              .props
-              .updateApp({ isDirty: false });
-
-            this
-              .props
-              .handleDirectInputChange("Total Captured Entries", count, this.props.group);
-
-          });
+        this.saveData();
 
       })
       .catch(() => { })
