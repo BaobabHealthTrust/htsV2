@@ -1136,15 +1136,15 @@ class BackdataEntry extends Component {
       },
       52: {
         type: "number",
-        hiddens: ["clear", "abc", "qwe", "Unknown", "-"]
+        hiddens: ["clear", "abc", "qwe", "Unknown", "-", ".", "/"]
       },
       53: {
         type: "number",
-        hiddens: ["clear", "abc", "qwe", "Unknown", "-"]
+        hiddens: ["clear", "abc", "qwe", "Unknown", "-", ".", "/"]
       },
       54: {
         type: "number",
-        hiddens: ["clear", "abc", "qwe", "Unknown", "-"]
+        hiddens: ["clear", "abc", "qwe", "Unknown", "-", ".", "/"]
       }
     };
 
