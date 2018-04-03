@@ -585,7 +585,23 @@ class BackdataEntry extends Component {
 
       }
 
-      if (String(this.state.data["Last HIV Test"]).trim() !== "Never Tested" && !this.state.data["Time Since Last Test"]) {
+      if (String(this.state.data["Last HIV Test"]).trim() === "Never Tested" && this.state.data["Time Since Last Test"] && String(this.state.data["Time Since Last Test"]).length > 0) {
+
+        this
+          .props
+          .showErrorMsg("Invalid Entry", "Time Since Last Test \n must NOT be entered \n if never tested");
+
+        setTimeout(() => {
+
+          if (this.coords[this.categories["Last HIV Test"]])
+            this.$("bdScroller").scrollLeft = this.coords[this.categories["Last HIV Test"]];
+
+        }
+          , this.scrollDelay)
+
+        return reject();
+
+      } else if (String(this.state.data["Last HIV Test"]).trim() !== "Never Tested" && !this.state.data["Time Since Last Test"]) {
 
         this
           .props
