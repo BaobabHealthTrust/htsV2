@@ -350,6 +350,44 @@ export function validated(props, state) {
         ? props.wf[state.currentWorkflow].currentNode.label
         : ""].title : "Invalid Entry");
 
+  } else if (props.wf.responses[state.currentWorkflow] && props.wf.responses[state.currentWorkflow][props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+    ? props.wf[state.currentWorkflow].currentNode.label
+    : ""] && props.wf.responses[state.currentWorkflow][props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+      ? props.wf[state.currentWorkflow].currentNode.label
+      : ""].length > 0 && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+        ? props.wf[state.currentWorkflow].currentNode.label
+        : ""] && Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+          ? props.wf[state.currentWorkflow].currentNode.label
+          : ""]).indexOf("validationCases") >= 0) {
+
+    valid = true;
+    msg = "";
+    title = "";
+
+    const rootNode = props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+      ? props.wf[state.currentWorkflow].currentNode.label
+      : ""].validationCases;
+
+    const fieldValue = props.wf.responses[state.currentWorkflow][props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+      ? props.wf[state.currentWorkflow].currentNode.label
+      : ""];
+
+    for (let rootCase of rootNode.cases) {
+
+      if (String(fieldValue).match(rootCase.patternGroup) && !String(fieldValue).match(rootCase.pattern)) {
+
+        valid = false;
+
+        msg = rootCase.message;
+
+        title = rootCase.title;
+
+        break;
+
+      }
+
+    }
+
   } else if ((props.wf.responses[state.currentWorkflow] && props.wf.responses[state.currentWorkflow][props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
     ? props.wf[state.currentWorkflow].currentNode.label
     : ""] && props.wf.responses[state.currentWorkflow][props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
