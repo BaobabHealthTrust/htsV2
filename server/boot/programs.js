@@ -521,6 +521,7 @@ module.exports = function (app) {
   };
 
   const addNewPatient = (req, raw) => {
+
     return new Promise(resolve => {
       const args = {
         data: {
@@ -597,7 +598,9 @@ module.exports = function (app) {
 
         resolve();
       });
+
     });
+    
   };
 
   const parseAge = (number) => {

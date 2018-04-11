@@ -190,7 +190,7 @@ module.exports = function (app) {
             },
             "gender": (row.person && row.person.gender ? row.person.gender : null),
             "attributes": (row.person && row.person.attributes ? row.person.attributes : {}),
-            "birthdate": (row.person && row.person.birth_year ? row.person.birth_year : "0000") + "-" + (row.person && row.person.birth_month ? padZeros(row.person.birth_month, 2) : "00") + "-" + (row.person && row.person.birth_day ? padZeros(row.person.birth_day, 2) : "00"),
+            "birthdate": (row.person && row.person.birthdate ? row.person.birthdate : "0000-00-00"),
             "birthdate_estimated": (row.person && row.person.age_estimate === 1 ? true : false),
             "addresses": {
               "current_residence": (row.person && row.person.address1 ? row.person.address1 : null),
@@ -484,62 +484,130 @@ module.exports = function (app) {
 
   router.post('/dde/search_by_name_and_gender', function (req, res, next) {
 
-    dde.checkIfDDEAuthenticated(function (authenticated) {
+    if (ddeConfig.use_art) {
 
-      if ((typeof authenticated === "boolean" && authenticated === true) || (typeof authenticated === "object" && [200, 201].indexOf(authenticated.status) >= 0)) {
+      console.log(JSON.stringify(req.body));
 
-        const json = Object.assign({}, req.body, {
-          token: (typeof authenticated === "boolean"
-            ? dde.globalToken
-            : authenticated.data.token)
-        });
+      console.log(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(1) : ""));
 
-        const args = {
-          data: json,
-          headers: {
-            "Content-Type": "application/json"
+      (new client())
+        .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""), async function (data, props) {
+
+          console.log(data.toString("utf8"));
+
+          const rows = JSON.parse(data) || [];
+
+          console.log(rows);
+
+          let json = [];
+
+          for (let row of rows) {
+
+            console.log(row);
+
+            json.push({
+              "names": {
+                "family_name": (row.person && row.person.names && row.person.names.family_name ? row.person.names.family_name : null),
+                "given_name": (row.person && row.person.names && row.person.names.given_name ? row.person.names.given_name : null),
+                "middle_name": (row.person && row.person.names && row.person.names.middle_name ? row.person.names.middle_name : null)
+              },
+              "gender": (row.person && row.person.gender ? row.person.gender : null),
+              "attributes": (row.person && row.person.attributes ? row.person.attributes : {}),
+              "birthdate": (row.person && row.person.birthdate ? row.person.birthdate : "0000-00-00"),
+              "birthdate_estimated": (row.person && row.person.age_estimate === 1 ? true : false),
+              "addresses": {
+                "current_residence": (row.person && row.person.address1 ? row.person.address1 : null),
+                "current_village": (row.person && row.person.city_village ? row.person.city_village : null),
+                "current_ta": (row.person && row.person.township_division ? row.person.township_division : null),
+                "current_district": (row.person && row.person.state_province ? row.person.state_province : null),
+                "home_village": (row.person && row.person.neighborhood_cell ? row.person.neighborhood_cell : null),
+                "home_ta": (row.person && row.person.county_district ? row.person.county_district : null),
+                "home_district": (row.person && row.person.address2 ? row.person.address2 : null),
+              },
+              "npid": (row.person && row.person.patient && row.person.patient.identifiers ? row.person.patient.identifiers["National id"] : null),
+              "_id": (row.person && row.person.patient && row.person.patient.identifiers ? row.person.patient.identifiers["National id"] : null),
+              "age": (row.person && row.person.birth_year ? (new Date()).getFullYear() - parseInt(row.person.birth_year, 10) : 0)
+            });
+
           }
-        };
 
-        setTimeout(function () {
+          console.log(json);
 
-          return (new client()).post(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/v1/search_by_name_and_gender", args, function (data, props) {
+          return res
+            .status(200)
+            .json({
+              data: {
+                hits: json,
+                matches: (Array.isArray(json)
+                  ? json.length
+                  : Object.keys(json).length > 0
+                    ? 1
+                    : 0)
+              }
+            });
 
-            if (props.statusCode === 204) {
+        })
 
-              return res
-                .status(200)
-                .json({
-                  "status": 204,
-                  "message": "No data",
-                  "error": false,
-                  "data": {
-                    "matches": 0,
-                    "hits": []
-                  }
-                });
+    } else {
 
-            } else {
+      dde.checkIfDDEAuthenticated(function (authenticated) {
 
-              return res
-                .status(200)
-                .json(data);
+        if ((typeof authenticated === "boolean" && authenticated === true) || (typeof authenticated === "object" && [200, 201].indexOf(authenticated.status) >= 0)) {
 
+          const json = Object.assign({}, req.body, {
+            token: (typeof authenticated === "boolean"
+              ? dde.globalToken
+              : authenticated.data.token)
+          });
+
+          const args = {
+            data: json,
+            headers: {
+              "Content-Type": "application/json"
             }
+          };
 
-          })
+          setTimeout(function () {
 
-        }, 1000)
+            return (new client()).post(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/v1/search_by_name_and_gender", args, function (data, props) {
 
-      } else {
+              if (props.statusCode === 204) {
 
-        return res
-          .json(401)
-          .json({ error: true, message: "DDE authentation failed" })
+                return res
+                  .status(200)
+                  .json({
+                    "status": 204,
+                    "message": "No data",
+                    "error": false,
+                    "data": {
+                      "matches": 0,
+                      "hits": []
+                    }
+                  });
 
-      }
+              } else {
 
-    })
+                return res
+                  .status(200)
+                  .json(data);
+
+              }
+
+            })
+
+          }, 1000)
+
+        } else {
+
+          return res
+            .json(401)
+            .json({ error: true, message: "DDE authentation failed" })
+
+        }
+
+      })
+
+    }
 
   })
 
@@ -660,62 +728,85 @@ module.exports = function (app) {
 
   router.post('/dde/add_patient', function (req, res, next) {
 
-    dde.checkIfDDEAuthenticated(function (authenticated) {
+    if (ddeConfig.use_art) {
 
-      if ((typeof authenticated === "boolean" && authenticated === true) || (typeof authenticated === "object" && [200, 201].indexOf(authenticated.status) >= 0)) {
+      console.log(JSON.stringify(req.body));
 
-        const json = Object.assign({}, req.body, {
-          token: (typeof authenticated === "boolean"
-            ? dde.globalToken
-            : authenticated.data.token)
-        });
+      console.log(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.createPath);
 
-        const args = {
-          data: json,
-          headers: {
-            "Content-Type": "application/json"
-          }
-        };
+      let data = [];
 
-        setTimeout(function () {
+      (new client())
+        .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.createPath, data, async function (result, props) {
 
-          (new client())
-            .put(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/v1/add_patient", args, function (data, props) {
+          console.log(result.toString("utf8"));
 
-              if (props.statusCode === 204) {
+          return res
+          .status(200)
+          .json({});
 
-                return res
-                  .status(200)
-                  .json({
-                    "status": 204,
-                    "message": "No data",
-                    "error": false,
-                    "data": {
-                      "matches": 0,
-                      "hits": []
-                    }
-                  });
+        })
 
-              } else {
+    } else {
 
-                return res
-                  .status(200)
-                  .json(data);
+      dde.checkIfDDEAuthenticated(function (authenticated) {
 
-              }
-            })
+        if ((typeof authenticated === "boolean" && authenticated === true) || (typeof authenticated === "object" && [200, 201].indexOf(authenticated.status) >= 0)) {
 
-        }, 1000)
+          const json = Object.assign({}, req.body, {
+            token: (typeof authenticated === "boolean"
+              ? dde.globalToken
+              : authenticated.data.token)
+          });
 
-      } else {
+          const args = {
+            data: json,
+            headers: {
+              "Content-Type": "application/json"
+            }
+          };
 
-        res
-          .json(401)
-          .json({ error: true, message: "DDE authentation failed" })
+          setTimeout(function () {
 
-      }
+            (new client())
+              .put(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/v1/add_patient", args, function (data, props) {
 
-    })
+                if (props.statusCode === 204) {
+
+                  return res
+                    .status(200)
+                    .json({
+                      "status": 204,
+                      "message": "No data",
+                      "error": false,
+                      "data": {
+                        "matches": 0,
+                        "hits": []
+                      }
+                    });
+
+                } else {
+
+                  return res
+                    .status(200)
+                    .json(data);
+
+                }
+              })
+
+          }, 1000)
+
+        } else {
+
+          res
+            .json(401)
+            .json({ error: true, message: "DDE authentation failed" })
+
+        }
+
+      })
+
+    }
 
   })
 
