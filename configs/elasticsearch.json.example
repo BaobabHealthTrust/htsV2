@@ -5,5 +5,6 @@
   "index": "omrs",
   "username": "",
   "password": "",
-  "type": "patient"
+  "type": "patient",
+  "redis-host": ""
 }

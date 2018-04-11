@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './login.css';
 import icoCOA from '../images/coa.js';
 import Input from './input';
@@ -106,7 +106,7 @@ class Login extends Component {
 
       if (this.props.app.activeUser && this.props.app.activeUser !== "") {
 
-        this.setState({label: "", currentString: "", username: "", password: ""})
+        this.setState({ label: "", currentString: "", username: "", password: "" })
 
       }
 
@@ -126,62 +126,59 @@ class Login extends Component {
 
       <div
         style={{
-        width: "calc(100% - 3px)",
-        height: "84.7vh",
-        textAlign: "center",
-        paddingTop: "5vh"
-      }}>
+          width: "calc(100% - 3px)",
+          height: "84.7vh",
+          textAlign: "center",
+          paddingTop: "5vh"
+        }}>
         {this.props.app.activeUser && this.props.app.activeUser !== ""
           ? <table
-              width="100%"
-              style={{
+            width="100%"
+            style={{
               borderCollapse: "collapse"
             }}
-              border="0">
-              <tbody>
-                <tr>
-                  <td
-                    style={{
+            border="0">
+            <tbody>
+              <tr>
+                <td
+                  style={{
                     padding: "5px",
                     fontSize: "2em",
                     textAlign: "left",
                     paddingLeft: "20px"
                   }}
-                    id="u14HelpText">
-                    {this.props.label}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{
-                    paddingLeft: "10px"
-                  }}>
-                    {(this.configs && this.configs[this.props.label] && this.configs[this.props.label].className && this.configs[this.props.label].className === "longSelectList")
-                      ? ""
-                      : <Input
-                        className="touchscreenTextInput"
-                        id="touchscreenTextInput"
-                        value={(this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label]
-                        ? this.props.responses[this.props.group][this.props.label]
-                        : "")}
-                        onChangeHandler={this
+                  id="u14HelpText">
+                  {this.props.label}
+                </td>
+              </tr>
+              <tr>
+                <td style={{
+                  paddingLeft: "10px"
+                }}>
+                  {(this.configs && this.configs[this.props.label] && this.configs[this.props.label].className && this.configs[this.props.label].className === "longSelectList")
+                    ? ""
+                    : <Input
+                      className="touchscreenTextInput"
+                      id="touchscreenTextInput"
+                      onChangeHandler={this
                         .onChangeHandlerWS
                         .bind(this)}
-                        currentString={(this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label]
+                      currentString={(this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label]
                         ? this.props.responses[this.props.group][this.props.label]
                         : "")}
-                        fieldType={this.props.fieldType}
-                        navNext={this.props.navNext}
-                        configs={this.configs}
-                        options={this.props.options}
-                        placeholder={this.configs && this.configs[this.props.label] && this.configs[this.props.label].placeholder
+                      fieldType={this.props.fieldType}
+                      navNext={this.props.navNext}
+                      configs={this.configs}
+                      options={this.props.options}
+                      placeholder={this.configs && this.configs[this.props.label] && this.configs[this.props.label].placeholder
                         ? this.configs && this.configs[this.props.label] && this.configs[this.props.label].placeholder
                         : ""}
-                        label={this.props.label}/>}
-                  </td>
-                </tr>
+                      label={this.props.label} />}
+                </td>
+              </tr>
 
-              </tbody>
-            </table>
+            </tbody>
+          </table>
           : <table style={{
             margin: "auto"
           }} cellPadding="5">
@@ -191,19 +188,19 @@ class Login extends Component {
                   <img
                     src={icoCOA}
                     style={{
-                    height: "20vh"
-                  }}
-                    alt="COA"/>
+                      height: "20vh"
+                    }}
+                    alt="COA" />
                 </th>
               </tr>
               <tr>
                 <th
                   colSpan="2"
                   style={{
-                  fontSize: "32px",
-                  padding: "20px",
-                  fontWeight: "normal"
-                }}>
+                    fontSize: "32px",
+                    padding: "20px",
+                    fontWeight: "normal"
+                  }}>
                   Ministry of Health
                 </th>
               </tr>
@@ -216,32 +213,32 @@ class Login extends Component {
                 <td
                   align="right"
                   style={{
-                  fontSize: "1.8em"
-                }}>Username</td>
+                    fontSize: "1.8em"
+                  }}>Username</td>
                 <td><Input
                   className={"touchscreenTextInput" + (this.state.label === "username"
-            ? " activeField"
-            : " size2Border")}
+                    ? " activeField"
+                    : " size2Border")}
                   value={this.state.username}
                   onMouseDown={() => {
-            this.setState({label: "username", currentString: this.state.username})
-          }}/></td>
+                    this.setState({ label: "username", currentString: this.state.username })
+                  }} id="txtUsername" /></td>
               </tr>
               <tr>
                 <td
                   align="right"
                   style={{
-                  fontSize: "1.8em"
-                }}>Password</td>
+                    fontSize: "1.8em"
+                  }}>Password</td>
                 <td><Input
                   className={"touchscreenTextInput" + (this.state.label === "password"
-            ? " activeField"
-            : " size2Border")}
+                    ? " activeField"
+                    : " size2Border")}
                   value={this.state.password}
                   onMouseDown={() => {
-            this.setState({label: "password", currentString: this.state.password})
-          }}
-                  fieldType="password"/></td>
+                    this.setState({ label: "password", currentString: this.state.password })
+                  }}
+                  fieldType="password" id="txtPassword" /></td>
               </tr>
               <tr>
                 <td colSpan="2">&nbsp;
@@ -252,46 +249,46 @@ class Login extends Component {
 
         <div
           style={{
-          position: "absolute",
-          zIndex: "100",
-          textAlign: "center",
-          width: "700px",
-          bottom: "10px",
-          left: "calc(50vw - 350px)",
-          backgroundColor: "rgba(255,255,255,0.9)",
-          borderRadius: "5px",
-          border: "1px solid #cccccc",
-          display: (this.state.label !== ""
-            ? this.props.app.activeUser && this.props.app.activeUser !== ""
-              ? "none"
-              : "block"
-            : "none")
-        }}>
+            position: "absolute",
+            zIndex: "100",
+            textAlign: "center",
+            width: "700px",
+            bottom: "10px",
+            left: "calc(50vw - 350px)",
+            backgroundColor: "rgba(255,255,255,0.9)",
+            borderRadius: "5px",
+            border: "1px solid #cccccc",
+            display: (this.state.label !== ""
+              ? this.props.app.activeUser && this.props.app.activeUser !== ""
+                ? "none"
+                : "block"
+              : "none")
+          }}>
           <Keyboard
             onChangeHandler={this
-            .onChangeHandler
-            .bind(this)}
+              .onChangeHandler
+              .bind(this)}
             currentString={this.state.currentString}
             configs={{
-            username: {
-              hiddenButtons: [
-                '/', '.', '-', 'Unknown'
-              ],
-              textCase: "upper",
-              fieldType: "dha"
-            },
-            password: {
-              hiddenButtons: [
-                '/', '.', '-', 'Unknown'
-              ],
-              fieldType: "password",
-              textCase: "lower"
-            }
-          }}
+              username: {
+                hiddenButtons: [
+                  '/', '.', '-', 'Unknown'
+                ],
+                textCase: "upper",
+                fieldType: "dha"
+              },
+              password: {
+                hiddenButtons: [
+                  '/', '.', '-', 'Unknown'
+                ],
+                fieldType: "password",
+                textCase: "lower"
+              }
+            }}
             label={this.state.label}
             fieldType={this.state.label === "password"
-            ? "password"
-            : "dha"}/>
+              ? "password"
+              : "dha"} />
         </div>
       </div>
 

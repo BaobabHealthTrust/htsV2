@@ -78,6 +78,19 @@ module.exports = function (app) {
 
   }
 
+  const padZeros = (number, positions) => {
+    const zeros = parseInt(positions) - String(number).length;
+    let padded = "";
+
+    for (let i = 0; i < zeros; i++) {
+      padded += "0";
+    }
+
+    padded += String(number);
+
+    return padded;
+  };
+
   router
     .get('/dde/fetch_token', function (req, res, next) {
       const ddePath = ddeConfig.protocol + '://' + ddeConfig.host + ':' + ddeConfig.port;
@@ -117,7 +130,7 @@ module.exports = function (app) {
 
       if (authenticated) {
 
-        const json = Object.assign({}, req.body, {token: dde.globalToken});
+        const json = Object.assign({}, req.body, { token: dde.globalToken });
 
         const args = {
           data: json,
@@ -138,7 +151,7 @@ module.exports = function (app) {
 
         res
           .json(401)
-          .json({error: true, message: "DDE authentation failed"})
+          .json({ error: true, message: "DDE authentation failed" })
 
       }
 
@@ -152,7 +165,7 @@ module.exports = function (app) {
 
       res
         .status(200)
-        .json({authenticated})
+        .json({ authenticated })
 
     })
 
@@ -160,158 +173,113 @@ module.exports = function (app) {
 
   router.get('/dde/search_by_identifier/:identifier', async function (req, res, next) {
 
-    dde.checkIfDDEAuthenticated(async function (authenticated) {
+    if (ddeConfig.use_art) {
 
-      if ((typeof authenticated === "boolean" && authenticated === true) || (typeof authenticated === "object" && [200, 201].indexOf(authenticated.status) >= 0)) {
+      (new client())
+        .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + "/" + ddeConfig.art_settings.search_by_id + req.params.identifier, async function (data, props) {
 
-        const token = (typeof authenticated === "boolean"
-          ? dde.globalToken
-          : authenticated.data.token);
+          const row = JSON.parse(data) || {};
 
-        setTimeout(async function () {
+          console.log(row);
 
-          (new client())
-            .get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/v1/search_by_identifier/" + req.params.identifier + "/" + token, async function (data, props) {
+          let json = {
+            "names": {
+              "family_name": (row.person && row.person.names && row.person.names.family_name ? row.person.names.family_name : null),
+              "given_name": (row.person && row.person.names && row.person.names.given_name ? row.person.names.given_name : null),
+              "middle_name": (row.person && row.person.names && row.person.names.middle_name ? row.person.names.middle_name : null)
+            },
+            "gender": (row.person && row.person.gender ? row.person.gender : null),
+            "attributes": (row.person && row.person.attributes ? row.person.attributes : {}),
+            "birthdate": (row.person && row.person.birth_year ? row.person.birth_year : "0000") + "-" + (row.person && row.person.birth_month ? padZeros(row.person.birth_month, 2) : "00") + "-" + (row.person && row.person.birth_day ? padZeros(row.person.birth_day, 2) : "00"),
+            "birthdate_estimated": (row.person && row.person.age_estimate === 1 ? true : false),
+            "addresses": {
+              "current_residence": (row.person && row.person.address1 ? row.person.address1 : null),
+              "current_village": (row.person && row.person.city_village ? row.person.city_village : null),
+              "current_ta": (row.person && row.person.township_division ? row.person.township_division : null),
+              "current_district": (row.person && row.person.state_province ? row.person.state_province : null),
+              "home_village": (row.person && row.person.neighborhood_cell ? row.person.neighborhood_cell : null),
+              "home_ta": (row.person && row.person.county_district ? row.person.county_district : null),
+              "home_district": (row.person && row.person.address2 ? row.person.address2 : null),
+            },
+            "npid": (row.person && row.person.patient && row.person.patient.identifiers ? row.person.patient.identifiers["National id"] : null),
+            "_id": (row.person && row.person.patient && row.person.patient.identifiers ? row.person.patient.identifiers["National id"] : null)
+          };
 
-              if (props.statusCode === 204) {
+          return res
+            .status(200)
+            .json({
+              data: {
+                hits: [json],
+                matches: (Array.isArray(json)
+                  ? json.length
+                  : Object.keys(json).length > 0
+                    ? 1
+                    : 0)
+              }
+            });
 
-                (new client())
-                  .get(req.protocol + "://" + req.hostname + ":" + (process.env.PORT
-                    ? process.env.PORT
-                    : 3001) + "/programs/fetch/" + req.params.identifier, function (data, props) {
+        })
 
-                    if (data && Object.keys(data).length > 0) {
+    } else {
 
-                      return res
-                        .status(200)
-                        .json({
-                          data: {
-                            hits: [data],
-                            matches: (Array.isArray(data)
-                              ? data.length
-                              : Object.keys(data).length > 0
-                                ? 1
-                                : 0)
-                          }
-                        });
+      dde.checkIfDDEAuthenticated(async function (authenticated) {
 
-                    } else {
+        if ((typeof authenticated === "boolean" && authenticated === true) || (typeof authenticated === "object" && [200, 201].indexOf(authenticated.status) >= 0)) {
 
-                      return res
-                        .status(200)
-                        .json({data: {}});
+          const token = (typeof authenticated === "boolean"
+            ? dde.globalToken
+            : authenticated.data.token);
 
-                    }
+          setTimeout(async function () {
 
-                  })
+            (new client())
+              .get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/v1/search_by_identifier/" + req.params.identifier + "/" + token, async function (data, props) {
 
-              } else {
+                if (props.statusCode === 204) {
 
-                if (data && data.data && Object.keys(data.data).indexOf("hits") < 0) {
+                  (new client())
+                    .get(req.protocol + "://" + req.hostname + ":" + (process.env.PORT
+                      ? process.env.PORT
+                      : 3001) + "/programs/fetch/" + req.params.identifier, function (data, props) {
 
-                  let json = Object.assign({}, data.data);
+                        if (data && Object.keys(data).length > 0) {
 
-                  if (Object.keys(json).indexOf("patientName") < 0) {
+                          return res
+                            .status(200)
+                            .json({
+                              data: {
+                                hits: [data],
+                                matches: (Array.isArray(data)
+                                  ? data.length
+                                  : Object.keys(data).length > 0
+                                    ? 1
+                                    : 0)
+                              }
+                            });
 
-                    json.patientName = (json.names && json.names.given_name
-                      ? json.names.given_name
-                      : "") + " " + (json.names && json.names.family_name
-                      ? json.names.family_name
-                      : "");
+                        } else {
 
-                  }
+                          return res
+                            .status(200)
+                            .json({ data: {} });
 
-                  if (Object.keys(json).indexOf("currentVillage") < 0) {
-
-                    json.currentVillage = (json.addresses && json.addresses.current_village
-                      ? json.addresses.current_village
-                      : "");
-
-                    json.currentTA = (json.addresses && json.addresses.current_ta
-                      ? json.addresses.current_ta
-                      : "");
-
-                    json.currentDistrict = (json.addresses && json.addresses.current_district
-                      ? json.addresses.current_district
-                      : "");
-
-                  }
-
-                  if (Object.keys(json).indexOf("cellPhoneNumber") < 0) {
-
-                    json.cellPhoneNumber = (json.attributes && json.attributes.cell_phone_number
-                      ? json.attributes.cell_phone_number
-                      : "");
-
-                  }
-
-                  if (Object.keys(json).indexOf("age") < 0) {
-
-                    json.dateOfBirth = json.birthdate;
-
-                    fetchAge(json);
-
-                  }
-
-                  json.otherIdType = "HTS Number";
-
-                  let identifier = await PatientIdentifier.findOne({
-                    where: {
-                      identifier: json.npid
-                    }
-                  });
-
-                  let patientId = (identifier
-                    ? identifier.patientId
-                    : null);
-
-                  if (patientId !== null) {
-
-                    let idType = await PatientIdentifierType.findOne({
-                      where: {
-                        name: "HTS Number"
-                      }
-                    });
-
-                    let identifierType = (idType
-                      ? idType.patientIdentifierTypeId
-                      : null);
-
-                    if (identifierType !== null) {
-
-                      identifier = await PatientIdentifier.findOne({
-                        where: {
-                          and: [{
-                              patientId
-                            }, {
-                              identifierType
-                            }]
                         }
-                      });
 
-                      if (identifier && Object.keys(identifier).length > 0) {
+                      })
 
-                        json.otherId = identifier.identifier;
+                } else {
 
-                      }
+                  if (data && data.data && Object.keys(data.data).indexOf("hits") < 0) {
 
-                    }
-
-                  }
-
-                  data.data = Object.assign({}, json);
-
-                } else if (data && data.data && Object.keys(data.data).indexOf("hits") > 0 && Array.isArray(data.data.hits) && data.data.hits.length > 0) {
-
-                  for (let json of data.data.hits) {
+                    let json = Object.assign({}, data.data);
 
                     if (Object.keys(json).indexOf("patientName") < 0) {
 
                       json.patientName = (json.names && json.names.given_name
                         ? json.names.given_name
                         : "") + " " + (json.names && json.names.family_name
-                        ? json.names.family_name
-                        : "");
+                          ? json.names.family_name
+                          : "");
 
                     }
 
@@ -376,10 +344,10 @@ module.exports = function (app) {
                         identifier = await PatientIdentifier.findOne({
                           where: {
                             and: [{
-                                patientId
-                              }, {
-                                identifierType
-                              }]
+                              patientId
+                            }, {
+                              identifierType
+                            }]
                           }
                         });
 
@@ -393,28 +361,124 @@ module.exports = function (app) {
 
                     }
 
-                  };
+                    data.data = Object.assign({}, json);
+
+                  } else if (data && data.data && Object.keys(data.data).indexOf("hits") > 0 && Array.isArray(data.data.hits) && data.data.hits.length > 0) {
+
+                    for (let json of data.data.hits) {
+
+                      if (Object.keys(json).indexOf("patientName") < 0) {
+
+                        json.patientName = (json.names && json.names.given_name
+                          ? json.names.given_name
+                          : "") + " " + (json.names && json.names.family_name
+                            ? json.names.family_name
+                            : "");
+
+                      }
+
+                      if (Object.keys(json).indexOf("currentVillage") < 0) {
+
+                        json.currentVillage = (json.addresses && json.addresses.current_village
+                          ? json.addresses.current_village
+                          : "");
+
+                        json.currentTA = (json.addresses && json.addresses.current_ta
+                          ? json.addresses.current_ta
+                          : "");
+
+                        json.currentDistrict = (json.addresses && json.addresses.current_district
+                          ? json.addresses.current_district
+                          : "");
+
+                      }
+
+                      if (Object.keys(json).indexOf("cellPhoneNumber") < 0) {
+
+                        json.cellPhoneNumber = (json.attributes && json.attributes.cell_phone_number
+                          ? json.attributes.cell_phone_number
+                          : "");
+
+                      }
+
+                      if (Object.keys(json).indexOf("age") < 0) {
+
+                        json.dateOfBirth = json.birthdate;
+
+                        fetchAge(json);
+
+                      }
+
+                      json.otherIdType = "HTS Number";
+
+                      let identifier = await PatientIdentifier.findOne({
+                        where: {
+                          identifier: json.npid
+                        }
+                      });
+
+                      let patientId = (identifier
+                        ? identifier.patientId
+                        : null);
+
+                      if (patientId !== null) {
+
+                        let idType = await PatientIdentifierType.findOne({
+                          where: {
+                            name: "HTS Number"
+                          }
+                        });
+
+                        let identifierType = (idType
+                          ? idType.patientIdentifierTypeId
+                          : null);
+
+                        if (identifierType !== null) {
+
+                          identifier = await PatientIdentifier.findOne({
+                            where: {
+                              and: [{
+                                patientId
+                              }, {
+                                identifierType
+                              }]
+                            }
+                          });
+
+                          if (identifier && Object.keys(identifier).length > 0) {
+
+                            json.otherId = identifier.identifier;
+
+                          }
+
+                        }
+
+                      }
+
+                    };
+
+                  }
+
+                  return res
+                    .status(200)
+                    .json(data);
 
                 }
 
-                return res
-                  .status(200)
-                  .json(data);
+              })
 
-              }
+          }, 1000)
 
-            })
+        } else {
 
-        }, 1000)
+          res
+            .json(401)
+            .json({ error: true, message: "DDE authentation failed" })
 
-      } else {
+        }
+      })
 
-        res
-          .json(401)
-          .json({error: true, message: "DDE authentation failed"})
-
-      }
-    })
+    }
 
   })
 
@@ -471,7 +535,7 @@ module.exports = function (app) {
 
         return res
           .json(401)
-          .json({error: true, message: "DDE authentation failed"})
+          .json({ error: true, message: "DDE authentation failed" })
 
       }
 
@@ -533,7 +597,7 @@ module.exports = function (app) {
 
         res
           .json(401)
-          .json({error: true, message: "DDE authentation failed"})
+          .json({ error: true, message: "DDE authentation failed" })
 
       }
 
@@ -586,7 +650,7 @@ module.exports = function (app) {
 
         res
           .json(401)
-          .json({error: true, message: "DDE authentation failed"})
+          .json({ error: true, message: "DDE authentation failed" })
 
       }
 
@@ -647,7 +711,7 @@ module.exports = function (app) {
 
         res
           .json(401)
-          .json({error: true, message: "DDE authentation failed"})
+          .json({ error: true, message: "DDE authentation failed" })
 
       }
 
@@ -709,7 +773,7 @@ module.exports = function (app) {
 
         res
           .json(401)
-          .json({error: true, message: "DDE authentation failed"})
+          .json({ error: true, message: "DDE authentation failed" })
 
       }
 
@@ -771,7 +835,7 @@ module.exports = function (app) {
 
         res
           .json(401)
-          .json({error: true, message: "DDE authentation failed"})
+          .json({ error: true, message: "DDE authentation failed" })
 
       }
 
@@ -789,11 +853,11 @@ module.exports = function (app) {
       ? query.name
       : ""), function (data) {
 
-      res
-        .status(200)
-        .json(data);
+        res
+          .status(200)
+          .json(data);
 
-    })
+      })
 
   })
 
@@ -807,11 +871,11 @@ module.exports = function (app) {
       ? query.name
       : ""), function (data) {
 
-      res
-        .status(200)
-        .json(data);
+        res
+          .status(200)
+          .json(data);
 
-    })
+      })
 
   })
 
@@ -825,11 +889,11 @@ module.exports = function (app) {
       ? query.name
       : ""), function (data) {
 
-      res
-        .status(200)
-        .json(data);
+        res
+          .status(200)
+          .json(data);
 
-    })
+      })
 
   })
 
@@ -842,14 +906,14 @@ module.exports = function (app) {
     (new client()).get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/search_by_district/json?region=" + (query.region
       ? query.region
       : "") + "&district=" + (query.district
-      ? query.district
-      : ""), function (data) {
+        ? query.district
+        : ""), function (data) {
 
-      res
-        .status(200)
-        .json(data);
+          res
+            .status(200)
+            .json(data);
 
-    })
+        })
 
   })
 
@@ -862,14 +926,14 @@ module.exports = function (app) {
     (new client()).get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/search_by_t_a/json?district=" + (query.district
       ? query.district
       : "") + "&ta=" + (query.ta
-      ? query.ta
-      : ""), function (data) {
+        ? query.ta
+        : ""), function (data) {
 
-      res
-        .status(200)
-        .json(data);
+          res
+            .status(200)
+            .json(data);
 
-    })
+        })
 
   })
 
@@ -882,14 +946,14 @@ module.exports = function (app) {
     (new client()).get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/search_by_village/json?ta=" + (query.ta
       ? query.ta
       : "") + "&village=" + (query.village
-      ? query.village
-      : ""), function (data) {
+        ? query.village
+        : ""), function (data) {
 
-      res
-        .status(200)
-        .json(data);
+          res
+            .status(200)
+            .json(data);
 
-    })
+        })
 
   })
 
