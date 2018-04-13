@@ -220,7 +220,7 @@ module.exports = function (app) {
     return null;
   };
 
-  const generateId = async(patientId, username, locationName, prefix, suffix) => {
+  const generateId = async (patientId, username, locationName, prefix, suffix) => {
 
     return await mutex
       .lock("id_lock")
@@ -246,12 +246,12 @@ module.exports = function (app) {
           : new Date().getFullYear();
 
         const property = (prefix
-            ? prefix
-            : "DMY")
+          ? prefix
+          : "DMY")
           .trim()
           .toLowerCase() + (suffix
-          ? "." + suffix.trim().toLowerCase()
-          : "") + ".id.counter." + yr;
+            ? "." + suffix.trim().toLowerCase()
+            : "") + ".id.counter." + yr;
 
         let result;
 
@@ -273,7 +273,7 @@ module.exports = function (app) {
             uuid: uuid.v4()
           });
         } else {
-          const entry = Object.assign({}, result[0], {propertyValue: nextId});
+          const entry = Object.assign({}, result[0], { propertyValue: nextId });
 
           result = await GlobalProperty.upsertWithWhere({
             property: property
@@ -283,8 +283,8 @@ module.exports = function (app) {
         let identifier = prefix
           .trim()
           .toUpperCase() + "-" + nextId + "-" + yr + (suffix
-          ? "-" + suffix.trim().toUpperCase()
-          : "");
+            ? "-" + suffix.trim().toUpperCase()
+            : "");
 
         let location = await Location.findOne({
           where: {
@@ -296,9 +296,11 @@ module.exports = function (app) {
           ? location.locationId
           : 1;
 
-        let user = await User.findOne({where: {
+        let user = await User.findOne({
+          where: {
             username
-          }});
+          }
+        });
 
         let creator = user
           ? user.id
@@ -359,7 +361,7 @@ module.exports = function (app) {
     }
   };
 
-  const generateEntryCode = async(patientId, username, locationName, prefix, encounterId) => {
+  const generateEntryCode = async (patientId, username, locationName, prefix, encounterId) => {
 
     return await mutex
       .lock("id_lock")
@@ -371,8 +373,8 @@ module.exports = function (app) {
         const largestPossibleId = parseInt(padded, 10) - 1;
 
         const property = (prefix
-            ? prefix
-            : "EC")
+          ? prefix
+          : "EC")
           .trim()
           .toLowerCase() + ".id.counter";
 
@@ -406,7 +408,7 @@ module.exports = function (app) {
 
         } else {
 
-          const entry = Object.assign({}, result[0], {propertyValue: nextId});
+          const entry = Object.assign({}, result[0], { propertyValue: nextId });
 
           result = await GlobalProperty.upsertWithWhere({
             property: property
@@ -430,9 +432,11 @@ module.exports = function (app) {
           ? location.locationId
           : 1;
 
-        let user = await User.findOne({where: {
+        let user = await User.findOne({
+          where: {
             username
-          }});
+          }
+        });
 
         let creator = user
           ? user.id
@@ -511,16 +515,22 @@ module.exports = function (app) {
         .get(req.protocol + "://" + req.hostname + ":" + (process.env.PORT
           ? process.env.PORT
           : 3001) + "/dde/search_by_identifier/" + raw.npid, function (result, props) {
-          ddeData = result.data && result.data.matches === 1
-            ? result.data.hits[0]
-            : result;
+            ddeData = result.data && result.data.matches === 1
+              ? result.data.hits[0]
+              : result;
 
-          resolve();
-        });
+            resolve();
+          });
     });
   };
 
   const addNewPatient = (req, raw) => {
+
+    debug("***********************");
+
+    debug(JSON.stringify(raw));
+
+    debug("***********************");
 
     return new Promise(resolve => {
       const args = {
@@ -592,15 +602,15 @@ module.exports = function (app) {
       new client().post(req.protocol + "://" + req.hostname + ":" + (process.env.PORT
         ? process.env.PORT
         : 3001) + "/dde/add_patient", args, function (result, props) {
-        ddeData = result.data
-          ? result.data
-          : result;
+          ddeData = result.data
+            ? result.data
+            : result;
 
-        resolve();
-      });
+          resolve();
+        });
 
     });
-    
+
   };
 
   const parseAge = (number) => {
@@ -718,32 +728,32 @@ module.exports = function (app) {
               return f
                 .toLowerCase()
                 .trim() !== "registration" && f
-                .toLowerCase()
-                .trim() !== "user management";
+                  .toLowerCase()
+                  .trim() !== "user management";
 
             case "hts coordinator":
 
               return f
                 .toLowerCase()
                 .trim() !== "registration" && f
-                .toLowerCase()
-                .trim() !== "user management";
+                  .toLowerCase()
+                  .trim() !== "user management";
 
             case "counselor":
 
               return f
                 .toLowerCase()
                 .trim() === "hts" && f
-                .toLowerCase()
-                .trim() !== "user management";
+                  .toLowerCase()
+                  .trim() !== "user management";
 
             default:
 
               return f
                 .toLowerCase()
                 .trim() === "registration" && f
-                .toLowerCase()
-                .trim() !== "user management";
+                  .toLowerCase()
+                  .trim() !== "user management";
 
           }
 
@@ -833,7 +843,7 @@ module.exports = function (app) {
     debug(raw);
 
     debug("####################");
-    
+
     ddeData = {};
 
     if (raw['Find Client By Name']) {
@@ -851,7 +861,7 @@ module.exports = function (app) {
     debug(raw);
 
     debug("####################");
-    
+
     if (!raw["Create local with given ID?"]) {
 
       if (raw.npid) {
@@ -872,8 +882,8 @@ module.exports = function (app) {
                 json.patientName = (json.names && json.names.given_name
                   ? json.names.given_name
                   : "") + " " + (json.names && json.names.family_name
-                  ? json.names.family_name
-                  : "");
+                    ? json.names.family_name
+                    : "");
               }
 
               if (Object.keys(json).indexOf("currentVillage") < 0) {
@@ -929,10 +939,10 @@ module.exports = function (app) {
                   identifier = await PatientIdentifier.findOne({
                     where: {
                       and: [{
-                          patientId
-                        }, {
-                          identifierType
-                        }]
+                        patientId
+                      }, {
+                        identifierType
+                      }]
                     }
                   });
 
@@ -962,7 +972,15 @@ module.exports = function (app) {
         await addNewPatient(req, raw);
 
         if (ddeData && !ddeData.data) {
+
+          debug("#################");
+
+          debug(ddeData);
+
+          debug("#################");
+
           raw.npid = ddeData.npid;
+          
         } else if (ddeData && ddeData.data && Array.isArray(ddeData.data)) {
           ddeData
             .data
@@ -972,8 +990,8 @@ module.exports = function (app) {
                 json.patientName = (json.names && json.names.given_name
                   ? json.names.given_name
                   : "") + " " + (json.names && json.names.family_name
-                  ? json.names.family_name
-                  : "");
+                    ? json.names.family_name
+                    : "");
               }
 
               if (Object.keys(json).indexOf("currentVillage") < 0) {
@@ -1030,10 +1048,10 @@ module.exports = function (app) {
                   identifier = await PatientIdentifier.findOne({
                     where: {
                       and: [{
-                          patientId
-                        }, {
-                          identifierType
-                        }]
+                        patientId
+                      }, {
+                        identifierType
+                      }]
                     }
                   });
 
@@ -1100,7 +1118,7 @@ module.exports = function (app) {
         ? raw.npid
         : "",
       age: raw.birthdate
-        ? fetchAge({dateOfBirth: raw.birthdate})
+        ? fetchAge({ dateOfBirth: raw.birthdate })
         : raw.Age
           ? raw.Age
           : raw.age
@@ -1184,7 +1202,7 @@ module.exports = function (app) {
 
       const personId = person.personId;
 
-      patient = await Patient.create({patientId: personId, creator: userId, dateCreated: new Date()});
+      patient = await Patient.create({ patientId: personId, creator: userId, dateCreated: new Date() });
 
       let result = await PersonName.create({
         personId,
@@ -1273,7 +1291,7 @@ module.exports = function (app) {
       clinicId = await generateId(personId, currentUser, currentLocationName, "HTS");
 
       while (!clinicId || clinicId === "Locked") {
-        setTimeout(async() => {
+        setTimeout(async () => {
           clinicId = await generateId(personId, currentUser, currentLocationName, "HTS");
         }, 1000);
       }
@@ -1644,7 +1662,7 @@ module.exports = function (app) {
     clinicId = await generateEntryCode(patientId, currentUser, currentLocationName, "EC", encounterId);
 
     while (!clinicId || clinicId === "Locked") {
-      setTimeout(async() => {
+      setTimeout(async () => {
         clinicId = await generateEntryCode(patientId, currentUser, currentLocationName, "EC", encounterId);
       }, 1000);
     }
@@ -1653,9 +1671,11 @@ module.exports = function (app) {
       .keys(json[encounterName])
       .forEach(async name => {
 
-        let concept = await ConceptName.findOne({where: {
+        let concept = await ConceptName.findOne({
+          where: {
             name
-          }});
+          }
+        });
 
         let conceptId = concept
           ? concept.conceptId
@@ -1768,7 +1788,7 @@ module.exports = function (app) {
               }
             };
 
-            new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) {});
+            new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) { });
 
           }
 
@@ -1804,9 +1824,9 @@ module.exports = function (app) {
       }
     });
 
-    if (!identifier) 
+    if (!identifier)
       return res.status(200).json([]);
-    
+
     let primaryId,
       patientId,
       clinicId,
@@ -1922,20 +1942,20 @@ module.exports = function (app) {
     let result = await Encounter.updateAll({
       encounterId: req.body.encounterId
     }, {
-      voided: 1,
-      voidedBy: userId,
-      dateVoided: new Date(),
-      voidReason: "Voided by user"
-    });
+        voided: 1,
+        voidedBy: userId,
+        dateVoided: new Date(),
+        voidReason: "Voided by user"
+      });
 
     result = await Obs.updateAll({
       encounterId: req.body.encounterId
     }, {
-      voided: 1,
-      voidedBy: userId,
-      dateVoided: new Date(),
-      voidReason: "Voided by user"
-    });
+        voided: 1,
+        voidedBy: userId,
+        dateVoided: new Date(),
+        voidReason: "Voided by user"
+      });
 
     const args = {
       data: {
@@ -2027,7 +2047,7 @@ module.exports = function (app) {
     debug(json);
 
     debug("*****************");
-    
+
     let currentUser = json["Current User"]
       ? json["Current User"]
       : null;
@@ -2048,9 +2068,9 @@ module.exports = function (app) {
 
     let clinicId;
 
-    if (json["Entry Code"]) 
+    if (json["Entry Code"])
       clinicId = json["Entry Code"];
-    
+
     let birthdate;
 
     if (!json.birthdate && json["Age"]) {
@@ -2126,9 +2146,9 @@ module.exports = function (app) {
 
     debug("$$$$$$$$$$$$$$$$$$$$$$$$$");
 
-    if(!provider) {
+    if (!provider) {
 
-      return res.status(400).json({error: true, message: "HTS Provider ID \n not registered at this site"});
+      return res.status(400).json({ error: true, message: "HTS Provider ID \n not registered at this site" });
 
     }
 
@@ -2140,9 +2160,9 @@ module.exports = function (app) {
       .trim()
       .match(/^(\d+)\s\(([^\-]+)\-([^\)]+)\)/);
 
-    if (!parts) 
-      return res.status(400).json({error: true, message: "Error occured when picking locations"});
-    
+    if (!parts)
+      return res.status(400).json({ error: true, message: "Error occured when picking locations" });
+
     let registerNumber = parts[1].trim();
     let locationType = parts[2].trim();
     let serviceDeliveryPoint = parts[3].trim();
@@ -2166,7 +2186,7 @@ module.exports = function (app) {
     let personId = person.personId;
     let patientId = personId;
 
-    let patient = await Patient.create({patientId: personId, creator: userId, dateCreated: new Date()});
+    let patient = await Patient.create({ patientId: personId, creator: userId, dateCreated: new Date() });
 
     let programName = "HTS";
 
@@ -2207,7 +2227,7 @@ module.exports = function (app) {
       }
     };
 
-    new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/patient/" + clinicId, args, function (result) {});
+    new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/patient/" + clinicId, args, function (result) { });
 
     let programId = program
       ? program.programId
@@ -2288,13 +2308,13 @@ module.exports = function (app) {
 
     let encounterId = encounter.encounterId;
 
-    let registerMap = await HtsRegisterEncounterMapping.create({encounterId, registerId: registerNumber});
+    let registerMap = await HtsRegisterEncounterMapping.create({ encounterId, registerId: registerNumber });
 
-    if (!clinicId) 
+    if (!clinicId)
       clinicId = await generateEntryCode(personId, currentUser, currentLocationName, "EC", encounterId);
-    
+
     while (!clinicId || clinicId === "Locked") {
-      setTimeout(async() => {
+      setTimeout(async () => {
         clinicId = await generateEntryCode(personId, currentUser, currentLocationName, "EC", encounterId);
       }, 1000);
     }
@@ -2391,7 +2411,7 @@ module.exports = function (app) {
                     }
                   };
 
-                  new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) {});
+                  new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) { });
 
                 }
 
@@ -2521,7 +2541,7 @@ module.exports = function (app) {
             }
           };
 
-          new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) {});
+          new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) { });
 
         }
 
@@ -2666,7 +2686,7 @@ module.exports = function (app) {
           }
         };
 
-        new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) {})
+        new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) { })
 
       });
 
@@ -2827,7 +2847,7 @@ module.exports = function (app) {
 
   router.get("/programs/scan/:id", async function (req, res, next) {
 
-    await searchById(req, {npid: req.params.id});
+    await searchById(req, { npid: req.params.id });
 
     let result = !Array.isArray(ddeData)
       ? [ddeData]
@@ -2842,9 +2862,9 @@ module.exports = function (app) {
 
     res.set("Content-Type", "application/json");
 
-    if (req.params.id === null) 
+    if (req.params.id === null)
       return res.status(200).json({});
-    
+
     let identifier = await PatientIdentifier.findOne({
       where: {
         identifier: req.params.id
@@ -2948,7 +2968,7 @@ module.exports = function (app) {
 
       let entryCodeSent = false;
       const rs = new ReadableSearch(searchExec);
-      const ws = new require("stream").Writable({objectMode: true});
+      const ws = new require("stream").Writable({ objectMode: true });
       ws._write = function (chunk, enc, next) {
 
         let entry = Object.assign({}, chunk);
@@ -3027,9 +3047,9 @@ module.exports = function (app) {
       .trim()
       .match(/^(\d+)\s\(([^\-]+)\-([^\)]+)\)/);
 
-    if (!parts) 
-      return res.status(400).json({error: true, message: "Error occured when picking locations"});
-    
+    if (!parts)
+      return res.status(400).json({ error: true, message: "Error occured when picking locations" });
+
     let registerNumber = parts[1].trim();
     let locationType = parts[2].trim();
     let serviceDeliveryPoint = parts[3].trim();
@@ -3066,9 +3086,11 @@ module.exports = function (app) {
         uuid: uuid.v4()
       });
 
-      let location = await Location.findOne({where: {
+      let location = await Location.findOne({
+        where: {
           locationId
-        }});
+        }
+      });
 
       let person = await Person.findOne({
         where: {
@@ -3076,9 +3098,11 @@ module.exports = function (app) {
         }
       });
 
-      let user = await User.findOne({where: {
+      let user = await User.findOne({
+        where: {
           userId
-        }});
+        }
+      });
 
       let encType = await EncounterType.findOne({
         where: {
@@ -3107,7 +3131,7 @@ module.exports = function (app) {
           result
             .hits
             .hits
-            .forEach(async(hit) => {
+            .forEach(async (hit) => {
 
               let existingMap = await HtsRegisterEncounterMapping.find({
                 where: {
@@ -3116,17 +3140,17 @@ module.exports = function (app) {
                 }
               })
 
-              if (existingMap.length <= 0) 
-                await HtsRegisterEncounterMapping.create({encounterId: hit._source.encounterId, registerId: registerNumber});
-              
+              if (existingMap.length <= 0)
+                await HtsRegisterEncounterMapping.create({ encounterId: hit._source.encounterId, registerId: registerNumber });
+
               args = {
-                data: Object.assign({}, hit._source, {registerNumber, locationType, serviceDeliveryPoint}),
+                data: Object.assign({}, hit._source, { registerNumber, locationType, serviceDeliveryPoint }),
                 headers: {
                   "Content-Type": "application/json"
                 }
               };
 
-              new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/" + hit._id, args, function (result) {});
+              new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/" + hit._id, args, function (result) { });
 
             });
 
@@ -3144,9 +3168,11 @@ module.exports = function (app) {
 
     let personId = patientIdentifier.patientId;
 
-    let person = await Person.findOne({where: {
+    let person = await Person.findOne({
+      where: {
         personId
-      }});
+      }
+    });
 
     let birthdate = (person.birthdate
       ? person.birthdate
@@ -3305,7 +3331,7 @@ module.exports = function (app) {
           }
         };
 
-        new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) {})
+        new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) { })
 
       });
 
@@ -3313,7 +3339,7 @@ module.exports = function (app) {
 
     res
       .status(200)
-      .json({registerNumber, entryCode});
+      .json({ registerNumber, entryCode });
 
   });
 
@@ -3343,11 +3369,11 @@ module.exports = function (app) {
 
     encounterIds = await Encounter
       .find({
-      where: {
-        encounterDatetime: req.body.visitDate,
-        patientId: patient.patientId
-      }
-    })
+        where: {
+          encounterDatetime: req.body.visitDate,
+          patientId: patient.patientId
+        }
+      })
       .map((e) => {
         return e.encounterId
       });
@@ -3375,20 +3401,20 @@ module.exports = function (app) {
       let result = await Encounter.updateAll({
         encounterId
       }, {
-        voided: 1,
-        voidedBy: userId,
-        dateVoided: new Date(),
-        voidReason: "Voided by user"
-      });
+          voided: 1,
+          voidedBy: userId,
+          dateVoided: new Date(),
+          voidReason: "Voided by user"
+        });
 
       result = await Obs.updateAll({
         encounterId
       }, {
-        voided: 1,
-        voidedBy: userId,
-        dateVoided: new Date(),
-        voidReason: "Voided by user"
-      });
+          voided: 1,
+          voidedBy: userId,
+          dateVoided: new Date(),
+          voidReason: "Voided by user"
+        });
 
       const args = {
         data: {
@@ -3430,7 +3456,7 @@ module.exports = function (app) {
               }
             };
 
-            new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_bulk", bulkArgs, function (result) {});
+            new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_bulk", bulkArgs, function (result) { });
           }
         }
       });
@@ -3522,7 +3548,7 @@ module.exports = function (app) {
 
       return res
         .status(400)
-        .json({error: true, message: "Active register with same number already exists!"});
+        .json({ error: true, message: "Active register with same number already exists!" });
 
     }
 
@@ -3564,10 +3590,10 @@ module.exports = function (app) {
       let register = await HtsRegister.upsertWithWhere({
         registerId: existingRegister.registerId
       }, {
-        closed: 1,
-        dateClosed: (new Date()),
-        closedBy: user.id
-      })
+          closed: 1,
+          dateClosed: (new Date()),
+          closedBy: user.id
+        })
 
       new client().delete(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + registerNumber, function (result) {
 
@@ -3603,7 +3629,7 @@ module.exports = function (app) {
 
     res
       .status(200)
-      .json({active: activeRegisters.length, closed: closedRegisters.length});
+      .json({ active: activeRegisters.length, closed: closedRegisters.length });
 
   })
 
@@ -3820,11 +3846,11 @@ module.exports = function (app) {
 
           }
 
-          if (done) 
+          if (done)
             break;
 
-          }
-        
+        }
+
       }
 
       res
@@ -3851,12 +3877,12 @@ module.exports = function (app) {
 
     const activeUser = req.body.activeUser;
 
-    if (!entryCode) 
-      return res.status(400).json({error: true, message: "Saving changes failed"});
-    
-    if (!activeUser) 
-      return res.status(400).json({error: true, message: "Missing username"});
-    
+    if (!entryCode)
+      return res.status(400).json({ error: true, message: "Saving changes failed" });
+
+    if (!activeUser)
+      return res.status(400).json({ error: true, message: "Missing username" });
+
     let user = await User.findOne({
       where: {
         username: activeUser
@@ -3867,9 +3893,9 @@ module.exports = function (app) {
       ? user.id
       : null);
 
-    if (!userId) 
-      return res.status(400).json({error: true, message: "Invalid user credentials parsed"});
-    
+    if (!userId)
+      return res.status(400).json({ error: true, message: "Invalid user credentials parsed" });
+
     let serviceDeliveryPoint,
       clinicId,
       age,
@@ -3926,12 +3952,12 @@ module.exports = function (app) {
           let result = await Person.upsertWithWhere({
             personId: person.personId
           }, {
-            birthdate: json.dateOfBirth,
-            birthdate_estimated: (json["Birthdate Estimated?"] === "Yes"
-              ? 1
-              : 0),
-            gender
-          })
+              birthdate: json.dateOfBirth,
+              birthdate_estimated: (json["Birthdate Estimated?"] === "Yes"
+                ? 1
+                : 0),
+              gender
+            })
 
         }
 
@@ -4012,21 +4038,21 @@ module.exports = function (app) {
 
                     for (let match of matches) {
 
-                      if (!serviceDeliveryPoint) 
+                      if (!serviceDeliveryPoint)
                         serviceDeliveryPoint = match._source.serviceDeliveryPoint;
-                      
+
                       let locationName = await Location.findOne({
                         where: {
                           name: match._source.location
                         }
                       });
 
-                      if (!locationId && locationName) 
+                      if (!locationId && locationName)
                         locationId = locationName.locationId;
-                      
-                      if (!clinicId) 
+
+                      if (!clinicId)
                         clinicId = match._source.identifier;
-                      
+
                       if (!age && !json.Age) {
 
                         age = match._source.age;
@@ -4039,38 +4065,38 @@ module.exports = function (app) {
 
                       }
 
-                      if (!registerNumber) 
+                      if (!registerNumber)
                         registerNumber = match._source.registerNumber;
-                      
-                      if (!encounterType) 
+
+                      if (!encounterType)
                         encounterType = match._source.encounterType;
-                      
-                      if (!program) 
+
+                      if (!program)
                         program = match._source.program;
-                      
-                      if (!location) 
+
+                      if (!location)
                         location = match._source.location;
-                      
-                      if (!dateOfBirth) 
+
+                      if (!dateOfBirth)
                         dateOfBirth = match._source.dateOfBirth;
-                      
-                      if (!encounterId) 
+
+                      if (!encounterId)
                         encounterId = match._source.encounterId;
-                      
-                      if (!locationType) 
+
+                      if (!locationType)
                         locationType = match._source.locationType;
-                      
-                      if (!today) 
+
+                      if (!today)
                         today = match._source.visitDate;
-                      
+
                       let oldObs = await Obs.upsertWithWhere({
                         obsId: match._source.obsId
                       }, {
-                        voided: 1,
-                        voidedBy: userId,
-                        dateVoided: new Date(),
-                        voidReason: "Voided by user through update"
-                      })
+                          voided: 1,
+                          voidedBy: userId,
+                          dateVoided: new Date(),
+                          voidReason: "Voided by user through update"
+                        })
 
                       let concept = await ConceptName.findOne({
                         where: {
@@ -4175,12 +4201,12 @@ module.exports = function (app) {
 
               for (let match of matches) {
 
-                if (!serviceDeliveryPoint) 
+                if (!serviceDeliveryPoint)
                   serviceDeliveryPoint = match._source.serviceDeliveryPoint;
-                
-                if (!clinicId) 
+
+                if (!clinicId)
                   clinicId = match._source.identifier;
-                
+
                 if (!age && !json.Age) {
 
                   age = match._source.age;
@@ -4199,33 +4225,33 @@ module.exports = function (app) {
                   }
                 });
 
-                if (!locationId && locationName) 
+                if (!locationId && locationName)
                   locationId = locationName.locationId;
-                
-                if (!registerNumber) 
+
+                if (!registerNumber)
                   registerNumber = match._source.registerNumber;
-                
-                if (!encounterType) 
+
+                if (!encounterType)
                   encounterType = match._source.encounterType;
-                
-                if (!program) 
+
+                if (!program)
                   program = match._source.program;
-                
-                if (!location) 
+
+                if (!location)
                   location = match._source.location;
-                
-                if (!dateOfBirth) 
+
+                if (!dateOfBirth)
                   dateOfBirth = match._source.dateOfBirth;
-                
-                if (!encounterId) 
+
+                if (!encounterId)
                   encounterId = match._source.encounterId;
-                
-                if (!locationType) 
+
+                if (!locationType)
                   locationType = match._source.locationType;
-                
-                if (!today) 
+
+                if (!today)
                   today = match._source.visitDate;
-                
+
                 let concept = await ConceptName.findOne({
                   where: {
                     name: (otherMapping[key]
@@ -4286,11 +4312,11 @@ module.exports = function (app) {
                   let oldObs = await Obs.upsertWithWhere({
                     obsId: match._source.obsId
                   }, {
-                    voided: 1,
-                    voidedBy: userId,
-                    dateVoided: new Date(),
-                    voidReason: "Voided by user through update"
-                  })
+                      voided: 1,
+                      voidedBy: userId,
+                      dateVoided: new Date(),
+                      voidReason: "Voided by user through update"
+                    })
 
                   bulk.push(JSON.stringify({
                     index: {
@@ -4515,7 +4541,7 @@ module.exports = function (app) {
 
           res
             .status(400)
-            .json({message: "Location not found!"});
+            .json({ message: "Location not found!" });
 
         } else {
 
@@ -4525,7 +4551,7 @@ module.exports = function (app) {
 
           res
             .status(200)
-            .json({location: result.name});
+            .json({ location: result.name });
 
         }
 
@@ -4537,7 +4563,7 @@ module.exports = function (app) {
 
       res
         .status(401)
-        .json({message: "Invalid session!"});
+        .json({ message: "Invalid session!" });
 
     })
 

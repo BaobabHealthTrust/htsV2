@@ -788,13 +788,13 @@ module.exports = function (app) {
 
           const json = JSON.parse(result) || {};
 
-          let output = {
-            
-          }
+          let npid = {
+            npid: (Object.keys(json).indexOf("person") >= 0 && json.person && Object.keys(json.person).indexOf("patient") >= 0 && json.person.patient && Object.keys(json.person.patient).indexOf("identifiers") >= 0 && json.person.patient.identifiers && Object.keys(json.person.patient.identifiers).indexOf("National id") >= 0 ? json.person.patient.identifiers["National id"] : null)
+          };
 
           return res
             .status(200)
-            .json(json);
+            .json(npid);
 
         })
 
