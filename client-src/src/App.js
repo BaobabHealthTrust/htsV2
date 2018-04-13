@@ -3282,7 +3282,7 @@ class App extends Component {
           setReportingPeriod={this
             .setReportingPeriod
             .bind(this)}
-          app={this.props.app} />{" "} {!this.props.app.activeUser || !this.props.app.location
+          app={this.props.app} />{" "} {(!this.props.app.activeUser || !this.props.app.location)
             ? <Login
               handleDirectInputChange={this.props.handleInputChange}
               app={this.props.app}

@@ -488,7 +488,7 @@ module.exports = function (app) {
 
       console.log(JSON.stringify(req.body));
 
-      console.log(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(1) : ""));
+      console.log(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""));
 
       (new client())
         .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""), async function (data, props) {
@@ -734,16 +734,67 @@ module.exports = function (app) {
 
       console.log(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.createPath);
 
-      let data = [];
+      const json = req.body;
 
-      (new client())
-        .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.createPath, data, async function (result, props) {
+      const dob = String(json.birthdate).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+      let data = {
+        data: {
+          addresses: {
+            state_province: (Object.keys(json).indexOf('current_district') >= 0 ? json.current_district : null),
+            city_village: (Object.keys(json).indexOf('current_village') >= 0 ? json.current_village : null),
+            neighborhood_cell: (Object.keys(json).indexOf('home_village') >= 0 ? json.home_village : null),
+            county_district: (Object.keys(json).indexOf('home_ta') >= 0 ? json.home_ta : null),
+            address2: (Object.keys(json).indexOf('home_district') >= 0 ? json.home_district : null),
+            address1: (Object.keys(json).indexOf('current_residence') >= 0 ? json.current_residence : null)
+          },
+          patient_age: {
+            age_estimate: (Object.keys(json).indexOf("age") >= 0 ? json.age : null)
+          },
+          cell_phone: {
+            identifier: (Object.keys(json).indexOf("attributes") >= 0 && Object.keys(json.attributes).indexOf("cell_phone_number") >= 0 ? json.attributes.cell_phone_number : null)
+          },
+          home_phone: {
+            identifier: (Object.keys(json).indexOf("attributes") >= 0 && Object.keys(json.attributes).indexOf("home_phone_number") >= 0 ? json.attributes.home_phone_number : null)
+          },
+          office_phone: {
+            identifier: (Object.keys(json).indexOf("attributes") >= 0 && Object.keys(json.attributes).indexOf("office_phone_number") >= 0 ? json.attributes.office_phone_number : null)
+          },
+          patient_month: (json.birthdate && dob ? parseInt(dob[2], 10) : null),
+          patient_year: (json.birthdate && dob ? parseInt(dob[1], 10) : null),
+          patient_day: (json.birthdate && dob ? parseInt(dob[3], 10) : null),
+          patient_name: {
+            family_name: (Object.keys(json).indexOf('family_name') >= 0 ? json.family_name : null),
+            given_name: (Object.keys(json).indexOf('given_name') >= 0 ? json.given_name : null),
+            middle_name: (Object.keys(json).indexOf('middle_name') >= 0 ? json.middle_name : null)
+          },
+          patient: {
+            gender: (Object.keys(json).indexOf('gender') >= 0 ? json.gender : null)
+          }
+        },
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+
+      console.log(JSON.stringify(data));
+
+      console.log(JSON.stringify({ username: ddeConfig.art_settings.username, password: ddeConfig.art_settings.password }));
+
+      (new client({ user: ddeConfig.art_settings.username, password: ddeConfig.art_settings.password }))
+        .post(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.createPath, data, async function (result, props) {
 
           console.log(result.toString("utf8"));
 
+          const json = JSON.parse(result) || {};
+
+          let output = {
+            
+          }
+
           return res
-          .status(200)
-          .json({});
+            .status(200)
+            .json(json);
 
         })
 
