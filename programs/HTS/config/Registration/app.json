@@ -85,11 +85,13 @@
         "visible": false
     },
     "Region of Origin": {
-        "ajaxURL": "/dde/search_by_region?name="
+        "ajaxURL": "/dde/search_by_region?name=",
+        "lockList": true
     },
     "Current Region": {
         "ajaxURL": "/dde/search_by_region?name=",
-        "autoNext": true
+        "autoNext": true,
+        "lockList": true
     },
     "Year of Birth": {
         "fieldType": "number",
@@ -146,7 +148,8 @@
             "Region of Origin": "REGION",
             "autoNext": true
         },
-        "fieldType": "text"
+        "fieldType": "text",
+        "lockList": true
     },
     "Current District": {
         "ajaxURL": "/dde/search_by_district?region=REGION&district=",
@@ -154,7 +157,8 @@
             "Current Region": "REGION",
             "autoNext": true
         },
-        "fieldType": "text"
+        "fieldType": "text",
+        "lockList": true
     },
     "Current T/A": {
         "ajaxURL": "/dde/search_by_t_a?district=DISTRICT&ta=",
@@ -162,7 +166,8 @@
             "Current District": "DISTRICT",
             "autoNext": true
         },
-        "fieldType": "text"
+        "fieldType": "text",
+        "lockList": true
     },
     "Current Village": {
         "ajaxURL": "/dde/search_by_village?ta=TA&village=",
@@ -170,7 +175,8 @@
             "Current T/A": "TA",
             "autoNext": true
         },
-        "fieldType": "text"
+        "fieldType": "text",
+        "lockList": true
     },
     "Patient Match Found?": {
         "customComponent": "DDESearch",

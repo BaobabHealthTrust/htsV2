@@ -2150,20 +2150,6 @@ class App extends Component {
       .props
       .updateApp({ ignore: true });
 
-    /*await this
-      .props
-      .submitForm("/programs/save_demographics", Object.assign({}, activePatient, {
-        primaryId: this.props.app.scanID || activePatient._id || activePatient.npid || activePatient.otherId,
-        date: this.props.app.selectedVisit && new Date(this.props.app.selectedVisit)
-          ? new Date(this.props.app.selectedVisit).getTime()
-          : new Date().getTime(),
-        program: this.props.app.module,
-        group: this.state.currentWorkflow,
-        location: this.props.app.activeLocation,
-        user: this.props.app.activeUser,
-        ignore: true
-      }));*/
-
     await this
       .props
       .selectPatient(activePatient);
