@@ -180,7 +180,11 @@ module.exports = function (app) {
 
           const row = JSON.parse(data) || {};
 
+          console.log("******************");
+
           console.log(row);
+
+          console.log("******************");
 
           let json = {
             "names": {
@@ -486,24 +490,30 @@ module.exports = function (app) {
 
     if (ddeConfig.use_art) {
 
-      console.log(JSON.stringify(req.body));
+      debug(JSON.stringify(req.body));
 
-      console.log(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""));
+      debug(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""));
 
       (new client())
         .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""), async function (data, props) {
 
-          console.log(data.toString("utf8"));
+          debug("^^^^^^^^^^^^^^^^^^^^^");
+
+          debug(data.toString("utf8"));
+
+          debug("^^^^^^^^^^^^^^^^^^^^^");
 
           const rows = JSON.parse(data) || [];
 
-          console.log(rows);
+          debug(JSON.stringify(rows));
+
+          debug("^^^^^^^^^^^^^^^^^^^^^");
 
           let json = [];
 
           for (let row of rows) {
 
-            console.log(row);
+            debug(JSON.stringify(row, null, 2));
 
             json.push({
               "names": {
@@ -516,13 +526,13 @@ module.exports = function (app) {
               "birthdate": (row.person && row.person.birthdate ? row.person.birthdate : "0000-00-00"),
               "birthdate_estimated": (row.person && row.person.age_estimate === 1 ? true : false),
               "addresses": {
-                "current_residence": (row.person && row.person.address1 ? row.person.address1 : null),
-                "current_village": (row.person && row.person.city_village ? row.person.city_village : null),
-                "current_ta": (row.person && row.person.township_division ? row.person.township_division : null),
-                "current_district": (row.person && row.person.state_province ? row.person.state_province : null),
-                "home_village": (row.person && row.person.neighborhood_cell ? row.person.neighborhood_cell : null),
-                "home_ta": (row.person && row.person.county_district ? row.person.county_district : null),
-                "home_district": (row.person && row.person.address2 ? row.person.address2 : null),
+                "current_residence": (row.person && row.person.addresses ? row.person.addresses.address1 : null),
+                "current_village": (row.person && row.person.addresses ? row.person.addresses.city_village : null),
+                "current_ta": (row.person && row.person.addresses ? row.person.addresses.township_division : null),
+                "current_district": (row.person && row.person.addresses ? row.person.addresses.state_province : null),
+                "home_village": (row.person && row.person.addresses ? row.person.addresses.neighborhood_cell : null),
+                "home_ta": (row.person && row.person.addresses ? row.person.addresses.county_district : null),
+                "home_district": (row.person && row.person.addresses ? row.person.addresses.address2 : null),
               },
               "npid": (row.person && row.person.patient && row.person.patient.identifiers ? row.person.patient.identifiers["National id"] : null),
               "_id": (row.person && row.person.patient && row.person.patient.identifiers ? row.person.patient.identifiers["National id"] : null),
@@ -531,7 +541,9 @@ module.exports = function (app) {
 
           }
 
-          console.log(json);
+          debug(JSON.stringify(json));
+
+          debug("^^^^^^^^^^^^^^^^^^^^^");
 
           return res
             .status(200)
