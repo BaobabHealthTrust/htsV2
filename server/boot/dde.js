@@ -78,6 +78,14 @@ module.exports = function (app) {
 
   }
 
+  const debug = (msg) => {
+
+    if (String(process.env.DEBUG_APP) === 'true') {
+      console.log(msg);
+    }
+
+  }
+
   const padZeros = (number, positions) => {
     const zeros = parseInt(positions) - String(number).length;
     let padded = "";
@@ -178,11 +186,26 @@ module.exports = function (app) {
       (new client())
         .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + "/" + ddeConfig.art_settings.search_by_id + req.params.identifier, async function (data, props) {
 
-          const row = JSON.parse(data) || {};
+          if (String(data).trim().length <= 0) {
+
+            return res
+              .status(200)
+              .json({
+                data: {
+                  hits: [],
+                  matches: 0
+                }
+              });
+
+          }
 
           console.log("******************");
 
-          console.log(row);
+          console.log(data.toString("utf8"));
+
+          const row = JSON.parse(data) || {};
+
+          console.log(JSON.stringify(row, null, 2));
 
           console.log("******************");
 
@@ -194,20 +217,22 @@ module.exports = function (app) {
             },
             "gender": (row.person && row.person.gender ? row.person.gender : null),
             "attributes": (row.person && row.person.attributes ? row.person.attributes : {}),
-            "birthdate": (row.person && row.person.birthdate ? row.person.birthdate : "0000-00-00"),
+            "birthdate": (row.person && row.person.birthdate ? row.person.birthdate : (row.person.birth_year && row.person.birth_month && row.person.birth_day ? (padZeros(row.person.birth_year, 4) + "-" + padZeros(row.person.birth_month, 2) + "-" + padZeros(row.person.birth_day, 2)) : "0000-00-00")),
             "birthdate_estimated": (row.person && row.person.age_estimate === 1 ? true : false),
             "addresses": {
-              "current_residence": (row.person && row.person.address1 ? row.person.address1 : null),
-              "current_village": (row.person && row.person.city_village ? row.person.city_village : null),
-              "current_ta": (row.person && row.person.township_division ? row.person.township_division : null),
-              "current_district": (row.person && row.person.state_province ? row.person.state_province : null),
-              "home_village": (row.person && row.person.neighborhood_cell ? row.person.neighborhood_cell : null),
-              "home_ta": (row.person && row.person.county_district ? row.person.county_district : null),
-              "home_district": (row.person && row.person.address2 ? row.person.address2 : null),
+              "current_residence": (row.person && row.person.addresses ? row.person.addresses.address1 : null),
+              "current_village": (row.person && row.person.addresses ? row.person.addresses.city_village : null),
+              "current_ta": (row.person && row.person.addresses ? row.person.addresses.township_division : null),
+              "current_district": (row.person && row.person.addresses ? row.person.addresses.state_province : null),
+              "home_village": (row.person && row.person.addresses ? row.person.addresses.neighborhood_cell : null),
+              "home_ta": (row.person && row.person.addresses ? row.person.addresses.county_district : null),
+              "home_district": (row.person && row.person.addresses ? row.person.addresses.address2 : null),
             },
             "npid": (row.person && row.person.patient && row.person.patient.identifiers ? row.person.patient.identifiers["National id"] : null),
             "_id": (row.person && row.person.patient && row.person.patient.identifiers ? row.person.patient.identifiers["National id"] : null)
           };
+
+          console.log(JSON.stringify(json, null, 2));
 
           return res
             .status(200)
@@ -523,7 +548,7 @@ module.exports = function (app) {
               },
               "gender": (row.person && row.person.gender ? row.person.gender : null),
               "attributes": (row.person && row.person.attributes ? row.person.attributes : {}),
-              "birthdate": (row.person && row.person.birthdate ? row.person.birthdate : "0000-00-00"),
+              "birthdate": (row.person && row.person.birthdate ? row.person.birthdate : (row.person.birth_year && row.person.birth_month && row.person.birth_day ? (padZeros(row.person.birth_year, 4) + "-" + padZeros(row.person.birth_month, 2) + "-" + padZeros(row.person.birth_day, 2)) : "0000-00-00")),
               "birthdate_estimated": (row.person && row.person.age_estimate === 1 ? true : false),
               "addresses": {
                 "current_residence": (row.person && row.person.addresses ? row.person.addresses.address1 : null),

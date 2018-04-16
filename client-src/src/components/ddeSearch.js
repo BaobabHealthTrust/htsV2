@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './ddeSearch.css';
 
 class DDESearch extends Component {
@@ -135,14 +135,14 @@ class DDESearch extends Component {
         id={row._id || row.otherId}
         key={row._id || row.otherId}
         className={this.state.selectedId === (row._id || row.otherId)
-        ? "selectedListLi"
-        : "selectListLi"}
+          ? "selectedListLi"
+          : "selectListLi"}
         style={{
-        borderRadius: "10px"
-      }}
+          borderRadius: "10px"
+        }}
         onMouseDown={() => {
-        this.loadPatientData((row._id || row.otherId))
-      }}>
+          this.loadPatientData((row._id || row.otherId))
+        }}>
         <table width="100%">
           <tbody>
             <tr>
@@ -153,8 +153,8 @@ class DDESearch extends Component {
                   ? (row.names && row.names.given_name
                     ? row.names.given_name
                     : "-") + " " + (row.names && row.names.family_name
-                    ? row.names.family_name
-                    : "-")
+                      ? row.names.family_name
+                      : "-")
                   : (row.patientName
                     ? row.patientName
                     : "Anonymous")) + " (" + this.fetchAge(row) + ")"}
@@ -195,7 +195,7 @@ class DDESearch extends Component {
 
     this
       .props
-      .searchByNameAndGender({given_name, family_name, gender, page_size: this.state.pageSize, page: this.state.page});
+      .searchByNameAndGender({ given_name, family_name, gender, page_size: this.state.pageSize, page: this.state.page });
 
   }
 
@@ -229,7 +229,7 @@ class DDESearch extends Component {
 
     this
       .props
-      .searchByNameAndGender({given_name, family_name, gender, page_size: 6, page: this.state.page});
+      .searchByNameAndGender({ given_name, family_name, gender, page_size: 6, page: this.state.page });
 
   }
 
@@ -292,7 +292,7 @@ class DDESearch extends Component {
 
       if (!this.state.busy && this.props.activeSection === "registration" && (this.props.ddeResults || []).length === 1) {
 
-        await this.setState({busy: true});
+        await this.setState({ busy: true });
 
         const activeClient = this.props.ddeResults[0];
 
@@ -312,11 +312,11 @@ class DDESearch extends Component {
           .props
           .handleNextButtonClicks();
 
-        await this.setState({busy: false});
+        await this.setState({ busy: false });
 
       } else if (!this.state.busy && this.props.activeSection === "registration" && Object.keys(this.props.ddeCurrentPatient).length > 0) {
 
-        await this.setState({busy: true});
+        await this.setState({ busy: true });
 
         const activeClient = this.props.ddeCurrentPatient;
 
@@ -336,17 +336,17 @@ class DDESearch extends Component {
           .props
           .handleNextButtonClicks();
 
-        await this.setState({busy: false});
+        await this.setState({ busy: false });
 
       } else if (!this.state.busy) {
 
-        await this.setState({busy: true});
+        await this.setState({ busy: true });
 
         await this
           .props
-          .updateApp({sectionHeader: "Find Client By Name"})
+          .updateApp({ sectionHeader: "Find Client By Name" })
 
-        await this.setState({busy: false});
+        await this.setState({ busy: false });
 
       }
 
@@ -360,9 +360,9 @@ class DDESearch extends Component {
       <div>
         <table
           style={{
-          borderCollapse: "collapse",
-          width: "calc(100% - 8px)"
-        }}
+            borderCollapse: "collapse",
+            width: "calc(100% - 8px)"
+          }}
           border="0"
           cellPadding="0">
           <tbody>
@@ -370,9 +370,9 @@ class DDESearch extends Component {
               <td
                 colSpan="3"
                 style={{
-                fontSize: "2em",
-                padding: "10px"
-              }}
+                  fontSize: "2em",
+                  padding: "10px"
+                }}
                 id="ddeHelpText">
                 {this.props.label}
               </td>
@@ -381,140 +381,140 @@ class DDESearch extends Component {
               <td
                 align="center"
                 style={{
-                paddingLeft: "0px"
-              }}
+                  paddingLeft: "0px"
+                }}
                 rowSpan="2">
                 <div
                   className={this.props.mini
-                  ? "mini-panel"
-                  : "panel"}>
+                    ? "mini-panel"
+                    : "panel"}>
                   {this.state.clientName != null
                     ? <table
-                        width="100%"
-                        cellPadding="10"
-                        style={{
+                      width="100%"
+                      cellPadding="10"
+                      style={{
                         fontSize: "1.5em",
                         margin: "auto"
                       }}>
-                        <tbody>
-                          <tr>
-                            <th
-                              align="right"
-                              style={{
+                      <tbody>
+                        <tr>
+                          <th
+                            align="right"
+                            style={{
                               borderRight: "1px dotted #333333",
                               width: "250px"
                             }}>
-                              Client Name:
+                            Client Name:
                             </th>
-                            <td align="left">
-                              {this.state.clientName}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th
-                              align="right"
-                              style={{
+                          <td align="left">
+                            {this.state.clientName}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th
+                            align="right"
+                            style={{
                               borderRight: "1px dotted #333333",
                               width: "250px"
                             }}>
-                              Age:
+                            Age:
                             </th>
-                            <td align="left">
-                              {this.state.age}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th
-                              align="right"
-                              style={{
+                          <td align="left">
+                            {this.state.age}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th
+                            align="right"
+                            style={{
                               borderRight: "1px dotted #333333",
                               width: "250px"
                             }}>
-                              National Health ID:
+                            National Health ID:
                             </th>
-                            <td align="left">
-                              {this.state.nhid}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th
-                              align="right"
-                              style={{
+                          <td align="left">
+                            {this.state.nhid}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th
+                            align="right"
+                            style={{
                               borderRight: "1px dotted #333333",
                               width: "250px"
                             }}>
-                              Gender:
+                            Gender:
                             </th>
-                            <td align="left">
-                              {this.state.gender}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th
-                              align="right"
-                              style={{
+                          <td align="left">
+                            {this.state.gender}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th
+                            align="right"
+                            style={{
                               borderRight: "1px dotted #333333",
                               width: "250px"
                             }}>
-                              Residence:
+                            Residence:
                             </th>
-                            <td align="left">
-                              {this.state.residence}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                          <td align="left">
+                            {this.state.residence}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                     : ""}
                 </div>
               </td>
               <td align="center" rowSpan="2">
                 <div
                   className={this.props.mini
-                  ? "mini-panel"
-                  : "panel"}>
+                    ? "mini-panel"
+                    : "panel"}>
                   <ul
                     className="selectUl"
                     style={{
-                    listStyle: "none",
-                    textAlign: "left",
-                    padding: "0px"
-                  }}>{this.loadDDEResults()}</ul>
+                      listStyle: "none",
+                      textAlign: "left",
+                      padding: "0px"
+                    }}>{this.loadDDEResults()}</ul>
                 </div>
               </td>
               <td
                 align="center"
                 style={{
-                width: "60px",
-                backgroundColor: "#eeeeee",
-                verticalAlign: "top"
-              }}>
+                  width: "60px",
+                  backgroundColor: "#eeeeee",
+                  verticalAlign: "top"
+                }}>
                 <div
                   className={this.state.page > 1
-                  ? "arrow-up"
-                  : "arrow-up-disabled"}
+                    ? "arrow-up"
+                    : "arrow-up-disabled"}
                   onMouseDown={this.state.page > 1
-                  ? () => {
-                    this.fetchBackward()
-                  }
-                  : () => {}}/>
+                    ? () => {
+                      this.fetchBackward()
+                    }
+                    : () => { }} />
               </td>
             </tr>
             <tr>
               <td
                 align="center"
                 style={{
-                width: "60px",
-                backgroundColor: "#eeeeee",
-                verticalAlign: "bottom"
-              }}><div
-                className={(this.props.ddeResults || []).length >= this.state.pageSize
-        ? "arrow-down"
-        : "arrow-down-disabled"}
-                onMouseDown={(this.props.ddeResults || []).length >= this.state.pageSize
-        ? () => {
-          this.fetchForward()
-        }
-        : () => {}}/></td>
+                  width: "60px",
+                  backgroundColor: "#eeeeee",
+                  verticalAlign: "bottom"
+                }}><div
+                  className={(this.props.ddeResults || []).length >= this.state.pageSize
+                    ? "arrow-down"
+                    : "arrow-down-disabled"}
+                  onMouseDown={(this.props.ddeResults || []).length >= this.state.pageSize
+                    ? () => {
+                      this.fetchForward()
+                    }
+                    : () => { }} /></td>
             </tr>
           </tbody>
         </table>

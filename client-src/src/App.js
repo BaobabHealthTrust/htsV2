@@ -2150,7 +2150,7 @@ class App extends Component {
       .props
       .updateApp({ ignore: true });
 
-    await this
+    /*await this
       .props
       .submitForm("/programs/save_demographics", Object.assign({}, activePatient, {
         primaryId: this.props.app.scanID || activePatient._id || activePatient.npid || activePatient.otherId,
@@ -2162,7 +2162,7 @@ class App extends Component {
         location: this.props.app.activeLocation,
         user: this.props.app.activeUser,
         ignore: true
-      }));
+      }));*/
 
     await this
       .props
@@ -2990,7 +2990,7 @@ class App extends Component {
         id: "btnNext",
         buttonClass: (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].data
           ? "green nav-buttons"
-          : "gray nav-buttons"),
+          : (this.props.app.sectionHeader === "Find Client By Name" && Object.keys(this.props.app.currentPatient).length > 0 ? "green nav-buttons" : "gray nav-buttons")),
         onMouseDown: () => {
           this.handleNextButtonClicks();
         },

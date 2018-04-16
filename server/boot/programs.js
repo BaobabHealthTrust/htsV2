@@ -973,11 +973,11 @@ module.exports = function (app) {
 
         if (ddeData && !ddeData.data) {
 
-          debug("#################");
+          debug("%%%%%%%%%%%%%%%%%%%%");
 
           debug(ddeData);
 
-          debug("#################");
+          debug("%%%%%%%%%%%%%%%%%%%%");
 
           raw.npid = ddeData.npid;
           
@@ -1347,6 +1347,12 @@ module.exports = function (app) {
     if (!primaryId) {
       primaryId = clinicId;
     }
+
+    debug("^^^^^^^^^^^^^^^^^^^^^");
+
+    debug(json);
+
+    debug("^^^^^^^^^^^^^^^^^^^^^");
 
     let buffer = Object.assign({}, json);
 
