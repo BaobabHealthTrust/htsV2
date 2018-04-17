@@ -2196,7 +2196,12 @@ class App extends Component {
         hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
         hiddenElement.target = '_blank';
         hiddenElement.download = filename + '.csv';
+
+        document.body.appendChild(hiddenElement);
+
         hiddenElement.click();
+
+        document.body.removeChild(hiddenElement);
 
       } catch (e) {
 
