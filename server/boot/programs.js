@@ -135,7 +135,7 @@ module.exports = function (app) {
 
     return new Promise((resolve, reject) => {
 
-      debug(token);
+      debug("'" + token + "'");
 
       User
         .accessToken
@@ -145,10 +145,12 @@ module.exports = function (app) {
 
           if (result) {
 
-            const ttl = result.ttl;
+            const ttl = (!isNaN(result.ttl) ? parseInt(result.ttl, 10) : 0) * 1000;
             const ttd = (new Date(result.created)).getTime() + ttl;
 
             const now = (new Date()).getTime();
+
+            debug("%s - %s = %s", ttd, now, (ttd - now));
 
             if (ttd > now) {
 
@@ -980,7 +982,7 @@ module.exports = function (app) {
           debug("%%%%%%%%%%%%%%%%%%%%");
 
           raw.npid = ddeData.npid;
-          
+
         } else if (ddeData && ddeData.data && Array.isArray(ddeData.data)) {
           ddeData
             .data
@@ -4565,7 +4567,7 @@ module.exports = function (app) {
 
     }).catch((e) => {
 
-      debug(e);
+      console.log(e);
 
       res
         .status(401)
