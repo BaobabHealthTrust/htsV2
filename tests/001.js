@@ -6,9 +6,32 @@ module.exports = {
       .assert
       .title('HTS')
       .assert
-      .visible('#btnBD.gray.nav-buttons')
+      .visible('#txtUsername')
+      .click('#txtUsername')
+      .waitForElementVisible('#dha_C', 1000)
+      .click('#dha_C')
+      .click('#dha_P')
+      .click('#dha_6')
+      .click('#dha_K')
       .assert
-      .visible('#btnNext.gray.nav-buttons')
+      .visible('#txtPassword')
+      .click('#txtPassword')
+      .assert
+      .visible('#qwe_t')
+      .click('#qwe_t')
+      .click('#qwe_e')
+      .click('#qwe_s')
+      .click('#qwe_t')
+      .assert
+      .visible('#btnLogin')
+      .click('#btnLogin')
+      .waitForElementVisible('#u14HelpText', 1000)
+      .assert
+      .containsText('#u14HelpText', 'Scan Workstation Location')
+      .assert
+      .visible('#touchscreenTextInput')
+      .setValue('#touchscreenTextInput', 'Room 1$')
+      .waitForElementVisible('#facility', 3000)
       .assert
       .visible('#li-HTS')
       .click('#li-HTS')
@@ -54,7 +77,7 @@ module.exports = {
       .assert
       .containsText('#u14HelpText', 'HTS Access Type')
       .assert
-      .containsText('.sectionHeader', 'Pre-Test Counseling')
+      .containsText('.sectionHeader', 'HTS Visit')
       .assert
       .visible('#Routine_HTS__PITC__within_Health_Service')
       .click('#Routine_HTS__PITC__within_Health_Service')
@@ -70,54 +93,66 @@ module.exports = {
       .assert
       .visible('#Low_Risk')
       .click('#Low_Risk')
-      .waitForElementVisible('.label', 3000)
-      .assert
-      .containsText('.label', 'Summary')
-      .click('#btnNext.green.nav-buttons')
       .waitForElementVisible('#u14HelpText', 3000)
       .assert
       .containsText('#u14HelpText', 'Client gives consent to be tested?')
       .assert
       .visible('#Yes')
       .click('#Yes')
-      .click('#btnNext.green.nav-buttons')
-      .waitForElementVisible('#lblResult', 3000)
       .assert
-      .visible('#btnNonReactive')
-      .assert
-      .containsText('#lblResult', 'First Pass Test 1 Result')
-      .assert
-      .visible('#btnNonReactive')
+      .visible('#btnNext')
+      .click('#btnNext')
+      .waitForElementVisible('#btnNonReactive', 3000)
       .click('#btnNonReactive')
-      .click('#btnNext.green.nav-buttons')
-      .waitForElementVisible('#btnAlertOK', 3000)
+      .assert
+      .visible('#btnNext')
+      .click('#btnNext')
+      .waitForElementVisible('.popup', 3000)
+      .assert
+      .visible('#btnAlertOK')
       .click('#btnAlertOK')
-      .assert
-      .containsText('.label', 'Summary')
-      .click('#btnNext.green.nav-buttons')
-      .waitForElementVisible('#u14HelpText', 3000)
-      .assert
-      .containsText('#u14HelpText', 'Partner HIV Status')
-      .assert
-      .containsText('.sectionHeader', 'Post-Test Counseling')
       .assert
       .visible('#No_Partner')
       .click('#No_Partner')
+      .assert
+      .visible('#btnNext')
+      .click('#btnNext')
       .waitForElementVisible('#u14HelpText', 3000)
       .assert
-      .containsText('#u14HelpText', 'HTS Family Ref Slips')
-      .waitForElementVisible('#touchscreenTextInput', 1000)
-      .setValue('#touchscreenTextInput', '1')
-      .click('#btnNext.green.nav-buttons')
+      .containsText('#u14HelpText', 'Number of male condoms given')
+      .assert
+      .visible('#num_0')
+      .click('#num_0')
+      .assert
+      .visible('#btnNext')
+      .click('#btnNext')
+      .waitForElementVisible('#u14HelpText', 3000)
+      .assert
+      .containsText('#u14HelpText', 'Number of female condoms given')
+      .assert
+      .visible('#num_0')
+      .click('#num_0')
+      .assert
+      .visible('#btnNext')
+      .click('#btnNext')
+      .waitForElementVisible('#chkNone', 3000)
+      .click('#chkNone')
+      .assert
+      .visible('#btnNext')
+      .click('#btnNext')
       .waitForElementVisible('#u14HelpText', 3000)
       .assert
       .containsText('#u14HelpText', 'Comments')
-      .click('#btnNext.green.nav-buttons')
-      .waitForElementVisible('.label', 3000)
       .assert
-      .containsText('.label', 'Summary')
-      .click('#btnNext.green.nav-buttons')
-      .waitForElementVisible('li.selectLabel.selected', 3000)
+      .visible('#btnNext')
+      .click('#btnNext')
+      .waitForElementVisible('#btnTranscribe', 3000)
+      .assert
+      .visible('#btnTranscribe')
+      .click('#btnTranscribe')
+      .waitForElementVisible('#u14HelpText', 3000)
+      .assert
+      .containsText('#u14HelpText', 'Select Entry Code')
       .end()
   }
 }

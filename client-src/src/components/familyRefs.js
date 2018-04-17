@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './familyRefs.css';
 import uuid from 'uuid';
 
@@ -15,7 +15,7 @@ class FamilyRefs extends Component {
 
   async setCountToZero() {
 
-    await this.setState({checked: ['None']});
+    await this.setState({ checked: ['None'] });
 
     await this
       .props
@@ -31,7 +31,7 @@ class FamilyRefs extends Component {
 
     if (this.state.checked.indexOf('None') >= 0) {
 
-      await this.setState({checked: []});
+      await this.setState({ checked: [] });
 
       this
         .props
@@ -57,7 +57,7 @@ class FamilyRefs extends Component {
         .checked
         .splice(index, 1);
 
-      await this.setState({checked: json.checked});
+      await this.setState({ checked: json.checked });
 
       let count = Object
         .keys(this.state.checked)
@@ -79,7 +79,7 @@ class FamilyRefs extends Component {
 
     if (this.state.checked.indexOf('None') >= 0) {
 
-      await this.setState({checked: []});
+      await this.setState({ checked: [] });
 
     }
 
@@ -90,7 +90,7 @@ class FamilyRefs extends Component {
         : "")
     ];
 
-    await this.setState({checked: json});
+    await this.setState({ checked: json });
 
     let count = Object
       .keys(this.state.checked)
@@ -106,29 +106,29 @@ class FamilyRefs extends Component {
 
   }
 
-  addRow(title, setAction, unsetAction) {
+  addRow(title, setAction, unsetAction, id) {
 
     return (
       <div
         style={{
-        display: "inline-block",
-        width: "300px"
-      }}
-        key={uuid.v4()}
-        id={uuid.v4()}>
+          display: "inline-block",
+          width: "300px"
+        }}
+        key={uuid.v4()} id={uuid.v4()}>
         <table
           style={{
-          fontSize: "2em",
-          cursor: "pointer"
-        }}
+            fontSize: "2em",
+            cursor: "pointer"
+          }}
+          id={id ? id : uuid.v4()}
           onMouseDown={() => {
-          this
-            .state
-            .checked
-            .indexOf(title) >= 0
-            ? unsetAction(title)
-            : setAction(title)
-        }}>
+            this
+              .state
+              .checked
+              .indexOf(title) >= 0
+              ? unsetAction(title)
+              : setAction(title)
+          }}>
           <tbody>
             <tr>
               <td>
@@ -140,7 +140,7 @@ class FamilyRefs extends Component {
                     .checked
                     .indexOf(title) >= 0
                     ? <span
-                        style={{
+                      style={{
                         fontSize: "2.1em"
                       }}>&#9745;</span>
                     : <span style={{
@@ -184,16 +184,16 @@ class FamilyRefs extends Component {
     return (
       <table
         style={{
-        borderCollapse: "collapse",
-        width: "100%"
-      }}>
+          borderCollapse: "collapse",
+          width: "100%"
+        }}>
         <tbody>
           <tr>
             <td
               style={{
-              fontSize: "2em",
-              padding: "10px"
-            }}>
+                fontSize: "2em",
+                padding: "10px"
+              }}>
               {this.props.label}
             </td>
           </tr>
@@ -203,29 +203,29 @@ class FamilyRefs extends Component {
             }}>
               <div
                 style={{
-                width: "100%",
-                height: "calc(100vh - 390px)",
-                overflow: "auto"
-              }}>
+                  width: "100%",
+                  height: "calc(100vh - 390px)",
+                  overflow: "auto"
+                }}>
                 <div
                   style={{
-                  width: "100%",
-                  borderBottom: "1px solid #cccccc"
-                }}>
+                    width: "100%",
+                    borderBottom: "1px solid #cccccc"
+                  }}>
                   {this.addGroup("Spouse")}
                 </div>
                 <div
                   style={{
-                  width: "100%",
-                  borderBottom: "1px solid #cccccc"
-                }}>
+                    width: "100%",
+                    borderBottom: "1px solid #cccccc"
+                  }}>
                   {this.addGroup("Child")}
                 </div>
                 <div
                   style={{
-                  width: "100%",
-                  borderBottom: "1px solid #cccccc"
-                }}>
+                    width: "100%",
+                    borderBottom: "1px solid #cccccc"
+                  }}>
                   {this.addGroup("Other")}
                 </div>
               </div>
@@ -235,7 +235,7 @@ class FamilyRefs extends Component {
             <td style={{
               borderTop: "1px solid #cccccc"
             }}>
-              {this.addRow("None", this.setCountToZero.bind(this), this.uncheckRow.bind(this))}
+              {this.addRow("None", this.setCountToZero.bind(this), this.uncheckRow.bind(this), "chkNone")}
             </td>
           </tr>
         </tbody>
