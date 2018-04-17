@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './admin.css';
 import icoRegisters from '../images/registers';
 import icoUsers from '../images/users';
@@ -17,52 +17,52 @@ class Admin extends Component {
         <div
           className="sectionButton"
           onMouseDown={() => {
-          this
-            .props
-            .switchTab("manage registers", "Administration")
-        }}>
+            this
+              .props
+              .switchTab("manage registers", "Administration")
+          }} id="btnManageRegisters">
           <img
             src={icoRegisters}
             height="80"
             alt=""
             style={{
-            margin: "8px"
-          }}/>
-          <br/>
+              margin: "8px"
+            }} />
+          <br />
           Manage Registers
         </div>
         <div
           className="sectionButton"
           onMouseDown={() => {
-          this
-            .props
-            .updateApp({userManagementActive: true})
-        }}>
+            this
+              .props
+              .updateApp({ userManagementActive: true })
+          }} id="btnManageUsers">
           <img
             src={icoUsers}
             height="80"
             alt=""
             style={{
-            margin: "8px"
-          }}/>
-          <br/>
+              margin: "8px"
+            }} />
+          <br />
           Manage Users
         </div>
         <div
           className="sectionButton"
           onMouseDown={() => {
-          this
-            .props
-            .printLabel()
-        }}>
+            this
+              .props
+              .printLabel()
+          }} id="btnPrintLabel">
           <img
             src={icoPrint}
             height="80"
             alt=""
             style={{
-            margin: "8px"
-          }}/>
-          <br/>
+              margin: "8px"
+            }} />
+          <br />
           Print Label
         </div>
       </div>

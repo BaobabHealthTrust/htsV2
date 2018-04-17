@@ -30,12 +30,12 @@ module.exports = {
       .containsText('#u14HelpText', 'Scan Workstation Location')
       .assert
       .visible('#touchscreenTextInput')
-      .setValue('#touchscreenTextInput', 'Room 1')
-      .assert
-      .containsText('#touchscreenTextInput', 'Room 1')
-      .waitForElementVisible('#facility', 3000)
+      .setValue('#touchscreenTextInput', 'Room 1$')
+      .waitForElementVisible('#facility', 5000)
       .assert
       .visible('#li-HTS')
+      .click('#li-HTS')      
+      .waitForElementVisible('#btnNext.green.nav-buttons', 1000)
       .end()
   }
 }

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './manageRegisters.css';
 import Button from "./button";
 
@@ -20,9 +20,9 @@ class ManageRegisters extends Component {
         <table
           width="100%"
           style={{
-          borderCollapse: "collapse",
-          fontSize: "18px"
-        }}
+            borderCollapse: "collapse",
+            fontSize: "18px"
+          }}
           cellPadding="20">
           <tbody>
             <tr>
@@ -56,8 +56,8 @@ class ManageRegisters extends Component {
             </tr>
             <tr>
               <td colSpan="2" align="center">
-                <Button label="Add Register" handleMouseDown={this.props.addRegister}/>
-                <Button label="Close Register" handleMouseDown={this.props.closeRegister}/>
+                <Button label="Add Register" handleMouseDown={this.props.addRegister} id="btnAddRegister" />
+                <Button label="Close Register" handleMouseDown={this.props.closeRegister} id="btnCloseRegister" />
               </td>
             </tr>
           </tbody>
