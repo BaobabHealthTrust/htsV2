@@ -10,7 +10,8 @@ class DailyActivityRegister extends Component {
 
       <div style={{
         overflow: "auto",
-        width: "100%"
+        width: "calc(100% - 10px)",
+        height: "calc(-122px + 100vh)"
       }}>
         <table
           cellPadding="10"
