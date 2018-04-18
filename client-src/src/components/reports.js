@@ -60,7 +60,7 @@ class Reports extends Component {
             margin: "8px"
           }}/>
           <br/>
-          Daily Register
+          Daily Activity Register
         </div>
         <div
           className="sectionButton"

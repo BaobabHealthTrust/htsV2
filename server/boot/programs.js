@@ -2870,6 +2870,12 @@ module.exports = function (app) {
 
     res.set("Content-Type", "application/json");
 
+    if (!req.params.id) {
+
+      return res.end();
+
+    }
+
     if (req.params.id === null)
       return res.status(200).json({});
 
