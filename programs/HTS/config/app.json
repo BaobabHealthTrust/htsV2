@@ -69,7 +69,7 @@
         "func": [
             "Result Given to Client",
             "match",
-            "Positive|Inconclusive|New Exposed Infant",
+            "New Positive|Inconclusive|New Exposed Infant",
             "Testing"
         ]
     },
