@@ -310,7 +310,8 @@ export default function appReducer(state = {
     summary: false,
     configs: {}
   },
-  entryCode: null
+  entryCode: null,
+  activeRegisters: 0
 }, action) {
 
   let newState,

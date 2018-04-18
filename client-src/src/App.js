@@ -456,6 +456,10 @@ class App extends Component {
 
   switchProgram(programName) {
 
+    this
+      .props
+      .fetchRegisterStats();
+
     const program = this
       .props
       .app
@@ -2929,6 +2933,19 @@ class App extends Component {
 
   render() {
 
+    const nextLabel = (this.props.app.currentSection === "home" || this.props.app.currentSection === "registration"
+      ? this.props.app.formActive
+        ? (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
+          ? this.props.wf[this.state.currentWorkflow].currentNode.type
+          : "") === "exit" || (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "Enter Data")
+          ? "Finish"
+          : "Next" : "Realtime Data Entry" : this.props.app.formActive
+        ? (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
+          ? this.props.wf[this.state.currentWorkflow].currentNode.type
+          : "") === "exit"
+          ? "Finish"
+          : "Next" : "Finish");
+
     const buttons = [
       {
         id: "btnRegister",
@@ -2985,18 +3002,7 @@ class App extends Component {
         onMouseDown: () => {
           this.handleNextButtonClicks();
         },
-        label: this.props.app.currentSection === "home" || this.props.app.currentSection === "registration"
-          ? this.props.app.formActive
-            ? (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-              ? this.props.wf[this.state.currentWorkflow].currentNode.type
-              : "") === "exit" || (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "Enter Data")
-              ? "Finish"
-              : "Next" : "Realtime Data Entry" : this.props.app.formActive
-            ? (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-              ? this.props.wf[this.state.currentWorkflow].currentNode.type
-              : "") === "exit"
-              ? "Finish"
-              : "Next" : "Finish",
+        label: nextLabel,
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px",
@@ -3005,7 +3011,7 @@ class App extends Component {
         disabled: (this.props.app.currentSection === "reports" || (["HTS"].indexOf(this.props.app.module) < 0) || this.props.app.userManagementActive === true) && this.props.app.selectedTask !== "Report Filter"
           ? true
           : false,
-        inactive: (this.props.app.module === "" && !this.props.app.formActive) || (this.props.app.silentProcessing && !this.props.app.patientActivated)
+        inactive: (this.props.app.module === "" && !this.props.app.formActive) || (this.props.app.silentProcessing && !this.props.app.patientActivated) || (nextLabel === "Realtime Data Entry" && this.props.app.activeRegisters <= 0)
           ? true
           : false
       }, {
