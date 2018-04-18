@@ -3028,7 +3028,7 @@ class App extends Component {
         disabled: this.props.app.currentSection !== "home" || this.props.app.formActive || this.props.app.module !== "HTS" || this.props.app.userManagementActive === true
           ? true
           : false,
-        inactive: this.props.app.module === "" && !this.props.app.formActive
+        inactive: (this.props.app.module === "" && !this.props.app.formActive) || (nextLabel === "Realtime Data Entry" && this.props.app.activeRegisters <= 0)
           ? true
           : false
       }, {
