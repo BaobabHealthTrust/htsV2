@@ -4,8 +4,8 @@
     "category": "Outcome Summary"
   },
   "Invalid Outcome Summary": {
-    "message": "Outcome Summary \n does not match Test 1 / Test 2 results",
-    "category": "Outcome Summary",
+    "message": "Combination of test results \n is not plausible",
+    "category": "HIV Rapid Test Outcomes",
     "title": "Invalid Entry"
   },
   "Missing Result Given to Client": {

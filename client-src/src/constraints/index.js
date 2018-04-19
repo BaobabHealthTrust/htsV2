@@ -1156,6 +1156,37 @@ module.exports.validate = (data = {}, alertsMapping = {}, categories = {}) => {
 
   } else if (Object.keys(data).indexOf("Last HIV Test") >= 0) {
 
+    let nonReactive = false;
+
+    if (Object.keys(data).indexOf("HIV Rapid Test Outcomes") >= 0) {
+
+      if (Object.keys(data["HIV Rapid Test Outcomes"]).indexOf("First Pass") >= 0) {
+
+        if (Object.keys(data["HIV Rapid Test Outcomes"]["First Pass"]).indexOf("Test 1") >= 0 && Object.keys(data["HIV Rapid Test Outcomes"]["First Pass"]).indexOf("Test 2") >= 0) {
+
+          if (data["HIV Rapid Test Outcomes"]["First Pass"]["Test 1"] === "Non-Reactive" && data["HIV Rapid Test Outcomes"]["First Pass"]["Test 2"] === "Non-Reactive") {
+
+            nonReactive = true;
+
+          }
+
+        }
+
+      }
+
+    }
+
+    if (["Never Tested", "Last Negative", "Last Positive"].indexOf(data["Last HIV Test"]) >= 0 && nonReactive) {
+
+      return {
+        error: true,
+        message: alertsMapping["Invalid Outcome Summary"].message,
+        title: alertsMapping["Invalid Outcome Summary"].title,
+        group: categories[alertsMapping["Invalid Outcome Summary"].category]
+      };
+
+    }
+
     switch (data["Last HIV Test"]) {
 
       // eslint-disable-next-line
