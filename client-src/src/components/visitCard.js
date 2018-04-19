@@ -132,8 +132,8 @@ class VisitCard extends Component {
                                 return Object
                                   .keys(this.props.details[item][encounter])
                                   .filter((e) => {
-                                    return Array("encounterId").concat(this.props.app && this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module][item] && this.props.app.data[this.props.app.module][item][encounter] && this.props.app.data[this.props.app.module][item][encounter].ignores
-                                      ? this.props.app.data[this.props.app.module][item][encounter].ignores
+                                    return Array("encounterId").concat(this.props.app && this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module][(this.props.app.module === "HTS" ? "HTS Visit" : item)] && this.props.app.data[this.props.app.module][(this.props.app.module === "HTS" ? "HTS Visit" : item)] && this.props.app.data[this.props.app.module][(this.props.app.module === "HTS" ? "HTS Visit" : item)].ignores
+                                      ? this.props.app.data[this.props.app.module][(this.props.app.module === "HTS" ? "HTS Visit" : item)].ignores
                                       : []).indexOf(e) < 0
                                   })
                                   .map((itemKey) => {
