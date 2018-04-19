@@ -51,14 +51,14 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
     if (!state.busy) {
 
-      await parent.setState({busy: true});
+      await parent.setState({ busy: true });
 
-      if (props.app.patientActivated) 
+      if (props.app.patientActivated)
         parent.cancelForm();
-      else 
+      else
         parent.switchPage("home");
-      
-      await parent.setState({busy: false});
+
+      await parent.setState({ busy: false });
 
       return;
 
@@ -74,7 +74,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
     if (!state.busy) {
 
-      await parent.setState({busy: true});
+      await parent.setState({ busy: true });
 
       if (props.app.sectionHeader === "Report Filter") {
 
@@ -112,7 +112,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
         parent.setReportingPeriod();
 
-        return parent.setState({busy: false});
+        return parent.setState({ busy: false });
 
       } else if (props.app.currentPatient && Object.keys(props.app.currentPatient).length > 0 && ["Find Client By Name", "Search By ID"].indexOf(props.app.sectionHeader) >= 0) {
 
@@ -140,11 +140,23 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
       } else {
 
-        parent.submitForm();
+        parent.submitForm().then(() => {
+
+          if (props.app.sectionHeader === "HTS Visit") {
+
+            parent.transcribe();
+
+          } else {
+
+            props.updateApp({ processing: false });
+
+          }
+
+        });
 
       }
 
-      await parent.setState({busy: false});
+      await parent.setState({ busy: false });
 
       return props.goForward(state.currentWorkflow, "");
 
@@ -162,21 +174,21 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
       if (!state.busy) {
 
-        await parent.setState({busy: true});
+        await parent.setState({ busy: true });
 
         return await props
           .updateApp({
-          formActive: false,
-          selectedTask: "",
-          fieldPos: 0,
-          currentSection: "patient",
-          patientActivated: true,
-          processing: false,
-          dual: (Object.keys(props.app.partner).length > 0
-            ? true
-            : false)
-        })
-          .then(async() => {
+            formActive: false,
+            selectedTask: "",
+            fieldPos: 0,
+            currentSection: "patient",
+            patientActivated: true,
+            processing: false,
+            dual: (Object.keys(props.app.partner).length > 0
+              ? true
+              : false)
+          })
+          .then(async () => {
 
             await props.clearWorkflow("primary");
 
@@ -208,7 +220,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
             if (nextTask) {
 
-              await props.updateApp({sectionHeader: nextTask});
+              await props.updateApp({ sectionHeader: nextTask });
 
               await parent.navigateToRoute(nextTask, "/", "primary");
 
@@ -237,7 +249,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
             }
 
-            parent.setState({busy: false});
+            parent.setState({ busy: false });
 
           })
 
@@ -251,7 +263,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
       if (!state.busy) {
 
-        await parent.setState({busy: true});
+        await parent.setState({ busy: true });
 
         await props.updateApp({
           partner: Object.assign({}, props.app.currentPatient),
@@ -260,7 +272,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
         return await props
           .clearCache()
-          .then(async() => {
+          .then(async () => {
 
             await props.clearDataStructs();
 
@@ -389,7 +401,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
             }
 
-            parent.setState({busy: false});
+            parent.setState({ busy: false });
 
           });
 
@@ -399,7 +411,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
       if (!state.busy && (props.dde.matches.hits || []).length > 0) {
 
-        await parent.setState({busy: true});
+        await parent.setState({ busy: true });
 
         let primaryId;
 
@@ -416,7 +428,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
             : new Date().getTime(),
           program: props.module,
           group: state.currentWorkflow
-        })).then(async() => {
+        })).then(async () => {
 
           await props.fetchVisits(primaryId);
 
@@ -424,7 +436,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
             props
               .goForward(state.currentWorkflow, "")
-              .then(async() => {
+              .then(async () => {
 
                 await props.goForward(state.currentWorkflow, "No");
 
@@ -642,13 +654,13 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
                 }
 
-                parent.setState({busy: false});
+                parent.setState({ busy: false });
 
               });
 
           } else {
 
-            parent.setState({busy: false});
+            parent.setState({ busy: false });
 
             return;
 
@@ -658,7 +670,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
       } else if (!state.busy && props.wf.responses && props.wf.responses[state.currentWorkflow] && Object.keys(props.wf.responses[state.currentWorkflow]).length > 0) {
 
-        await parent.setState({busy: true});
+        await parent.setState({ busy: true });
 
         let primaryId;
 
@@ -681,7 +693,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
           return await props
             .goForward(state.currentWorkflow, "")
-            .then(async() => {
+            .then(async () => {
 
               await props.goForward(state.currentWorkflow, "No");
 
@@ -899,13 +911,13 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
               }
 
-              parent.setState({busy: false});
+              parent.setState({ busy: false });
 
             });
 
         } else {
 
-          parent.setState({busy: false});
+          parent.setState({ busy: false });
 
           return;
 
@@ -917,28 +929,28 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
       if (!state.busy) {
 
-        await parent.setState({busy: true});
+        await parent.setState({ busy: true });
 
         await props.submitForm(props.app.configs.action, Object.assign({}, props.app.currentSection !== "registration"
           ? {
             [props.app.sectionHeader]: props.wf.responses[state.currentWorkflow]
           }
           : props.wf.responses[state.currentWorkflow], {
-          primaryId: props.app.scanID,
-          date: props.selectedVisit && new Date(props.selectedVisit)
-            ? new Date(props.selectedVisit).getTime()
-            : new Date().getTime(),
-          program: props.module,
-          group: state.currentWorkflow,
-          location: props.app.activeLocation,
-          user: props.app.activeUser
-        }));
+            primaryId: props.app.scanID,
+            date: props.selectedVisit && new Date(props.selectedVisit)
+              ? new Date(props.selectedVisit).getTime()
+              : new Date().getTime(),
+            program: props.module,
+            group: state.currentWorkflow,
+            location: props.app.activeLocation,
+            user: props.app.activeUser
+          }));
 
         if (props.wf.responses && props.wf.responses[state.currentWorkflow] && Object.keys(props.wf.responses[state.currentWorkflow]).indexOf("Partner Present") >= 0) {
 
           return await props
             .goForward(state.currentWorkflow, "")
-            .then(async() => {
+            .then(async () => {
 
               await props.goForward(state.currentWorkflow, "No");
 
@@ -1155,13 +1167,13 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
               }
 
-              parent.setState({busy: false});
+              parent.setState({ busy: false });
 
             });
 
         } else {
 
-          parent.setState({busy: false});
+          parent.setState({ busy: false });
 
           return;
 
@@ -1183,13 +1195,13 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
         ? props.wf.responses[state.currentWorkflow]["Gender"]
         : "";
 
-      props.searchByNameAndGender({given_name, family_name, gender, page_size: 6, page: 1});
+      props.searchByNameAndGender({ given_name, family_name, gender, page_size: 6, page: 1 });
 
     } else if (props.wf[state.currentWorkflow].currentNode.label === "Search in DDE by ID") {
 
       if (!state.busy && props.wf.responses && props.wf.responses[state.currentWorkflow] && props.wf.responses[state.currentWorkflow]["Scan barcode"]) {
 
-        parent.setState({busy: true});
+        parent.setState({ busy: true });
 
         const id = props.wf.responses && props.wf.responses[state.currentWorkflow] && props.wf.responses[state.currentWorkflow]["Scan barcode"]
           ? String(props.wf.responses[state.currentWorkflow]["Scan barcode"])
@@ -1197,11 +1209,11 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
             .replace(/\$$/gi, "")
           : "";
 
-        props.updateApp({scanID: id})
+        props.updateApp({ scanID: id })
 
         props.searchByIdentifier(id);
 
-        parent.setState({busy: false});
+        parent.setState({ busy: false });
 
       }
 
@@ -1339,9 +1351,9 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
     ? props.wf[state.currentWorkflow].currentNode.type
     : "") === "alert") {
 
-    if (referrals && referrals[props.wf[state.currentWorkflow].currentNode.label]) 
+    if (referrals && referrals[props.wf[state.currentWorkflow].currentNode.label])
       props.handleInputChange("Referral for Re-Testing", referrals[props.wf[state.currentWorkflow].currentNode.label], state.currentWorkflow);
-    
+
     props.showInfoMsg("Referral", props.wf[state.currentWorkflow].currentNode.label);
 
     return props.goForward(state.currentWorkflow, "");

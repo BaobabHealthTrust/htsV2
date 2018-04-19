@@ -1449,6 +1449,12 @@ class App extends Component {
 
     } else if (this.props.app.configs.action) {
 
+      if (this.props.app.sectionHeader === "HTS Visit") {
+
+        await this.props.updateApp({ processing: true });
+
+      }
+
       await this
         .props
         .clearDataStructs();
@@ -1489,6 +1495,16 @@ class App extends Component {
             .fetchVisits(this.props.app.currentId);
 
         });
+
+      if (this.props.app.sectionHeader === "HTS Visit") {
+
+        this.transcribe();
+
+      } else {
+
+        this.props.updateApp({ processing: false });
+
+      }
 
     }
 
@@ -2311,7 +2327,8 @@ class App extends Component {
         sectionHeader: "Transcribe in Register",
         fieldPos: 0,
         configs,
-        summaryIgnores
+        summaryIgnores,
+        processing: false
       });
 
     await this
