@@ -1,10 +1,12 @@
 export default function (state = [], action) {
 
+    let newState;
+
     switch (action.type) {
 
         case "FETCH_DATA_FULFILLED":
 
-            let newState = Object.assign([], state);
+            newState = Object.assign([], state);
 
             if (Array.isArray(action.payload.data)) {
 
@@ -20,9 +22,15 @@ export default function (state = [], action) {
 
         case "CLEAR_DATA":
 
-            const newDefaultState = [];
+            newState = [];
 
-            return newDefaultState;
+            return newState;
+
+        case "SET_DATA":
+
+            newState = Object.assign([], action.payload);
+
+            return newState;
 
         default:
 

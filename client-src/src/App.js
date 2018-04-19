@@ -22,7 +22,7 @@ import {
   activateUser,
   loadData
 } from "./actions/appAction";
-import { fetchData, clearCache } from "./actions/fetchDataAction";
+import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
 import { loadWorkflow, goForward, clearWorkflow, goBackward, handleInputChange } from "./actions/wfActions";
 import { fetchLastBDRow, saveBDRow, fetchEditRow, saveEditRow, resetErrorMessage } from "./actions/bdAction";
@@ -2240,6 +2240,8 @@ class App extends Component {
         return Object.keys(e[Object.keys(e)[0]])
       })[0];
 
+    this.props.setData(entryCodes);
+
     return entryCodes;
 
   }
@@ -2274,7 +2276,8 @@ class App extends Component {
         lockList: true
       },
       "Select Entry Code": {
-        options: this.loadEntryCodes()
+        options: this.loadEntryCodes(),
+        lockList: true
       },
       "Entry Code Not Set?": {
         visible: false,
@@ -4105,6 +4108,9 @@ const mapDispatchToProps = dispatch => {
     },
     resetErrorMessage: async () => {
       return await dispatch(resetErrorMessage());
+    },
+    setData: async (data) => {
+      return await dispatch(setData(data));
     }
   };
 };
