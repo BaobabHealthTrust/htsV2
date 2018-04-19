@@ -657,7 +657,9 @@ class App extends Component {
         scanID: null,
         primary: {},
         secondary: {},
-        patientActivated: false
+        patientActivated: false,
+        firstSummary: null,
+        secondSummary: null
       };
 
       payload.currentSection = "home";
@@ -1035,7 +1037,9 @@ class App extends Component {
         primary: {},
         secondary: {},
         currentSection: "patient",
-        isDirty: false
+        isDirty: false,
+        firstSummary: null,
+        secondSummary: null
       };
 
       await this
@@ -1071,7 +1075,9 @@ class App extends Component {
         scanID: null,
         primary: {},
         secondary: {},
-        isDirty: false
+        isDirty: false,
+        firstSummary: null,
+        secondSummary: null
       };
 
       if (["registration", "admin"].indexOf(this.props.app.currentSection) >= 0) {

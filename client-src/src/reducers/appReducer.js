@@ -311,7 +311,9 @@ export default function appReducer(state = {
     configs: {}
   },
   entryCode: null,
-  activeRegisters: 0
+  activeRegisters: 0,
+  firstSummary: false,
+  secondSummary: false
 }, action) {
 
   let newState,
@@ -387,7 +389,9 @@ export default function appReducer(state = {
         "userManagementActive",
         "entryCode",
         "report",
-        "isDirty"
+        "isDirty",
+        "firstSummary",
+        "secondSummary"
       ].forEach((e) => {
 
         if (Object.keys(action.payload).indexOf(e) >= 0) {
