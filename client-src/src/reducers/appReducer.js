@@ -111,9 +111,9 @@ const processData = (newState, action) => {
 
     activeProgram = program[0];
 
-    if (activeProgram) 
+    if (activeProgram)
       activeProgram.visits = [];
-    
+
     for (let k = 0; k < activeProgram.tasks.length; k++) {
 
       activeProgram.tasks[k].done = false;
@@ -184,7 +184,7 @@ const processData = (newState, action) => {
 
 }
 
-const activateSummaries = async(newState) => {
+const activateSummaries = async (newState) => {
 
   ["primary", "secondary"].forEach((group) => {
 
@@ -318,6 +318,11 @@ export default function appReducer(state = {
     today,
     primaryId;
 
+  const genders = {
+    F: "Female",
+    M: "Male"
+  };
+
   switch (action.type) {
 
     case "INIT_APP_FULFILLED":
@@ -399,11 +404,11 @@ export default function appReducer(state = {
 
         primaryId = payload.currentPatient.primaryId;
 
-        if (!primaryId) 
+        if (!primaryId)
           primaryId = (payload.currentPatient.npid
             ? payload.currentPatient.npid
             : payload.currentPatient.otherId);
-        
+
         delete payload.currentPatient.primaryId;
 
         newState.currentId = primaryId;
@@ -463,7 +468,7 @@ export default function appReducer(state = {
             ? action.payload.data.age
             : ""),
           gender: (action.payload.data && action.payload.data.gender
-            ? action.payload.data.gender
+            ? (genders[action.payload.data.gender] ? genders[action.payload.data.gender] : action.payload.data.gender)
             : ""),
           otherId: (action.payload.data && action.payload.data.otherId
             ? action.payload.data.otherId
@@ -499,10 +504,10 @@ export default function appReducer(state = {
 
         if (npid) {
 
-          if (!newState.patientData) 
+          if (!newState.patientData)
             newState.patientData = {};
-          
-          if (!newState.patientData[npid]) 
+
+          if (!newState.patientData[npid])
             newState.patientData[npid] = {};
           [
             "age",
@@ -522,10 +527,17 @@ export default function appReducer(state = {
             "cellPhoneNumber"
           ].forEach((e) => {
 
-            if (Object.keys(action.payload.data).indexOf(e) >= 0) 
+            if (e === "gender") {
+
+              newState.patientData[npid][e] = (genders[action.payload.data[e]] ? genders[action.payload.data[e]] : action.payload.data[e])
+
+            } else if (Object.keys(action.payload.data).indexOf(e) >= 0) {
+
               newState.patientData[npid][e] = action.payload.data[e];
 
             }
+
+          }
           );
 
           newState.patientData[npid].primaryId = npid;
@@ -544,18 +556,18 @@ export default function appReducer(state = {
 
           const npid = action.payload.data.primaryId;
 
-          if (!newState.patientData) 
+          if (!newState.patientData)
             newState.patientData = {};
-          
-          if (!newState.patientData[npid]) 
+
+          if (!newState.patientData[npid])
             newState.patientData[npid] = {};
-          
-          if (!newState.patientData[npid][newState.module]) 
+
+          if (!newState.patientData[npid][newState.module])
             newState.patientData[npid][newState.module] = {};
-          
-          if (!newState.patientData[npid][newState.module].visits) 
+
+          if (!newState.patientData[npid][newState.module].visits)
             newState.patientData[npid][newState.module].visits = [];
-          
+
           let pos = -1;
 
           for (let i = 0; i < newState.patientData[npid][newState.module].visits.length; i++) {
@@ -597,7 +609,7 @@ export default function appReducer(state = {
             newState
               .patientData[npid][newState.module]
               .visits
-              .push({[today]: action.payload.data})
+              .push({ [today]: action.payload.data })
 
           }
 
@@ -645,18 +657,18 @@ export default function appReducer(state = {
 
           let pos = -1;
 
-          if (!newState.patientData) 
+          if (!newState.patientData)
             newState.patientData = {};
-          
-          if (!newState.patientData[npid]) 
+
+          if (!newState.patientData[npid])
             newState.patientData[npid] = {};
-          
-          if (!newState.patientData[npid][newState.module]) 
+
+          if (!newState.patientData[npid][newState.module])
             newState.patientData[npid][newState.module] = {};
-          
-          if (!newState.patientData[npid][newState.module].visits) 
+
+          if (!newState.patientData[npid][newState.module].visits)
             newState.patientData[npid][newState.module].visits = [];
-          
+
           for (let i = 0; i < newState.patientData[npid][newState.module].visits.length; i++) {
 
             const row = newState.patientData[npid][newState.module].visits[i];
@@ -713,7 +725,7 @@ export default function appReducer(state = {
             ? action.payload.data.age
             : ""),
           gender: (action.payload.data && action.payload.data.gender
-            ? action.payload.data.gender
+            ? (genders[action.payload.data.gender] ? genders[action.payload.data.gender] : action.payload.data.gender)
             : ""),
           otherId: (action.payload.data && action.payload.data.otherId
             ? action.payload.data.otherId
@@ -737,6 +749,8 @@ export default function appReducer(state = {
 
         newState.patientData[npid] = Object.assign({}, action.payload.data);
 
+        newState.patientData[npid].gender = (genders[action.payload.data.gender] ? genders[action.payload.data.gender] : action.payload.data.gender);
+
         newState.currentId = npid;
 
         newState.clientId = npid;
@@ -745,18 +759,18 @@ export default function appReducer(state = {
 
         let pos = -1;
 
-        if (!newState.patientData) 
+        if (!newState.patientData)
           newState.patientData = {};
-        
-        if (!newState.patientData[npid]) 
+
+        if (!newState.patientData[npid])
           newState.patientData[npid] = {};
-        
-        if (!newState.patientData[npid][newState.module]) 
+
+        if (!newState.patientData[npid][newState.module])
           newState.patientData[npid][newState.module] = {};
-        
-        if (!newState.patientData[npid][newState.module].visits) 
+
+        if (!newState.patientData[npid][newState.module].visits)
           newState.patientData[npid][newState.module].visits = [];
-        
+
         for (let i = 0; i < newState.patientData[npid][newState.module].visits.length; i++) {
 
           const row = newState.patientData[npid][newState.module].visits[i];
@@ -815,7 +829,7 @@ export default function appReducer(state = {
 
     case "SUBMIT_FORM_REJECTED":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
       if (action.payload && action.payload.response && action.payload.response.data && action.payload.response.data.message) {
 
@@ -827,7 +841,7 @@ export default function appReducer(state = {
 
     case "FETCH_JSON_PENDING":
 
-      newState = Object.assign({}, state, {processing: true});
+      newState = Object.assign({}, state, { processing: true });
 
       return newState;
 
@@ -835,12 +849,12 @@ export default function appReducer(state = {
 
       const data = Object.assign({}, state.data);
 
-      if (!data[action.payload.data.group]) 
+      if (!data[action.payload.data.group])
         data[action.payload.data.group] = {};
-      
-      if (!data[action.payload.data.group][action.payload.data.subGroup]) 
+
+      if (!data[action.payload.data.group][action.payload.data.subGroup])
         data[action.payload.data.group][action.payload.data.subGroup] = {};
-      
+
       data[action.payload.data.group][action.payload.data.subGroup].data = action.payload.data.data;
 
       data[action.payload.data.group][action.payload.data.subGroup].configs = action.payload.data.configs;
@@ -849,9 +863,9 @@ export default function appReducer(state = {
 
       data[action.payload.data.group].order = action.payload.data.order;
 
-      if (action.payload.data.referrals && Object.keys(action.payload.data.referrals).length > 0) 
+      if (action.payload.data.referrals && Object.keys(action.payload.data.referrals).length > 0)
         data[action.payload.data.group].referrals = action.payload.data.referrals;
-      
+
       newState = Object.assign({}, state, {
         data: data,
         order: action.payload.data.order,
@@ -864,13 +878,13 @@ export default function appReducer(state = {
 
     case "FETCH_PATIENT_DATA_PENDING":
 
-      newState = Object.assign({}, state, {processing: true});
+      newState = Object.assign({}, state, { processing: true });
 
       return newState;
 
     case "FETCH_PATIENT_DATA_FULFILLED":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
       let payload = Object.assign({}, action.payload.data);
 
@@ -900,7 +914,7 @@ export default function appReducer(state = {
 
     case "VOID_ENCOUNTER_PENDING":
 
-      newState = Object.assign({}, state, {processing: true});
+      newState = Object.assign({}, state, { processing: true });
 
       return newState;
 
@@ -915,7 +929,7 @@ export default function appReducer(state = {
 
     case "FETCHING_VISITS":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
       if (newState.refresh && newState.patientData[action.payload] && newState.patientData[action.payload][newState.module]) {
 
@@ -971,18 +985,18 @@ export default function appReducer(state = {
 
         let pos = -1;
 
-        if (!newState.patientData) 
+        if (!newState.patientData)
           newState.patientData = {};
-        
-        if (!newState.patientData[identifier]) 
+
+        if (!newState.patientData[identifier])
           newState.patientData[identifier] = {};
-        
-        if (!newState.patientData[identifier][program]) 
+
+        if (!newState.patientData[identifier][program])
           newState.patientData[identifier][program] = {};
-        
-        if (!newState.patientData[identifier][program].visits) 
+
+        if (!newState.patientData[identifier][program].visits)
           newState.patientData[identifier][program].visits = [];
-        
+
         for (let i = 0; i < newState.patientData[identifier][program].visits.length; i++) {
 
           const row = newState.patientData[identifier][program].visits[i];
@@ -1028,9 +1042,9 @@ export default function appReducer(state = {
             }
           };
 
-          if (registerNumber) 
+          if (registerNumber)
             entry[visitDate][entryCode][encounterType].registerNumber = registerNumber;
-          
+
           newState
             .patientData[identifier][program]
             .visits
@@ -1044,7 +1058,7 @@ export default function appReducer(state = {
 
     case "FETCH_VISITS_DONE":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
       if (action.payload.id && action.payload.flashId && newState.patientData[action.payload.id] && newState.patientData[action.payload.id][newState.module] && newState.patientData[action.payload.id][newState.module].visits) {
 
@@ -1128,7 +1142,7 @@ export default function appReducer(state = {
 
     case "LOGIN_PENDING":
 
-      newState = Object.assign({}, state, {processing: true});
+      newState = Object.assign({}, state, { processing: true });
 
       return newState;
 
@@ -1162,13 +1176,13 @@ export default function appReducer(state = {
 
     case "SET_LOCATION_PENDING":
 
-      newState = Object.assign({}, state, {processing: true});
+      newState = Object.assign({}, state, { processing: true });
 
       return newState;
 
     case "SET_LOCATION_REJECTED":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
       return newState;
 
@@ -1185,13 +1199,13 @@ export default function appReducer(state = {
 
     case "SESSION_VALID_PENDING":
 
-      newState = Object.assign({}, state, {processing: true});
+      newState = Object.assign({}, state, { processing: true });
 
       return newState;
 
     case "SESSION_VALID_FULFILLED":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
       return newState;
 
@@ -1238,23 +1252,23 @@ export default function appReducer(state = {
 
     case "LOAD_DATA":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
-      if (!newState.data[action.payload.data.group]) 
+      if (!newState.data[action.payload.data.group])
         newState.data[action.payload.data.group] = {};
-      
-      if (!newState.data[action.payload.data.group][action.payload.data.subGroup]) 
+
+      if (!newState.data[action.payload.data.group][action.payload.data.subGroup])
         newState.data[action.payload.data.group][action.payload.data.subGroup] = {};
-      
-      if (action.payload.data.data) 
+
+      if (action.payload.data.data)
         newState.data[action.payload.data.group][action.payload.data.subGroup].data = action.payload.data.data;
-      
-      if (action.payload.data.configs) 
+
+      if (action.payload.data.configs)
         newState.data[action.payload.data.group][action.payload.data.subGroup].configs = action.payload.data.configs;
-      
-      if (action.payload.data.ignores) 
+
+      if (action.payload.data.ignores)
         newState.data[action.payload.data.group][action.payload.data.subGroup].ignores = action.payload.data.ignores;
-      
+
       return newState;
 
     default:

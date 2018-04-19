@@ -62,5 +62,6 @@
     "url": ""
   },
   "license": "UNLICENSED",
-  "description": "hts-lb"
+  "description": "hts-lb",
+  "proxy": "http://localhost:3000"
 }
