@@ -96,9 +96,9 @@
     "Year of Birth": {
         "fieldType": "number",
         "validationRule": "^\\d{4}$|Unknown",
-        "min": "thisYear - 120",
+        "min": "thisYear - 110",
         "max": "thisYear",
-        "validationMessage": "Birth year \n must be (current year - 110) to (current year)",
+        "validationMessage": "Birth year \n must between {{thisYear - 110}} and {{thisYear}}",
         "hiddenButtons": ["clear", "/", ".", "-", "abc", "qwe"]
     },
     "Year of Birth Unknown?": {

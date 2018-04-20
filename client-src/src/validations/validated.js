@@ -32,6 +32,32 @@ const ageToDays = (age) => {
 
 }
 
+const evalInline = (msg, lDelim = '{{', rDelim = '}}') => {
+
+  const re = new RegExp(lDelim + '[^' + rDelim + ']+' + rDelim, 'g');
+  const parts = msg.match(re);
+
+  let result = String(msg);
+
+  const thisYear = (new Date()).getFullYear();
+
+  parts.forEach(part => {
+
+    let row = String(part)
+      .replace((new RegExp(lDelim, 'g')), '')
+      .replace((new RegExp(rDelim, 'g')), '')
+      .replace(/thisyear/ig, thisYear);
+
+    row = eval(row);
+
+    result = result.replace((new RegExp(part, 'g')), row);
+
+  });
+
+  return result;
+
+}
+
 export function validated(props, state) {
 
   let valid = false;
@@ -195,9 +221,9 @@ export function validated(props, state) {
         return {
           valid: false, message: (props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
             ? props.wf[state.currentWorkflow].currentNode.label
-            : ""].validationMessage ? props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+            : ""].validationMessage ? evalInline(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
               ? props.wf[state.currentWorkflow].currentNode.label
-              : ""].validationMessage : "Value less than expected minimum")
+              : ""].validationMessage) : "Value less than expected minimum")
         };
 
       }
@@ -213,9 +239,9 @@ export function validated(props, state) {
         return {
           valid: false, message: (props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
             ? props.wf[state.currentWorkflow].currentNode.label
-            : ""].validationMessage ? props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+            : ""].validationMessage ? evalInline(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
               ? props.wf[state.currentWorkflow].currentNode.label
-              : ""].validationMessage : "Value less than expected minimum")
+              : ""].validationMessage) : "Value less than expected minimum")
         };
 
       }
@@ -265,9 +291,9 @@ export function validated(props, state) {
         return {
           valid: false, message: (props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
             ? props.wf[state.currentWorkflow].currentNode.label
-            : ""].validationMessage ? props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+            : ""].validationMessage ? evalInline(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
               ? props.wf[state.currentWorkflow].currentNode.label
-              : ""].validationMessage : "Value greater than expected maximum")
+              : ""].validationMessage) : "Value greater than expected maximum")
         };
 
       }
@@ -283,9 +309,9 @@ export function validated(props, state) {
         return {
           valid: false, message: (props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
             ? props.wf[state.currentWorkflow].currentNode.label
-            : ""].validationMessage ? props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+            : ""].validationMessage ? evalInline(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
               ? props.wf[state.currentWorkflow].currentNode.label
-              : ""].validationMessage : "Value greater than expected maximum")
+              : ""].validationMessage) : "Value greater than expected maximum")
         };
 
       }
