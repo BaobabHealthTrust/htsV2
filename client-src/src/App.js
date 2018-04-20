@@ -1111,11 +1111,11 @@ class App extends Component {
     if (!this.props.app.formActive && this.props.app.dual && this.props.app.patientActivated && ((this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.clientId][this.props.app.module] && this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits && this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits.filter((e) => {
       return Object.keys(e)[0] === this.props.app.selectedVisit && Object
         .keys(e[this.props.app.selectedVisit])
-        .length < 1
+        .length > 0
     }).length > 0) || (this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.partnerId][this.props.app.module] && this.props.app.patientData[this.props.app.partnerId][this.props.app.module].visits && this.props.app.patientData[this.props.app.partnerId][this.props.app.module].visits.filter((e) => {
       return Object.keys(e)[0] === this.props.app.selectedVisit && Object
         .keys(e[this.props.app.selectedVisit])
-        .length < 1
+        .length > 0
     }).length > 0))) {
 
       this
@@ -1229,7 +1229,7 @@ class App extends Component {
     } else if (!this.props.app.formActive && this.props.app.patientActivated && this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.currentId][this.props.app.module] && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits.filter((e) => {
       return Object.keys(e)[0] === this.props.app.selectedVisit && Object
         .keys(e[this.props.app.selectedVisit])
-        .length < 1
+        .length > 0
     }).length > 0) {
 
       this
