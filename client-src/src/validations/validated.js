@@ -48,6 +48,7 @@ const evalInline = (msg, lDelim = '{{', rDelim = '}}') => {
       .replace((new RegExp(rDelim, 'g')), '')
       .replace(/thisyear/ig, thisYear);
 
+    // eslint-disable-next-line
     row = eval(row);
 
     result = result.replace((new RegExp(part, 'g')), row);
