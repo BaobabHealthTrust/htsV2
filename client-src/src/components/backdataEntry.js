@@ -28,6 +28,8 @@ class BackdataEntry extends Component {
     return document.getElementById(id);
   }
 
+  ignore = false;
+
   coords = {
     1: 158,
     2: 226,
@@ -61,6 +63,16 @@ class BackdataEntry extends Component {
     "Client Risk Category": 12,
     "Referral for Re-Testing": 13,
     "Number of Items Given": 14
+  }
+
+  hideKeyboard() {
+
+    let newState = this.state;
+
+    newState.fieldType = "";
+
+    this.setState(newState);
+
   }
 
   handleCellClick(fieldType, category, field, subField, subSubField, j, i, group, e) {
@@ -3016,29 +3028,32 @@ class BackdataEntry extends Component {
           </tbody>
         </table>
 
-        <div
-          style={{
-            position: "absolute",
-            zIndex: "100",
-            textAlign: "center",
-            width: "700px",
-            bottom: "10px",
-            left: "calc(50vw - 350px)",
-            backgroundColor: "rgba(255,255,255,0.9)",
-            borderRadius: "5px",
-            border: "1px solid #cccccc"
-          }}>
-          <Keyboard
-            onChangeHandler={this
-              .onChangeHandler
-              .bind(this)}
-            currentString={this.state.currentString}
-            configs={this.state.configs}
-            options={this.props.options}
-            label={this.state.label}
-            responses={this.props.responses}
-            fieldType={this.state.fieldType}
-            smallButtons={true} /></div>
+        <div style={{
+          position: "absolute",
+          zIndex: "100",
+          textAlign: "center",
+          bottom: "10px",
+          width: "100%"
+        }} onClick={(e) => { if (this.ignore) { this.ignore = false; return } else { this.hideKeyboard() } }}>
+          <div
+            style={{
+              display: "inline-block",
+              backgroundColor: "rgba(255,255,255,0.9)",
+              borderRadius: "5px",
+              border: "1px solid #cccccc"
+            }} id="dvBoard" onClick={() => { this.ignore = true }}>
+            <Keyboard
+              onChangeHandler={this
+                .onChangeHandler
+                .bind(this)}
+              currentString={this.state.currentString}
+              configs={this.state.configs}
+              options={this.props.options}
+              label={this.state.label}
+              responses={this.props.responses}
+              fieldType={this.state.fieldType}
+              smallButtons={true} /></div>
+        </div>
       </div>
 
     )

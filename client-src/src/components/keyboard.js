@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './keyboard.css';
 import Button from './button';
 import Input from './input';
@@ -349,7 +349,7 @@ class Keyboard extends Component {
 
     let tomorrow = (new Date(this.state.currentDate)).setDate(today.getDate() + 1);
 
-    tomorrow = (new Date(tomorrow)).setHours(0, 0, 0,);
+    tomorrow = (new Date(tomorrow)).setHours(0, 0, 0, );
 
     let maxDate;
 
@@ -439,7 +439,7 @@ class Keyboard extends Component {
 
       }
 
-      maxDate = (new Date(actualMaxdate)).setHours(0, 0, 0,);
+      maxDate = (new Date(actualMaxdate)).setHours(0, 0, 0, );
 
       maxDate = (new Date(maxDate)).setDate((new Date(maxDate)).getDate() + 1)
 
@@ -447,13 +447,13 @@ class Keyboard extends Component {
 
     if ((maxDate && tomorrow <= maxDate) || !maxDate) {
 
-      await this.setState({currentDate: tomorrow})
+      await this.setState({ currentDate: tomorrow })
 
       currentString = (new Date(tomorrow)).getDate() + " " + this.months[(new Date(tomorrow)).getMonth()] + " " + (new Date(tomorrow)).getFullYear();
 
     } else {
 
-      await this.setState({currentDate: today})
+      await this.setState({ currentDate: today })
 
       currentString = (new Date(today)).getDate() + " " + this.months[(new Date(today)).getMonth()] + " " + (new Date(today)).getFullYear();
 
@@ -473,7 +473,7 @@ class Keyboard extends Component {
 
     let tomorrow = (new Date(this.state.currentDate)).setMonth(today.getMonth() + 1);
 
-    tomorrow = (new Date(tomorrow)).setHours(0, 0, 0,);
+    tomorrow = (new Date(tomorrow)).setHours(0, 0, 0, );
 
     let maxDate;
 
@@ -563,7 +563,7 @@ class Keyboard extends Component {
 
       }
 
-      maxDate = (new Date(actualMaxdate)).setHours(0, 0, 0,);
+      maxDate = (new Date(actualMaxdate)).setHours(0, 0, 0, );
 
       maxDate = (new Date(maxDate)).setDate((new Date(maxDate)).getDate() + 1)
 
@@ -571,13 +571,13 @@ class Keyboard extends Component {
 
     if ((maxDate && tomorrow <= maxDate) || !maxDate) {
 
-      await this.setState({currentDate: tomorrow})
+      await this.setState({ currentDate: tomorrow })
 
       currentString = (new Date(tomorrow)).getDate() + " " + this.months[(new Date(tomorrow)).getMonth()] + " " + (new Date(tomorrow)).getFullYear();
 
     } else {
 
-      await this.setState({currentDate: today})
+      await this.setState({ currentDate: today })
 
       currentString = (new Date(today)).getDate() + " " + this.months[(new Date(today)).getMonth()] + " " + (new Date(today)).getFullYear();
 
@@ -597,7 +597,7 @@ class Keyboard extends Component {
 
     let tomorrow = (new Date(this.state.currentDate)).setYear(today.getFullYear() + 1);
 
-    tomorrow = (new Date(tomorrow)).setHours(0, 0, 0,);
+    tomorrow = (new Date(tomorrow)).setHours(0, 0, 0, );
 
     let maxDate;
 
@@ -687,7 +687,7 @@ class Keyboard extends Component {
 
       }
 
-      maxDate = (new Date(actualMaxdate)).setHours(0, 0, 0,);
+      maxDate = (new Date(actualMaxdate)).setHours(0, 0, 0, );
 
       maxDate = (new Date(maxDate)).setDate((new Date(maxDate)).getDate() + 1)
 
@@ -695,13 +695,13 @@ class Keyboard extends Component {
 
     if ((maxDate && tomorrow <= maxDate) || !maxDate) {
 
-      await this.setState({currentDate: tomorrow})
+      await this.setState({ currentDate: tomorrow })
 
       currentString = (new Date(tomorrow)).getDate() + " " + this.months[(new Date(tomorrow)).getMonth()] + " " + (new Date(tomorrow)).getFullYear();
 
     } else {
 
-      await this.setState({currentDate: today})
+      await this.setState({ currentDate: today })
 
       currentString = (new Date(today)).getDate() + " " + this.months[(new Date(today)).getMonth()] + " " + (new Date(today)).getFullYear();
 
@@ -721,7 +721,7 @@ class Keyboard extends Component {
 
     let yesterday = (new Date(this.state.currentDate)).setDate(today.getDate() - 1);
 
-    yesterday = (new Date(yesterday)).setHours(0, 0, 0,);
+    yesterday = (new Date(yesterday)).setHours(0, 0, 0, );
 
     let minDate;
 
@@ -811,7 +811,7 @@ class Keyboard extends Component {
 
       }
 
-      minDate = (new Date(actualMinDate)).setHours(0, 0, 0,);
+      minDate = (new Date(actualMinDate)).setHours(0, 0, 0, );
 
       minDate = (new Date(minDate)).setDate((new Date(minDate)).getDate())
 
@@ -819,13 +819,13 @@ class Keyboard extends Component {
 
     if ((minDate && yesterday >= minDate) || !minDate) {
 
-      await this.setState({currentDate: yesterday})
+      await this.setState({ currentDate: yesterday })
 
       currentString = (new Date(yesterday)).getDate() + " " + this.months[(new Date(yesterday)).getMonth()] + " " + (new Date(yesterday)).getFullYear();
 
     } else {
 
-      await this.setState({currentDate: today})
+      await this.setState({ currentDate: today })
 
       currentString = (new Date(today)).getDate() + " " + this.months[(new Date(today)).getMonth()] + " " + (new Date(today)).getFullYear();
 
@@ -845,7 +845,7 @@ class Keyboard extends Component {
 
     let yesterday = (new Date(this.state.currentDate)).setMonth(today.getMonth() - 1);
 
-    yesterday = (new Date(yesterday)).setHours(0, 0, 0,);
+    yesterday = (new Date(yesterday)).setHours(0, 0, 0, );
 
     let minDate;
 
@@ -935,7 +935,7 @@ class Keyboard extends Component {
 
       }
 
-      minDate = (new Date(actualMinDate)).setHours(0, 0, 0,);
+      minDate = (new Date(actualMinDate)).setHours(0, 0, 0, );
 
       minDate = (new Date(minDate)).setDate((new Date(minDate)).getDate())
 
@@ -943,13 +943,13 @@ class Keyboard extends Component {
 
     if ((minDate && yesterday >= minDate) || !minDate) {
 
-      await this.setState({currentDate: yesterday})
+      await this.setState({ currentDate: yesterday })
 
       currentString = (new Date(yesterday)).getDate() + " " + this.months[(new Date(yesterday)).getMonth()] + " " + (new Date(yesterday)).getFullYear();
 
     } else {
 
-      await this.setState({currentDate: today})
+      await this.setState({ currentDate: today })
 
       currentString = (new Date(today)).getDate() + " " + this.months[(new Date(today)).getMonth()] + " " + (new Date(today)).getFullYear();
 
@@ -969,7 +969,7 @@ class Keyboard extends Component {
 
     let yesterday = (new Date(this.state.currentDate)).setYear(today.getFullYear() - 1);
 
-    yesterday = (new Date(yesterday)).setHours(0, 0, 0,);
+    yesterday = (new Date(yesterday)).setHours(0, 0, 0, );
 
     let minDate;
 
@@ -1059,7 +1059,7 @@ class Keyboard extends Component {
 
       }
 
-      minDate = (new Date(actualMinDate)).setHours(0, 0, 0,);
+      minDate = (new Date(actualMinDate)).setHours(0, 0, 0, );
 
       minDate = (new Date(minDate)).setDate((new Date(minDate)).getDate())
 
@@ -1067,13 +1067,13 @@ class Keyboard extends Component {
 
     if ((minDate && yesterday >= minDate) || !minDate) {
 
-      await this.setState({currentDate: yesterday})
+      await this.setState({ currentDate: yesterday })
 
       currentString = (new Date(yesterday)).getDate() + " " + this.months[(new Date(yesterday)).getMonth()] + " " + (new Date(yesterday)).getFullYear();
 
     } else {
 
-      await this.setState({currentDate: today})
+      await this.setState({ currentDate: today })
 
       currentString = (new Date(today)).getDate() + " " + this.months[(new Date(today)).getMonth()] + " " + (new Date(today)).getFullYear();
 
@@ -1115,27 +1115,27 @@ class Keyboard extends Component {
                   label="+"
                   buttonClass="dateButton"
                   handleMouseDown={this
-                  .incrementDate
-                  .bind(this)}
-                  id="btnAddDate"/>
+                    .incrementDate
+                    .bind(this)}
+                  id="btnAddDate" />
               </td>
               <td>
                 <Button
                   label="+"
                   buttonClass="dateButton"
                   handleMouseDown={this
-                  .incrementMonth
-                  .bind(this)}
-                  id="btnAddMonth"/>
+                    .incrementMonth
+                    .bind(this)}
+                  id="btnAddMonth" />
               </td>
               <td>
                 <Button
                   label="+"
                   buttonClass="dateButton"
                   handleMouseDown={this
-                  .incrementYear
-                  .bind(this)}
-                  id="btnAddYear"/>
+                    .incrementYear
+                    .bind(this)}
+                  id="btnAddYear" />
               </td>
             </tr>
             <tr>
@@ -1144,21 +1144,21 @@ class Keyboard extends Component {
                   className="dateField"
                   id="txtDateDate"
                   readOnly={true}
-                  value={(new Date(this.props.currentString)).getDate() || ""}/>
+                  value={(new Date(this.props.currentString)).getDate() || ""} />
               </td>
               <td>
                 <Input
                   className="dateField"
                   id="txtDateMonth"
                   readOnly={true}
-                  value={months[(new Date(this.props.currentString)).getMonth()] || ""}/>
+                  value={months[(new Date(this.props.currentString)).getMonth()] || ""} />
               </td>
               <td>
                 <Input
                   className="dateField"
                   id="txtDateYear"
                   readOnly={true}
-                  value={(new Date(this.props.currentString)).getFullYear() || ""}/>
+                  value={(new Date(this.props.currentString)).getFullYear() || ""} />
               </td>
             </tr>
             <tr>
@@ -1167,27 +1167,27 @@ class Keyboard extends Component {
                   label="-"
                   buttonClass="dateButton"
                   handleMouseDown={this
-                  .decrementDate
-                  .bind(this)}
-                  id="btnSubDate"/>
+                    .decrementDate
+                    .bind(this)}
+                  id="btnSubDate" />
               </td>
               <td>
                 <Button
                   label="-"
                   buttonClass="dateButton"
                   handleMouseDown={this
-                  .decrementMonth
-                  .bind(this)}
-                  id="btnSubMonth"/>
+                    .decrementMonth
+                    .bind(this)}
+                  id="btnSubMonth" />
               </td>
               <td>
                 <Button
                   label="-"
                   buttonClass="dateButton"
                   handleMouseDown={this
-                  .decrementYear
-                  .bind(this)}
-                  id="btnSubYear"/>
+                    .decrementYear
+                    .bind(this)}
+                  id="btnSubYear" />
               </td>
             </tr>
           </tbody>
@@ -1199,7 +1199,7 @@ class Keyboard extends Component {
 
   async componentDidUpdate() {
 
-    if(this.state.currentLabel !== this.props.label) {
+    if (this.state.currentLabel !== this.props.label) {
 
       await this.setState({
         currentLabel: this.props.label,
@@ -1212,9 +1212,9 @@ class Keyboard extends Component {
 
   renderKeyboard(keyboardType) {
 
-    if (!this.state[keyboardType]) 
+    if (!this.state[keyboardType])
       return;
-    
+
     if (keyboardType === "date") {
 
       return this.renderDate();
@@ -1256,7 +1256,7 @@ class Keyboard extends Component {
           ? 29
           : 28);
 
-      } catch (e) {}
+      } catch (e) { }
 
     }
 
@@ -1279,13 +1279,13 @@ class Keyboard extends Component {
                     key={keyboardType + "_" + key}
                     buttonClass={"blue" + (this.props.smallButtons ? " small" : "")}
                     label={(key.length === 1)
-                    ? String(key).toUpperCase()
-                    : (key === "cap"
-                      ? key.toUpperCase()
-                      : key)}
+                      ? String(key).toUpperCase()
+                      : (key === "cap"
+                        ? key.toUpperCase()
+                        : key)}
                     handleMouseDown={this
-                    .handleOnMouseDown
-                    .bind(this, key)}/>)
+                      .handleOnMouseDown
+                      .bind(this, key)} />)
 
               } else if (this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].textCase && this.props.configs[this.props.label].textCase.toLowerCase() === "lower") {
 
@@ -1296,13 +1296,13 @@ class Keyboard extends Component {
                     key={keyboardType + "_" + key}
                     buttonClass={"blue" + (this.props.smallButtons ? " small" : "")}
                     label={(key.length === 1)
-                    ? String(key).toLowerCase()
-                    : (key === "cap"
-                      ? key.toUpperCase()
-                      : key)}
+                      ? String(key).toLowerCase()
+                      : (key === "cap"
+                        ? key.toUpperCase()
+                        : key)}
                     handleMouseDown={this
-                    .handleOnMouseDown
-                    .bind(this, key)}/>)
+                      .handleOnMouseDown
+                      .bind(this, key)} />)
 
               } else {
 
@@ -1313,13 +1313,13 @@ class Keyboard extends Component {
                     key={keyboardType + "_" + key}
                     buttonClass={"blue" + (this.props.smallButtons ? " small" : "")}
                     label={this.state.capsLocked && (key.length === 1)
-                    ? String(key).toUpperCase()
-                    : (key === "cap" && !this.state.capsLocked
-                      ? key.toLowerCase()
-                      : key)}
+                      ? String(key).toUpperCase()
+                      : (key === "cap" && !this.state.capsLocked
+                        ? key.toLowerCase()
+                        : key)}
                     handleMouseDown={this
-                    .handleOnMouseDown
-                    .bind(this, key)}/>)
+                      .handleOnMouseDown
+                      .bind(this, key)} />)
 
               }
             })}
@@ -1335,31 +1335,31 @@ class Keyboard extends Component {
     // eslint-disable-next-line
     let currentString = this.props.currentString;
 
-    this.setState({clickedButton: null});
+    this.setState({ clickedButton: null });
 
     switch (String(text).toLowerCase()) {
 
       case "abc":
 
-        this.setState({activeKeyboard: "abc"});
+        this.setState({ activeKeyboard: "abc" });
 
         break;
 
       case "qwe":
 
-        this.setState({activeKeyboard: "qwe"});
+        this.setState({ activeKeyboard: "qwe" });
 
         break;
 
       case "num":
 
-        this.setState({activeKeyboard: "num"});
+        this.setState({ activeKeyboard: "num" });
 
         break;
 
       case "period":
 
-        this.setState({activeKeyboard: "period"});
+        this.setState({ activeKeyboard: "period" });
 
         break;
 
@@ -1367,11 +1367,11 @@ class Keyboard extends Component {
 
         if (this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].textCase && this.props.configs[this.props.label].textCase.toLowerCase() === "upper") {
 
-          this.setState({capsLocked: true});
+          this.setState({ capsLocked: true });
 
         } else if (this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].textCase && this.props.configs[this.props.label].textCase.toLowerCase() === "lower") {
 
-          this.setState({capsLocked: false});
+          this.setState({ capsLocked: false });
 
         } else {
 
@@ -1433,7 +1433,7 @@ class Keyboard extends Component {
 
         currentString = "";
 
-        this.setState({capsLocked: true});
+        this.setState({ capsLocked: true });
 
         break;
 
@@ -1445,7 +1445,7 @@ class Keyboard extends Component {
 
       default:
 
-        this.setState({clickedButton: text, capsLocked: false});
+        this.setState({ clickedButton: text, capsLocked: false });
 
         if (currentString.match(/unknown/i) || text.match(/unknown/i)) {
 
