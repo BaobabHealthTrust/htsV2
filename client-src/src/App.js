@@ -1206,7 +1206,9 @@ class App extends Component {
               scanID: null,
               primary: {},
               secondary: {},
-              isDirty: false
+              isDirty: false,
+              firstSummary: null,
+              secondSummary: null
             };
 
             if (nextPage)
@@ -1306,7 +1308,9 @@ class App extends Component {
               scanID: null,
               primary: {},
               secondary: {},
-              isDirty: false
+              isDirty: false,
+              firstSummary: null,
+              secondSummary: null
             };
 
             if (nextPage)
@@ -1365,7 +1369,9 @@ class App extends Component {
         scanID: null,
         primary: {},
         secondary: {},
-        isDirty: false
+        isDirty: false,
+        firstSummary: null,
+        secondSummary: null
       };
 
       if (nextPage)
