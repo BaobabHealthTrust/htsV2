@@ -47,8 +47,7 @@
         "customComponent": "FamilyRefs",
         "properties": {
             "label": "HTS Family Referral Slips"
-        },
-        "optional": true
+        }
     },
     "Comments": {
         "fieldType": "textarea",

@@ -2549,7 +2549,7 @@ class App extends Component {
             fieldType: "dha",
             textCase: "upper",
             validator: algorithm.decode,
-            validatorMessage: "Invalid ID format entered"
+            validationMessage: "Invalid ID format entered"
           },
           "Password": {
             fieldType: "password",

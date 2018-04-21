@@ -61,7 +61,7 @@ const evalInline = (msg, lDelim = '{{', rDelim = '}}') => {
 
 export function validated(props, state) {
 
-  let valid = false;
+  let valid = true;
   let msg = "Required field empty!";
   let title = "Error";
 
@@ -84,6 +84,28 @@ export function validated(props, state) {
         : ""].optional === true) {
 
     return { valid: true, message: null };
+
+  } else if (props.wf && (!props.wf.responses || (props.wf.responses && props.wf.responses[state.currentWorkflow] && props.wf.responses[state.currentWorkflow][props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+    ? props.wf[state.currentWorkflow].currentNode.label
+    : ""] && props.wf.responses[state.currentWorkflow][props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+      ? props.wf[state.currentWorkflow].currentNode.label
+      : ""].length <= 0 && props.app.configs && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+        ? props.wf[state.currentWorkflow].currentNode.label
+        : ""] && Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+          ? props.wf[state.currentWorkflow].currentNode.label
+          : ""]).indexOf("optional") < 0))) {
+
+    return {
+      valid: false, message: (props.app.configs && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+        ? props.wf[state.currentWorkflow].currentNode.label
+        : ""] && Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+          ? props.wf[state.currentWorkflow].currentNode.label
+          : ""]).indexOf("validationMessage") >= 0
+        ? props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+          ? props.wf[state.currentWorkflow].currentNode.label
+          : ""].validationMessage
+        : msg)
+    }
 
   }
 
@@ -115,10 +137,10 @@ export function validated(props, state) {
         ? props.wf[state.currentWorkflow].currentNode.label
         : ""] && Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
           ? props.wf[state.currentWorkflow].currentNode.label
-          : ""]).indexOf("validatorMessage") >= 0
+          : ""]).indexOf("validationMessage") >= 0
         ? props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
           ? props.wf[state.currentWorkflow].currentNode.label
-          : ""].validatorMessage
+          : ""].validationMessage
         : "Invalid value entered")
     };
 
@@ -178,8 +200,6 @@ export function validated(props, state) {
       }
 
     }
-
-    // return {valid: true, message: null};
 
   }
 
@@ -249,8 +269,6 @@ export function validated(props, state) {
 
     }
 
-    // return {valid: true, message: null};
-
   }
 
   if (props.app.configs && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
@@ -318,8 +336,6 @@ export function validated(props, state) {
       }
 
     }
-
-    // return {valid: true, message: null};
 
   }
 
