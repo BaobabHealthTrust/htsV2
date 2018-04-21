@@ -71,7 +71,7 @@ export function validated(props, state) {
       ? props.wf[state.currentWorkflow].currentNode.label
       : ""].length <= 0)) {
 
-    return { valid: false, message: msg };
+    return { valid: false, msg };
 
   }
 
@@ -83,7 +83,8 @@ export function validated(props, state) {
         ? props.wf[state.currentWorkflow].currentNode.label
         : ""].optional === true) {
 
-    return { valid: true, message: null };
+    valid = true;
+    msg = "";
 
   } else if (props.wf && (!props.wf.responses || (props.wf.responses && props.wf.responses[state.currentWorkflow] && props.wf.responses[state.currentWorkflow][props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
     ? props.wf[state.currentWorkflow].currentNode.label
@@ -117,7 +118,8 @@ export function validated(props, state) {
         ? props.wf[state.currentWorkflow].currentNode.label
         : ""].visible === false) {
 
-    return { valid: true, message: null };
+    valid = true;
+    msg = "";
 
   }
 
@@ -171,6 +173,16 @@ export function validated(props, state) {
         : ""]
       : "");
 
+    if (currentValue.trim().length <= 0) {
+
+      return {
+        valid: false, title: "Missing data", message: (props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+          ? props.wf[state.currentWorkflow].currentNode.label
+          : "Required field") + " \n must be entered"
+      };
+
+    }
+
     let parts = params.split(" ");
 
     if (parts.length === 1) {
@@ -181,7 +193,8 @@ export function validated(props, state) {
 
           if (ageToDays(currentValue) < tokens.age) {
 
-            return { valid: true, message: null };
+            valid = true;
+            msg = "";
 
           } else {
 

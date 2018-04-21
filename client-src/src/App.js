@@ -2061,8 +2061,7 @@ class App extends Component {
 
   async handleClearClicks() {
 
-    // First branch does not make sense. May need to be pruned later.
-    if (this.props.dde.ddeSearchActive && false) {
+    if (this.props.dde.ddeSearchActive && this.$('btnClear') && this.$('btnClear').innerHTML === "New Client") {
 
       await this
         .props
