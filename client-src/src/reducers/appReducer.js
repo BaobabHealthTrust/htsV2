@@ -1275,6 +1275,34 @@ export default function appReducer(state = {
 
       return newState;
 
+    case "FLAG_REGISTER_FILLED":
+
+      newState = Object.assign({}, state);
+
+      let pos = -1;
+
+      for (let i = 0; i < newState.patientData[action.payload.data.clientId][action.payload.data.module].visits.length; i++) {
+
+        const row = newState.patientData[action.payload.data.clientId][action.payload.data.module].visits[i];
+
+        if (Object.keys(row)[0] === action.payload.data.visitDate) {
+
+          pos = i;
+
+          break;
+
+        }
+
+      }
+
+      if (pos >= 0) {
+
+        newState.patientData[action.payload.data.clientId][action.payload.data.module].visits[pos][action.payload.data.visitDate][action.payload.data.entryCode]["HTS Visit"].registerNumber = -1;
+
+      }
+
+      return newState;
+
     default:
 
       return state;

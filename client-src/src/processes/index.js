@@ -140,11 +140,28 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
       } else {
 
-        parent.submitForm().then(() => {
+        if (props.app.sectionHeader === "Transcribe in Register") {
+
+          await props.flagRegisterFilled(props.app.currentId, props.app.module, props.app.selectedVisit, props.app.entryCode);
+
+        }
+
+        parent.submitForm().then(async () => {
 
           if (props.app.sectionHeader === "HTS Visit") {
 
-            parent.transcribe();
+            const entryCode = props
+              .app
+              .patientData[props.app.currentId][props.app.module]
+              .visits
+              .filter((e) => {
+                return Object.keys(e)[0] === props.app.selectedVisit
+              })
+              .map((e) => {
+                return Object.keys(e[Object.keys(e)[0]])
+              })[0];
+
+            parent.transcribe(entryCode);
 
           } else {
 

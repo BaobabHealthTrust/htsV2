@@ -20,7 +20,8 @@ import {
   fetchUsers,
   blockUser,
   activateUser,
-  loadData
+  loadData,
+  flagRegisterFilled
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -1120,7 +1121,7 @@ class App extends Component {
 
       this
         .props
-        .showConfirmMsg("Confirm", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
+        .showConfirmMsg("Confirm 1", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
           " want to delete them?",
           "Delete", async () => {
 
@@ -1236,7 +1237,7 @@ class App extends Component {
 
       this
         .props
-        .showConfirmMsg("Confirm", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
+        .showConfirmMsg("Confirm 2", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
           " want to delete them?",
           "Delete", async () => {
 
@@ -1421,6 +1422,8 @@ class App extends Component {
             .showErrorMsg('Error', e)
         });
 
+      await this.props.flagRegisterFilled(this.props.app.currentId, this.props.app.module, this.props.app.selectedVisit, this.props.app.entryCode);
+
       if (this.props.app.dual) {
 
         this.cancelForm();
@@ -1428,6 +1431,10 @@ class App extends Component {
         this
           .props
           .fetchVisits(this.props.app.currentId);
+
+      } else if (this.props.app.patientActivated) {
+
+        this.switchPage("home");
 
       } else {
 
@@ -1510,7 +1517,18 @@ class App extends Component {
 
       if (this.props.app.sectionHeader === "HTS Visit") {
 
-        this.transcribe();
+        const entryCode = this.props
+          .app
+          .patientData[this.props.app.currentId][this.props.app.module]
+          .visits
+          .filter((e) => {
+            return Object.keys(e)[0] === this.props.app.selectedVisit
+          })
+          .map((e) => {
+            return Object.keys(e[Object.keys(e)[0]])
+          })[0];
+
+        this.transcribe(entryCode);
 
       } else {
 
@@ -2069,6 +2087,11 @@ class App extends Component {
           ? this.props.wf[this.state.currentWorkflow].currentNode.label
           : "", "", this.state.currentWorkflow);
 
+      this
+        .queryOptions(this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+          ? this.props.wf[this.state.currentWorkflow].currentNode.label
+          : "");
+
     }
 
   }
@@ -2268,7 +2291,7 @@ class App extends Component {
         return Object.keys(e[Object.keys(e)[0]])
       })[0];
 
-    this.props.setData(entryCodes);
+    // this.props.setData(entryCodes);
 
     return entryCodes;
 
@@ -2286,7 +2309,7 @@ class App extends Component {
 
     await this
       .props
-      .updateApp({ entryCode });
+      .updateApp({ entryCode: (Array.isArray(entryCode) ? entryCode[0] : entryCode) });
 
     const configs = {
       "Register Number (from cover)": {
@@ -2347,9 +2370,11 @@ class App extends Component {
       .props
       .loadData(this.props.app.module, this.props.app.selectedTask, configs, summaryIgnores);
 
-    this
+    await this
       .props
       .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Transcribe"].data);
+
+    this.queryOptions("");
 
   }
 
@@ -3189,7 +3214,19 @@ class App extends Component {
         id: "btnTranscribe",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
-          this.transcribe();
+
+          const entryCode = this.props
+            .app
+            .patientData[this.props.app.currentId][this.props.app.module]
+            .visits
+            .filter((e) => {
+              return Object.keys(e)[0] === this.props.app.selectedVisit
+            })
+            .map((e) => {
+              return Object.keys(e[Object.keys(e)[0]])
+            })[0];
+
+          this.transcribe(entryCode);
         },
         label: "Transcribe",
         extraStyles: {
@@ -4140,6 +4177,9 @@ const mapDispatchToProps = dispatch => {
     },
     setData: async (data) => {
       return await dispatch(setData(data));
+    },
+    flagRegisterFilled: async (clientId, module, visitDate, entryCode) => {
+      return await dispatch(flagRegisterFilled(clientId, module, visitDate, entryCode));
     }
   };
 };
