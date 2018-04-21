@@ -383,6 +383,8 @@ class BackdataEntry extends Component {
             .$("bdScroller")
             .scrollLeft = 0;
 
+          this.moveCursor(1);
+
         }
 
         await this
@@ -2983,7 +2985,7 @@ class BackdataEntry extends Component {
                                                     className=
                                                     {(fields[i] ? "normal" : (fieldNames[i] && this.state.label === (fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "") ? "active" : "inactive"))}
                                                     style=
-                                                    {{ color: "#c50000", fontSize: "16px", textAlign: "center", width: (i === 51 ? "130px" : (i === 55 ? "150px" : "60px")) }}>
+                                                    {{ color: "#c50000", fontSize: "16px", textAlign: "center", width: (i === 51 ? "130px" : (i === 55 ? "150px" : (i === 1 ? "70px" : "60px"))) }}>
                                                   {fields[i]
                                                     ? fields[i]
                                                     : (fieldNames[i] && this.state.label === (fieldNames[i].category
@@ -3036,7 +3038,7 @@ class BackdataEntry extends Component {
                       <tr>
                         <td
                           style={{
-                            height: "266px",
+                            height: "258px",
                             borderBottom: "1px solid #333333"
                           }}>
                           &nbsp;
