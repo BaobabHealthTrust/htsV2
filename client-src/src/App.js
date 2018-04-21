@@ -1121,7 +1121,7 @@ class App extends Component {
 
       this
         .props
-        .showConfirmMsg("Confirm 1", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
+        .showConfirmMsg("Confirm", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
           " want to delete them?",
           "Delete", async () => {
 
@@ -1237,7 +1237,7 @@ class App extends Component {
 
       this
         .props
-        .showConfirmMsg("Confirm 2", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
+        .showConfirmMsg("Confirm", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
           " want to delete them?",
           "Delete", async () => {
 
@@ -2061,7 +2061,8 @@ class App extends Component {
 
   async handleClearClicks() {
 
-    if (this.props.dde.ddeSearchActive) {
+    // First branch does not make sense. May need to be pruned later.
+    if (this.props.dde.ddeSearchActive && false) {
 
       await this
         .props
