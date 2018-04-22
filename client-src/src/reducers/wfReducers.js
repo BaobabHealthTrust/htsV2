@@ -319,7 +319,7 @@ const reverseNode = (newState, group) => {
         if (node.label && newState.responses[group] && newState.responses[group][node.label])
             delete newState.responses[group][node.label];
 
-        while (newState[group].history.length > 3 && ["option", "process", "decision"].indexOf(newState[group].history[newState[group].history.length - 1].type) >= 0) {
+        while (newState[group].history.length > 3 && ["option", "process", "decision", "alert"].indexOf(newState[group].history[newState[group].history.length - 1].type) >= 0) {
 
             node = newState[group]
                 .history
