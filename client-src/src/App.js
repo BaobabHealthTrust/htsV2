@@ -728,12 +728,19 @@ class App extends Component {
     await this
       .props
       .updateApp({
-        fieldPos: this.props.app.fieldPos - 1
+        fieldPos: this.props.app.fieldPos - 1,
+        reversing: true
       });
 
     await this
       .props
       .goBackward(this.state.currentWorkflow);
+
+    await this
+      .props
+      .updateApp({
+        reversing: false
+      });
 
     await this.queryOptions("");
   }

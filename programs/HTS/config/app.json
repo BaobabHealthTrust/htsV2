@@ -380,7 +380,8 @@
             "Partner Negative",
             "Partner Positive"
         ],
-        "className": "longSelectList"
+        "className": "longSelectList",
+        "condition": "!{{dual}}"
     },
     "Number of male condoms given": {
         "fieldType": "number",

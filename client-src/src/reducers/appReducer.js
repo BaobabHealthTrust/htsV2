@@ -313,7 +313,8 @@ export default function appReducer(state = {
   entryCode: null,
   activeRegisters: 0,
   firstSummary: false,
-  secondSummary: false
+  secondSummary: false,
+  reversing: false
 }, action) {
 
   let newState,
@@ -391,7 +392,8 @@ export default function appReducer(state = {
         "report",
         "isDirty",
         "firstSummary",
-        "secondSummary"
+        "secondSummary",
+        "reversing"
       ].forEach((e) => {
 
         if (Object.keys(action.payload).indexOf(e) >= 0) {

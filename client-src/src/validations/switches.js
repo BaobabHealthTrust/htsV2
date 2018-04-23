@@ -1,29 +1,64 @@
-import {equal} from './equalTo';
-import {lessThan} from './lessThan';
-import {notEqual} from './notEqualTo';
-import {match} from './matchWith';
-import {inRange} from './inRange';
-import {greaterThan} from './greaterThan';
+import { equal } from './equalTo';
+import { lessThan } from './lessThan';
+import { notEqual } from './notEqualTo';
+import { match } from './matchWith';
+import { inRange } from './inRange';
+import { greaterThan } from './greaterThan';
+
+const mapVar2Props = (expression, props, lDelim = '{{', rDelim = '}}') => {
+
+  const re = new RegExp(lDelim + '[^' + rDelim + ']+' + rDelim, 'g');
+  const parts = expression.match(re);
+
+  let result = true;
+
+  if (parts) {
+
+    for (let part of parts) {
+
+      let term = String(part)
+        .replace((new RegExp(lDelim, 'g')), '')
+        .replace((new RegExp(rDelim, 'g')), '');
+
+      let row = (props && props.app && props.app[term] ? props.app[term] : null);
+
+      if (row !== null) {
+
+        // eslint-disable-next-line
+        result = eval(String(expression).replace((new RegExp(part, 'g')), row));
+
+        if (!result)
+          break;
+
+      }
+
+    }
+
+  };
+
+  return result;
+
+}
 
 export function switches(props, state) {
 
   if (props.app.configs && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
-      ? props.wf[state.currentWorkflow].currentNode.label
-      : ""] && Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+    ? props.wf[state.currentWorkflow].currentNode.label
+    : ""] && Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
       ? props.wf[state.currentWorkflow].currentNode.label
       : ""]).indexOf("visible") >= 0 && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
-      ? props.wf[state.currentWorkflow].currentNode.label
-      : ""].visible === false) {
+        ? props.wf[state.currentWorkflow].currentNode.label
+        : ""].visible === false) {
 
     let result = "No";
 
     if (props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
-        ? props.wf[state.currentWorkflow].currentNode.label
-        : ""].func) {
+      ? props.wf[state.currentWorkflow].currentNode.label
+      : ""].func) {
 
       switch (props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
-          ? props.wf[state.currentWorkflow].currentNode.label
-          : ""].func[1]) {
+        ? props.wf[state.currentWorkflow].currentNode.label
+        : ""].func[1]) {
         case "match":
 
           result = match(props, state);
@@ -63,22 +98,22 @@ export function switches(props, state) {
         default:
           break;
       }
-      
-    } else if (props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
-        ? props.wf[state.currentWorkflow].currentNode.label
-        : ""].answer) {
+
+    } else if (Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+      ? props.wf[state.currentWorkflow].currentNode.label
+      : ""]).indexOf("answer") >= 0) {
 
       result = props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
-          ? props.wf[state.currentWorkflow].currentNode.label
-          : ""].answer;
-
-    } else if (props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
         ? props.wf[state.currentWorkflow].currentNode.label
-        : ""].condition) {
+        : ""].answer;
 
-      result = props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
-          ? props.wf[state.currentWorkflow].currentNode.label
-          : ""].condition;
+    } else if (Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+      ? props.wf[state.currentWorkflow].currentNode.label
+      : ""]).indexOf("condition") >= 0) {
+
+      result = mapVar2Props((props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+        ? props.wf[state.currentWorkflow].currentNode.label
+        : ""].condition), props);
 
     }
 
@@ -87,6 +122,34 @@ export function switches(props, state) {
       : "", result, state.currentWorkflow);
 
     props.goForward(state.currentWorkflow, result);
+
+  } else if (props.app.configs && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+    ? props.wf[state.currentWorkflow].currentNode.label
+    : ""] && Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+      ? props.wf[state.currentWorkflow].currentNode.label
+      : ""]).indexOf("condition") >= 0) {
+
+    let result = mapVar2Props((props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+      ? props.wf[state.currentWorkflow].currentNode.label
+      : ""].condition), props);
+
+    if (!result) {
+
+      if (props.app.reversing) {
+
+        props.goBackward(state.currentWorkflow);
+
+      } else {
+
+        props.handleInputChange(props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+          ? props.wf[state.currentWorkflow].currentNode.label
+          : "", "", state.currentWorkflow);
+
+        props.goForward(state.currentWorkflow, "");
+
+      }
+
+    }
 
   }
 
