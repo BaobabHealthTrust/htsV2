@@ -40,6 +40,91 @@ const mapVar2Props = (expression, props, lDelim = '{{', rDelim = '}}') => {
 
 }
 
+// eslint-disable-next-line
+const updatePartnerStatus = (group, props, state) => {
+
+  let output = "";
+
+  switch (group) {
+
+    case 'hiv status':
+
+      if (props && props.app && props.app.currentId && props.app.clientId && props.app.currentId !== props.app.clientId) {
+
+        if (props.app.patientData && Object.keys(props.app.patientData).indexOf(props.app.clientId) >= 0 && Object.keys(props.app.patientData[props.app.clientId]).indexOf(props.app.module) >= 0 && Object.keys(props.app.patientData[props.app.clientId][props.app.module]).indexOf('visits') >= 0) {
+
+          const visit = props.app.patientData[props.app.clientId][props.app.module].visits.filter((e) => { return Object.keys(e)[0] === props.app.selectedVisit });
+
+          if (visit.length > 0) {
+
+            const entryCode = Object.keys(visit[0][props.app.selectedVisit])[0];
+
+            const entry = (visit[0] && visit[0][props.app.selectedVisit] && visit[0][props.app.selectedVisit][entryCode] && visit[0][props.app.selectedVisit][entryCode]['HTS Visit'] ? visit[0][props.app.selectedVisit][entryCode]['HTS Visit'] : null);
+
+            props.handleInputChange("Partner HIV Status", (String(entry['Result Given to Client']).match(/negative/i) ? "Partner Negative" : String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown"), state.currentWorkflow);
+
+            output = (String(entry['Result Given to Client']).match(/negative/i) ? "Partner Negative" : String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown");
+
+          }
+
+        } else {
+
+          props.handleInputChange("Partner HIV Status", "HIV Unknown", state.currentWorkflow);
+
+          output = "HIV Unknown";
+
+        }
+
+      } else if(props && props.app && props.app.currentId && props.app.clientId && props.app.currentId === props.app.clientId) {
+
+
+
+      }
+
+      if (props && props.app && props.app.currentId && props.app.partnerId && props.app.currentId !== props.app.partnerId) {
+
+        if (props.app.patientData && Object.keys(props.app.patientData).indexOf(props.app.partnerId) >= 0 && Object.keys(props.app.patientData[props.app.partnerId]).indexOf(props.app.module) >= 0 && Object.keys(props.app.patientData[props.app.partnerId][props.app.module]).indexOf('visits') >= 0) {
+
+          const visit = props.app.patientData[props.app.partnerId][props.app.module].visits.filter((e) => { return Object.keys(e)[0] === props.app.selectedVisit });
+
+          if (visit.length > 0) {
+
+            const entryCode = Object.keys(visit[0][props.app.selectedVisit])[0];
+
+            const entry = (visit[0] && visit[0][props.app.selectedVisit] && visit[0][props.app.selectedVisit][entryCode] && visit[0][props.app.selectedVisit][entryCode]['HTS Visit'] ? visit[0][props.app.selectedVisit][entryCode]['HTS Visit'] : null);
+
+            props.handleInputChange("Partner HIV Status", (String(entry['Result Given to Client']).match(/negative/i) ? "Partner Negative" : String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown"), state.currentWorkflow);
+
+            output = (String(entry['Result Given to Client']).match(/negative/i) ? "Partner Negative" : String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown");
+
+          }
+
+        } else {
+
+          props.handleInputChange("Partner HIV Status", "HIV Unknown", state.currentWorkflow);
+
+          output = "HIV Unknown";
+
+        }
+
+      } else if (props && props.app && props.app.currentId && props.app.partnerId && props.app.currentId !== props.app.partnerId) {
+
+
+
+      }
+
+      break;
+
+    default:
+
+      break;
+
+  }
+
+  return output;
+
+}
+
 export function switches(props, state) {
 
   if (props.app.configs && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
@@ -141,11 +226,28 @@ export function switches(props, state) {
 
       } else {
 
-        props.handleInputChange(props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+        if (props.app.configs && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
           ? props.wf[state.currentWorkflow].currentNode.label
-          : "", "", state.currentWorkflow);
+          : ""] && Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+            ? props.wf[state.currentWorkflow].currentNode.label
+            : ""]).indexOf("action") >= 0) {
 
-        props.goForward(state.currentWorkflow, "");
+          // eslint-disable-next-line
+          const output = eval(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+            ? props.wf[state.currentWorkflow].currentNode.label
+            : ""].action);
+
+          props.goForward(state.currentWorkflow, output);
+
+        } else {
+
+          props.handleInputChange(props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+            ? props.wf[state.currentWorkflow].currentNode.label
+            : "", "", state.currentWorkflow);
+
+          props.goForward(state.currentWorkflow, "");
+
+        }
 
       }
 

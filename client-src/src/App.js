@@ -21,7 +21,8 @@ import {
   blockUser,
   activateUser,
   loadData,
-  flagRegisterFilled
+  flagRegisterFilled,
+  updatePartnerRecord
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -4187,6 +4188,9 @@ const mapDispatchToProps = dispatch => {
     },
     flagRegisterFilled: async (clientId, module, visitDate, entryCode) => {
       return await dispatch(flagRegisterFilled(clientId, module, visitDate, entryCode));
+    },
+    updatePartnerRecord: async (url, clientId, concept, visitDate, value) => {
+      return await dispatch(updatePartnerRecord(url, clientId, concept, visitDate, value));
     }
   };
 };

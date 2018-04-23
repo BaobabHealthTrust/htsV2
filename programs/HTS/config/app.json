@@ -381,7 +381,8 @@
             "Partner Positive"
         ],
         "className": "longSelectList",
-        "condition": "!{{dual}}"
+        "condition": "!{{dual}}",
+        "action": "updatePartnerStatus('hiv status', props, state)"
     },
     "Number of male condoms given": {
         "fieldType": "number",

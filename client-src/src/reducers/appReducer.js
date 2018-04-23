@@ -1305,6 +1305,14 @@ export default function appReducer(state = {
 
       return newState;
 
+    case "UPDATE_PARTNER_RECORD":
+
+      newState = Object.assign({}, state);
+
+      
+
+      return newState;
+
     default:
 
       return state;

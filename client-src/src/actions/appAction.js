@@ -210,7 +210,6 @@ export function loadData(group, subGroup, configs, ignores, data) {
 
 }
 
-
 export function flagRegisterFilled(clientId, module, visitDate, entryCode) {
 
   return {
@@ -223,5 +222,16 @@ export function flagRegisterFilled(clientId, module, visitDate, entryCode) {
       }
     }
   }
+
+}
+
+export function updatePartnerRecord(url, clientId, concept, visitDate, value) {
+
+  const API_KEY = "";
+  const END_POINT = url;
+  const payload = { clientId, concept, visitDate, value };
+  const request = axios.post(END_POINT + API_KEY, payload);
+
+  return { type: 'UPDATE_PARTNER_RECORD', payload: request };
 
 }
