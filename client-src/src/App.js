@@ -1984,7 +1984,8 @@ class App extends Component {
           currentId,
           selectedTask: nextTask,
           formActive: true,
-          fieldPos: 0
+          fieldPos: 0,
+          [this.state.currentWorkflow.match(/second/i) ? "secondSummary" : "firstSummary"]: false
         });
 
       await this.navigateToRoute(nextTask, "/", group);
@@ -2021,7 +2022,8 @@ class App extends Component {
           formActive: false,
           selectedTask: null,
           fieldPos: 0,
-          sectionHeader: null
+          sectionHeader: null,
+          [this.state.currentWorkflow.match(/second/i) ? "secondSummary" : "firstSummary"]: true
         });
 
     } else {
@@ -2048,7 +2050,8 @@ class App extends Component {
             formActive: true,
             selectedTask: this.props.app.order[0],
             fieldPos: 0,
-            sectionHeader: this.props.app.order[0]
+            sectionHeader: this.props.app.order[0],
+            [this.state.currentWorkflow.match(/second/i) ? "secondSummary" : "firstSummary"]: false
           });
 
         await this.navigateToRoute(this.props.app.order[0], "/", group);
@@ -4189,8 +4192,8 @@ const mapDispatchToProps = dispatch => {
     flagRegisterFilled: async (clientId, module, visitDate, entryCode) => {
       return await dispatch(flagRegisterFilled(clientId, module, visitDate, entryCode));
     },
-    updatePartnerRecord: async (url, clientId, concept, visitDate, value) => {
-      return await dispatch(updatePartnerRecord(url, clientId, concept, visitDate, value));
+    updatePartnerRecord: async (clientId, concept, visitDate, valuecurrentUser, url) => {
+      return await dispatch(updatePartnerRecord(clientId, concept, visitDate, valuecurrentUser, url));
     }
   };
 };

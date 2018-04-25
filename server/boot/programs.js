@@ -4591,6 +4591,259 @@ module.exports = function (app) {
 
   })
 
+  router.post('/programs/update_partner_record', async function (req, res, next) {
+
+    debug(req.body);
+
+    const patient = await PatientIdentifier.findOne({
+      where: {
+        identifier: req.body.clientId
+      }
+    });
+
+    const personId = (patient ? patient.patientId : null);
+
+    const concept = await ConceptName.findOne({
+      where: {
+        name: req.body.concept
+      }
+    });
+
+    const conceptId = (concept ? concept.conceptId : null);
+
+    const user = await User.findOne({
+      where: {
+        username: req.body.currentUser
+      }
+    });
+
+    const userId = user
+      ? user.id
+      : 1;
+
+    const obs = await Obs.findOne({
+      where: {
+        conceptId,
+        obsDatetime: {
+          gt: (new Date((new Date(req.body.visitDate)).setDate((new Date(req.body.visitDate)).getDate() - 1))),
+          lt: (new Date((new Date(req.body.visitDate)).setDate((new Date(req.body.visitDate)).getDate() + 1)))
+        },
+        personId,
+        voided: 0
+      }
+    })
+
+    if (obs) {
+
+      const value = String(req.body.value).trim();
+
+      const valueCoded = await ConceptName.findOne({
+        where: {
+          name: req.body.value
+        }
+      });
+  
+      const valueCodedId = (valueCoded ? valueCoded.conceptId : null);
+  
+      const valueCodedNameId = (valueCoded ? valueCoded.conceptNameId : null);
+  
+      const result = await Obs.updateAll({
+        obsId: obs.obsId
+      }, {
+          voided: 1,
+          voidedBy: userId,
+          dateVoided: new Date(),
+          voidReason: "Voided by user"
+        });
+
+
+      await Obs.create({
+        personId,
+        conceptId,
+        encounterId: obs.encounterId,
+        obsDatetime: new Date(req.body.visitDate),
+        locationId: obs.locationId,
+        valueCoded: valueCodedId,
+        valueCodedNameId,
+        valueNumeric: !valueCodedId && String(value)
+          .trim()
+          .match(/^\d+$/)
+          ? value
+          : null,
+        valueText: !valueCodedId && !String(value)
+          .trim()
+          .match(/^\d+$/)
+          ? value
+          : null,
+        creator: userId,
+        dateCreated: new Date(),
+        uuid: uuid.v4()
+      });
+
+      const encounter = await Encounter.findOne({
+        where: {
+          encounterId: obs.encounterId
+        }
+      });
+
+      const encounterType = (encounter ? (await EncounterType.findOne({
+        where: {
+          encounterTypeId: encounter.encounterTypeId
+        }
+      })) : null);
+
+      const entryCodeConcept = await ConceptName.findOne({
+        where: {
+          name: "HTS Entry Code"
+        }
+      });
+
+      const entryCodeConceptId = (entryCodeConcept ? entryCodeConcept.conceptId : null);
+
+      const clinicIdentifier = (entryCodeConceptId ? (await Obs.findOne({
+        where: {
+          conceptId: entryCodeConceptId,
+          personId,
+          obsDatetime: {
+            gt: (new Date((new Date(obs.obsDatetime)).setDate((new Date(obs.obsDatetime)).getDate() - 1))),
+            lt: (new Date((new Date(obs.obsDatetime)).setDate((new Date(obs.obsDatetime)).getDate() + 1)))
+          }
+        }
+      })) : null);
+
+      const clinicId = (clinicIdentifier ? clinicIdentifier.valueText : null);
+
+      debug(clinicId);
+
+      const registerConcept = await ConceptName.findOne({
+        where: {
+          name: "Register Number (from cover)"
+        }
+      });
+
+      const registerConceptId = (registerConcept ? registerConcept.conceptId : null);
+
+      const registerObs = (registerConceptId ? (await Obs.findOne({
+        where: {
+          conceptId: registerConceptId,
+          personId,
+          obsDatetime: {
+            gt: (new Date((new Date(obs.obsDatetime)).setDate((new Date(obs.obsDatetime)).getDate() - 1))),
+            lt: (new Date((new Date(obs.obsDatetime)).setDate((new Date(obs.obsDatetime)).getDate() + 1)))
+          }
+        }
+      })) : null);
+
+      const registerNumber = (registerObs ? registerObs.valueText : null);
+
+      debug(registerNumber);
+
+      new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", {
+        query: {
+          query_string: {
+            query: "encounterId:" + obs.encounterId + " AND obsId:" + obs.obsId
+          }
+        }
+      }, async function (result) {
+
+        if (result && result.hits && result.hits.total && result.hits.total > 0) {
+
+          new client().delete(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/" + result.hits.hits[0]._id, function (result) {
+
+            debug(result);
+
+          });
+
+        }
+
+        const providerId = await Users.findOne({
+          where: {
+            userId: encounter.providerId
+          }
+        });
+
+        const provider = (providerId ? providerId.username : null);
+
+        debug(provider);
+
+        const locationName = await Location.findOne({
+          where: {
+            locationId: obs.locationId
+          }
+        });
+
+        const location = (locationName ? locationName.name : null);
+
+        const locationType = "";
+
+        const serviceDeliveryPoint = "";
+
+        const person = await Person.findOne({
+          where: {
+            personId
+          }
+        });
+
+        debug(person);
+
+        const age = (person ? ((new Date(person.birthdate)) / (365.0 * 24.0 * 60.0 * 60.0 * 1000.0)) : null);
+
+        const patientProgram = await PatientProgram.findOne({
+          where: {
+            patientProgramId: encounter.patientProgramId
+          }
+        });
+
+        const program = (patientProgram ? (await Program.findOne({
+          where: {
+            programId: patientProgram.programId
+          }
+        })) : null);
+
+        const programName = (program ? program.name : "");
+
+        let row = {
+          visitDate: new Date(req.body.visitDate),
+          encounterType: (encounterType ? encounterType.name : null),
+          identifier: clinicId,
+          observation: req.body.concept,
+          observationValue: req.body.value,
+          program: programName.toUpperCase() + " PROGRAM",
+          location,
+          provider,
+          user: req.body.currentUser,
+          encounterId: obs.encounterId,
+          dateOfBirth: person.birthdate,
+          registerNumber,
+          locationType,
+          serviceDeliveryPoint,
+          age,
+          obsId: obs.obsId
+        };
+
+        let args = {
+          data: row,
+          headers: {
+            "Content-Type": "application/json"
+          }
+        };
+
+        new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) {
+
+          res.status(200).json({});
+
+        });
+
+      });
+
+    } else {
+
+      res.status(200).json({});
+
+    }
+
+  })
+
   app.use(router);
 
 };

@@ -225,11 +225,11 @@ export function flagRegisterFilled(clientId, module, visitDate, entryCode) {
 
 }
 
-export function updatePartnerRecord(url, clientId, concept, visitDate, value) {
+export function updatePartnerRecord(clientId, concept, visitDate, value, currentUser, url = "/programs/update_partner_record") {
 
   const API_KEY = "";
   const END_POINT = url;
-  const payload = { clientId, concept, visitDate, value };
+  const payload = { clientId, concept, visitDate, value, currentUser };
   const request = axios.post(END_POINT + API_KEY, payload);
 
   return { type: 'UPDATE_PARTNER_RECORD', payload: request };

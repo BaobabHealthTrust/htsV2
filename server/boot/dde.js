@@ -886,7 +886,7 @@ module.exports = function (app) {
 
         } else {
 
-          res
+          return res
             .json(401)
             .json({ error: true, message: "DDE authentation failed" })
 

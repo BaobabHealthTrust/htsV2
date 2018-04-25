@@ -172,6 +172,10 @@
       "HTS Setting",
       "HTS Modality",
       "Number of female condoms given",
-      "Number of male condoms given"
+      "Number of male condoms given",
+      "No Partner",
+      "HIV Unknown",
+      "Partner Negative",
+      "Partner Positive"
   ]
 }

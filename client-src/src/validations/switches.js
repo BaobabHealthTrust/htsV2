@@ -65,6 +65,19 @@ const updatePartnerStatus = (group, props, state) => {
 
             output = (String(entry['Result Given to Client']).match(/negative/i) ? "Partner Negative" : String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown");
 
+            props.updatePartnerRecord(
+              props.app.clientId,
+              "Partner HIV Status",
+              props.app.selectedVisit,
+              (String(entry['Result Given to Client']).match(/negative/i) ?
+                "Partner Negative" : String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown"), props.app.activeUser)
+
+          } else {
+
+            props.handleInputChange("Partner HIV Status", "HIV Unknown", state.currentWorkflow);
+
+            output = "HIV Unknown";
+
           }
 
         } else {
@@ -74,10 +87,6 @@ const updatePartnerStatus = (group, props, state) => {
           output = "HIV Unknown";
 
         }
-
-      } else if(props && props.app && props.app.currentId && props.app.clientId && props.app.currentId === props.app.clientId) {
-
-
 
       }
 
@@ -97,6 +106,20 @@ const updatePartnerStatus = (group, props, state) => {
 
             output = (String(entry['Result Given to Client']).match(/negative/i) ? "Partner Negative" : String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown");
 
+            props.updatePartnerRecord(
+              props.app.partnerId,
+              "Partner HIV Status",
+              props.app.selectedVisit,
+              (String(entry['Result Given to Client']).match(/negative/i) ?
+                "Partner Negative" :
+                String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown"), props.app.activeUser)
+
+          } else {
+
+            props.handleInputChange("Partner HIV Status", "HIV Unknown", state.currentWorkflow);
+
+            output = "HIV Unknown";
+
           }
 
         } else {
@@ -106,10 +129,6 @@ const updatePartnerStatus = (group, props, state) => {
           output = "HIV Unknown";
 
         }
-
-      } else if (props && props.app && props.app.currentId && props.app.partnerId && props.app.currentId !== props.app.partnerId) {
-
-
 
       }
 
