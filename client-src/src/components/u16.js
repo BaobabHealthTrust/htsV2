@@ -55,7 +55,7 @@ class U16 extends Component {
       return String(e)
         .toLowerCase()
         .trim()
-        .match("^" + this.props.value.toLowerCase())
+        .match("^" + (this.props.value ? String(this.props.value).toLowerCase() : ""))
     }).sort((a, b) => {
       return a > b
     }).slice(0, 5).map((opt) => {
