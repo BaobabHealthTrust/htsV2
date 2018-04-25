@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './u14.css';
 import Input from './input';
 import Summary from './summary';
@@ -54,20 +54,20 @@ class U14 extends Component {
       return (
         <li
           className={this.props.responses && this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label] && this.props.responses[this.props.group][this.props.label] === opt
-          ? "selectedLi"
-          : "selectLi"}
+            ? "selectedLi"
+            : "selectLi"}
           id={opt.replace(/[^a-z0-9]/gi, "_")}
           key={opt.replace(/[^a-z0-9]/gi, "_")}
           onMouseDown={() => {
-          this
-            .props
-            .handleDirectInputChange(this.props.label, opt, this.props.group);
-          if ((this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].autoNext && this.props.configs[this.props.label].autoNext === true)) {
             this
               .props
-              .navNext(opt);
-          }
-        }}>{opt}</li>
+              .handleDirectInputChange(this.props.label, opt, this.props.group);
+            if ((this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].autoNext && this.props.configs[this.props.label].autoNext === true)) {
+              this
+                .props
+                .navNext(opt);
+            }
+          }}>{opt}</li>
       )
 
     }))
@@ -80,7 +80,7 @@ class U14 extends Component {
       return String(e)
         .toLowerCase()
         .trim()
-        .match("^" + this.props.value.toLowerCase())
+        .match("^" + (this.props.value ? String(this.props.value).toLowerCase() : ""))
     }).sort((a, b) => {
       return a > b
     }).slice(0, 20).map((opt) => {
@@ -88,23 +88,23 @@ class U14 extends Component {
       return (
         <li
           className={this.props.responses && this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label] && this.props.responses[this.props.group][this.props.label] === opt
-          ? "selectedLi"
-          : "selectLi"}
+            ? "selectedLi"
+            : "selectLi"}
           id={opt.replace(/[^a-z0-9]/gi, "_")}
           key={opt.replace(/[^a-z0-9]/gi, "_")}
           onMouseDown={() => {
-          document
-            .getElementById("touchscreenTextInput")
-            .value = opt;
-          this
-            .props
-            .handleDirectInputChange(this.props.label, opt, this.props.group);
-          if ((this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].autoNext && this.props.configs[this.props.label].autoNext === true)) {
+            document
+              .getElementById("touchscreenTextInput")
+              .value = opt;
             this
               .props
-              .navNext(opt);
-          }
-        }}>{opt}</li>
+              .handleDirectInputChange(this.props.label, opt, this.props.group);
+            if ((this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].autoNext && this.props.configs[this.props.label].autoNext === true)) {
+              this
+                .props
+                .navNext(opt);
+            }
+          }}>{opt}</li>
       )
 
     }))
@@ -188,82 +188,82 @@ class U14 extends Component {
 
       <div
         style={{
-        height: (this.props.selectedTask === "Backdata Entry"
-          ? "calc(100vh - 180px)"
-          : "calc(100vh - 220px)"),
-        backgroundColor: "#ffffff",
-        userSelect: "none"
-      }}>
+          height: (this.props.selectedTask === "Backdata Entry"
+            ? "calc(100vh - 180px)"
+            : "calc(100vh - 220px)"),
+          backgroundColor: "#ffffff",
+          userSelect: "none"
+        }}>
 
         {(this.props.processing
           ? <div className="pleaseWait">Please wait...</div>
           : <div>
             <div
               className={this.props.sectionHeader === "Backdata Entry"
-              ? "bdeSectionHeader"
-              : "sectionHeader"}>
+                ? "bdeSectionHeader"
+                : "sectionHeader"}>
               {this.props.sectionHeader}
             </div>
             <div
               style={{
-              borderBottom: "1px solid #0065fd",
-              height: "2px"
-            }}></div>
+                borderBottom: "1px solid #0065fd",
+                height: "2px"
+              }}></div>
             {(this.props.type === "exit"
               ? <Summary
-                  responses={(this.props.group && this.props.responses && this.props.responses[this.props.group]
+                responses={(this.props.group && this.props.responses && this.props.responses[this.props.group]
                   ? this.props.responses[this.props.group]
                   : {})}
-                  summaryIgnores={this.props.summaryIgnores}/>
+                summaryIgnores={this.props.summaryIgnores} />
               : (this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].customComponent
                 ? <CustomComponent
-                    label={properties.label}
-                    test={properties.test}
-                    duration={properties.duration}
-                    group={this.props.group}
-                    handleDirectInputChange={this.props.handleDirectInputChange}
-                    responses={(this.props.group && this.props.responses && this.props.responses[this.props.group]
+                  label={properties.label}
+                  test={properties.test}
+                  duration={properties.duration}
+                  group={this.props.group}
+                  handleDirectInputChange={this.props.handleDirectInputChange}
+                  responses={(this.props.group && this.props.responses && this.props.responses[this.props.group]
                     ? this.props.responses[this.props.group]
                     : {})}
-                    test2={properties.test2}
-                    duration2={properties.duration2}
-                    handleDataEntryDone={this
+                  test2={properties.test2}
+                  duration2={properties.duration2}
+                  handleDataEntryDone={this
                     .handleDataEntryDone
                     .bind(this)}
-                    previous={this.props.nextBDRow}
-                    current={this.props.currentEditRow}
-                    fetchLastBDRow={this.props.fetchLastBDRow}
-                    saveBDRow={this.props.saveBDRow}
-                    fetchEditRow={this.props.fetchEditRow}
-                    saveEditRow={this.props.saveEditRow}
-                    ddeResults={this.props.ddeResults}
-                    ddeCurrentPatient={this.props.ddeCurrentPatient}
-                    searchByNameAndGender={this.props.searchByNameAndGender}
-                    selectPatient={this.props.selectPatient}
-                    showErrorMsg={this.props.showErrorMsg}
-                    handleNextButtonClicks={this.props.handleNextButtonClicks}
-                    activeSection={this.props.activeSection}
-                    app={this.props.app}
-                    sectionHeader={this.props.sectionHeader}
-                    updateApp={this.props.updateApp}
-                    showConfirmMsg={this.props.showConfirmMsg}
-                    showInfoMsg={this.props.showInfoMsg}
-                    activeWorkflow={this.props.activeWorkflow}
-                    wf={this.props.wf}/>
+                  previous={this.props.nextBDRow}
+                  current={this.props.currentEditRow}
+                  fetchLastBDRow={this.props.fetchLastBDRow}
+                  saveBDRow={this.props.saveBDRow}
+                  fetchEditRow={this.props.fetchEditRow}
+                  saveEditRow={this.props.saveEditRow}
+                  ddeResults={this.props.ddeResults}
+                  ddeCurrentPatient={this.props.ddeCurrentPatient}
+                  searchByNameAndGender={this.props.searchByNameAndGender}
+                  selectPatient={this.props.selectPatient}
+                  showErrorMsg={this.props.showErrorMsg}
+                  handleNextButtonClicks={this.props.handleNextButtonClicks}
+                  activeSection={this.props.activeSection}
+                  app={this.props.app}
+                  sectionHeader={this.props.sectionHeader}
+                  updateApp={this.props.updateApp}
+                  showConfirmMsg={this.props.showConfirmMsg}
+                  showInfoMsg={this.props.showInfoMsg}
+                  activeWorkflow={this.props.activeWorkflow}
+                  wf={this.props.wf} />
                 : <div>
                   <table
                     width="100%"
                     style={{
-                    borderCollapse: "collapse"
-                  }}
+                      borderCollapse: "collapse"
+                    }}
                     border="0">
                     <tbody>
                       <tr>
                         <td
                           style={{
-                          padding: "5px",
-                          fontSize: "2em"
-                        }}
+                            padding: "5px",
+                            fontSize: "2em"
+                          }}
                           id="u14HelpText">
                           {this.props.label}
                         </td>
@@ -271,30 +271,30 @@ class U14 extends Component {
                       <tr>
                         <td
                           style={{
-                          paddingLeft: "10px"
-                        }}>
+                            paddingLeft: "10px"
+                          }}>
                           {(this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].className && this.props.configs[this.props.label].className === "longSelectList")
                             ? ""
                             : <Input
                               className="touchscreenTextInput"
                               id="touchscreenTextInput"
                               value={(this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label]
-                              ? this.props.responses[this.props.group][this.props.label]
-                              : "")}
+                                ? this.props.responses[this.props.group][this.props.label]
+                                : "")}
                               onChangeHandler={this
-                              .onChangeHandler
-                              .bind(this)}
+                                .onChangeHandler
+                                .bind(this)}
                               currentString={(this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label]
-                              ? this.props.responses[this.props.group][this.props.label]
-                              : "")}
+                                ? this.props.responses[this.props.group][this.props.label]
+                                : "")}
                               fieldType={this.props.fieldType}
                               navNext={this.props.navNext}
                               configs={this.props.configs}
                               options={this.props.options}
                               placeholder={this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].placeholder
-                              ? this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].placeholder
-                              : ""}
-                              label={this.props.label}/>}
+                                ? this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].placeholder
+                                : ""}
+                              label={this.props.label} />}
                         </td>
                       </tr>
 
@@ -305,15 +305,15 @@ class U14 extends Component {
                             <td>
                               <div
                                 className={(this.props.configs[this.props.label] && this.props.configs[this.props.label].className
-                                ? this.props.configs[this.props.label].className
-                                : "shortSelectList")}>
+                                  ? this.props.configs[this.props.label].className
+                                  : "shortSelectList")}>
                                 <ul
                                   className="selectUl"
                                   style={{
-                                  listStyle: "none",
-                                  textAlign: "left",
-                                  padding: "0px"
-                                }}>
+                                    listStyle: "none",
+                                    textAlign: "left",
+                                    padding: "0px"
+                                  }}>
                                   {(this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].className && this.props.configs[this.props.label].className === "longSelectList")
                                     ? (this.renderForLongSelect())
                                     : (this.renderForShortSelect())}
