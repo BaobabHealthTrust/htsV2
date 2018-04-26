@@ -49,6 +49,9 @@ const updatePartnerStatus = (group, props, state) => {
 
     case 'hiv status':
 
+      /*
+        If active client is on the LEFT, change value on the RIGHT
+      */
       if (props && props.app && props.app.currentId && props.app.clientId && props.app.currentId !== props.app.clientId) {
 
         if (props.app.patientData && Object.keys(props.app.patientData).indexOf(props.app.clientId) >= 0 && Object.keys(props.app.patientData[props.app.clientId]).indexOf(props.app.module) >= 0 && Object.keys(props.app.patientData[props.app.clientId][props.app.module]).indexOf('visits') >= 0) {
@@ -64,13 +67,6 @@ const updatePartnerStatus = (group, props, state) => {
             props.handleInputChange("Partner HIV Status", (String(entry['Result Given to Client']).match(/negative/i) ? "Partner Negative" : String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown"), state.currentWorkflow);
 
             output = (String(entry['Result Given to Client']).match(/negative/i) ? "Partner Negative" : String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown");
-
-            props.updatePartnerRecord(
-              props.app.clientId,
-              "Partner HIV Status",
-              props.app.selectedVisit,
-              (String(entry['Result Given to Client']).match(/negative/i) ?
-                "Partner Negative" : String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown"), props.app.activeUser)
 
           } else {
 
@@ -90,6 +86,24 @@ const updatePartnerStatus = (group, props, state) => {
 
       }
 
+      if (props && props.app && props.app.currentId && props.app.clientId && props.app.currentId === props.app.clientId) {
+
+        if (props.wf && props.wf.responses && props.wf.responses[state.currentWorkflow] && props.wf.responses[state.currentWorkflow]["Result Given to Client"]) {
+
+          props.updatePartnerRecord(
+            props.app.partnerId,
+            "Partner HIV Status",
+            props.app.selectedVisit,
+            (String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/negative/i) ?
+              "Partner Negative" : String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/positive/i) ? "Partner Positive" : "HIV Unknown"), props.app.activeUser)
+
+        }
+
+      }
+
+      /*
+        If active client is on the RIGHT, change value on the LEFT
+      */
       if (props && props.app && props.app.currentId && props.app.partnerId && props.app.currentId !== props.app.partnerId) {
 
         if (props.app.patientData && Object.keys(props.app.patientData).indexOf(props.app.partnerId) >= 0 && Object.keys(props.app.patientData[props.app.partnerId]).indexOf(props.app.module) >= 0 && Object.keys(props.app.patientData[props.app.partnerId][props.app.module]).indexOf('visits') >= 0) {
@@ -106,14 +120,6 @@ const updatePartnerStatus = (group, props, state) => {
 
             output = (String(entry['Result Given to Client']).match(/negative/i) ? "Partner Negative" : String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown");
 
-            props.updatePartnerRecord(
-              props.app.partnerId,
-              "Partner HIV Status",
-              props.app.selectedVisit,
-              (String(entry['Result Given to Client']).match(/negative/i) ?
-                "Partner Negative" :
-                String(entry['Result Given to Client']).match(/positive/i) ? "Partner Positive" : "HIV Unknown"), props.app.activeUser)
-
           } else {
 
             props.handleInputChange("Partner HIV Status", "HIV Unknown", state.currentWorkflow);
@@ -127,6 +133,21 @@ const updatePartnerStatus = (group, props, state) => {
           props.handleInputChange("Partner HIV Status", "HIV Unknown", state.currentWorkflow);
 
           output = "HIV Unknown";
+
+        }
+
+      }
+
+      if (props && props.app && props.app.currentId && props.app.partnerId && props.app.currentId === props.app.partnerId) {
+
+        if (props.wf && props.wf.responses && props.wf.responses[state.currentWorkflow] && props.wf.responses[state.currentWorkflow]["Result Given to Client"]) {
+
+          props.updatePartnerRecord(
+            props.app.clientId,
+            "Partner HIV Status",
+            props.app.selectedVisit,
+            (String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/negative/i) ?
+              "Partner Negative" : String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/positive/i) ? "Partner Positive" : "HIV Unknown"), props.app.activeUser)
 
         }
 
