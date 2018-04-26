@@ -97,6 +97,24 @@ const updatePartnerStatus = (group, props, state) => {
             (String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/negative/i) ?
               "Partner Negative" : String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/positive/i) ? "Partner Positive" : "HIV Unknown"), props.app.activeUser)
 
+          if (props.app && props.app.patientData && props.app.patientData[props.app.partnerId] && props.app.patientData[props.app.partnerId][props.app.module] && props.app.patientData[props.app.partnerId][props.app.module].visits && props.app.patientData[props.app.partnerId][props.app.module].visits.length > 0) {
+
+            let visit = props.app.patientData[props.app.partnerId][props.app.module].visits.filter((e) => { return Object.keys(e)[0] === props.app.selectedVisit });
+
+            if (visit.length > 0) {
+
+              const entryCode = (Object.keys(visit[0][props.app.selectedVisit]).length > 0 ? Object.keys(visit[0][props.app.selectedVisit])[0] : null);
+
+              if (!props.app.patientData[props.app.partnerId][props.app.module].visits[0][props.app.selectedVisit][entryCode]['HTS Visit'])
+                props.app.patientData[props.app.partnerId][props.app.module].visits[0][props.app.selectedVisit][entryCode]['HTS Visit'] = {};
+
+              props.app.patientData[props.app.partnerId][props.app.module].visits[0][props.app.selectedVisit][entryCode]['HTS Visit']['Partner HIV Status'] = (String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/negative/i) ?
+                "Partner Negative" : String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/positive/i) ? "Partner Positive" : "HIV Unknown");
+
+            }
+
+          }
+
         }
 
       }
@@ -148,6 +166,24 @@ const updatePartnerStatus = (group, props, state) => {
             props.app.selectedVisit,
             (String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/negative/i) ?
               "Partner Negative" : String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/positive/i) ? "Partner Positive" : "HIV Unknown"), props.app.activeUser)
+
+          if (props.app && props.app.patientData && props.app.patientData[props.app.clientId] && props.app.patientData[props.app.clientId][props.app.module] && props.app.patientData[props.app.clientId][props.app.module].visits && props.app.patientData[props.app.clientId][props.app.module].visits.length > 0) {
+
+            let visit = props.app.patientData[props.app.clientId][props.app.module].visits.filter((e) => { return Object.keys(e)[0] === props.app.selectedVisit });
+
+            if (visit.length > 0) {
+
+              const entryCode = (Object.keys(visit[0][props.app.selectedVisit]).length > 0 ? Object.keys(visit[0][props.app.selectedVisit])[0] : null);
+
+              if (!props.app.patientData[props.app.clientId][props.app.module].visits[0][props.app.selectedVisit][entryCode]['HTS Visit'])
+                props.app.patientData[props.app.clientId][props.app.module].visits[0][props.app.selectedVisit][entryCode]['HTS Visit'] = {};
+
+              props.app.patientData[props.app.clientId][props.app.module].visits[0][props.app.selectedVisit][entryCode]['HTS Visit']['Partner HIV Status'] = (String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/negative/i) ?
+                "Partner Negative" : String(props.wf.responses[state.currentWorkflow]["Result Given to Client"]).match(/positive/i) ? "Partner Positive" : "HIV Unknown");
+
+            }
+
+          }
 
         }
 
