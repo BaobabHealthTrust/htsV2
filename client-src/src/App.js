@@ -682,6 +682,7 @@ class App extends Component {
   }
 
   queryOptions(value) {
+
     if (this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
       ? this.props.wf[this.state.currentWorkflow].currentNode.label
       : ""] && Object.keys(this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
@@ -2343,9 +2344,7 @@ class App extends Component {
       },
       "Entry Code Not Set?": {
         visible: false,
-        condition: (this.props.app.entryCode
-          ? "No"
-          : "Yes")
+        condition: "!String('{{entryCode}}').match(/^ec/i)"
       },
       "Display": {
         customComponent: "Transcribe",

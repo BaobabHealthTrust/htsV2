@@ -280,9 +280,9 @@ export function switches(props, state) {
 
     props.handleInputChange(props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
       ? props.wf[state.currentWorkflow].currentNode.label
-      : "", result, state.currentWorkflow);
+      : "", (result ? "Yes" : "No"), state.currentWorkflow);
 
-    props.goForward(state.currentWorkflow, result);
+    props.goForward(state.currentWorkflow, (result ? "Yes" : "No"));
 
   } else if (props.app.configs && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
     ? props.wf[state.currentWorkflow].currentNode.label
