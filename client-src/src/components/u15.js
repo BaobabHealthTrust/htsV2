@@ -224,7 +224,11 @@ class U15 extends Component {
                       borderCollapse: "collapse",
                       color: (this.props.activeWorkflow === "secondary"
                         ? "black"
-                        : "#999999")
+                        : "#eeeeee"),
+                        display: (this.props.activeWorkflow === "secondary"
+                        ? "table"
+                        : "none"),
+                        width: "100%"
                     }}
                       border="0">
                       <tbody>
