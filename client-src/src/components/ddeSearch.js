@@ -288,7 +288,7 @@ class DDESearch extends Component {
 
   async componentDidUpdate() {
 
-    if (this.props.sectionHeader !== "Find Client By Name") {
+    if (this.props.sectionHeader !== "Find or Register Client") {
 
       if (!this.state.busy && this.props.activeSection === "registration" && (this.props.ddeResults || []).length === 1) {
 
@@ -344,7 +344,7 @@ class DDESearch extends Component {
 
         await this
           .props
-          .updateApp({ sectionHeader: "Find Client By Name" })
+          .updateApp({ sectionHeader: "Find or Register Client" })
 
         await this.setState({ busy: false });
 

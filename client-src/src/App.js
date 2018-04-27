@@ -1670,7 +1670,7 @@ class App extends Component {
     await this
       .props
       .updateApp({
-        selectedTask: "Find Client By Name",
+        selectedTask: "Find or Register Client",
         formActive: true,
         currentSection: "registration",
         configs: Object.assign({}, (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].configs
@@ -1679,7 +1679,7 @@ class App extends Component {
         summaryIgnores: Object.assign([], (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
           ? this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
           : {})),
-        sectionHeader: "Find Client By Name"
+        sectionHeader: "Find or Register Client"
       });
 
     await this
@@ -1751,7 +1751,7 @@ class App extends Component {
 
       payload.currentPatient = this.props.app.patientData[currentId]
 
-      if (payload.sectionHeader === "Find Client By Name") {
+      if (payload.sectionHeader === "Find or Register Client") {
 
         payload.configs = Object.assign({}, (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].configs
           ? this.props.app.data[this.props.app.module]["PatientRegistration"].configs
@@ -3065,7 +3065,7 @@ class App extends Component {
         id: "btnNext",
         buttonClass: (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].data
           ? "green nav-buttons"
-          : (this.props.app.sectionHeader === "Find Client By Name" && Object.keys(this.props.app.currentPatient).length > 0 ? "green nav-buttons" : "gray nav-buttons")),
+          : (this.props.app.sectionHeader === "Find or Register Client" && Object.keys(this.props.app.currentPatient).length > 0 ? "green nav-buttons" : "gray nav-buttons")),
         onMouseDown: () => {
           this.handleNextButtonClicks();
         },

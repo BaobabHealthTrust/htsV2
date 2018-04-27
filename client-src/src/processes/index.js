@@ -114,7 +114,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
         return parent.setState({ busy: false });
 
-      } else if (props.app.currentPatient && Object.keys(props.app.currentPatient).length > 0 && ["Find Client By Name", "Search By ID"].indexOf(props.app.sectionHeader) >= 0) {
+      } else if (props.app.currentPatient && Object.keys(props.app.currentPatient).length > 0 && ["Find or Register Client", "Search By ID"].indexOf(props.app.sectionHeader) >= 0) {
 
         await props.updateApp({
           formActive: false,
@@ -302,7 +302,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
             await props.updateApp({
               formActive: true,
               selectedTask: "",
-              sectionHeader: "Find Client By Name",
+              sectionHeader: "Find or Register Client",
               fieldPos: 0,
               currentSection: "patient",
               patientActivated: true,
@@ -310,8 +310,8 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
               dual: true,
               selectedVisit: (new Date()).format("d mmm YYYY"),
               primary: {
-                sectionHeader: "Find Client By Name",
-                selectedTask: "Find Client By Name",
+                sectionHeader: "Find or Register Client",
+                selectedTask: "Find or Register Client",
                 summary: false,
                 formActive: true,
                 forceSummary: false,

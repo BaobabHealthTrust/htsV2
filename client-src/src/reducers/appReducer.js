@@ -466,7 +466,7 @@ export default function appReducer(state = {
         silentProcessing: false
       });
 
-      if (newState.sectionHeader !== "Find Client By Name") {
+      if (newState.sectionHeader !== "Find or Register Client") {
 
         newState = Object.assign({}, state, {
           processing: false,
@@ -723,7 +723,7 @@ export default function appReducer(state = {
 
         }
 
-      } else if (newState.sectionHeader === "Find Client By Name") {
+      } else if (newState.sectionHeader === "Find or Register Client") {
 
         newState = Object.assign({}, state, {
           processing: false,
