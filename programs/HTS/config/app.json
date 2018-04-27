@@ -23,7 +23,7 @@
             "Last Negative",
             "Last Positive",
             "Last Inconclusive",
-            "Last Exposed infant"
+            "Last Exposed Infant"
         ],
         "className": "longSelectList",
         "autoNext": true
