@@ -40,6 +40,16 @@ module.exports = function (app) {
   const ReadableSearch = require("elasticsearch-streams").ReadableSearch;
   const esClient = new require("elasticsearch").Client();
 
+  HtsRegister.hasMany(HtsRegisterLocationType, {
+    foreignKey: 'locationTypeId',
+    as: 'location'
+  })
+
+  HtsRegister.hasMany(HtsRegisterServiceDeliveryPoint, {
+    foreignKey: 'serviceDeliveryPointId',
+    as: 'serviceDeliveryPoint'
+  })
+
   const monthNames = [
     "January",
     "February",
@@ -4633,6 +4643,8 @@ module.exports = function (app) {
       }
     })
 
+    debug(obs);
+
     if (obs) {
 
       const value = String(req.body.value).trim();
@@ -4765,6 +4777,44 @@ module.exports = function (app) {
           let locationType = "";
 
           let serviceDeliveryPoint = "";
+
+          if (registerNumber !== null) {
+
+            const register = await HtsRegister.findOne({
+              where: {
+                registerId: registerNumber
+              }
+            });
+
+            debug(register);
+
+            if (register) {
+
+              const locType = await HtsRegisterLocationType.findOne({
+                where: {
+                  locationTypeId: register.locationTypeId
+                }
+              });
+
+              debug(locType);
+
+              if (locType)
+                locationType = locType.name;
+
+              const serviceDeliveryPt = await HtsRegisterServiceDeliveryPoint.findOne({
+                where: {
+                  serviceDeliveryPointId: register.serviceDeliveryPointId
+                }
+              });
+
+              debug(serviceDeliveryPt);
+
+              if (serviceDeliveryPt)
+                serviceDeliveryPoint = serviceDeliveryPt.name;
+
+            }
+
+          }
 
           if (result && result.hits && result.hits.total && result.hits.total > 0) {
 
