@@ -40,16 +40,6 @@ module.exports = function (app) {
   const ReadableSearch = require("elasticsearch-streams").ReadableSearch;
   const esClient = new require("elasticsearch").Client();
 
-  HtsRegister.hasMany(HtsRegisterLocationType, {
-    foreignKey: 'locationTypeId',
-    as: 'location'
-  })
-
-  HtsRegister.hasMany(HtsRegisterServiceDeliveryPoint, {
-    foreignKey: 'serviceDeliveryPointId',
-    as: 'serviceDeliveryPoint'
-  })
-
   const monthNames = [
     "January",
     "February",

@@ -2855,9 +2855,7 @@ class App extends Component {
           },
           "Ask End Month?": {
             visible: false,
-            condition: (this.props.app.activeReport !== "daily register"
-              ? "Yes"
-              : "No")
+            condition: "'{{activeReport}}' !== 'daily register'"
           },
           "End Month": {
             options: [
@@ -2893,9 +2891,7 @@ class App extends Component {
           },
           "Ask Location?": {
             visible: false,
-            condition: (this.props.app.activeReport === "daily register" || this.props.app.activeReport === "monthly report"
-              ? "Yes"
-              : "No")
+            condition: "'{{activeReport}}' === 'daily register' || '{{activeReport}}' === 'monthly report'"
           },
           "Location": {
             className: "longSelectList",
@@ -2907,9 +2903,7 @@ class App extends Component {
           },
           "Ask Test?": {
             visible: false,
-            condition: (this.props.app.activeReport === "daily register"
-              ? "Yes"
-              : "No")
+            condition: "'{{activeReport}}' === 'daily register'"
           },
           "Test": {
             options: (tests
