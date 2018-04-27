@@ -276,13 +276,15 @@ export function switches(props, state) {
         ? props.wf[state.currentWorkflow].currentNode.label
         : ""].condition), props);
 
+      result = (result ? "Yes" : "No");
+
     }
 
     props.handleInputChange(props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
       ? props.wf[state.currentWorkflow].currentNode.label
-      : "", (result ? "Yes" : "No"), state.currentWorkflow);
+      : "", result, state.currentWorkflow);
 
-    props.goForward(state.currentWorkflow, (result ? "Yes" : "No"));
+    props.goForward(state.currentWorkflow, result);
 
   } else if (props.app.configs && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
     ? props.wf[state.currentWorkflow].currentNode.label
