@@ -1953,13 +1953,13 @@ class Transcribe extends Component {
                                     ? fields[i]
                                     : (i === 0 && this.state.visitDetails && this.state.visitDetails.id
                                       ? this.state.visitDetails.id
-                                      : (this.state.visitDetails && fieldNames[i] && fieldNames[i].category && this.state.visitDetails[(fieldNames[i].category
+                                      : (this.state.visitDetails && fieldNames[i] && Object.keys(fieldNames[i]).indexOf("category") >= 0 && Object.keys(this.state.visitDetails).indexOf((fieldNames[i].category
                                         ? fieldNames[i].category
                                         : "") + (fieldNames[i].field
                                           ? ":" + fieldNames[i].field
                                           : "") + (fieldNames[i].subField
                                             ? ":" + fieldNames[i].subField
-                                            : "")]
+                                            : "")) >= 0
                                         ? this.state.visitDetails[(fieldNames[i].category
                                           ? fieldNames[i].category
                                           : "") + (fieldNames[i].field
