@@ -673,6 +673,18 @@ class App extends Component {
 
       this.checkBarcode();
 
+      if (this.props.app.currentId && this.props.app.flagged) {
+
+        delete this.props.app.flagged[this.props.app.currentId];
+
+      }
+
+      if (this.props.app.partnerId && this.props.app.flagged) {
+
+        delete this.props.app.flagged[this.props.app.partnerId];
+
+      }
+
     }
 
     await this
@@ -1435,11 +1447,19 @@ class App extends Component {
 
       if (this.props.app.dual) {
 
-        this.cancelForm();
+        if (this.props.app.flagged && this.props.app.flagged[this.props.app.clientId] && this.props.app.flagged[this.props.app.partnerId]) {
 
-        this
-          .props
-          .fetchVisits(this.props.app.currentId);
+          this.switchPage("home");
+
+        } else {
+
+          this.cancelForm();
+
+          this
+            .props
+            .fetchVisits(this.props.app.currentId);
+
+        }
 
       } else if (this.props.app.patientActivated) {
 

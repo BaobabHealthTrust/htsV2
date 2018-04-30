@@ -225,6 +225,7 @@ const activateSummaries = async (newState) => {
 }
 
 export default function appReducer(state = {
+  flagged: {},
   patientActivated: false,
   formActive: false,
   module: "",
@@ -1303,13 +1304,13 @@ export default function appReducer(state = {
 
       }
 
+      newState.flagged[action.payload.data.clientId] = true;
+
       return newState;
 
     case "UPDATE_PARTNER_RECORD":
 
       newState = Object.assign({}, state);
-
-      
 
       return newState;
 
