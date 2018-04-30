@@ -512,6 +512,7 @@ module.exports = function (app) {
   let ddeData = {};
 
   const searchById = (req, raw) => {
+
     return new Promise(resolve => {
       new client()
         .get(req.protocol + "://" + req.hostname + ":" + (process.env.PORT
@@ -524,6 +525,7 @@ module.exports = function (app) {
             resolve();
           });
     });
+
   };
 
   const addNewPatient = (req, raw) => {
@@ -535,6 +537,10 @@ module.exports = function (app) {
     debug("***********************");
 
     return new Promise(resolve => {
+
+      if (Object.keys(raw).indexOf("birthdate") < 0 && Object.keys(raw).indexOf("Date of Birth") < 0)
+        return resolve();
+
       const args = {
         data: {
           family_name: raw.names
