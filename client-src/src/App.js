@@ -1447,7 +1447,7 @@ class App extends Component {
 
       if (this.props.app.dual) {
 
-        if (this.props.app.flagged && this.props.app.flagged[this.props.app.clientId] && this.props.app.flagged[this.props.app.partnerId]) {
+        if (this.props.app.flagged && this.props.app.clientId && this.props.app.partnerId && this.props.app.flagged[this.props.app.clientId] && this.props.app.flagged[this.props.app.partnerId]) {
 
           this.switchPage("home");
 
