@@ -427,6 +427,15 @@ export default function (state = {
 
             return newState;
 
+        case "CLEAR_FIELD":
+
+            newState = Object.assign({}, state);
+
+            if (Object.keys(newState.responses).indexOf(action.payload.group) >= 0 && Object.keys(newState.responses[action.payload.group]).indexOf(action.payload.field) >= 0)
+                delete newState.responses[action.payload.group][action.payload.field];
+
+            return newState;
+
         default:
 
             return state;

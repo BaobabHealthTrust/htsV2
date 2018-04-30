@@ -249,7 +249,8 @@ class U14 extends Component {
                   showConfirmMsg={this.props.showConfirmMsg}
                   showInfoMsg={this.props.showInfoMsg}
                   activeWorkflow={this.props.activeWorkflow}
-                  wf={this.props.wf} />
+                  wf={this.props.wf}
+                  clearField={this.props.clearField} />
                 : <div>
                   <table
                     width="100%"

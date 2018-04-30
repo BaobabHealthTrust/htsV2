@@ -56,3 +56,15 @@ export function handleInputChange(field, value, group) {
     };
 
 }
+
+export function clearField(field, group) {
+
+    return {
+        type: "CLEAR_FIELD",
+        payload: {
+            field,
+            group
+        }
+    };
+
+}

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './singleTestResult.css';
 import Button from "./button";
 
@@ -23,13 +23,13 @@ class SingleTestResult extends Component {
 
       case "Non-Reactive":
 
-        this.setState({activeButtons: ["Non-Reactive"]});
+        this.setState({ activeButtons: ["Non-Reactive"] });
 
         break;
 
       case "Reactive":
 
-        this.setState({activeButtons: ["Reactive"]});
+        this.setState({ activeButtons: ["Reactive"] });
 
         break;
 
@@ -66,8 +66,8 @@ class SingleTestResult extends Component {
             <tr>
               <td
                 style={{
-                fontSize: "2em"
-              }}
+                  fontSize: "2em"
+                }}
                 align="left"
                 id="lblResult">
                 {this.props.label}
@@ -77,15 +77,15 @@ class SingleTestResult extends Component {
               <td>
                 <div
                   style={{
-                  verticalAlign: "middle",
-                  width: "100%",
-                  height: "calc(100vh - 350px)"
-                }}>
+                    verticalAlign: "middle",
+                    width: "100%",
+                    height: "calc(100vh - 350px)"
+                  }}>
                   <table
                     style={{
-                    margin: "auto",
-                    marginTop: "calc(20vh)"
-                  }}>
+                      margin: "auto",
+                      marginTop: "calc(20vh)"
+                    }}>
                     <tbody>
                       <tr style={{
                         fontSize: "1.2em"
@@ -98,41 +98,45 @@ class SingleTestResult extends Component {
                         </td>
                         <td
                           style={{
-                          color: "green"
-                        }}>
+                            color: "green"
+                          }}>
                           {this.props.duration}
                         </td>
                         <td>
                           <Button
                             id="btnNonReactive"
                             buttonClass={this
-                            .state
-                            .activeButtons
-                            .indexOf("Non-Reactive") >= 0
-                            ? (this.state.activeButtons.length > 1
-                              ? "blue"
-                              : "depressed")
-                            : "gray"}
+                              .state
+                              .activeButtons
+                              .indexOf("Non-Reactive") >= 0 && (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf(this.props.label) < 0)
+                              ? (this.state.activeButtons.length > 1
+                                ? "blue"
+                                : "depressed")
+                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf(this.props.label) >= 0 && this.props.wf.responses[this.props.activeWorkflow][this.props.label] === "Non-Reactive" ? "depressed" : (this.state.activeButtons.length > 1
+                                ? "blue"
+                                : "gray"))}
                             label="Non-Reactive"
                             handleMouseDown={this
-                            .selectResult
-                            .bind(this)}/>
+                              .selectResult
+                              .bind(this)} />
                         </td>
                         <td>
                           <Button
                             id="btnReactive"
                             buttonClass={this
-                            .state
-                            .activeButtons
-                            .indexOf("Reactive") >= 0
-                            ? (this.state.activeButtons.length > 1
-                              ? "blue"
-                              : "depressed")
-                            : "gray"}
+                              .state
+                              .activeButtons
+                              .indexOf("Reactive") >= 0 && (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf(this.props.label) < 0)
+                              ? (this.state.activeButtons.length > 1
+                                ? "blue"
+                                : "depressed")
+                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf(this.props.label) >= 0 && this.props.wf.responses[this.props.activeWorkflow][this.props.label] === "Reactive" ? "depressed" : (this.state.activeButtons.length > 1
+                                ? "blue"
+                                : "gray"))}
                             label="Reactive"
                             handleMouseDown={this
-                            .selectResult
-                            .bind(this)}/>
+                              .selectResult
+                              .bind(this)} />
                         </td>
                       </tr>
                     </tbody>

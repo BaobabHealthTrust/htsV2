@@ -26,7 +26,7 @@ import {
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
-import { loadWorkflow, goForward, clearWorkflow, goBackward, handleInputChange } from "./actions/wfActions";
+import { loadWorkflow, goForward, clearWorkflow, goBackward, handleInputChange, clearField } from "./actions/wfActions";
 import { fetchLastBDRow, saveBDRow, fetchEditRow, saveEditRow, resetErrorMessage } from "./actions/bdAction";
 import {
   searchByIdentifier,
@@ -3826,7 +3826,8 @@ class App extends Component {
                         .bind(this)}
                       printLabel={this
                         .printLabel
-                        .bind(this)} />
+                        .bind(this)}
+                      clearField={this.props.clearField.bind(this)} />
                   </div>
                 )}
         <U13 buttons={buttons} />
@@ -4207,6 +4208,9 @@ const mapDispatchToProps = dispatch => {
     },
     updatePartnerRecord: async (clientId, concept, visitDate, valuecurrentUser, url) => {
       return await dispatch(updatePartnerRecord(clientId, concept, visitDate, valuecurrentUser, url));
+    },
+    clearField: async (field, group) => {
+      return await dispatch(clearField(field, group));
     }
   };
 };
