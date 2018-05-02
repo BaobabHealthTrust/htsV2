@@ -3257,7 +3257,7 @@ class App extends Component {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: !this.props.app.patientActivated || this.props.app.formActive // || this.props.app.dual
+        disabled: true // !this.props.app.patientActivated || this.props.app.formActive
           ? true
           : false,
         inactive: this.props.app.module === "" && !this.props.app.formActive
