@@ -727,6 +727,17 @@ class App extends Component {
   }
 
   async navBack() {
+
+    if (this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "Immediate Parallel Repeat Test 1 & 2 Results") {
+
+      this.props.clearField("Immediate Repeat Test 1 Result", this.state.currentWorkflow);
+
+      this.props.clearField("Immediate Repeat Test 2 Result", this.state.currentWorkflow);
+
+      this.props.clearField("Immediate Parallel Repeat Test 1 & 2 Results", this.state.currentWorkflow);
+
+    }
+
     if (this.props.app.fieldPos <= 0) {
       return;
     }
@@ -757,6 +768,7 @@ class App extends Component {
       });
 
     await this.queryOptions("");
+
   }
 
   async navNext(value) {
@@ -2118,6 +2130,16 @@ class App extends Component {
       this.fetchNextTask(this.props.app.currentId, this.state.currentWorkflow);
 
     } else {
+
+      if (this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "Immediate Parallel Repeat Test 1 & 2 Results") {
+
+        this.props.clearField("Immediate Repeat Test 1 Result", this.state.currentWorkflow);
+
+        this.props.clearField("Immediate Repeat Test 2 Result", this.state.currentWorkflow);
+
+        this.props.clearField("Immediate Parallel Repeat Test 1 & 2 Results", this.state.currentWorkflow);
+
+      }
 
       this
         .props

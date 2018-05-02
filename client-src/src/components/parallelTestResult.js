@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './parallelTestResult.css';
 import Button from "./button";
 
@@ -11,7 +11,10 @@ class ParallelTestResult extends Component {
       group1ActiveButtons: [
         "Non-Reactive", "Reactive"
       ],
-      group2ActiveButtons: ["Non-Reactive", "Reactive"]
+      group2ActiveButtons: [
+        "Non-Reactive", "Reactive"
+      ],
+      busy: false
     }
 
   }
@@ -20,63 +23,63 @@ class ParallelTestResult extends Component {
     return document.getElementById(id);
   }
 
-  selectResult(e) {
+  async selectResult(e) {
 
     switch (e.target.id) {
 
       case "btnNonReactive1":
 
-        this.setState({group1ActiveButtons: ["Non-Reactive"]});
+        await this.setState({ group1ActiveButtons: ["Non-Reactive"] });
 
-        this
+        await this
           .props
           .handleDirectInputChange(((this.props.label || "").match(/^partner/i)
             ? "Partner "
             : "") + (this.props.label.match(/immediate/i)
-            ? "Immediate Repeat "
-            : "First Pass ") + "Test 1 Result", "Non-Reactive", this.props.group);
+              ? "Immediate Repeat "
+              : "First Pass ") + "Test 1 Result", "Non-Reactive", this.props.group);
 
         break;
 
       case "btnReactive1":
 
-        this.setState({group1ActiveButtons: ["Reactive"]});
+        await this.setState({ group1ActiveButtons: ["Reactive"] });
 
-        this
+        await this
           .props
           .handleDirectInputChange(((this.props.label || "").match(/^partner/i)
             ? "Partner "
             : "") + (this.props.label.match(/immediate/i)
-            ? "Immediate Repeat "
-            : "First Pass ") + "Test 1 Result", "Reactive", this.props.group);
+              ? "Immediate Repeat "
+              : "First Pass ") + "Test 1 Result", "Reactive", this.props.group);
 
         break;
 
       case "btnNonReactive2":
 
-        this.setState({group2ActiveButtons: ["Non-Reactive"]});
+        await this.setState({ group2ActiveButtons: ["Non-Reactive"] });
 
-        this
+        await this
           .props
           .handleDirectInputChange(((this.props.label || "").match(/^partner/i)
             ? "Partner "
             : "") + (this.props.label.match(/immediate/i)
-            ? "Immediate Repeat "
-            : "First Pass ") + "Test 2 Result", "Non-Reactive", this.props.group);
+              ? "Immediate Repeat "
+              : "First Pass ") + "Test 2 Result", "Non-Reactive", this.props.group);
 
         break;
 
       case "btnReactive2":
 
-        this.setState({group2ActiveButtons: ["Reactive"]});
+        await this.setState({ group2ActiveButtons: ["Reactive"] });
 
-        this
+        await this
           .props
           .handleDirectInputChange(((this.props.label || "").match(/^partner/i)
             ? "Partner "
             : "") + (this.props.label.match(/immediate/i)
-            ? "Immediate Repeat "
-            : "First Pass ") + "Test 2 Result", "Reactive", this.props.group);
+              ? "Immediate Repeat "
+              : "First Pass ") + "Test 2 Result", "Reactive", this.props.group);
 
         break;
 
@@ -86,49 +89,9 @@ class ParallelTestResult extends Component {
 
     }
 
-  }
+    if (this.state.group1ActiveButtons.length === 1 && this.state.group2ActiveButtons.length === 1) {
 
-  componentDidUpdate() {
-
-    if (this.props.responses[(this.props.label.match(/immediate/i)
-        ? ((this.props.label || "").match(/^partner/i)
-          ? "Partner "
-          : "") + "Immediate Repeat "
-        : ((this.props.label || "").match(/^partner/i)
-          ? "Partner "
-          : "") + "First Pass ") + "Test 1 Result"] !== undefined && this.props.responses[(this.props.label.match(/immediate/i)
-        ? ((this.props.label || "").match(/^partner/i)
-          ? "Partner "
-          : "") + "Immediate Repeat "
-        : ((this.props.label || "").match(/^partner/i)
-          ? "Partner "
-          : "") + "First Pass ") + "Test 1 Result"].trim().length <= 0 && this.state.activeButtons.length < 2) {
-
-      return this.setState({
-        group1ActiveButtons: ["Non-Reactive", "Reactive"]
-      });
-
-    }
-
-    if (this.props.responses[((this.props.label || "").match(/^partner/i)
-        ? "Partner "
-        : "") + (this.props.label.match(/immediate/i)
-        ? ((this.props.label || "").match(/^partner/i)
-          ? "Partner "
-          : "") + "Immediate Repeat "
-        : ((this.props.label || "").match(/^partner/i)
-          ? "Partner "
-          : "") + "First Pass ") + "Test 2 Result"] !== undefined && this.props.responses[(this.props.label.match(/immediate/i)
-        ? ((this.props.label || "").match(/^partner/i)
-          ? "Partner "
-          : "") + "Immediate Repeat "
-        : ((this.props.label || "").match(/^partner/i)
-          ? "Partner "
-          : "") + "First Pass ") + "Test 2 Result"].trim().length <= 0 && this.state.activeButtons.length < 2) {
-
-      return this.setState({
-        group2ActiveButtons: ["Non-Reactive", "Reactive"]
-      });
+      this.props.handleDirectInputChange("Immediate Parallel Repeat Test 1 & 2 Results", this.state.group1ActiveButtons.concat(this.state.group2ActiveButtons).join(","), this.props.group);
 
     }
 
@@ -143,8 +106,8 @@ class ParallelTestResult extends Component {
             <tr>
               <td
                 style={{
-                fontSize: "2em"
-              }}
+                  fontSize: "2em"
+                }}
                 align="left"
                 id="lblResult">
                 {this.props.label}
@@ -154,15 +117,15 @@ class ParallelTestResult extends Component {
               <td>
                 <div
                   style={{
-                  verticalAlign: "middle",
-                  width: "100%",
-                  height: "calc(100vh - 350px)"
-                }}>
+                    verticalAlign: "middle",
+                    width: "100%",
+                    height: "calc(100vh - 350px)"
+                  }}>
                   <table
                     style={{
-                    margin: "auto",
-                    marginTop: "calc(10vh)"
-                  }}>
+                      margin: "auto",
+                      marginTop: "calc(10vh)"
+                    }}>
                     <tbody>
                       <tr style={{
                         fontSize: "1.2em"
@@ -175,41 +138,31 @@ class ParallelTestResult extends Component {
                         </td>
                         <td
                           style={{
-                          color: "green"
-                        }}>
+                            color: "green"
+                          }}>
                           {this.props.duration}
                         </td>
                         <td>
                           <Button
                             id="btnNonReactive1"
-                            buttonClass={this
-                            .state
-                            .group1ActiveButtons
-                            .indexOf("Non-Reactive") >= 0
-                            ? (this.state.group1ActiveButtons.length > 1
+                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") < 0)
                               ? "blue"
-                              : "depressed")
-                            : "gray"}
+                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 1 Result"] === "Non-Reactive") ? "depressed" : "gray"}
                             label="Non-Reactive"
                             handleMouseDown={this
-                            .selectResult
-                            .bind(this)}/>
+                              .selectResult
+                              .bind(this)} />
                         </td>
                         <td>
                           <Button
                             id="btnReactive1"
-                            buttonClass={this
-                            .state
-                            .group1ActiveButtons
-                            .indexOf("Reactive") >= 0
-                            ? (this.state.group1ActiveButtons.length > 1
+                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") < 0)
                               ? "blue"
-                              : "depressed")
-                            : "gray"}
+                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 1 Result"] === "Reactive") ? "depressed" : "gray"}
                             label="Reactive"
                             handleMouseDown={this
-                            .selectResult
-                            .bind(this)}/>
+                              .selectResult
+                              .bind(this)} />
                         </td>
                       </tr>
                       <tr style={{
@@ -223,41 +176,31 @@ class ParallelTestResult extends Component {
                         </td>
                         <td
                           style={{
-                          color: "green"
-                        }}>
+                            color: "green"
+                          }}>
                           {this.props.duration2}
                         </td>
                         <td>
                           <Button
                             id="btnNonReactive2"
-                            buttonClass={this
-                            .state
-                            .group2ActiveButtons
-                            .indexOf("Non-Reactive") >= 0
-                            ? (this.state.group2ActiveButtons.length > 1
+                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") < 0)
                               ? "blue"
-                              : "depressed")
-                            : "gray"}
+                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 2 Result"] === "Non-Reactive") ? "depressed" : "gray"}
                             label="Non-Reactive"
                             handleMouseDown={this
-                            .selectResult
-                            .bind(this)}/>
+                              .selectResult
+                              .bind(this)} />
                         </td>
                         <td>
                           <Button
                             id="btnReactive2"
-                            buttonClass={this
-                            .state
-                            .group2ActiveButtons
-                            .indexOf("Reactive") >= 0
-                            ? (this.state.group2ActiveButtons.length > 1
+                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") < 0)
                               ? "blue"
-                              : "depressed")
-                            : "gray"}
+                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 2 Result"] === "Reactive") ? "depressed" : "gray"}
                             label="Reactive"
                             handleMouseDown={this
-                            .selectResult
-                            .bind(this)}/>
+                              .selectResult
+                              .bind(this)} />
                         </td>
                       </tr>
                     </tbody>

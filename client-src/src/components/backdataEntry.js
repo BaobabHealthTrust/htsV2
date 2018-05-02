@@ -1066,7 +1066,7 @@ class BackdataEntry extends Component {
       },
       18: {
         type: "period",
-        hiddens: ["clear", "abc", "qwe", "Unknown", "-"]
+        hiddens: ["clear", "abc", "qwe", "Unknown", "-", "/", "."]
       },
       19: {
         type: "click",

@@ -126,8 +126,7 @@
             "test": "Determine HIV 1/2 Result",
             "duration2": "10 Minutes",
             "test2": "Uni-Gold Result"
-        },
-        "optional": true
+        }
     },
     "Repeat Test 1 Negative?": {
         "visible": false,
