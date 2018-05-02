@@ -1521,6 +1521,8 @@ class App extends Component {
 
       }
 
+      const selectedTask = this.props.app.selectedTask;
+
       await this
         .props
         .clearDataStructs();
@@ -1548,6 +1550,12 @@ class App extends Component {
             .props
             .showErrorMsg('Error', this.props.app.errorMessage);
         });
+
+      if (selectedTask === "Add User") {
+
+        await this.props.fetchUsers();
+
+      }
 
       await this
         .props
@@ -2640,7 +2648,16 @@ class App extends Component {
           },
           "Confirm Password": {
             fieldType: "password",
-            textCase: "lower"
+            textCase: "lower",
+            onUnLoad: () => {
+              if (this.props.wf && this.props.wf.responses && this.state.currentWorkflow && this.props.wf.responses[this.state.currentWorkflow] && Object.keys(this.props.wf.responses[this.state.currentWorkflow]).indexOf("Password") >= 0 && Object.keys(this.props.wf.responses[this.state.currentWorkflow]).indexOf("Confirm Password") >= 0 && this.props.wf.responses[this.state.currentWorkflow]["Confirm Password"].trim().length > 0 && this.props.wf.responses[this.state.currentWorkflow]["Password"] !== this.props.wf.responses[this.state.currentWorkflow]["Confirm Password"]) {
+
+                this.props.showErrorMsg("Invalid Data", "Password mismatch");
+
+                this.navBack();
+
+              }
+            }
           },
           "Role": {
             options: [
