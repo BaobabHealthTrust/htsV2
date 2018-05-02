@@ -146,22 +146,32 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
         }
 
-        parent.submitForm().then(async () => {
+        parent.submitForm().then(async (result) => {
 
           if (props.app.sectionHeader === "HTS Visit") {
 
-            const entryCode = props
-              .app
-              .patientData[props.app.currentId][props.app.module]
-              .visits
-              .filter((e) => {
-                return Object.keys(e)[0] === props.app.selectedVisit
-              })
-              .map((e) => {
-                return Object.keys(e[Object.keys(e)[0]])
-              })[0];
+            if (result === false) {
 
-            parent.transcribe(entryCode);
+              await props.updateApp({ processing: false });
+
+              parent.cancelForm();
+
+            } else {
+
+              const entryCode = props
+                .app
+                .patientData[props.app.currentId][props.app.module]
+                .visits
+                .filter((e) => {
+                  return Object.keys(e)[0] === props.app.selectedVisit
+                })
+                .map((e) => {
+                  return Object.keys(e[Object.keys(e)[0]])
+                })[0];
+
+              parent.transcribe(entryCode);
+
+            }
 
           } else {
 

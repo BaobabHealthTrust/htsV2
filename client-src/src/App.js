@@ -1499,6 +1499,12 @@ class App extends Component {
 
       if (this.props.app.sectionHeader === "HTS Visit") {
 
+        if (this.props.wf && this.props.wf.responses && this.state.currentWorkflow && this.props.wf.responses[this.state.currentWorkflow] && Object.keys(this.props.wf.responses[this.state.currentWorkflow]).indexOf("Client gives consent to be tested?") && this.props.wf.responses[this.state.currentWorkflow]["Client gives consent to be tested?"] === "No") {
+
+          return false;
+
+        }
+
         await this.props.updateApp({ processing: true });
 
       }
