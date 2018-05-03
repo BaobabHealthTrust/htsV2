@@ -2149,6 +2149,16 @@ class App extends Component {
 
       }
 
+      if (this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "First Pass Parallel Test 1 & 2 Results") {
+
+        this.props.clearField("First Pass Test 1 Result", this.state.currentWorkflow);
+
+        this.props.clearField("First Pass Test 2 Result", this.state.currentWorkflow);
+
+        this.props.clearField("First Pass Parallel Test 1 & 2 Results", this.state.currentWorkflow);
+
+      }
+
       this
         .props
         .handleInputChange(this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label

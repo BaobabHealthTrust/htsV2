@@ -185,8 +185,7 @@
             "test": "Determine HIV 1/2 Result",
             "duration2": "10 Minutes",
             "test2": "Uni-Gold Result"
-        },
-        "optional": true
+        }
     },
     "Last Positive?": {
         "visible": false,

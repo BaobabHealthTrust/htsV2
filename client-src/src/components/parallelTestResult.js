@@ -89,9 +89,13 @@ class ParallelTestResult extends Component {
 
     }
 
-    if (this.state.group1ActiveButtons.length === 1 && this.state.group2ActiveButtons.length === 1) {
+    if ((this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") >= 0 && ["Non-Reactive", "Reactive"].indexOf(this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 1 Result"]) >= 0 && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") >= 0 && ["Non-Reactive", "Reactive"].indexOf(this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 2 Result"]) >= 0)) {
 
-      this.props.handleDirectInputChange("Immediate Parallel Repeat Test 1 & 2 Results", this.state.group1ActiveButtons.concat(this.state.group2ActiveButtons).join(","), this.props.group);
+      await this.props.handleDirectInputChange("Immediate Parallel Repeat Test 1 & 2 Results", this.state.group1ActiveButtons.concat(this.state.group2ActiveButtons).join(","), this.props.group);
+
+    } else if ((this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("First Pass Test 1 Result") >= 0 && ["Non-Reactive", "Reactive"].indexOf(this.props.wf.responses[this.props.activeWorkflow]["First Pass Test 1 Result"]) >= 0 && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("First Pass Test 2 Result") >= 0 && ["Non-Reactive", "Reactive"].indexOf(this.props.wf.responses[this.props.activeWorkflow]["First Pass Test 2 Result"]) >= 0)) {
+
+      await this.props.handleDirectInputChange("First Pass Parallel Test 1 & 2 Results", this.state.group1ActiveButtons.concat(this.state.group2ActiveButtons).join(","), this.props.group);
 
     }
 
@@ -145,9 +149,9 @@ class ParallelTestResult extends Component {
                         <td>
                           <Button
                             id="btnNonReactive1"
-                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") < 0)
+                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") < 0 && this.props.label === "Immediate Parallel Repeat Test 1 & 2 Results") || (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("First Pass Test 1 Result") < 0 && this.props.label === "First Pass Parallel Test 1 & 2 Results")
                               ? "blue"
-                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 1 Result"] === "Non-Reactive") ? "depressed" : "gray"}
+                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 1 Result"] === "Non-Reactive" && this.props.label === "Immediate Parallel Repeat Test 1 & 2 Results") || (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("First Pass Test 1 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["First Pass Test 1 Result"] === "Non-Reactive" && this.props.label === "First Pass Parallel Test 1 & 2 Results") ? "depressed" : "gray"}
                             label="Non-Reactive"
                             handleMouseDown={this
                               .selectResult
@@ -156,9 +160,9 @@ class ParallelTestResult extends Component {
                         <td>
                           <Button
                             id="btnReactive1"
-                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") < 0)
+                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") < 0 && this.props.label === "Immediate Parallel Repeat Test 1 & 2 Results") || (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("First Pass Test 1 Result") < 0 && this.props.label === "First Pass Parallel Test 1 & 2 Results")
                               ? "blue"
-                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 1 Result"] === "Reactive") ? "depressed" : "gray"}
+                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 1 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 1 Result"] === "Reactive") || (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("First Pass Test 1 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["First Pass Test 1 Result"] === "Reactive" && this.props.label === "First Pass Parallel Test 1 & 2 Results") ? "depressed" : "gray"}
                             label="Reactive"
                             handleMouseDown={this
                               .selectResult
@@ -183,9 +187,9 @@ class ParallelTestResult extends Component {
                         <td>
                           <Button
                             id="btnNonReactive2"
-                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") < 0)
+                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") < 0 && this.props.label === "Immediate Parallel Repeat Test 1 & 2 Results") || (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("First Pass Test 2 Result") < 0 && this.props.label === "First Pass Parallel Test 1 & 2 Results")
                               ? "blue"
-                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 2 Result"] === "Non-Reactive") ? "depressed" : "gray"}
+                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 2 Result"] === "Non-Reactive" && this.props.label === "Immediate Parallel Repeat Test 1 & 2 Results") || (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("First Pass Test 2 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["First Pass Test 2 Result"] === "Non-Reactive" && this.props.label === "First Pass Parallel Test 1 & 2 Results") ? "depressed" : "gray"}
                             label="Non-Reactive"
                             handleMouseDown={this
                               .selectResult
@@ -194,9 +198,9 @@ class ParallelTestResult extends Component {
                         <td>
                           <Button
                             id="btnReactive2"
-                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") < 0)
+                            buttonClass={(this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") < 0 && this.props.label === "Immediate Parallel Repeat Test 1 & 2 Results") || (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("First Pass Test 2 Result") < 0 && this.props.label === "First Pass Parallel Test 1 & 2 Results")
                               ? "blue"
-                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 2 Result"] === "Reactive") ? "depressed" : "gray"}
+                              : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("Immediate Repeat Test 2 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["Immediate Repeat Test 2 Result"] === "Reactive" && this.props.label === "Immediate Parallel Repeat Test 1 & 2 Results") || (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf("First Pass Test 2 Result") >= 0 && this.props.wf.responses[this.props.activeWorkflow]["First Pass Test 2 Result"] === "Reactive" && this.props.label === "First Pass Parallel Test 1 & 2 Results") ? "depressed" : "gray"}
                             label="Reactive"
                             handleMouseDown={this
                               .selectResult
