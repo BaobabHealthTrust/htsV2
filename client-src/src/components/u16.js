@@ -271,13 +271,13 @@ class U16 extends Component {
                         </td>
                       </tr>
 
-                      {(((this.props.configs[this.props.label] && this.props.configs[this.props.label].options) || this.props.options || (this.props.data && this.props.data.length > 0))
+                      {(((this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].options) || this.props.options || (this.props.data && this.props.data.length > 0))
                         ? (
 
                           <tr>
                             <td>
                               <div
-                                className={(this.props.configs[this.props.label] && this.props.configs[this.props.label].className
+                                className={(this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].className
                                   ? this.props.configs[this.props.label].className
                                   : "shortSelectList")}>
                                 <ul

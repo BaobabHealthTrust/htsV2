@@ -1761,7 +1761,7 @@ class App extends Component {
           "summaryIgnores"
         ].forEach(field => {
 
-          if (this.props.app.secondary[field])
+          if (this.props.app.secondary[field] || (typeof this.props.app.secondary[field] === "boolean" && Object.keys(this.props.app.secondary).indexOf(field)))
             payload[field] = this.props.app.secondary[field]
 
         })
@@ -1781,7 +1781,7 @@ class App extends Component {
           "summaryIgnores"
         ].forEach(field => {
 
-          if (this.props.app.primary[field])
+          if (this.props.app.primary[field] || (typeof this.props.app.primary[field] === "boolean" && Object.keys(this.props.app.primary).indexOf(field)))
             payload[field] = this.props.app.primary[field]
 
         })
@@ -3740,7 +3740,7 @@ class App extends Component {
                         ? this.props.wf[this.state.currentWorkflow].currentNode.options
                         : null}
                       order={this.props.app.order}
-                      fieldType={this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+                      fieldType={this.props.app && this.props.app.configs && this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
                         ? this.props.wf[this.state.currentWorkflow].currentNode.label
                         : ""] && this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
                           ? this.props.wf[this.state.currentWorkflow].currentNode.label
