@@ -701,7 +701,7 @@ class BackdataEntry extends Component {
 
       }
 
-      if (Object.keys(this.state.data).indexOf("HIV Rapid Test Outcomes") >= 0 && Object.keys(this.state.data["HIV Rapid Test Outcomes"]).indexOf("Immediate Repeat") >= 0 && ((Object.keys(this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length > 0 && Object.keys(this.state.data["HIV Rapid Test Outcomes"]["First Pass"]).length < 2) || (Object.keys(this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length > 0 && this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length < 2)) {
+      if (((Object.keys(this.state.data).indexOf("HIV Rapid Test Outcomes") >= 0 && Object.keys(this.state.data["HIV Rapid Test Outcomes"]).indexOf("Immediate Repeat") >= 0 && ((Object.keys(this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length > 0 && Object.keys(this.state.data["HIV Rapid Test Outcomes"]["First Pass"]).length < 2) || (Object.keys(this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length > 0 && this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length < 2)) && ["Last Positive", "Last Inconclusive", "Last Exposed Infant"].indexOf(String(this.state.data["Last HIV Test"]).trim()) >= 0) || ((Object.keys(this.state.data).indexOf("HIV Rapid Test Outcomes") >= 0 && Object.keys(this.state.data["HIV Rapid Test Outcomes"]).indexOf("Immediate Repeat") >= 0 && (((Object.keys(this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length > 0 && Object.keys(this.state.data["HIV Rapid Test Outcomes"]["First Pass"]).length < 2) || (Object.keys(this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length > 0 && this.state.data["HIV Rapid Test Outcomes"]["Immediate Repeat"]).length < 2))) && ["Last Negative", "Never Tested"].indexOf(String(this.state.data["Last HIV Test"]).trim()) >= 0)) {
 
         this
           .props
@@ -1429,7 +1429,7 @@ class BackdataEntry extends Component {
       },
       39: {
         category: "Result Given to Client",
-        field: "Inconclusive",
+        field: "Confirmatory Inconclusive",
         group: 10
       },
       40: {

@@ -677,7 +677,7 @@ const lastPositiveTest1And2Negative = (data, alertsMapping, categories) => {
     result.title = alertsMapping["Missing Referral for Re-Testing"].title;
     result.group = categories[alertsMapping["Missing Referral for Re-Testing"].category];
 
-  } else if (data["Referral for Re-Testing"] !== "Re-Test") {
+  } else if (data["Referral for Re-Testing"] !== "Re-Test" && ["Last Positive", "Last Inconclusive", "Last Exposed Infant"].indexOf(String(data["Last HIV Test"]).trim()) < 0) {
 
     result.error = true;
     result.message = alertsMapping["Invalid Referral for Re-Testing"].message;
@@ -1176,7 +1176,7 @@ module.exports.validate = (data = {}, alertsMapping = {}, categories = {}) => {
 
     }
 
-    if (["Never Tested", "Last Negative", "Last Positive"].indexOf(data["Last HIV Test"]) >= 0 && nonReactive) {
+    if (["Never Tested", "Last Negative"].indexOf(data["Last HIV Test"]) >= 0 && nonReactive) {
 
       return {
         error: true,
