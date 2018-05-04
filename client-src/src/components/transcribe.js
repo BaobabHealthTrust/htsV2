@@ -144,6 +144,10 @@ class Transcribe extends Component {
 
                     visitDetails["Last HIV Test"] = visit[this.props.app.selectedVisit][entryCode][encounter][concept];
 
+                  } else if (concept === "Comments") {
+
+                    visitDetails["Comments:Comments"] = visit[this.props.app.selectedVisit][entryCode][encounter][concept];
+
                   } else if (concept === "HTS Family Referral Slips") {
 
                     visitDetails["Number of Items Given:HTS Family Ref Slips"] = visit[this.props.app.selectedVisit][entryCode][encounter][concept];
@@ -515,6 +519,11 @@ class Transcribe extends Component {
         field: "Condoms",
         subField: "Female",
         group: 14
+      },
+      55: {
+        category: "Comments",
+        field: "Comments",
+        group: 15
       }
     };
 

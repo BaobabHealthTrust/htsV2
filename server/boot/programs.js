@@ -298,7 +298,7 @@ module.exports = function (app) {
           ? location.locationId
           : 1;
 
-        let user = await User.findOne({
+        let user = await Users.findOne({
           where: {
             username
           }
@@ -434,7 +434,7 @@ module.exports = function (app) {
           ? location.locationId
           : 1;
 
-        let user = await User.findOne({
+        let user = await Users.findOne({
           where: {
             username
           }
@@ -1109,7 +1109,7 @@ module.exports = function (app) {
     const currentUser = "admin";
     const currentLocationName = "Unknown";
 
-    const user = await User.findOne({
+    const user = await Users.findOne({
       where: {
         username: currentUser
       }
@@ -1475,6 +1475,8 @@ module.exports = function (app) {
 
     let json = Object.assign({}, req.body);
 
+    debug(JSON.stringify(json));
+
     let identifier = await PatientIdentifier.findOne({
       where: {
         identifier: json.primaryId
@@ -1584,7 +1586,7 @@ module.exports = function (app) {
       ? program.programId
       : null;
 
-    const user = await User.findOne({
+    const user = await Users.findOne({
       where: {
         username: currentUser
       }
@@ -1593,6 +1595,8 @@ module.exports = function (app) {
     const userId = user
       ? user.id
       : 1;
+
+    const providerId = user ? user.personId : 1;
 
     let location = await Location.findOne({
       where: {
@@ -1660,7 +1664,7 @@ module.exports = function (app) {
     encounter = await Encounter.create({
       encounterType,
       patientId,
-      providerId: userId,
+      providerId,
       locationId,
       encounterDatetime: new Date(today),
       creator: userId,
@@ -1943,7 +1947,7 @@ module.exports = function (app) {
 
     let currentUser = "admin";
 
-    const user = await User.findOne({
+    const user = await Users.findOne({
       where: {
         username: currentUser
       }
@@ -2070,7 +2074,7 @@ module.exports = function (app) {
       ? json["Current Location"]
       : "Unknown";
 
-    const user = await User.findOne({
+    const user = await Users.findOne({
       where: {
         username: currentUser
       }
@@ -2444,20 +2448,20 @@ module.exports = function (app) {
 
           conceptname = "HTS Family Referral Slips";
 
-        } 
-        
+        }
+
         if (conceptname === "Number of Items Given:Condoms:Male") {
 
           conceptname = "Number of male condoms given";
 
-        } 
-        
+        }
+
         if (conceptname === "Number of Items Given:Condoms:Female") {
 
           conceptname = "Number of female condoms given";
 
-        } 
-        
+        }
+
         if (conceptname === "Comments:Comments") {
 
           conceptname = "Comments";
@@ -3143,7 +3147,7 @@ module.exports = function (app) {
         }
       });
 
-      let user = await User.findOne({
+      let user = await Users.findOne({
         where: {
           userId
         }
@@ -3394,7 +3398,7 @@ module.exports = function (app) {
 
     let currentUser = "admin";
 
-    const user = await User.findOne({
+    const user = await Users.findOne({
       where: {
         username: currentUser
       }
@@ -3518,7 +3522,7 @@ module.exports = function (app) {
       ? req.body['Add Register']
       : {});
 
-    let user = await User.findOne({
+    let user = await Users.findOne({
       where: {
         username: json.username
       }
@@ -3626,7 +3630,7 @@ module.exports = function (app) {
 
     if (existingRegister && Object.keys(existingRegister).length > 0) {
 
-      let user = await User.findOne({
+      let user = await Users.findOne({
         where: {
           username: req.body.user
         }
@@ -3932,7 +3936,7 @@ module.exports = function (app) {
     if (!activeUser)
       return res.status(400).json({ error: true, message: "Missing username" });
 
-    let user = await User.findOne({
+    let user = await Users.findOne({
       where: {
         username: activeUser
       }
@@ -4646,7 +4650,7 @@ module.exports = function (app) {
 
     const conceptId = (concept ? concept.conceptId : null);
 
-    const user = await User.findOne({
+    const user = await Users.findOne({
       where: {
         username: req.body.currentUser
       }
@@ -4853,7 +4857,7 @@ module.exports = function (app) {
 
           const providerId = await Users.findOne({
             where: {
-              userId: encounter.providerId
+              personId: encounter.providerId
             }
           });
 
