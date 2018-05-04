@@ -943,6 +943,10 @@ class FindEnteredRecord extends Component {
       54: {
         type: "number",
         hiddens: ["clear", "abc", "qwe", "Unknown", "-", "/", "."]
+      },
+      55: {
+        type: "text",
+        hiddens: ["Unknown"]
       }
     };
 
@@ -2609,6 +2613,7 @@ class FindEnteredRecord extends Component {
                                     <td
                                       id={"cell" + j + "_" + i}
                                       key={"cell" + j + "_" + i}
+                                      style={{ textAlign: (i === 55 ? "left" : ""), paddingLeft: (i === 55 ? "12px" : "") }}
                                       className={"bdcell" + ([
                                         0,
                                         1,
@@ -2713,7 +2718,7 @@ class FindEnteredRecord extends Component {
                                                     className=
                                                     {(fields[i] ? "normal" : (fieldNames[i] && this.state.label === (fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "") ? "active" : "inactive"))}
                                                     style=
-                                                    {{ color: ([0, 1, 5, 18, 51, 52, 53, 54].indexOf(i) >= 0 ? (fieldNames[i] && this.state.data && this.state.data[(fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "")] ? "#c50000" : "#008500") : "#c50000"), fontSize: "16px", width: ([0, 51].indexOf(i) >= 0 ? "150px" : "60px"), marginLeft: ([0].indexOf(i) >= 0 ? "10px !important" : "") }}>
+                                                    {{ color: ([0, 1, 5, 18, 51, 52, 53, 54, 55].indexOf(i) >= 0 ? (fieldNames[i] && this.state.data && this.state.data[(fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "")] ? "#c50000" : "#008500") : "#c50000"), fontSize: "16px", width: ([0, 51].indexOf(i) >= 0 ? "150px" : (i === 55 ? "150px" : (i === 1 ? "70px" : "60px"))), marginLeft: ([0].indexOf(i) >= 0 ? "10px !important" : (i === 55 ? "3px" : "")) }}>
                                                   {fields[i]
                                                     ? fields[i]
                                                     : (fieldNames[i] && this.state.label === (fieldNames[i].category
@@ -2782,7 +2787,7 @@ class FindEnteredRecord extends Component {
                       <tr>
                         <td
                           style={{
-                            height: "266px",
+                            height: "258px",
                             borderBottom: "1px solid #333333"
                           }}>
                           &nbsp;

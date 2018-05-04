@@ -2292,7 +2292,10 @@ module.exports = function (app) {
         "Partner HIV Status",
         "Referral for Re-Testing",
         "Appointment Date Given",
-        "Number of Items Given:HTS Family Referral Slips"
+        "Number of Items Given:HTS Family Referral Slips",
+        "Number of Items Given:Condoms:Male",
+        "Number of Items Given:Condoms:Female",
+        "Comments:Comments"
       ]
     };
 
@@ -2440,6 +2443,24 @@ module.exports = function (app) {
         if (conceptname === "Number of Items Given:HTS Family Referral Slips") {
 
           conceptname = "HTS Family Referral Slips";
+
+        } 
+        
+        if (conceptname === "Number of Items Given:Condoms:Male") {
+
+          conceptname = "Number of male condoms given";
+
+        } 
+        
+        if (conceptname === "Number of Items Given:Condoms:Female") {
+
+          conceptname = "Number of female condoms given";
+
+        } 
+        
+        if (conceptname === "Comments:Comments") {
+
+          conceptname = "Comments";
 
         }
 
@@ -2831,6 +2852,10 @@ module.exports = function (app) {
             } else if (row.observation === "Last HIV Test Result") {
 
               json["Last HIV Test"] = row.observationValue;
+
+            } else if (row.observation === "Comments") {
+
+              json["Comments:Comments"] = row.observationValue;
 
             } else if (row.observation === "HTS Family Referral Slips") {
 
@@ -3825,6 +3850,10 @@ module.exports = function (app) {
                       } else if (row.observation === "Last HIV Test Result") {
 
                         json["Last HIV Test"] = row.observationValue;
+
+                      } else if (row.observation === "Comments") {
+
+                        json["Comments:Comments"] = row.observationValue;
 
                       } else if (row.observation === "HTS Family Referral Slips") {
 
