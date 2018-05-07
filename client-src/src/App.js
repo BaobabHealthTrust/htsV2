@@ -738,6 +738,14 @@ class App extends Component {
 
     }
 
+    if (this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && (this.props.wf[this.state.currentWorkflow].currentNode.label === "HTS Referral Slips Recipients" || this.props.wf[this.state.currentWorkflow].currentNode.label === "Comments")) {
+
+      this.props.clearField("HTS Referral Slips Recipients", this.state.currentWorkflow);
+
+      this.props.clearField("HTS Family Referral Slips", this.state.currentWorkflow);
+
+    }
+
     if (this.props.app.fieldPos <= 0) {
       return;
     }
