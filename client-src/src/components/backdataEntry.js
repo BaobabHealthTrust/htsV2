@@ -395,6 +395,17 @@ class BackdataEntry extends Component {
           .props
           .handleDirectInputChange("Total Captured Entries", count, this.props.group);
 
+      })
+      .catch(() => {
+
+        setTimeout(() => {
+
+          this
+            .$("bdScroller")
+            .scrollLeft = this.coords["HTS Provider ID"];
+
+        }, this.scrollDelay)
+
       });
 
   }

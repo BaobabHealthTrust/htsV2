@@ -2166,7 +2166,7 @@ module.exports = function (app) {
 
     if (!provider) {
 
-      return res.status(400).json({ error: true, message: "HTS Provider ID \n not registered at this site" });
+      return res.status(400).json({ error: true, message: "HTS Provider ID \n does not exist" });
 
     }
 
