@@ -584,7 +584,7 @@ class FindEnteredRecord extends Component {
       .props
       .showConfirmMsg("Confirm Action", "You are about to clear changes on this record. \n Do you want to continue?", "Clear", () => {
 
-        this.setState({ data: {} });
+        this.setState({ data: {}, currentString: "" });
 
         if (this.$("bdScroller")) {
 
