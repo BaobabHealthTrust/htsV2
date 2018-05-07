@@ -370,7 +370,30 @@ export function validated(props, state) {
 
     if (props.data.indexOf(currentValue) < 0) {
 
-      return { valid: false, message: "Select value from provided list only", title: "Invalid Data" };
+      let message = "Select value from provided list only";
+      let title = "Invalid Data";
+
+      if (Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+        ? props.wf[state.currentWorkflow].currentNode.label
+        : ""]).indexOf("validationMessage") >= 0) {
+
+        message = props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+          ? props.wf[state.currentWorkflow].currentNode.label
+          : ""].validationMessage;
+
+      }
+
+      if (Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+        ? props.wf[state.currentWorkflow].currentNode.label
+        : ""]).indexOf("title") >= 0 && String(currentValue).trim().length <= 0) {
+
+        title = props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+          ? props.wf[state.currentWorkflow].currentNode.label
+          : ""].title;
+
+      }
+
+      return { valid: false, message, title };
 
     }
 

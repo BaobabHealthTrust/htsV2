@@ -1875,7 +1875,9 @@ class App extends Component {
               "del"
             ],
             ajaxURL: '/programs/fetch_active_registers?q=',
-            lockList: true
+            lockList: true,
+            validationMessage: "Select register number from list",
+            title: "Missing Data"
           },
           "Enter Data": {
             customComponent: "BackdataEntry",
