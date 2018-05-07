@@ -100,12 +100,16 @@
     },
     "Region of Origin": {
         "ajaxURL": "/dde/search_by_region?name=",
-        "lockList": true
+        "lockList": true,
+        "validationMessage": "Region of Origin \n must be entered",
+        "title": "Missing Data"
     },
     "Current Region": {
         "ajaxURL": "/dde/search_by_region?name=",
         "autoNext": true,
-        "lockList": true
+        "lockList": true,
+        "validationMessage": "Current Region \n must be entered",
+        "title": "Missing Data"
     },
     "Year of Birth": {
         "fieldType": "number",
@@ -203,7 +207,9 @@
             "autoNext": true
         },
         "fieldType": "text",
-        "lockList": true
+        "lockList": true,
+        "validationMessage": "District of Origin \n must be entered",
+        "title": "Missing Data"
     },
     "Current District": {
         "ajaxURL": "/dde/search_by_district?region=REGION&district=",
@@ -212,7 +218,9 @@
             "autoNext": true
         },
         "fieldType": "text",
-        "lockList": true
+        "lockList": true,
+        "validationMessage": "Current District \n must be entered",
+        "title": "Missing Data"
     },
     "Current T/A": {
         "ajaxURL": "/dde/search_by_t_a?district=DISTRICT&ta=",
@@ -221,7 +229,9 @@
             "autoNext": true
         },
         "fieldType": "text",
-        "lockList": true
+        "lockList": true,
+        "validationMessage": "Current T/A \n must be entered",
+        "title": "Missing Data"
     },
     "Current Village": {
         "ajaxURL": "/dde/search_by_village?ta=TA&village=",
@@ -230,7 +240,9 @@
             "autoNext": true
         },
         "fieldType": "text",
-        "lockList": true
+        "lockList": true,
+        "validationMessage": "Current Village \n must be entered",
+        "title": "Missing Data"
     },
     "Patient Match Found?": {
         "customComponent": "DDESearch",
