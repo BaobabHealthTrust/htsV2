@@ -956,7 +956,7 @@ class BackdataEntry extends Component {
   render() {
 
     let captureDate = new Date(this.props.responses["Set Date"]);
-    let minDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate() + 7)));
+    let minDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate())));
     let maxDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate() + 365)));
 
     const fields = {
