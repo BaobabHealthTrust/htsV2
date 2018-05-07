@@ -46,14 +46,14 @@
         "ajaxURL": "/dde/list_first_names?name=",
         "fieldType": "text",
         "hiddenButtons": [
-            "num"
+            "num", ":", ".", "/"
         ]
     },
     "Last Name": {
         "ajaxURL": "/dde/list_last_names?name=",
         "fieldType": "text",
         "hiddenButtons": [
-            "num"
+            "num", ":", ".", "/"
         ]
     },
     "Gender": {
