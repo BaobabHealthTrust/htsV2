@@ -955,6 +955,10 @@ class BackdataEntry extends Component {
 
   render() {
 
+    let captureDate = new Date(this.props.responses["Set Date"]);
+    let minDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate() + 7)));
+    let maxDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate() + 365)));
+
     const fields = {
       2: "M",
       3: "FNP",
@@ -1210,8 +1214,8 @@ class BackdataEntry extends Component {
       51: {
         type: "date",
         hiddens: [],
-        minDate: "today",
-        maxDate: "today + 1year"
+        minDate: minDate.format("YYYY-mm-dd"),
+        maxDate: maxDate.format("YYYY-mm-dd")
       },
       52: {
         type: "number",

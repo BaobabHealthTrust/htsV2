@@ -769,6 +769,23 @@ class App extends Component {
 
     await this.queryOptions("");
 
+    if (this.props.app.selectedTask === "Backdata Entry") {
+
+      await this.props.updateApp({ isDirty: false });
+
+      if (this.props.wf && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow]) {
+
+        Object.keys(this.props.wf.responses[this.state.currentWorkflow]).forEach(async (field) => {
+
+          if (["Register Number (from cover)", "Set Date"].indexOf(field) < 0)
+            this.props.clearField(field, this.state.currentWorkflow);
+
+        })
+
+      }
+
+    }
+
   }
 
   async navNext(value) {
