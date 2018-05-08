@@ -3265,7 +3265,7 @@ class App extends Component {
           this.handleClearClicks();
         },
         label: (!this.props.app.formActive && this.props.app.dual && (this.props.app.dual && ((this.props.app.primary.summary || this.props.app.primary.forceSummary) || (this.props.app.secondary.summary || this.props.app.secondary.forceSummary)))
-          ? "Continue"
+          ? "HTS Visit"
           : "Clear"),
         extraStyles: {
           cssFloat: "right",
