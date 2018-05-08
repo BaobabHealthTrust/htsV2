@@ -2792,7 +2792,7 @@ class App extends Component {
           },
           "Role": {
             options: [
-              "Admin", "Counselor", "HTS Coordinator", "Registration Clerk"
+              "Admin", "Counselor", "HTS Coordinator"
             ],
             className: "longSelectList"
           },
