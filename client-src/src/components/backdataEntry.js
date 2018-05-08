@@ -686,6 +686,70 @@ class BackdataEntry extends Component {
 
         return reject();
 
+      } else if (String(this.state.data["Last HIV Test"]).trim() !== "Never Tested" && String(this.state.data["Time Since Last Test"]).match(/\d+D$/) && !String(this.state.data["Time Since Last Test"]).match(/^[0-9]D$|^[1-2][0-9]D$|^30D$/)) {
+
+        this
+          .props
+          .showErrorMsg("Invalid Entry", "Number of days between 0 and 30 \n must be entered");
+
+        setTimeout(() => {
+
+          if (this.coords[this.categories["Last HIV Test"]])
+            this.$("bdScroller").scrollLeft = this.coords[this.categories["Last HIV Test"]];
+
+        }
+          , this.scrollDelay)
+
+        return reject();
+
+      } else if (String(this.state.data["Last HIV Test"]).trim() !== "Never Tested" && String(this.state.data["Time Since Last Test"]).match(/\d+W$/) && !String(this.state.data["Time Since Last Test"]).match(/^[1-9]W$|^[1][0-9]W$|^[2][0-6]W$/)) {
+
+        this
+          .props
+          .showErrorMsg("Invalid Entry", "Number of weeks between 1 and 26 \n must be entered");
+
+        setTimeout(() => {
+
+          if (this.coords[this.categories["Last HIV Test"]])
+            this.$("bdScroller").scrollLeft = this.coords[this.categories["Last HIV Test"]];
+
+        }
+          , this.scrollDelay)
+
+        return reject();
+
+      } else if (String(this.state.data["Last HIV Test"]).trim() !== "Never Tested" && String(this.state.data["Time Since Last Test"]).match(/\d+M$/) && !String(this.state.data["Time Since Last Test"]).match(/^[1-9]M$|^[1][0-9]M$|^[2][0-9]M$|^[3][0-6]M$/)) {
+
+        this
+          .props
+          .showErrorMsg("Invalid Entry", "Number of months between 1 and 36 \n must be entered");
+
+        setTimeout(() => {
+
+          if (this.coords[this.categories["Last HIV Test"]])
+            this.$("bdScroller").scrollLeft = this.coords[this.categories["Last HIV Test"]];
+
+        }
+          , this.scrollDelay)
+
+        return reject();
+
+      } else if (String(this.state.data["Last HIV Test"]).trim() !== "Never Tested" && String(this.state.data["Time Since Last Test"]).match(/\d+Y$/) && !String(this.state.data["Time Since Last Test"]).match(/^[1-9]Y$|^[1-9][0-9]Y$|^[1][0][0-9]Y$|^110Y$/)) {
+
+        this
+          .props
+          .showErrorMsg("Invalid Entry", "Number of years between 1 and 110 \n must be entered");
+
+        setTimeout(() => {
+
+          if (this.coords[this.categories["Last HIV Test"]])
+            this.$("bdScroller").scrollLeft = this.coords[this.categories["Last HIV Test"]];
+
+        }
+          , this.scrollDelay)
+
+        return reject();
+
       } else if (String(this.state.data["Last HIV Test"]).trim() !== "Never Tested") {
 
         const duration = this.getDuration(String(this.state.data["Time Since Last Test"]));
