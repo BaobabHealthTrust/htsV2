@@ -114,7 +114,7 @@ class SingleTestResult extends Component {
                                 : "depressed")
                               : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf(this.props.label) >= 0 && this.props.wf.responses[this.props.activeWorkflow][this.props.label] === "Non-Reactive" ? "depressed" : (this.state.activeButtons.length > 1
                                 ? "blue"
-                                : "gray"))}
+                                : "blue"))}
                             label="Non-Reactive"
                             handleMouseDown={this
                               .selectResult
@@ -132,7 +132,7 @@ class SingleTestResult extends Component {
                                 : "depressed")
                               : (this.props.wf && this.props.wf.responses && this.props.activeWorkflow && this.props.wf.responses[this.props.activeWorkflow] && Object.keys(this.props.wf.responses[this.props.activeWorkflow]).indexOf(this.props.label) >= 0 && this.props.wf.responses[this.props.activeWorkflow][this.props.label] === "Reactive" ? "depressed" : (this.state.activeButtons.length > 1
                                 ? "blue"
-                                : "gray"))}
+                                : "blue"))}
                             label="Reactive"
                             handleMouseDown={this
                               .selectResult
