@@ -579,33 +579,127 @@ class App extends Component {
 
   async switchPage(target) {
 
-    if (!this.props.app.formActive && this.props.app.patientActivated && this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.currentId][this.props.app.module] && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits.filter((e) => {
-      return Object
-        .keys(e)
-        .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
-    })) {
+    if (this.props.app.dual) {
 
-      let rows = this
-        .props
-        .app
-        .patientData[this.props.app.currentId][this.props.app.module]
-        .visits
-        .filter((e) => {
+      if (this.props.app.partnerId) {
+
+        if (!this.props.app.formActive && this.props.app.patientActivated && this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.partnerId][this.props.app.module] && this.props.app.patientData[this.props.app.partnerId][this.props.app.module].visits && this.props.app.patientData[this.props.app.partnerId][this.props.app.module].visits.filter((e) => {
           return Object
             .keys(e)
             .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
-        });
+        })) {
 
-      if (rows.length > 0) {
+          let rows = this
+            .props
+            .app
+            .patientData[this.props.app.partnerId][this.props.app.module]
+            .visits
+            .filter((e) => {
+              return Object
+                .keys(e)
+                .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
+            });
 
-        for (let entryCode of Object.keys(rows[0][this.props.app.selectedVisit])) {
+          if (rows.length > 0) {
 
-          if (Object.keys(rows[0][this.props.app.selectedVisit][entryCode]["HTS Visit"]).indexOf("registerNumber") <= 0) {
+            for (let entryCode of Object.keys(rows[0][this.props.app.selectedVisit])) {
 
-            return this
-              .props
-              .showInfoMsg("Transcribe in Register", "The current visit does not have a register number associated. Please enter in re" +
-                "gister first to proceed!");
+              if (Object.keys(rows[0][this.props.app.selectedVisit][entryCode]["HTS Visit"]).indexOf("registerNumber") <= 0) {
+
+                return this
+                  .props
+                  .showInfoMsg("Transcribe in Register", "The current partner visit does not have a register number associated. Please enter in re" +
+                    "gister first to proceed!");
+
+              }
+
+            }
+
+          }
+
+        }
+
+      } else {
+
+        return this.props.showInfoMsg("Incomplete Data", "The current visit is missing partner data. Please capture partner data first before closing session.")
+
+      }
+
+      if (this.props.app.clientId) {
+
+        if (!this.props.app.formActive && this.props.app.patientActivated && this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.clientId][this.props.app.module] && this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits && this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits.filter((e) => {
+          return Object
+            .keys(e)
+            .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
+        })) {
+
+          let rows = this
+            .props
+            .app
+            .patientData[this.props.app.clientId][this.props.app.module]
+            .visits
+            .filter((e) => {
+              return Object
+                .keys(e)
+                .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
+            });
+
+          if (rows.length > 0) {
+
+            for (let entryCode of Object.keys(rows[0][this.props.app.selectedVisit])) {
+
+              if (Object.keys(rows[0][this.props.app.selectedVisit][entryCode]["HTS Visit"]).indexOf("registerNumber") <= 0) {
+
+                return this
+                  .props
+                  .showInfoMsg("Transcribe in Register", "The current partner visit does not have a register number associated. Please enter in re" +
+                    "gister first to proceed!");
+
+              }
+
+            }
+
+          }
+
+        }
+
+      } else {
+
+        return this.props.showInfoMsg("Incomplete Data", "The current visit is missing partner data. Please capture partner data first before closing session.")
+
+      }
+
+    } else {
+
+      if (!this.props.app.formActive && this.props.app.patientActivated && this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.currentId][this.props.app.module] && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits.filter((e) => {
+        return Object
+          .keys(e)
+          .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
+      })) {
+
+        let rows = this
+          .props
+          .app
+          .patientData[this.props.app.currentId][this.props.app.module]
+          .visits
+          .filter((e) => {
+            return Object
+              .keys(e)
+              .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
+          });
+
+        if (rows.length > 0) {
+
+          for (let entryCode of Object.keys(rows[0][this.props.app.selectedVisit])) {
+
+            if (Object.keys(rows[0][this.props.app.selectedVisit][entryCode]["HTS Visit"]).indexOf("registerNumber") <= 0) {
+
+              return this
+                .props
+                .showInfoMsg("Transcribe in Register", "The current visit does not have a register number associated. Please enter in re" +
+                  "gister first to proceed!");
+
+            }
 
           }
 
