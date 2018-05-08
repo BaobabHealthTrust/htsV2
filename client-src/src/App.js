@@ -879,7 +879,7 @@ class App extends Component {
 
         Object.keys(this.props.wf.responses[this.state.currentWorkflow]).forEach(async (field) => {
 
-          if (["Register Number (from cover)", "Set Date"].indexOf(field) < 0)
+          if (["Register Number (from cover)", "Testing Date"].indexOf(field) < 0)
             this.props.clearField(field, this.state.currentWorkflow);
 
         })
@@ -1965,7 +1965,7 @@ class App extends Component {
         sectionHeader: "Backdata Entry",
         fieldPos: 0,
         configs: {
-          "Set Date": {
+          "Testing Date": {
             fieldType: "date",
             validationRule: "^\\d+\\s[A-Za-z]+\\s\\d{4}$",
             validationMessage: "Enter valid date (day, month, year)",
