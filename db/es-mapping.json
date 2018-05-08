@@ -168,6 +168,15 @@
             }
           }
         },
+        "htsModality": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
         "observation": {
           "type": "text",
           "fields": {

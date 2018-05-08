@@ -1,10 +1,5 @@
-[
-  "PITC Inpatient",
-  "PITC Pediatric",
-  "PITC Malnutrition Facilities",
-  "PITC PMTCT (ANC Only)",
-  "PITC TB Clinics",
-  "VMMC Services",
-  "Other PITC",
-  "VCT"
-]
+{
+  "Community": ["Mobile"],
+  "Health Facility": ["ANC", "Inpatient", "Malnutrition", "Maternity", "OPD", "Other", "Pediatric", "STI", "TB", "VMMC"],
+  "Standalone": ["Other"]
+}

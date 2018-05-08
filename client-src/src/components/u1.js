@@ -127,7 +127,7 @@ class U1 extends Component {
               }}>
                 {(this.props.selectedTask === "Backdata Entry"
                   ? (this.props.wf.responses && this.props.wf.responses.primary
-                    ? this.props.wf.responses.primary["Set Date"]
+                    ? this.props.wf.responses.primary["Testing Date"]
                     : "")
                   : this.props.today)}
               </td>

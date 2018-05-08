@@ -352,7 +352,7 @@ class BackdataEntry extends Component {
   async saveData() {
 
     let newState = Object.assign({}, this.state.data, {
-      "Set Date": this.props.responses["Set Date"],
+      "Testing Date": this.props.responses["Testing Date"],
       "Current Location": (this.props.app && this.props.app.currentLocation
         ? this.props.app.currentLocation
         : null),
@@ -912,7 +912,7 @@ class BackdataEntry extends Component {
 
     if (this.state.data && this.state.data['Referral for Re-Testing'] && ["Re-Test"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
 
-      let captureDate = new Date(this.props.responses["Set Date"]);
+      let captureDate = new Date(this.props.responses["Testing Date"]);
       let appointmentDate = new Date(this.state.data["Appointment Date Given"]);
       let minDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate() + 7)));
       let maxDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate() + 365)));
@@ -929,7 +929,7 @@ class BackdataEntry extends Component {
 
     if (this.state.data && this.state.data['Referral for Re-Testing'] && ["Confirmatory Test at HIV Clinic"].indexOf(this.state.data['Referral for Re-Testing']) >= 0) {
 
-      let captureDate = new Date(this.props.responses["Set Date"]);
+      let captureDate = new Date(this.props.responses["Testing Date"]);
       let appointmentDate = new Date(this.state.data["Appointment Date Given"]);
       let maxDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate() + 90)));
       let minDate = (new Date(captureDate));
@@ -1019,7 +1019,7 @@ class BackdataEntry extends Component {
 
   render() {
 
-    let captureDate = new Date(this.props.responses["Set Date"]);
+    let captureDate = new Date(this.props.responses["Testing Date"]);
     let minDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate())));
     let maxDate = (new Date((new Date(captureDate)).setDate(captureDate.getDate() + 365)));
 
