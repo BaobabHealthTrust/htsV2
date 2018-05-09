@@ -4812,9 +4812,50 @@ module.exports = function (app) {
 
   router.get('/programs/fetch_locations', function (req, res, next) {
 
-    const locations = Object.keys(htsIndicatorsMapping);
+    // let locations = Object.keys(htsIndicatorsMapping);
 
-    res.status(200).json(locations);
+    const args = {
+      data: {
+        query: {
+          match_all: {
+          }
+        },
+        aggs: {
+          locations: {
+            terms: {
+              field: "locationType.keyword",
+              size: 1000
+            }
+          }
+        }
+      },
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+
+      debug(result);
+
+      let locations = [];
+
+      if (Object.keys(result).indexOf("aggregations") >= 0 && Object.keys(result.aggregations).indexOf("locations") >= 0 &&
+        Object.keys(result.aggregations.locations).indexOf("buckets") >= 0 && result.aggregations.locations.buckets.length > 0) {
+
+        result.aggregations.locations.buckets.forEach(row => {
+
+          locations.push(row.key);
+
+        })
+
+      }
+
+      res
+        .status(200)
+        .json(locations);
+
+    });
 
   })
 
