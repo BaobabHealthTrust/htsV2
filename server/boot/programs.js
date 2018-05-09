@@ -35,10 +35,11 @@ module.exports = function (app) {
   const Location = app.models.Location;
   const site = require(__dirname + "/../../client-src/src/config/site.json");
   const es = require(__dirname + "/../../configs/elasticsearch.json");
-  const htsIndicatorsMapping = require(__dirname + "/../../client-src/src/config/htsIndicatorsMapping.json");
+  const htsIndicatorsMapping = require(__dirname + "/../../configs/htsIndicatorsMapping.json");
   const uuid = require("uuid");
   const ReadableSearch = require("elasticsearch-streams").ReadableSearch;
   const esClient = new require("elasticsearch").Client();
+  const pepfarSynthesis = require(__dirname + "/../../lib/pepfarSynthesis.js");
 
   const monthNames = [
     "January",
@@ -2611,79 +2612,14 @@ module.exports = function (app) {
         "Other (VCT, etc.)": "VCT/Other"
       };
 
-      const accessType = htsAccessTypeMappings[json['HTS Access Type']];
+      const accessType = json['HTS Access Type'];
 
-      let partnerHIVStatus = (json["Partner HIV Status"] !== "Partner Positive"
-        ? "Any"
-        : "Partner Positive");
+      let partnerHIVStatus = json["Partner HIV Status"];
 
-      if (htsIndicatorsMapping[locationType] && htsIndicatorsMapping[locationType][serviceDeliveryPoint] && htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType] && htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus]) {
+      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age);
 
-        for (let group of Object.keys(clientAges)) {
-
-          if (age >= clientAges[group][0] && age <= clientAges[group][1]) {
-
-            if (htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]) {
-
-              htsSetting = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Setting'];
-
-              htsModality = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Modality'];
-
-              break;
-
-            }
-
-          }
-
-        }
-
-        if (String(htsSetting).trim().length <= 0) {
-
-          partnerHIVStatus = "Any other";
-
-          for (let group of Object.keys(clientAges)) {
-
-            if (age >= clientAges[group][0] && age <= clientAges[group][1]) {
-
-              if (htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]) {
-
-                htsSetting = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Setting'];
-
-                htsModality = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Modality'];
-
-                break;
-
-              }
-
-            }
-
-          }
-
-        }
-
-      } else if (htsIndicatorsMapping[locationType] && htsIndicatorsMapping[locationType][serviceDeliveryPoint] && htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType] && htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType]["Any other"]) {
-
-        partnerHIVStatus = "Any other";
-
-        for (let group of Object.keys(clientAges)) {
-
-          if (age >= clientAges[group][0] && age <= clientAges[group][1]) {
-
-            if (htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]) {
-
-              htsSetting = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Setting'];
-
-              htsModality = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Modality'];
-
-              break;
-
-            }
-
-          }
-
-        }
-
-      }
+      htsSetting = result.htsSetting;
+      htsModality = result.htsModality;
 
       debug("$$$$$$$$$$$$$$$$$$$$$$$");
 
@@ -3258,79 +3194,14 @@ module.exports = function (app) {
         "Other (VCT, etc.)": "VCT/Other"
       };
 
-      const accessType = htsAccessTypeMappings[json.client[entryCode]["HTS Visit"]['HTS Access Type']];
+      const accessType = json.client[entryCode]["HTS Visit"]['HTS Access Type'];
 
-      let partnerHIVStatus = (json.client[entryCode]["HTS Visit"]["Partner HIV Status"] !== "Partner Positive"
-        ? "Any"
-        : "Partner Positive");
+      let partnerHIVStatus = json.client[entryCode]["HTS Visit"]["Partner HIV Status"];
 
-      if (htsIndicatorsMapping[locationType] && htsIndicatorsMapping[locationType][serviceDeliveryPoint] && htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType] && htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus]) {
+      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age);
 
-        for (let group of Object.keys(clientAges)) {
-
-          if (age >= clientAges[group][0] && age <= clientAges[group][1]) {
-
-            if (htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]) {
-
-              htsSetting = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Setting'];
-
-              htsModality = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Modality'];
-
-              break;
-
-            }
-
-          }
-
-        }
-
-        if (String(htsSetting).trim().length <= 0) {
-
-          partnerHIVStatus = "Any other";
-
-          for (let group of Object.keys(clientAges)) {
-
-            if (age >= clientAges[group][0] && age <= clientAges[group][1]) {
-
-              if (htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]) {
-
-                htsSetting = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Setting'];
-
-                htsModality = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Modality'];
-
-                break;
-
-              }
-
-            }
-
-          }
-
-        }
-
-      } else if (htsIndicatorsMapping[locationType] && htsIndicatorsMapping[locationType][serviceDeliveryPoint] && htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType] && htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType]["Any other"]) {
-
-        partnerHIVStatus = "Any other";
-
-        for (let group of Object.keys(clientAges)) {
-
-          if (age >= clientAges[group][0] && age <= clientAges[group][1]) {
-
-            if (htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]) {
-
-              htsSetting = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Setting'];
-
-              htsModality = htsIndicatorsMapping[locationType][serviceDeliveryPoint][accessType][partnerHIVStatus][group]['HTS Modality'];
-
-              break;
-
-            }
-
-          }
-
-        }
-
-      }
+      htsSetting = result.htsSetting;
+      htsModality = result.htsModality;
 
       debug("$$$$$$$$$$$$$$$$$$$$$$$");
 
