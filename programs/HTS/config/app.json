@@ -265,7 +265,7 @@
             "Pre-Test Counseling"
         ]
     },
-    "Time since last HIV Test": {
+    "Time Since Last Test": {
         "fieldType": "period",
         "hiddenButtons": [
             "clear", "Unknown"
