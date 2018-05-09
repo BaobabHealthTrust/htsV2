@@ -150,7 +150,7 @@ class Transcribe extends Component {
 
                   } else if (concept === "HTS Family Referral Slips") {
 
-                    visitDetails["Number of Items Given:HTS Family Ref Slips"] = visit[this.props.app.selectedVisit][entryCode][encounter][concept];
+                    visitDetails["Number of Items Given:HTS Family Referral Slips"] = visit[this.props.app.selectedVisit][entryCode][encounter][concept];
 
                   } else if (concept === "Number of female condoms given") {
 
@@ -505,7 +505,7 @@ class Transcribe extends Component {
       },
       52: {
         category: "Number of Items Given",
-        field: "HTS Family Ref Slips",
+        field: "HTS Family Referral Slips",
         group: 14
       },
       53: {
