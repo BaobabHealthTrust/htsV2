@@ -4810,6 +4810,14 @@ module.exports = function (app) {
 
   })
 
+  router.get('/programs/fetch_locations', function (req, res, next) {
+
+    const locations = Object.keys(htsIndicatorsMapping);
+
+    res.status(200).json(locations);
+
+  })
+
   app.use(router);
 
 };

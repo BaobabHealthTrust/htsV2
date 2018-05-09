@@ -33,7 +33,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Sex/Pregnancy" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Sex/Pregnancy" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -75,7 +75,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Sex/Pregnancy" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Sex/Pregnancy" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -117,7 +117,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Sex/Pregnancy" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Sex/Pregnancy" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -159,7 +159,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Age Group" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Age Group" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -201,7 +201,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Age Group" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Age Group" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -243,7 +243,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Age Group" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Age Group" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -285,7 +285,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Age Group" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Age Group" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -327,7 +327,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Last HIV Test" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Last HIV Test" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -369,7 +369,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Last HIV Test" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Last HIV Test" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -411,7 +411,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Last HIV Test" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Last HIV Test" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -453,7 +453,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Last HIV Test" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Last HIV Test" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -495,7 +495,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Last HIV Test" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Last HIV Test" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -580,7 +580,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Partner Present" AND observationValue:"No" AND serviceDeliveryPoint' +
+                  query: 'observation:"Partner Present" AND observationValue:"No" AND locationType' +
                       ':"' + location + '"'
                 }
               }, {
@@ -623,7 +623,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Outcome Summary" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Outcome Summary" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -665,7 +665,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Outcome Summary" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Outcome Summary" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -707,7 +707,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Outcome Summary" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Outcome Summary" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -749,7 +749,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Outcome Summary" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Outcome Summary" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -791,7 +791,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Outcome Summary" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Outcome Summary" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -833,7 +833,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -875,7 +875,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -917,7 +917,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -959,7 +959,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -1001,7 +1001,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -1043,7 +1043,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -1085,7 +1085,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"HTS Access Type" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"HTS Access Type" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -1127,7 +1127,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"HTS Access Type" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"HTS Access Type" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -1169,7 +1169,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"HTS Access Type" AND observationValue:"' + field + '" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"HTS Access Type" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -1211,7 +1211,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"HTS Family Ref Slips" AND serviceDeliveryPoint:"' + location + '"'
+                  query: 'observation:"HTS Family Ref Slips" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
@@ -1261,7 +1261,7 @@ module.exports = function (app) {
               {
                 query_string: {
                   query: "(observation:\"Immediate Repeat Test 1 Result\" OR observation:\"First Pass Test" +
-                      " 1 Result\") AND serviceDeliveryPoint:\"" + location + "\""
+                      " 1 Result\") AND locationType:\"" + location + "\""
                 }
               }, {
                 range: {
@@ -1304,7 +1304,7 @@ module.exports = function (app) {
               {
                 query_string: {
                   query: "(observation:\"Immediate Repeat Test 2 Result\" OR observation:\"First Pass Test" +
-                      " 2 Result\") AND serviceDeliveryPoint:\"" + location + "\""
+                      " 2 Result\") AND locationType:\"" + location + "\""
                 }
               }, {
                 range: {
@@ -1607,7 +1607,7 @@ module.exports = function (app) {
                     ? "(observation:\"Immediate Repeat Test 1 Result\" OR observation:\"First Pass Test" +
                       " 1 Result\")"
                     : "(observation:\"Immediate Repeat Test 2 Result\" OR observation:\"First Pass Test" +
-                      " 2 Result\")") + " AND serviceDeliveryPoint:\"" + locationName + "\""
+                      " 2 Result\")") + " AND locationType:\"" + locationName + "\""
                 }
               }, {
                 range: {

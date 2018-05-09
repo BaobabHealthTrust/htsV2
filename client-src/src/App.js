@@ -3090,12 +3090,9 @@ class App extends Component {
             condition: "'{{activeReport}}' === 'daily register' || '{{activeReport}}' === 'monthly report'"
           },
           "Location": {
-            className: "longSelectList",
-            options: (locations && Object.keys(locations).length > 0
-              ? [...new Set(Array.prototype.concat.apply([], Object.keys(locations).map((e) => {
-                return locations[e]
-              })))].sort()
-              : null)
+            ajaxURL: "/programs/fetch_locations",
+            lockList: true,
+            className: "longSelectList"
           },
           "Ask Test?": {
             visible: false,
