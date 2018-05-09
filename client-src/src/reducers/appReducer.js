@@ -315,7 +315,8 @@ export default function appReducer(state = {
   activeRegisters: 0,
   firstSummary: false,
   secondSummary: false,
-  reversing: false
+  reversing: false,
+  version: ""
 }, action) {
 
   let newState,
@@ -1311,6 +1312,12 @@ export default function appReducer(state = {
     case "UPDATE_PARTNER_RECORD":
 
       newState = Object.assign({}, state);
+
+      return newState;
+
+    case "GET_VERSION_FULFILLED":
+
+      newState = Object.assign({}, state, { version: action.payload.data.version });
 
       return newState;
 

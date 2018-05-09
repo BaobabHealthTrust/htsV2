@@ -235,3 +235,11 @@ export function updatePartnerRecord(clientId, concept, visitDate, value, current
   return { type: 'UPDATE_PARTNER_RECORD', payload: request };
 
 }
+
+export function getVersion() {
+
+  const request = axios.get('/version');
+
+  return { type: 'GET_VERSION', payload: request };
+
+}

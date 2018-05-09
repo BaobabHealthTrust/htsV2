@@ -22,7 +22,8 @@ import {
   activateUser,
   loadData,
   flagRegisterFilled,
-  updatePartnerRecord
+  updatePartnerRecord,
+  getVersion
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -171,6 +172,12 @@ class App extends Component {
         this.setCookie('accessToken', '', 1);
 
       });
+
+  }
+
+  componentWillMount() {
+
+    this.props.getVersion();
 
   }
 
@@ -4003,7 +4010,7 @@ class App extends Component {
                       clearField={this.props.clearField.bind(this)} />
                   </div>
                 )}
-        <U13 buttons={buttons} />
+        <U13 buttons={buttons} version={this.props.app.version} />
       </div>
     );
   }
@@ -4384,6 +4391,9 @@ const mapDispatchToProps = dispatch => {
     },
     clearField: async (field, group) => {
       return await dispatch(clearField(field, group));
+    },
+    getVersion: async () => {
+      return await dispatch(getVersion());
     }
   };
 };

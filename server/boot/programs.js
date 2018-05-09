@@ -132,6 +132,42 @@ module.exports = function (app) {
 
   }
 
+  const runCmd = (cmd) => {
+
+    return new Promise((resolve, reject) => {
+
+      const exec = require('child_process').exec;
+
+      try {
+
+        exec(cmd, function (error, stdout, stderr) {
+
+          if (stderr) {
+
+            reject(stderr);
+
+          } else {
+
+            debug(stdout);
+
+            resolve(stdout);
+
+          }
+
+        })
+
+      } catch (e) {
+
+        currentError = e;
+
+        reject(e);
+
+      }
+
+    })
+
+  }
+
   const validActiveToken = (token) => {
 
     return new Promise((resolve, reject) => {
@@ -4856,6 +4892,32 @@ module.exports = function (app) {
         .json(locations);
 
     });
+
+  })
+
+  router.get('/version', async function (req, res, next) {
+
+    const git = await runCmd("which git").catch(e => { 
+
+      return res.status(200).json({ version: "1.0.0" });
+
+    });
+
+    if (git.trim().length > 0) {
+
+      const version = await runCmd("git describe").catch(e => {
+
+        return res.status(200).json({ version: "1.0.0" });
+
+       });
+
+      if (String(version).match(/^fatal/i)) {
+
+        res.status(200).json({ version: "1.0.0" });
+
+      } 
+
+    } 
 
   })
 
