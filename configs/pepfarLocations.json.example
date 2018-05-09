@@ -1,0 +1,5 @@
+{
+  "Community": ["Mobile"],
+  "Health Facility": ["ANC", "Inpatient", "Malnutrition", "Maternity", "OPD", "Other", "Pediatric", "STI", "TB", "VMMC"],
+  "Standalone": ["Other"]
+}
