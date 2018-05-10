@@ -4899,7 +4899,7 @@ module.exports = function (app) {
 
     const git = await runCmd("which git").catch(e => { 
 
-      return res.status(200).json({ version: "1.0.0" });
+      return res.status(200).json({ version: "3.0.0" });
 
     });
 
@@ -4907,13 +4907,13 @@ module.exports = function (app) {
 
       const version = await runCmd("git describe").catch(e => {
 
-        return res.status(200).json({ version: "1.0.0" });
+        return res.status(200).json({ version: "3.0.0" });
 
        });
 
       if (String(version).match(/^fatal/i)) {
 
-        res.status(200).json({ version: "1.0.0" });
+        res.status(200).json({ version: "3.0.0" });
 
       } 
 

@@ -250,6 +250,10 @@
     "dataSource": "hts",
     "public": false
   },
+  "hts_valid_usernames": {
+    "dataSource": "hts",
+    "public": false
+  },
   "liquibasechangelog": {
     "dataSource": "hts",
     "public": false

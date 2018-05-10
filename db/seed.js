@@ -385,7 +385,29 @@ const loadSeedData = async () => {
 
   await loadProgramNames(seed.programs)
 
+  await loadValidUsernames();
+
   console.log("Done!");
+
+}
+
+const loadValidUsernames = async () => {
+
+  let cmd = "export MYSQL_PWD=" + connection[env].password + " && mysql -h " + connection[env].host + " -u " + connection[env].user + " " + connection[env].database + " < hts_valid_usernames.sql"
+
+  await runCmd(cmd).catch(e => { console.log(e) });
+
+  const data = fs.readFileSync("./valid_hts_usernames.txt").toString("utf8");
+
+  const json = data.split("\n");
+
+  const sql = "INSERT INTO hts_valid_usernames (username) VALUES (\"" + json.join("\"), (\"") + "\")";
+
+  cmd = "export MYSQL_PWD=" + connection[env].password + " && mysql -h " + connection[env].host + " -u " + connection[env].user + " " + connection[env].database + " -e '" + sql + "'"
+
+  console.log("Adding valid usernames list");
+
+  await runCmd(cmd).catch(e => { console.log(e) });
 
 }
 

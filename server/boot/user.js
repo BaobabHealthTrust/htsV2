@@ -12,6 +12,7 @@ module.exports = function (app) {
   const PersonName = app.models.PersonName;
   const Role = app.models.Role;
   const RoleMapping = app.models.RoleMapping;
+  const HtsValidUsernames = app.models.HtsValidUsernames;
   const uuid = require('uuid');
 
   const debug = (msg) => {
@@ -72,10 +73,10 @@ module.exports = function (app) {
 
           debug(err);
 
-          res.clearCookie('location', {path: '/'});
-          res.clearCookie('username', {path: '/'});
-          res.clearCookie('role', {path: '/'});
-          res.clearCookie('accessToken', {path: '/'});
+          res.clearCookie('location', { path: '/' });
+          res.clearCookie('username', { path: '/' });
+          res.clearCookie('role', { path: '/' });
+          res.clearCookie('accessToken', { path: '/' });
 
           return res
             .status(401)
@@ -154,7 +155,7 @@ module.exports = function (app) {
 
         res
           .status(200)
-          .json({username: req.body.username, accessToken: token.id, role});
+          .json({ username: req.body.username, accessToken: token.id, role });
 
       })
 
@@ -320,26 +321,26 @@ module.exports = function (app) {
                         .upsertWithWhere({
                           userId: secondary.userId
                         }, {
-                          personId: person.personId
-                        }, function (err, name) {
+                            personId: person.personId
+                          }, function (err, name) {
 
-                          if (err) {
+                            if (err) {
 
-                            debug(err);
+                              debug(err);
 
-                            return res
-                              .status(400)
-                              .json(err);
+                              return res
+                                .status(400)
+                                .json(err);
 
-                          }
+                            }
 
-                          console.log(name);
+                            console.log(name);
 
-                          res
-                            .status(200)
-                            .json({});
+                            res
+                              .status(200)
+                              .json({});
 
-                        });
+                          });
 
                     });
 
@@ -368,77 +369,77 @@ module.exports = function (app) {
     Users.upsertWithWhere({
       username: req.params.id
     }, {
-      retired: 1
-    }, function (err, user) {
-
-      if (err) {
-
-        debug(err);
-
-        return res
-          .status(400)
-          .json(err);
-
-      }
-
-      const page = (query.page
-        ? query.page
-        : 1);
-      const pageSize = (query.pageSize
-        ? query.pageSize
-        : 10);
-
-      const skip = (pageSize * (page - 1));
-
-      User.find({
-        skip,
-        limit: pageSize,
-        include: ['person', 'roles', 'users']
-      }, async(err, users) => {
+        retired: 1
+      }, function (err, user) {
 
         if (err) {
 
           debug(err);
 
-          return [];
+          return res
+            .status(400)
+            .json(err);
 
         }
 
-        let json = [];
+        const page = (query.page
+          ? query.page
+          : 1);
+        const pageSize = (query.pageSize
+          ? query.pageSize
+          : 10);
 
-        let i = skip;
+        const skip = (pageSize * (page - 1));
 
-        for (let u of users) {
+        User.find({
+          skip,
+          limit: pageSize,
+          include: ['person', 'roles', 'users']
+        }, async (err, users) => {
 
-          i++;
+          if (err) {
 
-          const name = await PersonName.find({
-            where: {
-              personId: u.__data.person[0].personId
-            }
-          });
+            debug(err);
 
-          json.push({
-            pos: i,
-            username: u.__data.username,
-            givenName: name[0].givenName,
-            familyName: name[0].familyName,
-            gender: u.__data.person[0].gender,
-            retired: u.__data.users[0].retired,
-            role: u.__data.roles[0].name
-          });
+            return [];
 
-        };
+          }
 
-        debug(json);
+          let json = [];
 
-        res
-          .status(200)
-          .json(json);
+          let i = skip;
+
+          for (let u of users) {
+
+            i++;
+
+            const name = await PersonName.find({
+              where: {
+                personId: u.__data.person[0].personId
+              }
+            });
+
+            json.push({
+              pos: i,
+              username: u.__data.username,
+              givenName: name[0].givenName,
+              familyName: name[0].familyName,
+              gender: u.__data.person[0].gender,
+              retired: u.__data.users[0].retired,
+              role: u.__data.roles[0].name
+            });
+
+          };
+
+          debug(json);
+
+          res
+            .status(200)
+            .json(json);
+
+        })
 
       })
-
-    })
 
   })
 
@@ -453,77 +454,77 @@ module.exports = function (app) {
     Users.upsertWithWhere({
       username: req.params.id
     }, {
-      retired: 0
-    }, function (err, user) {
-
-      if (err) {
-
-        debug(err);
-
-        return res
-          .status(400)
-          .json(err);
-
-      }
-
-      const page = (query.page
-        ? query.page
-        : 1);
-      const pageSize = (query.pageSize
-        ? query.pageSize
-        : 10);
-
-      const skip = (pageSize * (page - 1));
-
-      User.find({
-        skip,
-        limit: pageSize,
-        include: ['person', 'roles', 'users']
-      }, async(err, users) => {
+        retired: 0
+      }, function (err, user) {
 
         if (err) {
 
           debug(err);
 
-          return [];
+          return res
+            .status(400)
+            .json(err);
 
         }
 
-        let json = [];
+        const page = (query.page
+          ? query.page
+          : 1);
+        const pageSize = (query.pageSize
+          ? query.pageSize
+          : 10);
 
-        let i = skip;
+        const skip = (pageSize * (page - 1));
 
-        for (let u of users) {
+        User.find({
+          skip,
+          limit: pageSize,
+          include: ['person', 'roles', 'users']
+        }, async (err, users) => {
 
-          i++;
+          if (err) {
 
-          const name = await PersonName.find({
-            where: {
-              personId: u.__data.person[0].personId
-            }
-          });
+            debug(err);
 
-          json.push({
-            pos: i,
-            username: u.__data.username,
-            givenName: name[0].givenName,
-            familyName: name[0].familyName,
-            gender: u.__data.person[0].gender,
-            retired: u.__data.users[0].retired,
-            role: u.__data.roles[0].name
-          });
+            return [];
 
-        };
+          }
 
-        debug(json);
+          let json = [];
 
-        res
-          .status(200)
-          .json(json);
+          let i = skip;
+
+          for (let u of users) {
+
+            i++;
+
+            const name = await PersonName.find({
+              where: {
+                personId: u.__data.person[0].personId
+              }
+            });
+
+            json.push({
+              pos: i,
+              username: u.__data.username,
+              givenName: name[0].givenName,
+              familyName: name[0].familyName,
+              gender: u.__data.person[0].gender,
+              retired: u.__data.users[0].retired,
+              role: u.__data.roles[0].name
+            });
+
+          };
+
+          debug(json);
+
+          res
+            .status(200)
+            .json(json);
+
+        })
 
       })
-
-    })
 
   })
 
@@ -533,13 +534,13 @@ module.exports = function (app) {
 
       res
         .status(200)
-        .json({valid: true});
+        .json({ valid: true });
 
     }).catch(() => {
 
       res
         .status(401)
-        .json({valid: false});
+        .json({ valid: false });
 
     });
 
@@ -564,7 +565,7 @@ module.exports = function (app) {
       skip,
       limit: pageSize,
       include: ['person', 'roles', 'users']
-    }, async(err, users) => {
+    }, async (err, users) => {
 
       if (err) {
 
@@ -628,36 +629,36 @@ module.exports = function (app) {
 
       if (data['First Name']) {
 
-        if (!json.name) 
+        if (!json.name)
           json.name = {};
-        
+
         json.name.givenName = data['First Name'];
 
       }
 
       if (data['Last Name']) {
 
-        if (!json.name) 
+        if (!json.name)
           json.name = {};
-        
+
         json.name.familyName = data['Last Name'];
 
       }
 
       if (data['Gender']) {
 
-        if (!json.person) 
+        if (!json.person)
           json.person = {};
-        
+
         json.person.gender = data['Gender'];
 
       }
 
       if (data['Role']) {
 
-        if (!json.role) 
+        if (!json.role)
           json.role = {};
-        
+
         json.role = data['Role'];
 
       }
@@ -721,7 +722,7 @@ module.exports = function (app) {
 
       await RoleMapping.upsertWithWhere({
         principalId: userId
-      }, {roleId: role.id});
+      }, { roleId: role.id });
 
     }
 
@@ -740,7 +741,7 @@ module.exports = function (app) {
         skip,
         limit: pageSize,
         include: ['person', 'roles', 'users']
-      }, async(err, users) => {
+      }, async (err, users) => {
 
         if (err) {
 
@@ -796,22 +797,38 @@ module.exports = function (app) {
 
     let data = {};
 
-    if (req.body && req.body['Change Password']) 
+    if (req.body && req.body['Change Password'])
       data = req.body['Change Password'];
-    
-    if (data.password && data['Current Password'] && data.password !== data['Current Password']) 
-      return res.status(401).json({error: true, message: "Unauthorized password!"});
-    
-    if (data['Confirm Password'] && data['New Password'] && data['New Password'] !== data['Confirm Password']) 
-      return res.status(400).json({error: true, message: "Password mismatch!"});
-    
+
+    if (data.password && data['Current Password'] && data.password !== data['Current Password'])
+      return res.status(401).json({ error: true, message: "Unauthorized password!" });
+
+    if (data['Confirm Password'] && data['New Password'] && data['New Password'] !== data['Confirm Password'])
+      return res.status(400).json({ error: true, message: "Password mismatch!" });
+
     await User.upsertWithWhere({
       username: req.params.id
-    }, {password: data['New Password']});
+    }, { password: data['New Password'] });
 
     res
       .status(200)
       .json({});
+
+  })
+
+  router.get('/username_valid/:username', async function (req, res, next) {
+
+    let valid = false;
+
+    const username = await HtsValidUsernames.findOne({
+      where: {
+        username: req.params.username
+      }
+    }).catch((e) => { console.log(e) });
+
+    valid = username !== null ? true : false;
+
+    res.status(200).json({ valid })
 
   })
 

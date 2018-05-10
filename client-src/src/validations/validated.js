@@ -59,7 +59,7 @@ const evalInline = (msg, lDelim = '{{', rDelim = '}}') => {
 
 }
 
-export function validated(props, state) {
+export async function validated(props, state) {
 
   let valid = true;
   let msg = "Required field empty!";
@@ -127,24 +127,30 @@ export function validated(props, state) {
     ? props.wf[state.currentWorkflow].currentNode.label
     : ""] && Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
       ? props.wf[state.currentWorkflow].currentNode.label
-      : ""]).indexOf("validator") >= 0 && !props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
-        ? props.wf[state.currentWorkflow].currentNode.label
-        : ""].validator(props.wf.responses[state.currentWorkflow][props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
-          ? props.wf[state.currentWorkflow].currentNode.label
-          : ""])) {
+      : ""]).indexOf("validator") >= 0) {
 
-    return {
-      valid: false,
-      message: (props.app.configs && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+    const valid = await props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+      ? props.wf[state.currentWorkflow].currentNode.label
+      : ""].validator(props.wf.responses[state.currentWorkflow][props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
         ? props.wf[state.currentWorkflow].currentNode.label
-        : ""] && Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+        : ""]).catch(e => { return false; });
+
+    if (valid !== true) {
+
+      return {
+        valid: false,
+        message: (props.app.configs && props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
           ? props.wf[state.currentWorkflow].currentNode.label
-          : ""]).indexOf("validationMessage") >= 0
-        ? props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
-          ? props.wf[state.currentWorkflow].currentNode.label
-          : ""].validationMessage
-        : "Invalid value entered")
-    };
+          : ""] && Object.keys(props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+            ? props.wf[state.currentWorkflow].currentNode.label
+            : ""]).indexOf("validationMessage") >= 0
+          ? props.app.configs[props.wf && props.wf[state.currentWorkflow] && props.wf[state.currentWorkflow].currentNode && props.wf[state.currentWorkflow].currentNode.label
+            ? props.wf[state.currentWorkflow].currentNode.label
+            : ""].validationMessage
+          : "Invalid value entered")
+      };
+
+    }
 
   }
 

@@ -243,3 +243,11 @@ export function getVersion() {
   return { type: 'GET_VERSION', payload: request };
 
 }
+
+export function usernameValid(username) {
+
+  const request = axios.get('/username_valid/' + username);
+
+  return { type: 'USERNAME_VALID', payload: request };
+
+}

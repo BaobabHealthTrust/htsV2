@@ -23,7 +23,8 @@ import {
   loadData,
   flagRegisterFilled,
   updatePartnerRecord,
-  getVersion
+  getVersion,
+  usernameValid
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -74,6 +75,7 @@ import { updateClient } from './validations/updateClient';
 import { switches } from "./validations/switches";
 import { validated } from './validations/validated';
 import UsersViewer from './components/usersViewer';
+// eslint-disable-next-line
 import algorithm from './lib/dhaAlgorithm.js';
 import Login from './components/login';
 import tests from './config/tests';
@@ -902,7 +904,7 @@ class App extends Component {
     if (this.props.app.currentSection === "home" && !this.props.app.formActive) {
       this.switchPage("patient");
     } else if (this.props.app.formActive) {
-      const valid = validated(this.props, this.state);
+      const valid = await validated(this.props, this.state);
 
       if (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "Service Delivery Point" && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Service Delivery Point"]) {
         this
@@ -2753,6 +2755,46 @@ class App extends Component {
 
   }
 
+  checkIfUsernameValid(token) {
+
+    return new Promise(function (resolve, reject) {
+      // Do the usual XHR stuff
+      var req = new XMLHttpRequest();
+      req.open('GET', '/username_valid/' + token);
+
+      req.onload = function () {
+        // This is called even on 404 etc
+        // so check the status
+        if (req.status === 200) {
+          // Resolve the promise with the response text
+          if (JSON.parse(req.response).valid === true) {
+
+            resolve(true);
+
+          } else {
+
+            reject(false);
+
+          }
+        }
+        else {
+          // Otherwise reject with the status text
+          // which will hopefully be a meaningful error
+          reject(Error(req.statusText));
+        }
+      };
+
+      // Handle network errors
+      req.onerror = function () {
+        reject(Error("Network Error"));
+      };
+
+      // Make the request
+      req.send();
+    });
+
+  }
+
   async addUser() {
 
     await this.setState({ currentWorkflow: "primary" });
@@ -2777,7 +2819,7 @@ class App extends Component {
           "Username": {
             fieldType: "dha",
             textCase: "upper",
-            validator: algorithm.decode,
+            validator: this.checkIfUsernameValid, // algorithm.decode,
             validationMessage: "Invalid ID format entered"
           },
           "Password": {
@@ -4394,6 +4436,9 @@ const mapDispatchToProps = dispatch => {
     },
     getVersion: async () => {
       return await dispatch(getVersion());
+    },
+    usernameValid: async (username) => {
+      return await dispatch(usernameValid(username));
     }
   };
 };

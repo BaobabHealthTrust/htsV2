@@ -1321,6 +1321,18 @@ export default function appReducer(state = {
 
       return newState;
 
+    case "USERNAME_VALID_FULFILLED":
+
+      newState = Object.assign({}, state, { usernameValid: action.payload.data.valid });
+
+      return newState;
+
+    case "USERNAME_VALID_REJECTED":
+
+      newState = Object.assign({}, state, { usernameValid: false });
+
+      return newState;
+
     default:
 
       return state;
