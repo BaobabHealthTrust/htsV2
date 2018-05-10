@@ -22,10 +22,10 @@ class U7 extends Component {
           id="tableDiv2">
           <table
             width="100%"
+            cellPadding="0"
             style={{
             fontSize: "12px"
-          }}
-            cellPadding="1">
+          }}>
             <tbody>
               <tr>
                 <td
