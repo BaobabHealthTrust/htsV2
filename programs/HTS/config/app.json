@@ -81,7 +81,7 @@
             "Last HIV Test Result",
             "match",
             "Last\\sNegative|Never\\sTested",
-            "Pre-Test Counseling"
+            "HTS Visit"
         ]
     },
     "First Pass Test 1 Result": {
@@ -193,7 +193,7 @@
             "Last HIV Test Result",
             "equal",
             "Last Positive",
-            "Pre-Test Counseling"
+            "HTS Visit"
         ]
     },
     "FP Test 1 & 2 Negative?": {
@@ -262,7 +262,7 @@
             "Last HIV Test Result",
             "notEqual",
             "Never Tested",
-            "Pre-Test Counseling"
+            "HTS Visit"
         ]
     },
     "Time Since Last Test": {
@@ -329,7 +329,7 @@
             "age",
             "lessThan",
             "120",
-            "Pre-Test Counseling",
+            "HTS Visit",
             "months"
         ]
     },
@@ -339,7 +339,7 @@
             "Client Risk Category",
             "equal",
             "High Risk Event in Last 3 months",
-            "Pre-Test Counseling"
+            "HTS Visit"
         ]
     },
     "Ongoing risky behaviour?": {
@@ -348,7 +348,7 @@
             "Client Risk Category",
             "equal",
             "On-going Risk",
-            "Pre-Test Counseling"
+            "HTS Visit"
         ]
     },
     "Age 12-23 months?": {
@@ -359,6 +359,15 @@
             "1",
             "2",
             "Patient"
+        ]
+    },
+    "Pregnant female?": {
+        "visible": false,
+        "func": [
+            "Sex/Pregnancy",
+            "equal",
+            "Female Pregnant",
+            "HTS Visit"
         ]
     },
     "Child?": {
