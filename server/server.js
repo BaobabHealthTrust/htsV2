@@ -12,16 +12,19 @@ var bfj = require("bfj");
 var bpmn = require(path.resolve('lib', 'process_bpmn.js')).ProcessBPMN;
 var chokidar = require('chokidar');
 
+const client = require("node-rest-client").Client;
+const es = require(__dirname + "/../configs/elasticsearch.json");
+
 var app = module.exports = loopback();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-var watcher = chokidar.watch('./programs', {persistent: true});
+var watcher = chokidar.watch('./programs', { persistent: true });
 
 function generateTree(filename, cb) {
-  
+
   var root = '';
   var folder = '';
 
@@ -93,9 +96,9 @@ watcher.on('add', filename => {
 
   var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i);
 
-  if (!parts) 
+  if (!parts)
     return;
-  
+
   log(`File ${filename} has been added`);
 
   generateTree(filename, () => {
@@ -108,9 +111,9 @@ watcher.on('add', filename => {
 
   var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i);
 
-  if (!parts) 
+  if (!parts)
     return;
-  
+
   log(`File ${filename} has been changed`);
 
   generateTree(filename, () => {
@@ -123,14 +126,15 @@ watcher.on('add', filename => {
 
   var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i);
 
-  if (!parts) 
+  if (!parts)
     return;
-  
+
   log(`File ${filename} has been removed`);
 
 });
 
 app.start = function () {
+
   // start the web server
   return app.listen(function () {
     app.emit('started');
@@ -145,16 +149,45 @@ app.start = function () {
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
     }
   });
+
 };
 
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function (err) {
-  if (err) 
+  if (err)
     throw err;
-  
+
   // start the server if `$ node server.js`
-  if (require.main === module) 
-    app.start();
+  if (require.main === module) {
+
+    new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/_search", function (result) {
+
+      if (Object.keys(result).indexOf("error") >= 0) {
+
+        const json = require(__dirname + "/../configs/es-mapping.json");
+
+        const args = {
+          data: json,
+          headers: {
+            "Content-Type": "application/json"
+          }
+        };
+
+        new client().put(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index, args, function (result) {
+
+          app.start();
+
+        })
+
+      } else {
+
+        app.start();
+
+      }
+
+    });
+
   }
+}
 );

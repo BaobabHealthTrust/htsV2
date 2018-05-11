@@ -30,7 +30,7 @@ services:
     image: elasticsearch:5.6.8
     container_name: es
     volumes:
-      - esdata:/usr/share/elasticsearch/data
+      - /opt/es_data:/usr/share/elasticsearch/data
     ports:
       - 9201:9200
     healthcheck:
@@ -54,7 +54,7 @@ services:
     healthcheck:
       test: curl 0.0.0.0:5984
     volumes:
-      - cbdata:/usr/local/var/lib/couchdb
+      - /opt/cb_data:/usr/local/var/lib/couchdb
     ports:
       - "5985:5984"
     environment:
@@ -67,6 +67,8 @@ services:
     container_name: ms
     healthcheck:
       test: mysqladmin --silent --wait -uroot -ppassword ping || exit 1
+    volumes:
+      - /opt/mysql_data:/var/lib/mysql
     ports:
       - "3307:3306"
     networks: 
@@ -103,6 +105,5 @@ volumes:
   cbdata:
     driver: local
   mysqldata:
-    driver: local
 networks: 
   ntwk:
