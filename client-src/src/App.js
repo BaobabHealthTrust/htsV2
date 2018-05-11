@@ -2499,7 +2499,7 @@ class App extends Component {
         return Object.keys(e[Object.keys(e)[0]])
       })[0];
 
-    // this.props.setData(entryCodes);
+    this.props.setData(entryCodes);
 
     return entryCodes;
 
