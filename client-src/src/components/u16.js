@@ -169,9 +169,56 @@ class U16 extends Component {
           userSelect: "none"
         }}
         onMouseDown={() => {
-          this
+
+          let rows = this
             .props
-            .switchWorkflow("primary")
+            .app
+            .patientData[this.props.app.partnerId][this.props.app.module]
+            .visits
+            .filter((e) => {
+              return Object
+                .keys(e)
+                .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
+            });
+
+
+
+          if (rows.length > 0) {
+
+            let canProceed = true;
+
+            for (let entryCode of Object.keys(rows[0][this.props.app.selectedVisit])) {
+
+              if (Object.keys(rows[0][this.props.app.selectedVisit][entryCode]["HTS Visit"]).indexOf("registerNumber") <= 0) {
+
+                canProceed = false;
+
+              }
+
+            }
+
+            if (canProceed) {
+
+              this
+                .props
+                .switchWorkflow("primary")
+
+            } else {
+
+              this
+                .props
+                .showInfoMsg("Missing data", "Please capture data for one client first before the next client!");
+
+            }
+
+          } else {
+
+            this
+              .props
+              .showInfoMsg("Missing data", "Please capture data for one client first before the next client!");
+
+          }
+
         }}>
 
         {(this.props.processing

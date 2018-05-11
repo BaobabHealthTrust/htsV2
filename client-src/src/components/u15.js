@@ -169,9 +169,10 @@ class U15 extends Component {
           userSelect: "none"
         }}
         onMouseDown={() => {
-          this
-            .props
-            .switchWorkflow("secondary")
+          if (false)
+            this
+              .props
+              .switchWorkflow("secondary")
         }}>
 
         {(this.props.processing
