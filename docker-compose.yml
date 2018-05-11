@@ -5,6 +5,7 @@ services:
     build: .
     environment:
       PORT: 3000
+      REDIS_HOST: redis
     ports:
       - "3000:3000"
     volumes:

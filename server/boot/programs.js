@@ -10,7 +10,7 @@ module.exports = function (app) {
   const glob = require("glob");
   const url = require("url");
   const client = require("node-rest-client").Client;
-  const mutex = require("node-mutex")();
+  const mutex = require("node-mutex")({ host: (process.env.REDIS_HOST ? process.env.REDIS_HOST : 'localhost') });
   const GlobalProperty = app.models.GlobalProperty;
   const Patient = app.models.Patient;
   const Person = app.models.Person;
@@ -4897,7 +4897,7 @@ module.exports = function (app) {
 
   router.get('/version', async function (req, res, next) {
 
-    const git = await runCmd("which git").catch(e => { 
+    const git = await runCmd("which git").catch(e => {
 
       return res.status(200).json({ version: "3.0.0" });
 
@@ -4909,15 +4909,15 @@ module.exports = function (app) {
 
         return res.status(200).json({ version: "3.0.0" });
 
-       });
+      });
 
       if (String(version).match(/^fatal/i)) {
 
         res.status(200).json({ version: "3.0.0" });
 
-      } 
+      }
 
-    } 
+    }
 
   })
 
