@@ -1,0 +1,16 @@
+node_modules
+Dockerfile
+encounter_mod.sql
+es-mapping.json
+htc.roles.sql
+hts_registers.sql
+hts_valid_usernames.sql
+locations.sql
+malawi_regions.sql
+nationalities.sql
+openmrs_1_7_2_concept_server_full_db.sql
+package-lock.json
+package.json
+seed.js
+seed.json
+valid_hts_usernames.txt
