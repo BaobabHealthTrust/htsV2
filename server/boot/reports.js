@@ -12,7 +12,7 @@ module.exports = function (app) {
   const locations = require(__dirname + '/../../configs/pepfarLocations');
   const htsModalities = require(__dirname + '/../../configs/htsModalities');
 
-  const esClient = new require('elasticsearch').Client();
+  const esClient = new require('elasticsearch').Client({ host: es.host + ":" + es.port });
 
   let url = require("url");
 
