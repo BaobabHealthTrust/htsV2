@@ -13,7 +13,8 @@
     "unit-tests": "./node_modules/.bin/mocha -w unit-tests/",
     "build": "cd client-src && node ./node_modules/.bin/react-scripts --max-old-space-size=2000 build && cp -r build/* ../client/",
     "production": "concurrently \"cd ../dde3.0 && if [ $? -eq 0 ]; then IP_ADDRESS=0.0.0.0 NODE_ENV=development ~/.nvm/versions/node/v5.10.1/bin/node app.js; fi\" \"PORT=3015 node .\" \"cd ./redis && node redis.js\"",
-    "discover-models": "./node_modules/.bin/loopback-discovery -d hts ."
+    "discover-models": "./node_modules/.bin/loopback-discovery -d hts .",
+    "docker": "PORT=3000 node ."
   },
   "dependencies": {
     "async": "^2.6.0",
