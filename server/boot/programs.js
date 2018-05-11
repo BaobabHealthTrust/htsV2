@@ -38,7 +38,7 @@ module.exports = function (app) {
   const htsIndicatorsMapping = require(__dirname + "/../../configs/htsIndicatorsMapping.json");
   const uuid = require("uuid");
   const ReadableSearch = require("elasticsearch-streams").ReadableSearch;
-  const esClient = new require("elasticsearch").Client();
+  const esClient = new require("elasticsearch").Client({ host: es.host + ":" + es.port });
   const pepfarSynthesis = require(__dirname + "/../../lib/pepfarSynthesis.js");
 
   const monthNames = [
