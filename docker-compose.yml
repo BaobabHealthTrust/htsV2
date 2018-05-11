@@ -27,7 +27,7 @@ services:
     networks: 
       - ntwk
   elasticsearch:
-    image: elasticsearch:5.6.8
+    image: elasticsearch:5.3.0
     container_name: es
     volumes:
       - /opt/es_data:/usr/share/elasticsearch/data
@@ -38,7 +38,7 @@ services:
     networks: 
       - ntwk
   kibana:
-    image: kibana:5.6.8
+    image: kibana:5.3.0
     container_name: kb
     ports:
       - 5602:5601

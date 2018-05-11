@@ -538,7 +538,7 @@ module.exports = function (app) {
               {
                 query_string: {
                   query: 'observation:"Partner Present" AND observationValue:"Yes" AND serviceDeliveryPoin' +
-                      't:"' + location + '"'
+                    't:"' + location + '"'
                 }
               }, {
                 range: {
@@ -581,7 +581,7 @@ module.exports = function (app) {
               {
                 query_string: {
                   query: 'observation:"Partner Present" AND observationValue:"No" AND locationType' +
-                      ':"' + location + '"'
+                    ':"' + location + '"'
                 }
               }, {
                 range: {
@@ -1261,7 +1261,7 @@ module.exports = function (app) {
               {
                 query_string: {
                   query: "(observation:\"Immediate Repeat Test 1 Result\" OR observation:\"First Pass Test" +
-                      " 1 Result\") AND locationType:\"" + location + "\""
+                    " 1 Result\") AND locationType:\"" + location + "\""
                 }
               }, {
                 range: {
@@ -1304,7 +1304,7 @@ module.exports = function (app) {
               {
                 query_string: {
                   query: "(observation:\"Immediate Repeat Test 2 Result\" OR observation:\"First Pass Test" +
-                      " 2 Result\") AND locationType:\"" + location + "\""
+                    " 2 Result\") AND locationType:\"" + location + "\""
                 }
               }, {
                 range: {
@@ -1493,9 +1493,9 @@ module.exports = function (app) {
       }
     }, (e, resp) => {
 
-      if (!resp.aggregations) 
+      if (!resp || (resp && !resp.aggregations))
         return res.end();
-      
+
       for (let row of resp.aggregations.raw.buckets) {
 
         const location = row.key;
@@ -1605,9 +1605,9 @@ module.exports = function (app) {
                 query_string: {
                   query: (kitType.match(/1/)
                     ? "(observation:\"Immediate Repeat Test 1 Result\" OR observation:\"First Pass Test" +
-                      " 1 Result\")"
+                    " 1 Result\")"
                     : "(observation:\"Immediate Repeat Test 2 Result\" OR observation:\"First Pass Test" +
-                      " 2 Result\")") + " AND locationType:\"" + locationName + "\""
+                    " 2 Result\")") + " AND locationType:\"" + locationName + "\""
                 }
               }, {
                 range: {
@@ -1631,9 +1631,9 @@ module.exports = function (app) {
       }
     }, (e, resp) => {
 
-      if (!resp.aggregations) 
+      if (!resp || (resp && !resp.aggregations))
         return res.end();
-      
+
       for (let visit of resp.aggregations.visit.buckets) {
 
         const visitDate = (new Date(visit.key)).format("d mmm YYYY");
@@ -1790,9 +1790,9 @@ module.exports = function (app) {
         }
       }, (e, resp) => {
 
-        if (!resp.aggregations) 
+        if (!resp || (resp && !resp.aggregations))
           return cb();
-        
+
         for (let year of resp.aggregations.year.buckets) {
 
           for (let month of year.month.buckets) {
@@ -1846,9 +1846,9 @@ module.exports = function (app) {
 
     }, (e) => {
 
-      if (e) 
+      if (e)
         console.log(e);
-      
+
       res.end();
 
     })
@@ -1927,9 +1927,9 @@ module.exports = function (app) {
       }
     }, (e, resp) => {
 
-      if (!resp.aggregations) 
+      if (!resp || (resp && !resp.aggregations))
         return res.end();
-      
+
       for (let row of resp.aggregations.location.buckets) {
 
         const location = row.key;
@@ -2273,9 +2273,9 @@ module.exports = function (app) {
                         (group[0] === ">=50"
                           ? "50+"
                           : group.join("-")), {
-                          "M": "Male",
-                          "F": "Female"
-                        }[gender],
+                            "M": "Male",
+                            "F": "Female"
+                          }[gender],
                         resultGiven,
                         count
                       ];
@@ -2294,9 +2294,9 @@ module.exports = function (app) {
                         (group[0] === ">=50"
                           ? "50+"
                           : group.join("-")), {
-                          "M": "Male",
-                          "F": "Female"
-                        }[gender],
+                            "M": "Male",
+                            "F": "Female"
+                          }[gender],
                         resultGiven,
                         count
                       ];
