@@ -1520,6 +1520,10 @@ module.exports = function (app) {
       }
     });
 
+    let today = json.date
+      ? json.date
+      : new Date().format("YYYY-mm-dd");
+
     let primaryId,
       patientId,
       clinicId,
@@ -1593,10 +1597,6 @@ module.exports = function (app) {
       primaryId = json.primaryId;
     }
 
-    const today = (json.date
-      ? new Date(json.date)
-      : new Date()).format("d/mmm/YYYY");
-
     const programName = json.program;
 
     const group = json.group;
@@ -1665,9 +1665,9 @@ module.exports = function (app) {
       patientProgram = await PatientProgram.create({
         patientId,
         programId,
-        dateEnrolled: new Date(),
+        dateEnrolled: new Date(today),
         creator: userId,
-        dateCreated: new Date(),
+        dateCreated: new Date(today),
         location: locationId,
         uuid: uuid.v4()
       });
@@ -1705,7 +1705,7 @@ module.exports = function (app) {
       locationId,
       encounterDatetime: new Date(today),
       creator: userId,
-      dateCreated: new Date(),
+      dateCreated: new Date(today),
       uuid: uuid.v4(),
       patientProgramId
     });
@@ -1779,7 +1779,7 @@ module.exports = function (app) {
                   .match(/^(\d+)(.+)$/)[2]
                 : null,
               creator: userId,
-              dateCreated: new Date(),
+              dateCreated: new Date(today),
               uuid: uuid.v4()
             });
 
@@ -1806,7 +1806,7 @@ module.exports = function (app) {
                 ? value
                 : null,
               creator: userId,
-              dateCreated: new Date(),
+              dateCreated: new Date(today),
               uuid: uuid.v4()
             });
 
