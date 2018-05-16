@@ -1,0 +1,109 @@
+version: "2.1"
+
+services:
+  hts:
+    image: localhost:5000/htslb_hts
+    environment:
+      PORT: 3000
+      REDIS_HOST: redis
+    ports:
+      - "3010:3000"
+    volumes:
+      - .:/usr/src/app
+    container_name: hts
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      dde:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    links:
+      - elasticsearch
+      - redis
+      - mysql
+    networks: 
+      - ntwk
+  elasticsearch:
+    image: localhost:5000/elasticsearch:5.3.0
+    container_name: es
+    volumes:
+      - /opt/es_data:/usr/share/elasticsearch/data
+    ports:
+      - 9201:9200
+    healthcheck:
+      test: curl 0.0.0.0:9200
+    networks: 
+      - ntwk
+  kibana:
+    image: localhost:5000/kibana:5.3.0
+    container_name: kb
+    ports:
+      - 5602:5601
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+    networks: 
+      - ntwk
+  couchdb:
+    image: localhost:5000/couchdb:1.7.1
+    container_name: cb
+    healthcheck:
+      test: curl 0.0.0.0:5984
+    volumes:
+      - /opt/cb_data:/usr/local/var/lib/couchdb
+    ports:
+      - "5985:5984"
+    environment:
+      COUCHDB_USER: admin
+      COUCHDB_PASSWORD: test
+    networks: 
+      - ntwk
+  mysql:
+    image: localhost:5000/htslb_mysql
+    container_name: ms
+    healthcheck:
+      test: mysqladmin --silent --wait -uroot -ppassword ping || exit 1
+    volumes:
+      - /opt/mysql_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks: 
+      - ntwk
+  redis:
+    image: localhost:5000/redis:4.0.8
+    container_name: rd
+    healthcheck:
+      test: redis-cli ping
+    ports:
+      - "6479:6379"
+    networks: 
+      - ntwk
+  dde:
+    image: localhost:5000/kachaje/dde3_0
+    container_name: dde
+    ports: 
+      - 3009:3009
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      couchdb:
+        condition: service_healthy
+    healthcheck:
+      test: curl 0.0.0.0:3009
+    links:
+      - elasticsearch
+      - couchdb
+    networks: 
+      - ntwk
+volumes:
+  esdata:
+    driver: local
+  cbdata:
+    driver: local
+  mysqldata:
+networks: 
+  ntwk:
