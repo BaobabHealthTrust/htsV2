@@ -181,11 +181,11 @@ module.exports = function (app) {
 
   router.get('/dde/search_by_identifier/:identifier', async function (req, res, next) {
 
-    if (process.env['USE_ART'] || ddeConfig.use_art) {
+    if (String(process.env['USE_ART']) === "1" || ddeConfig.use_art) {
 
-      const protocol = (process.env['USE_ART'] ? process.env['ART_PROTOCOL'] : ddeConfig.art_settings.protocol);
-      const host = (process.env['USE_ART'] ? process.env['ART_HOST'] : ddeConfig.art_settings.host);
-      const port = (process.env['USE_ART'] ? process.env['ART_PORT'] : ddeConfig.art_settings.port);
+      const protocol = (String(process.env['USE_ART']) === "1" ? process.env['ART_PROTOCOL'] : ddeConfig.art_settings.protocol);
+      const host = (String(process.env['USE_ART']) === "1" ? process.env['ART_HOST'] : ddeConfig.art_settings.host);
+      const port = (String(process.env['USE_ART']) === "1" ? process.env['ART_PORT'] : ddeConfig.art_settings.port);
 
       (new client())
         .get(protocol + "://" + host + ":" + port + "/" + ddeConfig.art_settings.search_by_id + req.params.identifier, async function (data, props) {
@@ -517,11 +517,11 @@ module.exports = function (app) {
 
   router.post('/dde/search_by_name_and_gender', function (req, res, next) {
 
-    if (process.env['USE_ART'] || ddeConfig.use_art) {
+    if (String(process.env['USE_ART']) === "1" || ddeConfig.use_art) {
 
-      const protocol = (process.env['USE_ART'] ? process.env['ART_PROTOCOL'] : ddeConfig.art_settings.protocol);
-      const host = (process.env['USE_ART'] ? process.env['ART_HOST'] : ddeConfig.art_settings.host);
-      const port = (process.env['USE_ART'] ? process.env['ART_PORT'] : ddeConfig.art_settings.port);
+      const protocol = (String(process.env['USE_ART']) === "1" ? process.env['ART_PROTOCOL'] : ddeConfig.art_settings.protocol);
+      const host = (String(process.env['USE_ART']) === "1" ? process.env['ART_HOST'] : ddeConfig.art_settings.host);
+      const port = (String(process.env['USE_ART']) === "1" ? process.env['ART_PORT'] : ddeConfig.art_settings.port);
 
       debug(JSON.stringify(req.body));
 
@@ -773,13 +773,13 @@ module.exports = function (app) {
 
   router.post('/dde/add_patient', function (req, res, next) {
 
-    if (process.env['USE_ART'] || ddeConfig.use_art) {
+    if (String(process.env['USE_ART']) === "1" || ddeConfig.use_art) {
 
-      const protocol = (process.env['USE_ART'] ? process.env['ART_PROTOCOL'] : ddeConfig.art_settings.protocol);
-      const host = (process.env['USE_ART'] ? process.env['ART_HOST'] : ddeConfig.art_settings.host);
-      const port = (process.env['USE_ART'] ? process.env['ART_PORT'] : ddeConfig.art_settings.port);
-      const username = (process.env['USE_ART'] ? process.env['ART_USERNAME'] : ddeConfig.art_settings.username);
-      const password = (process.env['USE_ART'] ? process.env['ART_PASSWORD'] : ddeConfig.art_settings.password);
+      const protocol = (String(process.env['USE_ART']) === "1" ? process.env['ART_PROTOCOL'] : ddeConfig.art_settings.protocol);
+      const host = (String(process.env['USE_ART']) === "1" ? process.env['ART_HOST'] : ddeConfig.art_settings.host);
+      const port = (String(process.env['USE_ART']) === "1" ? process.env['ART_PORT'] : ddeConfig.art_settings.port);
+      const username = (String(process.env['USE_ART']) === "1" ? process.env['ART_USERNAME'] : ddeConfig.art_settings.username);
+      const password = (String(process.env['USE_ART']) === "1" ? process.env['ART_PASSWORD'] : ddeConfig.art_settings.password);
 
       debug(JSON.stringify(req.body));
 

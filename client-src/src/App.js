@@ -1657,7 +1657,7 @@ class App extends Component {
 
       let currentEncounter = this.props.app.sectionHeader;
 
-      const result = await this
+      await this
         .props
         .submitForm(this.props.app.configs.action, Object.assign({}, this.props.app.currentSection !== "registration"
           ? {
