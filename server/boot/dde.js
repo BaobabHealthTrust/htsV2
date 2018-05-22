@@ -181,10 +181,14 @@ module.exports = function (app) {
 
   router.get('/dde/search_by_identifier/:identifier', async function (req, res, next) {
 
-    if (ddeConfig.use_art) {
+    if (process.env['USE_ART'] || ddeConfig.use_art) {
+
+      const protocol = (process.env['USE_ART'] ? process.env['ART_PROTOCOL'] : ddeConfig.art_settings.protocol);
+      const host = (process.env['USE_ART'] ? process.env['ART_HOST'] : ddeConfig.art_settings.host);
+      const port = (process.env['USE_ART'] ? process.env['ART_PORT'] : ddeConfig.art_settings.port);
 
       (new client())
-        .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + "/" + ddeConfig.art_settings.search_by_id + req.params.identifier, async function (data, props) {
+        .get(protocol + "://" + host + ":" + port + "/" + ddeConfig.art_settings.search_by_id + req.params.identifier, async function (data, props) {
 
           if (String(data).trim().length <= 0) {
 
@@ -513,14 +517,18 @@ module.exports = function (app) {
 
   router.post('/dde/search_by_name_and_gender', function (req, res, next) {
 
-    if (ddeConfig.use_art) {
+    if (process.env['USE_ART'] || ddeConfig.use_art) {
+
+      const protocol = (process.env['USE_ART'] ? process.env['ART_PROTOCOL'] : ddeConfig.art_settings.protocol);
+      const host = (process.env['USE_ART'] ? process.env['ART_HOST'] : ddeConfig.art_settings.host);
+      const port = (process.env['USE_ART'] ? process.env['ART_PORT'] : ddeConfig.art_settings.port);
 
       debug(JSON.stringify(req.body));
 
-      debug(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""));
+      debug(protocol + "://" + host + ":" + port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""));
 
       (new client())
-        .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""), async function (data, props) {
+        .get(protocol + "://" + host + ":" + port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""), async function (data, props) {
 
           debug("^^^^^^^^^^^^^^^^^^^^^");
 
@@ -765,11 +773,17 @@ module.exports = function (app) {
 
   router.post('/dde/add_patient', function (req, res, next) {
 
-    if (ddeConfig.use_art) {
+    if (process.env['USE_ART'] || ddeConfig.use_art) {
 
-      console.log(JSON.stringify(req.body));
+      const protocol = (process.env['USE_ART'] ? process.env['ART_PROTOCOL'] : ddeConfig.art_settings.protocol);
+      const host = (process.env['USE_ART'] ? process.env['ART_HOST'] : ddeConfig.art_settings.host);
+      const port = (process.env['USE_ART'] ? process.env['ART_PORT'] : ddeConfig.art_settings.port);
+      const username = (process.env['USE_ART'] ? process.env['ART_USERNAME'] : ddeConfig.art_settings.username);
+      const password = (process.env['USE_ART'] ? process.env['ART_PASSWORD'] : ddeConfig.art_settings.password);
 
-      console.log(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.createPath);
+      debug(JSON.stringify(req.body));
+
+      debug(protocol + "://" + host + ":" + port + ddeConfig.art_settings.createPath);
 
       const json = req.body;
 
@@ -814,12 +828,12 @@ module.exports = function (app) {
         }
       };
 
-      console.log(JSON.stringify(data));
+      debug(JSON.stringify(data));
 
-      console.log(JSON.stringify({ username: ddeConfig.art_settings.username, password: ddeConfig.art_settings.password }));
+      debug(JSON.stringify({ username: username, password: password }));
 
-      (new client({ user: ddeConfig.art_settings.username, password: ddeConfig.art_settings.password }))
-        .post(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.createPath, data, async function (result, props) {
+      (new client({ user: username, password: password }))
+        .post(protocol + "://" + host + ":" + port + ddeConfig.art_settings.createPath, data, async function (result, props) {
 
           console.log(result.toString("utf8"));
 

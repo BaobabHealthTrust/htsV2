@@ -6,6 +6,15 @@ services:
     environment:
       PORT: 3000
       REDIS_HOST: redis
+      USE_ART: false
+      DDE_HOST: dde
+      DDE_PROTOCOL: http
+      DDE_PORT: 3009
+      ART_HOST: 172.17.0.1
+      ART_USERNAME: admin
+      ART_PASSWORD: test
+      ART_PORT: 3005
+      ART_PROTOCOL: http
     ports:
       - "3000:3000"
     volumes:
