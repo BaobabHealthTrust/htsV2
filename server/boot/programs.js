@@ -2610,6 +2610,12 @@ module.exports = function (app) {
             obsId: obs.obsId
           };
 
+          if (String(value).trim().match(/^\d+$/)) {
+            
+            row.observationNumber = value;
+
+          }
+
           let args = {
             data: row,
             headers: {
