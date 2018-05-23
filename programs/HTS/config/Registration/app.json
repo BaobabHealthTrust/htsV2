@@ -102,14 +102,16 @@
         "ajaxURL": "/dde/search_by_region?name=",
         "lockList": true,
         "validationMessage": "Region of Origin \n must be entered",
-        "title": "Missing Data"
+        "title": "Missing Data",
+        "className": "longSelectList"
     },
     "Current Region": {
         "ajaxURL": "/dde/search_by_region?name=",
         "autoNext": true,
         "lockList": true,
         "validationMessage": "Current Region \n must be entered",
-        "title": "Missing Data"
+        "title": "Missing Data",
+        "className": "longSelectList"
     },
     "Year of Birth": {
         "fieldType": "number",
