@@ -1211,7 +1211,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"HTS Family Ref Slips" AND locationType:"' + location + '"'
+                  query: 'observation:"HTS Family Referral Slips" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
