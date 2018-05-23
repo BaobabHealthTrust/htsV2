@@ -1833,7 +1833,9 @@ module.exports = function (app) {
             };
 
             if (String(value).trim().match(/^\d+$/)) {
+
               row.observationNumber = value;
+
             }
 
             let args = {
@@ -2609,6 +2611,12 @@ module.exports = function (app) {
             age,
             obsId: obs.obsId
           };
+
+          if(String(value).trim().match(/^\d+$/)) {
+
+            row.observationNumber = value;
+
+          }
 
           let args = {
             data: row,

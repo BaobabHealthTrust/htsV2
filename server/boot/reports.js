@@ -1239,6 +1239,8 @@ module.exports = function (app) {
 
     (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
 
+      debug(JSON.stringify(result));
+
       res
         .status(200)
         .json({
