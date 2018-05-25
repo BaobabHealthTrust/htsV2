@@ -102,6 +102,14 @@ module.exports = {
       .assert
       .visible('#No.selectLi')
       .click('#No.selectLi')
+      .assert
+      .visible('#btnNext')
+      .click('#btnNext')
+      .pause(1000)
+      .click('#btnCancel')
+      .waitForElementVisible('#task-Overview', 5000)
+      .assert
+      .containsText('#task-Overview', 'Overview')
       .end()
   }
 }
