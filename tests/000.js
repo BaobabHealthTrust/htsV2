@@ -35,7 +35,7 @@ module.exports = {
       .assert
       .visible('#li-HTS')
       .click('#li-HTS')
-      .waitForElementVisible('#btnNext.green.nav-buttons', 1000)
+      .waitForElementVisible('#btnNext', 1000)
       .assert
       .visible('#task-Administration')
       .click('#task-Administration')
