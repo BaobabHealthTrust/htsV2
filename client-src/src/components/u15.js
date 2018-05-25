@@ -55,7 +55,7 @@ class U15 extends Component {
       return String(e)
         .toLowerCase()
         .trim()
-        .match("^" + (this.props.value ? String(this.props.value).toLowerCase() : ""))
+        .match("^" + (this.props.value ? String(this.props.value).toLowerCase().replace(/\(/g, '\\(').replace(/\)/g, '\\)') : ""))
     }).sort((a, b) => {
       return a > b
     }).slice(0, 5).map((opt) => {
