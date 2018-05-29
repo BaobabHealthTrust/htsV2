@@ -141,9 +141,11 @@ module.exports = {
       .waitForElementVisible('#u14HelpText', 1000)
       .assert
       .containsText('#u14HelpText', 'Register Number (from cover)')
+      .pause(3000)
       .assert
       .visible('#touchscreenTextInput')
       .setValue('#touchscreenTextInput', '1 (Health Facility - Inpatient)')
+      .pause(1000)
       .waitForElementVisible('#btnNext', 3000)
       .assert
       .visible('#btnNext')

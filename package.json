@@ -8,6 +8,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "concurrently \"cd ../dde3.0 && if [ $? -eq 0 ]; then IP_ADDRESS=0.0.0.0 NODE_ENV=development ~/.nvm/versions/node/v5.10.1/bin/node app.js; fi\" \"PORT=3001 node .\" \"cd ./client-src && npm start\" \"cd ./redis && node redis.js\"",
+    "test": "concurrently \"cd ../dde3.0 && if [ $? -eq 0 ]; then IP_ADDRESS=0.0.0.0 NODE_ENV=development ~/.nvm/versions/node/v5.10.1/bin/node app.js; fi\" \"PORT=3001 NODE_ENV=test node .\" \"cd ./client-src && NODE_ENV=test npm start\" \"cd ./redis && node redis.js\"",
     "posttest": "npm run lint && nsp check",
     "test-e2e": "nightwatch",
     "unit-tests": "./node_modules/.bin/mocha -w unit-tests/",
