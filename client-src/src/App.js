@@ -1617,23 +1617,13 @@ class App extends Component {
 
       const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB50,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
 
-      const uri = 'data:application/label; charset=utf-8; filename=' + uuid.v4() + '.lbl; disposition=inline,' + encodeURIComponent(data);
+      const name = uuid.v4().replace(/-/g, "").substring(0, 6) + ".lbl";
 
-      let ifrm = document.createElement("iframe");
-
-      ifrm.setAttribute("src", uri);
-
-      document
-        .body
-        .appendChild(ifrm);
-
-      setTimeout(function () {
-
-        document
-          .body
-          .removeChild(ifrm);
-
-      }, 100);
+      Axios
+        .post("/barcode")
+        .then(response => {
+          FileDownload(data, name);
+        });
 
     } else if (this.props.app.configs.action) {
 
@@ -3214,23 +3204,13 @@ class App extends Component {
           ? (new Date(data.date_of_birth)).format("dd/mmm/YYYY")
           : "") + "(" + data.gender + ")\"\nA40,142,0,2,2,2,N,\"" + data.residence + "\"\nP1\n";
 
-    const uri = 'data:application/label; charset=utf-8; filename=' + uuid.v4() + '.lbl; disposition=inline,' + encodeURIComponent(text);
+    const name = uuid.v4().replace(/-/g, "").substring(0, 6) + ".lbl";
 
-    let ifrm = document.createElement("iframe");
-
-    ifrm.setAttribute("src", uri);
-
-    document
-      .body
-      .appendChild(ifrm);
-
-    setTimeout(function () {
-
-      document
-        .body
-        .removeChild(ifrm);
-
-    }, 100);
+    Axios
+      .post("/barcode")
+      .then(response => {
+        FileDownload(text, name);
+      });
 
   }
 

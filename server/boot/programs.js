@@ -2611,7 +2611,7 @@ module.exports = function (app) {
           };
 
           if (String(value).trim().match(/^\d+$/)) {
-            
+
             row.observationNumber = value;
 
           }
@@ -4924,6 +4924,17 @@ module.exports = function (app) {
       }
 
     }
+
+  })
+
+  router.post('/barcode', function (req, res, next) {
+
+    res.setHeader('Content-disposition', 'attachment; filename=label.lbl');
+    res.set('Content-Type', 'application/label');
+
+    res
+      .status(200)
+      .send(req.body.data);
 
   })
 
