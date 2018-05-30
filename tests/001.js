@@ -43,8 +43,8 @@ module.exports = {
       .assert
       .containsText('#u14HelpText', 'Client consents to be contacted')
       .assert
-      .visible('#No.selectLi')
-      .click('#No.selectLi')
+      .visible('#liNo.selectLi')
+      .click('#liNo.selectLi')
       .click('#btnNext.green.nav-buttons')
       .waitForElementVisible('#u14HelpText', 1000)
       .assert
@@ -61,47 +61,47 @@ module.exports = {
       .assert
       .containsText('#u14HelpText', 'Gender')
       .assert
-      .visible('#Female.selectLi')
-      .click('#Female.selectLi')
+      .visible('#liFemale.selectLi')
+      .click('#liFemale.selectLi')
       .click('#btnNext.green.nav-buttons')
       .waitForElementVisible('#u14HelpText', 1000)
       .assert
       .containsText('#u14HelpText', 'Partner present')
       .assert
-      .visible('#No.selectLi')
-      .click('#No.selectLi')
+      .visible('#liNo.selectLi')
+      .click('#liNo.selectLi')
       .click('#btnNext.green.nav-buttons')
       .waitForElementVisible('#u14HelpText', 1000)
       .assert
       .containsText('#u14HelpText', 'HTS Access Type')
       .assert
-      .visible('#Routine_HTS__PITC__within_Health_Service.selectLi')
-      .click('#Routine_HTS__PITC__within_Health_Service.selectLi')
+      .visible('#liRoutine_HTS__PITC__within_Health_Service.selectLi')
+      .click('#liRoutine_HTS__PITC__within_Health_Service.selectLi')
       .waitForElementVisible('#u14HelpText', 1000)
       .assert
       .containsText('#u14HelpText', 'Last HIV Test Result')
       .assert
-      .visible('#Never_Tested.selectLi')
-      .click('#Never_Tested.selectLi')
+      .visible('#liNever_Tested.selectLi')
+      .click('#liNever_Tested.selectLi')
       .waitForElementVisible('#u14HelpText', 1000)
       .assert
       .containsText('#u14HelpText', 'Client Risk Category')
       .assert
-      .visible('#Low_Risk.selectLi')
-      .click('#Low_Risk.selectLi')
+      .visible('#liLow_Risk.selectLi')
+      .click('#liLow_Risk.selectLi')
       .waitForElementVisible('#u14HelpText', 1000)
       .assert
       .containsText('#u14HelpText', 'Pregnant?')
       .assert
-      .visible('#No.selectLi')
-      .click('#No.selectLi')
+      .visible('#liNo.selectLi')
+      .click('#liNo.selectLi')
       .click('#btnNext.green.nav-buttons')
       .waitForElementVisible('#u14HelpText', 1000)
       .assert
       .containsText('#u14HelpText', 'Client gives consent to be tested?')
       .assert
-      .visible('#No.selectLi')
-      .click('#No.selectLi')
+      .visible('#liNo.selectLi')
+      .click('#liNo.selectLi')
       .assert
       .visible('#btnNext')
       .click('#btnNext')

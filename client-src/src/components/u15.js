@@ -31,8 +31,8 @@ class U15 extends Component {
           className={this.props.responses && this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label] && this.props.responses[this.props.group][this.props.label] === opt
             ? "selectedLi"
             : "selectLi"}
-          id={opt.replace(/[^a-z0-9]/gi, "_")}
-          key={opt.replace(/[^a-z0-9]/gi, "_")}
+          id={"li" + opt.replace(/[^a-z0-9]/gi, "_")}
+          key={"li" + opt.replace(/[^a-z0-9]/gi, "_")}
           onMouseDown={() => {
             this
               .props
@@ -65,8 +65,8 @@ class U15 extends Component {
           className={this.props.responses && this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label] && this.props.responses[this.props.group][this.props.label] === opt
             ? "selectedLi"
             : "selectLi"}
-          id={opt.replace(/[^a-z0-9]/gi, "_")}
-          key={opt.replace(/[^a-z0-9]/gi, "_")}
+          id={"li" + opt.replace(/[^a-z0-9]/gi, "_")}
+          key={"li" + opt.replace(/[^a-z0-9]/gi, "_")}
           onMouseDown={() => {
             document
               .getElementById("touchscreenTextInputU15")

@@ -58,8 +58,8 @@ module.exports = {
       .assert
       .containsText('#u14HelpText', 'Location Type')
       .assert
-      .visible('#Health_Facility')
-      .click('#Health_Facility')
+      .visible('#liHealth_Facility')
+      .click('#liHealth_Facility')
       .assert
       .visible('#btnNext')
       .click('#btnNext')
@@ -67,8 +67,8 @@ module.exports = {
       .assert
       .containsText('#u14HelpText', 'Service Delivery Point')
       .assert
-      .visible('#Inpatient')
-      .click('#Inpatient')
+      .visible('#liInpatient')
+      .click('#liInpatient')
       .assert
       .visible('#btnNext')
       .click('#btnNext')

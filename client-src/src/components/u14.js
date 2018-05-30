@@ -56,9 +56,9 @@ class U14 extends Component {
           className={this.props.responses && this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label] && this.props.responses[this.props.group][this.props.label] === opt
             ? "selectedLi"
             : "selectLi"}
-          id={opt.replace(/[^a-z0-9]/gi, "_")}
-          key={opt.replace(/[^a-z0-9]/gi, "_")}
-          onMouseDown={() => {
+          id={"li" + opt.replace(/[^a-z0-9]/gi, "_")}
+          key={"li" + opt.replace(/[^a-z0-9]/gi, "_")}
+          onClick={() => {
             this
               .props
               .handleDirectInputChange(this.props.label, opt, this.props.group);
@@ -90,9 +90,9 @@ class U14 extends Component {
           className={this.props.responses && this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label] && this.props.responses[this.props.group][this.props.label] === opt
             ? "selectedLi"
             : "selectLi"}
-          id={opt.replace(/[^a-z0-9]/gi, "_")}
-          key={opt.replace(/[^a-z0-9]/gi, "_")}
-          onMouseDown={() => {
+          id={"li" + opt.replace(/[^a-z0-9]/gi, "_")}
+          key={"li" + opt.replace(/[^a-z0-9]/gi, "_")}
+          onClick={() => {
             document
               .getElementById("touchscreenTextInput")
               .value = opt;
