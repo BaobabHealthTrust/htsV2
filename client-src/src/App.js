@@ -1633,7 +1633,7 @@ class App extends Component {
           .body
           .removeChild(ifrm);
 
-      }, 100);
+      }, 1000);
 
     } else if (this.props.app.configs.action) {
 
@@ -3230,7 +3230,7 @@ class App extends Component {
         .body
         .removeChild(ifrm);
 
-    }, 100);
+    }, 1000);
 
   }
 
