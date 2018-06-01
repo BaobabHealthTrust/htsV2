@@ -1619,11 +1619,23 @@ class App extends Component {
 
       const name = uuid.v4().replace(/-/g, "").substring(0, 6) + ".lbl";
 
-      Axios
-        .post("/barcode")
-        .then(response => {
-          FileDownload(data, name);
-        });
+      const uri = 'data:application/label; charset=utf-8; filename=' + name + '; disposition=inline,' + encodeURIComponent(data);
+
+      let ifrm = document.createElement("iframe");
+
+      ifrm.setAttribute("src", uri);
+
+      document
+        .body
+        .appendChild(ifrm);
+
+      setTimeout(function () {
+
+        document
+          .body
+          .removeChild(ifrm);
+
+      }, 1000);
 
     } else if (this.props.app.configs.action) {
 
@@ -3206,11 +3218,23 @@ class App extends Component {
 
     const name = uuid.v4().replace(/-/g, "").substring(0, 6) + ".lbl";
 
-    Axios
-      .post("/barcode")
-      .then(response => {
-        FileDownload(text, name);
-      });
+    const uri = 'data:application/label; charset=utf-8; filename=' + name + '; disposition=inline,' + encodeURIComponent(text);
+
+    let ifrm = document.createElement("iframe");
+
+    ifrm.setAttribute("src", uri);
+
+    document
+      .body
+      .appendChild(ifrm);
+
+    setTimeout(function () {
+
+      document
+        .body
+        .removeChild(ifrm);
+
+    }, 1000);
 
   }
 
