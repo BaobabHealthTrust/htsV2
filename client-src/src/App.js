@@ -1564,6 +1564,26 @@ class App extends Component {
 
   }
 
+  sendBarcode(uri) {
+
+    let ifrm = document.createElement("iframe");
+
+    ifrm.setAttribute("src", uri);
+
+    document
+      .body
+      .appendChild(ifrm);
+
+    setTimeout(function () {
+
+      document
+        .body
+        .removeChild(ifrm);
+
+    }, 1000);
+
+  }
+
   async submitForm() {
 
     if (this.props.app.sectionHeader === "Transcribe in Register") {
@@ -1619,21 +1639,7 @@ class App extends Component {
 
       const uri = 'data:application/label; charset=utf-8; filename=' + uuid.v4() + '.lbl; disposition=inline,' + encodeURIComponent(data);
 
-      let ifrm = document.createElement("iframe");
-
-      ifrm.setAttribute("src", uri);
-
-      document
-        .body
-        .appendChild(ifrm);
-
-      setTimeout(function () {
-
-        document
-          .body
-          .removeChild(ifrm);
-
-      }, 1000);
+      this.sendBarcode(uri);
 
     } else if (this.props.app.configs.action) {
 
@@ -3216,21 +3222,7 @@ class App extends Component {
 
     const uri = 'data:application/label; charset=utf-8; filename=' + uuid.v4() + '.lbl; disposition=inline,' + encodeURIComponent(text);
 
-    let ifrm = document.createElement("iframe");
-
-    ifrm.setAttribute("src", uri);
-
-    document
-      .body
-      .appendChild(ifrm);
-
-    setTimeout(function () {
-
-      document
-        .body
-        .removeChild(ifrm);
-
-    }, 1000);
+    this.sendBarcode(uri);
 
   }
 
