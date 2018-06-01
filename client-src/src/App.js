@@ -82,6 +82,7 @@ import tests from './config/tests';
 import locations from './config/pepfarLocations';
 import Axios from 'axios';
 import FileDownload from 'react-file-download';
+// eslint-disable-next-line
 import uuid from 'uuid';
 
 class App extends Component {
@@ -1631,16 +1632,6 @@ class App extends Component {
 
       }
 
-    } else if (this.props.app.sectionHeader === "Print Label") {
-
-      const label = this.props.wf.responses[this.state.currentWorkflow]["Label Text"];
-
-      const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB50,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
-
-      const uri = 'data:application/label; charset=utf-8; filename=' + uuid.v4() + '.lbl; disposition=inline,' + encodeURIComponent(data);
-
-      this.sendBarcode(uri);
-
     } else if (this.props.app.configs.action) {
 
       if (this.props.app.sectionHeader === "HTS Visit") {
@@ -2049,6 +2040,38 @@ class App extends Component {
 
     if (this.$("btnNext").className.match(/gray/i))
       return;
+
+    if (this.props.app.sectionHeader === "Print Label") {
+
+      const label = this.props.wf.responses[this.state.currentWorkflow]["Label Text"];
+
+      const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB50,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
+
+      const uri = 'data:application/label; charset=utf-8; filename=label.lbl; disposition=inline,' + encodeURIComponent(data);
+
+      this.sendBarcode(uri);
+
+      await this
+        .props
+        .clearCache();
+
+      await this
+        .props
+        .clearDataStructs();
+
+      ["primary", "secondary"].forEach(workflow => {
+        this
+          .props
+          .clearWorkflow(workflow);
+      });
+
+      this.props.updateApp({ sectionHeader: null });
+
+      this.switchPage("home");
+
+      return;
+
+    }
 
     if (this.props.wf && this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label && this.props.app.configs && this.props.app.configs[this.props.wf[this.state.currentWorkflow].currentNode.label] && Object.keys(this.props.app.configs[this.props.wf[this.state.currentWorkflow].currentNode.label]).indexOf("onUnLoad") >= 0) {
 
@@ -3218,9 +3241,9 @@ class App extends Component {
         ? "~"
         : "") + (String((new Date(data.date_of_birth))) !== "Invalid Date"
           ? (new Date(data.date_of_birth)).format("dd/mmm/YYYY")
-          : "") + "(" + data.gender + ")\"\nA40,142,0,2,2,2,N,\"" + data.residence + "\"\nP1\n";
+          : "") + "(" + (data.gender ? String(data.gender).substring(0, 1) : "") + ")\"\nA40,142,0,2,2,2,N,\"" + data.residence + "\"\nP1\n";
 
-    const uri = 'data:application/label; charset=utf-8; filename=' + uuid.v4() + '.lbl; disposition=inline,' + encodeURIComponent(text);
+    const uri = 'data:application/label; charset=utf-8; filename=label.lbl; disposition=inline,' + encodeURIComponent(text);
 
     this.sendBarcode(uri);
 
