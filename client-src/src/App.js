@@ -1564,6 +1564,26 @@ class App extends Component {
 
   }
 
+  sendBarcode(uri) {
+
+    let ifrm = document.createElement("iframe");
+
+    ifrm.setAttribute("src", uri);
+
+    document
+      .body
+      .appendChild(ifrm);
+
+    setTimeout(function () {
+
+      document
+        .body
+        .removeChild(ifrm);
+
+    }, 1000);
+
+  }
+
   async submitForm() {
 
     if (this.props.app.sectionHeader === "Transcribe in Register") {
@@ -1610,32 +1630,6 @@ class App extends Component {
         this.cancelSession();
 
       }
-
-    } else if (this.props.app.sectionHeader === "Print Label") {
-
-      const label = this.props.wf.responses[this.state.currentWorkflow]["Label Text"];
-
-      const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB50,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
-
-      const name = uuid.v4().replace(/-/g, "").substring(0, 6) + ".lbl";
-
-      const uri = 'data:application/label; charset=utf-8; filename=' + name + '; disposition=inline,' + encodeURIComponent(data);
-
-      let ifrm = document.createElement("iframe");
-
-      ifrm.setAttribute("src", uri);
-
-      document
-        .body
-        .appendChild(ifrm);
-
-      setTimeout(function () {
-
-        document
-          .body
-          .removeChild(ifrm);
-
-      }, 1000);
 
     } else if (this.props.app.configs.action) {
 
@@ -2045,6 +2039,38 @@ class App extends Component {
 
     if (this.$("btnNext").className.match(/gray/i))
       return;
+
+    if (this.props.app.sectionHeader === "Print Label") {
+
+      const label = this.props.wf.responses[this.state.currentWorkflow]["Label Text"];
+
+      const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB50,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
+
+      const uri = 'data:application/label; charset=utf-8; filename=label.lbl; disposition=inline,' + encodeURIComponent(data);
+
+      this.sendBarcode(uri);
+
+      await this
+        .props
+        .clearCache();
+
+      await this
+        .props
+        .clearDataStructs();
+
+      ["primary", "secondary"].forEach(workflow => {
+        this
+          .props
+          .clearWorkflow(workflow);
+      });
+
+      this.props.updateApp({ sectionHeader: null });
+
+      this.switchPage("home");
+
+      return;
+
+    }
 
     if (this.props.wf && this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label && this.props.app.configs && this.props.app.configs[this.props.wf[this.state.currentWorkflow].currentNode.label] && Object.keys(this.props.app.configs[this.props.wf[this.state.currentWorkflow].currentNode.label]).indexOf("onUnLoad") >= 0) {
 
