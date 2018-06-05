@@ -3,7 +3,7 @@ import './backdataEntry.css';
 import Keyboard from './keyboard';
 import icoSave from '../images/save.js';
 import icoClose from '../images/close.js';
-import algorithm from '../lib/dhaAlgorithm.js';
+// import algorithm from '../lib/dhaAlgorithm.js';
 import Button from './button';
 const alertsMapping = require('../config/alertsMapping.json');
 const checkData = require('../constraints').validate;
@@ -410,9 +410,49 @@ class BackdataEntry extends Component {
 
   }
 
+  checkIfUsernameValid(token) {
+
+    return new Promise(function (resolve, reject) {
+      // Do the usual XHR stuff
+      var req = new XMLHttpRequest();
+      req.open('GET', '/username_valid/' + token);
+
+      req.onload = function () {
+        // This is called even on 404 etc
+        // so check the status
+        if (req.status === 200) {
+          // Resolve the promise with the response text
+          if (JSON.parse(req.response).valid === true) {
+
+            resolve(true);
+
+          } else {
+
+            reject(false);
+
+          }
+        }
+        else {
+          // Otherwise reject with the status text
+          // which will hopefully be a meaningful error
+          reject(Error(req.statusText));
+        }
+      };
+
+      // Handle network errors
+      req.onerror = function () {
+        reject(Error("Network Error"));
+      };
+
+      // Make the request
+      req.send();
+    });
+
+  }
+
   validated() {
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
       if (!this.state.data["HTS Provider ID"]) {
 
@@ -430,7 +470,11 @@ class BackdataEntry extends Component {
 
         return reject();
 
-      } else if (this.state.data["HTS Provider ID"] && !algorithm.decode(this.state.data["HTS Provider ID"])) {
+      }
+
+      const valid = await this.checkIfUsernameValid(this.state.data["HTS Provider ID"]).catch((e) => { return false });
+
+      if (this.state.data["HTS Provider ID"] && !valid) {
 
         this
           .props
