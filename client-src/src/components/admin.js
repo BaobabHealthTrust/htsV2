@@ -3,6 +3,7 @@ import './admin.css';
 import icoRegisters from '../images/registers';
 import icoUsers from '../images/users';
 import icoPrint from '../images/print';
+import icoLocations from '../images/locations';
 
 class Admin extends Component {
 
@@ -47,6 +48,23 @@ class Admin extends Component {
             }} />
           <br />
           Manage Users
+        </div>
+        <div
+          className="sectionButton"
+          onMouseDown={() => {
+            this
+              .props
+              .addLocation()
+          }} id="btnAddLocation">
+          <img
+            src={icoLocations}
+            height="80"
+            alt=""
+            style={{
+              margin: "8px"
+            }} />
+          <br />
+          Add Location
         </div>
         <div
           className="sectionButton"

@@ -316,7 +316,8 @@ export default function appReducer(state = {
   firstSummary: false,
   secondSummary: false,
   reversing: false,
-  version: ""
+  version: "",
+  infoMessage: null
 }, action) {
 
   let newState,
@@ -395,7 +396,8 @@ export default function appReducer(state = {
         "isDirty",
         "firstSummary",
         "secondSummary",
-        "reversing"
+        "reversing",
+        "infoMessage"
       ].forEach((e) => {
 
         if (Object.keys(action.payload).indexOf(e) >= 0) {
@@ -832,6 +834,12 @@ export default function appReducer(state = {
       }
 
       newState.ignore = true;
+
+      if (action.payload && action.payload && action.payload.data && action.payload.data.message) {
+
+        newState.infoMessage = action.payload.data.message;
+
+      }
 
       return newState;
 

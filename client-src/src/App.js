@@ -1682,6 +1682,14 @@ class App extends Component {
 
       }
 
+      if (this.props.app.infoMessage !== null) {
+
+        await this.props.showInfoMsg("Info", this.props.app.infoMessage);
+
+        await this.props.updateApp({ infoMessage: null });
+
+      }
+
       await this
         .props
         .clearWorkflow(this.state.currentWorkflow)
@@ -3249,6 +3257,39 @@ class App extends Component {
 
   }
 
+  async addLocation() {
+
+    await this.setState({ currentWorkflow: "primary" });
+
+    await this.setState({
+      loaded: Object.assign({}, this.state.loaded, {
+        [this.state.currentWorkflow]: true
+      })
+    });
+
+    await this
+      .props
+      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Add Location"].data);
+
+    await this
+      .props
+      .updateApp({
+        selectedTask: "Add Location",
+        formActive: true,
+        currentSection: "add location",
+        configs: {
+          "Location Name": {
+            fieldType: "text"
+          },
+          action: "/add_location"
+        },
+        summaryIgnores: [],
+        sectionHeader: "Add Location",
+        fieldPos: 0
+      });
+
+  }
+
   render() {
 
     const nextLabel = (this.props.app.currentSection === "home" || this.props.app.currentSection === "registration"
@@ -4064,6 +4105,7 @@ class App extends Component {
                       printLabel={this
                         .printLabel
                         .bind(this)}
+                      addLocation={this.addLocation.bind(this)}
                       clearField={this.props.clearField.bind(this)} />
                   </div>
                 )}

@@ -2612,7 +2612,7 @@ module.exports = function (app) {
             obsId: obs.obsId
           };
 
-          if(String(value).trim().match(/^\d+$/)) {
+          if (String(value).trim().match(/^\d+$/)) {
 
             row.observationNumber = value;
 
@@ -4905,7 +4905,7 @@ module.exports = function (app) {
 
   router.get('/version', async function (req, res, next) {
 
-    const git = await runCmd("which git").catch(e => { 
+    const git = await runCmd("which git").catch(e => {
 
       return res.status(200).json({ version: "3.0.0" });
 
@@ -4917,15 +4917,64 @@ module.exports = function (app) {
 
         return res.status(200).json({ version: "3.0.0" });
 
-       });
+      });
 
       if (String(version).match(/^fatal/i)) {
 
         res.status(200).json({ version: "3.0.0" });
 
-      } 
+      }
 
-    } 
+    }
+
+  })
+
+  router.post('/add_location', async function (req, res, next) {
+
+    console.log(JSON.stringify(req.body));
+
+    const name = (req.body && req.body["Add Location"] && req.body["Add Location"]["Location Name"] ? req.body["Add Location"]["Location Name"] : undefined);
+
+    if (name === undefined)
+      return res.status(400).json({ error: true, message: "No valid location provided!" });
+
+    const existing = await Location.findOne(
+      {
+        where: {
+          name
+        }
+      }
+    );
+
+    if (existing)
+      return res.status(400).json({ error: true, message: "Location already exists!" });
+
+    const user = await Users.findOne({
+      where: {
+        username: req.body.user
+      }
+    });
+
+    const creator = user
+      ? user.id
+      : 1;
+
+    const dateCreated = (new Date());
+
+    const description = "HTS Location";
+
+    const result = await Location.create({
+      name,
+      description,
+      creator,
+      dateCreated,
+      retired: 0,
+      uuid: uuid.v4()
+    });
+
+    console.log(result);
+
+    res.status(200).json({ message: "Location added!" });
 
   })
 

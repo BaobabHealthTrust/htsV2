@@ -297,7 +297,8 @@ class Container extends Component {
           fetchVisitSummaries={this.props.fetchVisitSummaries}
           reports={this.props.reports}
           changePassword={this.props.changePassword}
-          printLabel={this.props.printLabel} />))
+          printLabel={this.props.printLabel}
+          addLocation={this.props.addLocation} />))
   }
   render() {
     return (

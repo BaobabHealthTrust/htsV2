@@ -59,7 +59,8 @@ class U4 extends Component {
                           ? <Admin
                               updateApp={this.props.updateApp}
                               switchTab={this.props.switchTab}
-                              printLabel={this.props.printLabel}/>
+                              printLabel={this.props.printLabel}
+                              addLocation={this.props.addLocation}/>
                           : this.props.currentTab === "manage registers"
                             ? <ManageRegisters
                                 updateApp={this.props.updateApp}
