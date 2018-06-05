@@ -3,7 +3,7 @@ import './findEnteredRecord.css';
 import Keyboard from './keyboard';
 import icoSave from '../images/save.js';
 import icoClose from '../images/close.js';
-import algorithm from '../lib/dhaAlgorithm.js';
+// import algorithm from '../lib/dhaAlgorithm.js';
 import Button from './button';
 const alertsMapping = require('../config/alertsMapping.json');
 const checkData = require('../constraints').validate;
@@ -246,9 +246,49 @@ class FindEnteredRecord extends Component {
 
   }
 
+  checkIfUsernameValid(token) {
+
+    return new Promise(function (resolve, reject) {
+      // Do the usual XHR stuff
+      var req = new XMLHttpRequest();
+      req.open('GET', '/username_valid/' + token);
+
+      req.onload = function () {
+        // This is called even on 404 etc
+        // so check the status
+        if (req.status === 200) {
+          // Resolve the promise with the response text
+          if (JSON.parse(req.response).valid === true) {
+
+            resolve(true);
+
+          } else {
+
+            reject(false);
+
+          }
+        }
+        else {
+          // Otherwise reject with the status text
+          // which will hopefully be a meaningful error
+          reject(Error(req.statusText));
+        }
+      };
+
+      // Handle network errors
+      req.onerror = function () {
+        reject(Error("Network Error"));
+      };
+
+      // Make the request
+      req.send();
+    });
+
+  }
+
   validated(data) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
       if (!data["HTS Provider ID"]) {
 
@@ -258,7 +298,11 @@ class FindEnteredRecord extends Component {
 
         return reject();
 
-      } else if (data["HTS Provider ID"] && !algorithm.decode(data["HTS Provider ID"])) {
+      }
+
+      const valid = await this.checkIfUsernameValid(data["HTS Provider ID"]).catch((e) => { return false });
+
+      if (data["HTS Provider ID"] && !valid) {
 
         this
           .props
@@ -748,7 +792,7 @@ class FindEnteredRecord extends Component {
 
     const fieldTypes = {
       1: {
-        type: "text",
+        type: "dha",
         hiddens: [],
         textCase: "UPPER"
       },
