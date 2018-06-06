@@ -218,9 +218,9 @@ class UserManagement extends Component {
                           ? "gray"
                           : "blue"}
                         handleMouseDown={() => { this.fetchUsers(this.props.app.pages) }} />
-                      <Button label="Find by Username"
+                      {/*<Button label="Find by Username"
                         buttonClass={"blue"}
-                        handleMouseDown={() => { }} />
+                        handleMouseDown={() => { this.props.findUser() }} />*/}
                     </div>
                   </td>
                 </tr>

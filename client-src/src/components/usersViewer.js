@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './usersViewer.css';
 import UserManagement from './userManagement';
 import U14 from './u14';
@@ -47,10 +47,10 @@ class UsersViewer extends Component {
     return (
       <div
         style={{
-        overflow: "auto",
-        padding: "0px",
-        height: "calc(100vh - 122px)"
-      }}>
+          overflow: "auto",
+          padding: "0px",
+          height: "calc(100vh - 122px)"
+        }}>
         <CustomComponent
           label={this.props.label}
           responses={this.props.responses}
@@ -95,33 +95,34 @@ class UsersViewer extends Component {
           fetchUsers={this.props.fetchUsers}
           blockUser={this.props.blockUser}
           activateUser={this.props.activateUser}
-          editUser={this.props.editUser}/>
+          editUser={this.props.editUser}
+          findUser={this.props.findUser} />
 
         <div
           style={{
-          position: "absolute",
-          bottom: "90px",
-          textAlign: "center",
-          width: "calc(100% - 10px)",
-          left: "5px"
-        }}>
+            position: "absolute",
+            bottom: "90px",
+            textAlign: "center",
+            width: "calc(100% - 10px)",
+            left: "5px"
+          }}>
           {((((this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].options) || this.props.options || []).length <= 0) && !(this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].fieldType === "barcode")) && this.props.formActive && this.props.type !== "exit" && (this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].fieldType !== undefined
             ? this.props.configs[this.props.label].fieldType
             : "") !== "" && ((this.props.activeWorkflow === "secondary" && !this.props.app.secondSummary) || (this.props.activeWorkflow === "primary" && !this.props.app.firstSummary))
             ? <Keyboard
-                onChangeHandler={this
+              onChangeHandler={this
                 .onChangeHandler
                 .bind(this)}
-                currentString={(this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label]
+              currentString={(this.props.responses[this.props.group] && this.props.responses[this.props.group][this.props.label]
                 ? this.props.responses[this.props.group][this.props.label]
                 : "")}
-                configs={this.props.configs}
-                options={this.props.options}
-                label={this.props.label}
-                responses={this.props.responses[this.props.group]}
-                fieldType={this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].fieldType !== undefined
+              configs={this.props.configs}
+              options={this.props.options}
+              label={this.props.label}
+              responses={this.props.responses[this.props.group]}
+              fieldType={this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].fieldType !== undefined
                 ? this.props.configs[this.props.label].fieldType
-                : "text"}/>
+                : "text"} />
             : ""}
         </div>
 

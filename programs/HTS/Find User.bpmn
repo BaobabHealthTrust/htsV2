@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bonitaConnector="http://www.bonitasoft.org/studio/connector/definition/6.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di_1="http://www.omg.org/spec/DD/20100524/DI" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:model="http://www.omg.org/spec/BPMN/20100524/MODEL" xsi:schemaLocation="schemaLocation http://www.omg.org/spec/BPMN/20100524/MODEL schemas/BPMN20.xsd" exporter="BonitaSoft" exporterVersion="7.6.3" expressionLanguage="http://groovy.apache.org/" targetNamespace="http://bonitasoft.com/_5XawcGmTEeitvZapdwy9Ww">
+  <model:collaboration id="_5XawcGmTEeitvZapdwy9Ww">
+    <model:participant id="_AXsVQGmUEeitvZapdwy9Ww" name="Find User" processRef="_5XawcWmTEeitvZapdwy9Ww"/>
+    <model:participant id="_5XawnWmTEeitvZapdwy9Ww" name="Employee actor">
+      <model:documentation>This is an example of actor that is mapped to any ACME users</model:documentation>
+    </model:participant>
+  </model:collaboration>
+  <model:process id="_5XawcWmTEeitvZapdwy9Ww" name="Find User">
+    <model:ioSpecification id="_AYEvwGmUEeitvZapdwy9Ww">
+      <model:inputSet id="_AYFW0GmUEeitvZapdwy9Ww"/>
+      <model:outputSet id="_AYF94GmUEeitvZapdwy9Ww"/>
+    </model:ioSpecification>
+    <model:laneSet id="Find User_laneSet">
+      <model:lane id="_5XawcmmTEeitvZapdwy9Ww" name="Find User lane">
+        <model:flowNodeRef>_5Xawc2mTEeitvZapdwy9Ww</model:flowNodeRef>
+        <model:flowNodeRef>_5XaweGmTEeitvZapdwy9Ww</model:flowNodeRef>
+        <model:flowNodeRef>_5XawgmmTEeitvZapdwy9Ww</model:flowNodeRef>
+      </model:lane>
+    </model:laneSet>
+    <model:startEvent id="_5Xawc2mTEeitvZapdwy9Ww" name="Start"/>
+    <model:task id="_5XaweGmTEeitvZapdwy9Ww" name="Find User"/>
+    <model:endEvent id="_5XawgmmTEeitvZapdwy9Ww" name="End1"/>
+    <model:sequenceFlow id="_5Xawl2mTEeitvZapdwy9Ww" name="" sourceRef="_5Xawc2mTEeitvZapdwy9Ww" targetRef="_5XaweGmTEeitvZapdwy9Ww"/>
+    <model:sequenceFlow id="_5XawmmmTEeitvZapdwy9Ww" name="" sourceRef="_5XaweGmTEeitvZapdwy9Ww" targetRef="_5XawgmmTEeitvZapdwy9Ww"/>
+  </model:process>
+  <di:BPMNDiagram name="Find User">
+    <di:BPMNPlane id="plane__5XawcGmTEeitvZapdwy9Ww" bpmnElement="_5XawcGmTEeitvZapdwy9Ww">
+      <di:BPMNShape id="_5XawuGmTEeitvZapdwy9Ww" bpmnElement="_AXsVQGmUEeitvZapdwy9Ww" isHorizontal="true">
+        <dc:Bounds height="250.0" width="1615.0" x="0.0" y="0.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_5Xawu2mTEeitvZapdwy9Ww" bpmnElement="_5XawcmmTEeitvZapdwy9Ww" isHorizontal="true">
+        <dc:Bounds height="250.0" width="1585.0" x="30.0" y="0.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_5XawvmmTEeitvZapdwy9Ww" bpmnElement="_5Xawc2mTEeitvZapdwy9Ww">
+        <dc:Bounds height="30.0" width="30.0" x="90.0" y="68.0"/>
+        <di:BPMNLabel id="_AYNSoGmUEeitvZapdwy9Ww" labelStyle="_AYMrkGmUEeitvZapdwy9Ww">
+          <dc:Bounds height="17.0" width="34.0" x="88.0" y="103.0"/>
+        </di:BPMNLabel>
+      </di:BPMNShape>
+      <di:BPMNShape id="_5XawwmmTEeitvZapdwy9Ww" bpmnElement="_5XaweGmTEeitvZapdwy9Ww">
+        <dc:Bounds height="50.0" width="100.0" x="190.0" y="60.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_5XawxWmTEeitvZapdwy9Ww" bpmnElement="_5XawgmmTEeitvZapdwy9Ww">
+        <dc:Bounds height="30.0" width="30.0" x="379.0" y="70.0"/>
+        <di:BPMNLabel id="_AYQ9AGmUEeitvZapdwy9Ww" labelStyle="_AYMrkGmUEeitvZapdwy9Ww">
+          <dc:Bounds height="17.0" width="35.0" x="377.0" y="105.0"/>
+        </di:BPMNLabel>
+      </di:BPMNShape>
+      <di:BPMNEdge id="_5Xaw1GmTEeitvZapdwy9Ww" bpmnElement="_5Xawl2mTEeitvZapdwy9Ww">
+        <di_1:waypoint x="120.0" y="84.0"/>
+        <di_1:waypoint x="190.0" y="84.0"/>
+        <di:BPMNLabel/>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_5Xaw2WmTEeitvZapdwy9Ww" bpmnElement="_5XawmmmTEeitvZapdwy9Ww">
+        <di_1:waypoint x="290.0" y="85.0"/>
+        <di_1:waypoint x="379.0" y="85.0"/>
+        <di:BPMNLabel/>
+      </di:BPMNEdge>
+    </di:BPMNPlane>
+    <di:BPMNLabelStyle id="_AYMrkGmUEeitvZapdwy9Ww">
+      <dc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Ubuntu" size="9.0"/>
+    </di:BPMNLabelStyle>
+  </di:BPMNDiagram>
+</model:definitions>

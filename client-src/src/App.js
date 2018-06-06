@@ -3291,6 +3291,40 @@ class App extends Component {
 
   }
 
+  async findUser() {
+
+    await this.setState({ currentWorkflow: "primary" });
+
+    await this.setState({
+      loaded: Object.assign({}, this.state.loaded, {
+        [this.state.currentWorkflow]: true
+      })
+    });
+
+    await this
+      .props
+      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Find User"].data);
+
+    await this
+      .props
+      .updateApp({
+        selectedTask: "Find User",
+        formActive: true,
+        currentSection: "find user",
+        configs: {
+          "Username": {
+            fieldType: "dha",
+            textCase: "upper"
+          },
+          action: "/find_user"
+        },
+        summaryIgnores: [],
+        sectionHeader: "Find User",
+        fieldPos: 0
+      });
+
+  }
+
   render() {
 
     const nextLabel = (this.props.app.currentSection === "home" || this.props.app.currentSection === "registration"
@@ -3880,7 +3914,8 @@ class App extends Component {
                   fetchUsers={this
                     .props
                     .fetchUsers
-                    .bind(this)} />
+                    .bind(this)}
+                  findUser={this.findUser.bind(this)} />
                 : (
                   <div>
                     <Topbar
