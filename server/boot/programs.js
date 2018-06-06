@@ -4931,7 +4931,7 @@ module.exports = function (app) {
 
   router.post('/add_location', async function (req, res, next) {
 
-    console.log(JSON.stringify(req.body));
+    debug(JSON.stringify(req.body));
 
     const name = (req.body && req.body["Add Location"] && req.body["Add Location"]["Location Name"] ? req.body["Add Location"]["Location Name"] : undefined);
 
@@ -4972,7 +4972,7 @@ module.exports = function (app) {
       uuid: uuid.v4()
     });
 
-    console.log(result);
+    debug(result);
 
     res.status(200).json({ message: "Location added!" });
 

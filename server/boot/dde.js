@@ -130,7 +130,7 @@ module.exports = function (app) {
 
     })
 
-  })
+  });
 
   router.post('/dde/add_user', function (req, res, next) {
 
