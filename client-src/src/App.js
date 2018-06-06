@@ -4459,7 +4459,7 @@ const mapDispatchToProps = dispatch => {
     sessionValid: async (token) => {
       return await dispatch(sessionValid(token));
     },
-    fetchUsers: async (page = 1, pageSize = 10) => {
+    fetchUsers: async (page = 1, pageSize = 6) => {
       return await dispatch(fetchUsers(page, pageSize));
     },
     blockUser: async (username) => {

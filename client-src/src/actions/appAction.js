@@ -164,7 +164,7 @@ export function sessionValid(token) {
 
 }
 
-export function fetchUsers(page = 1, pageSize = 10) {
+export function fetchUsers(page = 1, pageSize = 6) {
 
   const API_KEY = "";
   const END_POINT = '/users/list?page=' + page + "&pageSize=" + pageSize;

@@ -1242,7 +1242,9 @@ export default function appReducer(state = {
     case "FETCH_USERS_FULFILLED":
 
       newState = Object.assign({}, state, {
-        usersList: action.payload.data,
+        usersList: action.payload.data.users,
+        page: action.payload.data.page,
+        pages: action.payload.data.pages,
         processing: false
       });
 

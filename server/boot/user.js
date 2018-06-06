@@ -552,12 +552,12 @@ module.exports = function (app) {
 
     const query = url_parts.query;
 
-    const page = (query.page
+    const page = parseInt((query.page
       ? query.page
-      : 1);
+      : 1), 10);
     const pageSize = (query.pageSize
       ? query.pageSize
-      : 10);
+      : 6);
 
     const skip = (pageSize * (page - 1));
 
@@ -567,11 +567,22 @@ module.exports = function (app) {
       include: ['person', 'roles', 'users']
     }, async (err, users) => {
 
+      const total = await User.count({
+        skip,
+        include: ['person', 'roles', 'users']
+      });
+
+      debug(total);
+
+      const pages = Math.ceil(total / pageSize);
+
       if (err) {
 
         debug(err);
 
-        return [];
+        return res
+          .status(200)
+          .json({ users: [], page, pages });
 
       }
 
@@ -605,7 +616,7 @@ module.exports = function (app) {
 
       res
         .status(200)
-        .json(json);
+        .json({ users: json, page, pages });
 
     })
 
