@@ -2368,7 +2368,15 @@ module.exports = function (app) {
 
     let encounterId = encounter.encounterId;
 
-    let registerMap = await HtsRegisterEncounterMapping.create({ encounterId, registerId: registerNumber });
+    const register = await HtsRegister.findOne({
+      where: {
+        registerNumber
+      }
+    });
+
+    const registerId = (register ? register.registerId : undefined);
+
+    let registerMap = await HtsRegisterEncounterMapping.create({ encounterId, registerId });
 
     if (!clinicId)
       clinicId = await generateEntryCode(personId, currentUser, currentLocationName, "EC", encounterId);
@@ -3169,8 +3177,19 @@ module.exports = function (app) {
                 }
               })
 
-              if (existingMap.length <= 0)
-                await HtsRegisterEncounterMapping.create({ encounterId: hit._source.encounterId, registerId: registerNumber });
+              if (existingMap.length <= 0) {
+
+                const register = await HtsRegister.findOne({
+                  where: {
+                    registerNumber
+                  }
+                });
+
+                const registerId = (register ? register.registerId : undefined);
+
+                await HtsRegisterEncounterMapping.create({ encounterId: hit._source.encounterId, registerId });
+
+              }
 
               args = {
                 data: Object.assign({}, hit._source, { registerNumber, locationType, serviceDeliveryPoint }),
