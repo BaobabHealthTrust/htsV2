@@ -385,7 +385,7 @@
     "replaceOnPUT": true,
     "idInjection": false,
     "mysql": {
-      "schema": "hts",
+      "schema": "openmrs",
       "table": "location"
     }
   }

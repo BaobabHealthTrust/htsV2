@@ -70,7 +70,7 @@
     "replaceOnPUT": true,
     "idInjection": false,
     "mysql": {
-      "schema": "hts",
+      "schema": "openmrs",
       "table": "scheduler_task_config_property"
     }
   }

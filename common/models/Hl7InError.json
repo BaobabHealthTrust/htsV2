@@ -130,7 +130,7 @@
     "replaceOnPUT": true,
     "idInjection": false,
     "mysql": {
-      "schema": "hts",
+      "schema": "openmrs",
       "table": "hl7_in_error"
     }
   }

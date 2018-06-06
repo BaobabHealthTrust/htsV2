@@ -40,7 +40,7 @@
     "replaceOnPUT": true,
     "idInjection": false,
     "mysql": {
-      "schema": "hts",
+      "schema": "openmrs",
       "table": "hts_register_location_type"
     }
   }

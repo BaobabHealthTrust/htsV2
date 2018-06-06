@@ -56,7 +56,7 @@
     "replaceOnPUT": true,
     "idInjection": false,
     "mysql": {
-      "schema": "hts",
+      "schema": "openmrs",
       "table": "user_property"
     }
   }
