@@ -4980,7 +4980,7 @@ module.exports = function (app) {
 
     const dateCreated = (new Date());
 
-    const description = "HTS Location";
+    const description = "HTS location";
 
     const result = await Location.create({
       name,
@@ -4994,6 +4994,40 @@ module.exports = function (app) {
     debug(result);
 
     res.status(200).json({ message: "Location added!" });
+
+  })
+
+  router.get('/list_locations', async function (req, res, next) {
+
+    debug(req.query);
+
+    const results = await Location.find(
+      {
+        where: {
+          and: [
+            {
+              name: {
+                like: (req.query && req.query.name ? req.query.name : "") + '%'
+              }
+            },
+            {
+              description: 'HTS Location'
+            }
+          ]
+        }
+      })
+      .then((data) => {
+
+        return data.map(e => { return e.name });
+
+      })
+      .catch(e => {
+        return []
+      });
+
+    debug(JSON.stringify(results));
+
+    res.status(200).json(results);
 
   })
 

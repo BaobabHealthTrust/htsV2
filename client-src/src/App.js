@@ -3222,7 +3222,8 @@ class App extends Component {
         currentSection: "user management",
         configs: {
           "Label Text": {
-            fieldType: "text"
+            fieldType: "text",
+            ajaxURL: "/list_locations?name="
           },
           action: null
         },
