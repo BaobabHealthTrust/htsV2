@@ -1593,9 +1593,10 @@ module.exports = function (app) {
       primaryId = json.primaryId;
     }
 
-    const today = (json.date
+    const today = new Date().format("d/mmm/YYYY"); 
+    /*(json.date
       ? new Date(json.date)
-      : new Date()).format("d/mmm/YYYY");
+      : new Date()).format("d/mmm/YYYY")*/;
 
     const programName = json.program;
 
