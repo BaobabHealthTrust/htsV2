@@ -1592,6 +1592,8 @@ class App extends Component {
 
   async submitForm() {
 
+    await this.props.updateApp({ processing: true });
+
     if (this.props.app.sectionHeader === "Transcribe in Register") {
 
       await this
@@ -3408,9 +3410,14 @@ class App extends Component {
           : false)
       }, {
         id: "btnNext",
-        buttonClass: (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].data
-          ? "green nav-buttons"
-          : (this.props.app.sectionHeader === "Find or Register Client" && Object.keys(this.props.app.currentPatient).length > 0 ? "green nav-buttons" : "gray nav-buttons")),
+        buttonClass: (this.props.app.processing ?
+          "gray nav-buttons" :
+          (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] &&
+            this.props.app.data[this.props.app.module]["PatientRegistration"] &&
+            this.props.app.data[this.props.app.module]["PatientRegistration"].data
+            ? "green nav-buttons"
+            : (this.props.app.sectionHeader === "Find or Register Client" &&
+              Object.keys(this.props.app.currentPatient).length > 0 ? "green nav-buttons" : "gray nav-buttons"))),
         onMouseDown: () => {
           this.handleNextButtonClicks();
         },
