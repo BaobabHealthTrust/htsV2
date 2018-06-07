@@ -903,8 +903,11 @@ class App extends Component {
   async navNext(value) {
 
     if (this.props.app.currentSection === "home" && !this.props.app.formActive) {
+
       this.switchPage("patient");
+
     } else if (this.props.app.formActive) {
+
       const valid = await validated(this.props, this.state);
 
       if (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "Service Delivery Point" && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Service Delivery Point"]) {
@@ -952,6 +955,7 @@ class App extends Component {
           .updateApp({ formActive: false, selectedTask: "" });
 
       }
+
     } else {
 
       this.switchPage("home");
@@ -961,6 +965,7 @@ class App extends Component {
   }
 
   handleOnKeyDown(event) {
+
     const valid = validated(this.props, this.state);
 
     if (event.keyCode === 13 && valid.valid) {
@@ -2050,6 +2055,18 @@ class App extends Component {
       return;
 
     if (this.props.app.sectionHeader === "Print Label") {
+
+      const valid = await validated(this.props, this.state);
+
+      if (!valid.valid) {
+
+        this
+          .props
+          .showErrorMsg((valid.title ? valid.title : "Invalid Entry"), valid.message);
+
+        return;
+
+      }
 
       const label = this.props.wf.responses[this.state.currentWorkflow]["Label Text"];
 
@@ -3223,7 +3240,8 @@ class App extends Component {
         configs: {
           "Label Text": {
             fieldType: "text",
-            ajaxURL: "/list_locations?name="
+            ajaxURL: "/list_locations?name=",
+            lockList: true
           },
           action: null
         },
