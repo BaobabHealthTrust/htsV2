@@ -45,7 +45,8 @@
           }
         },
         "dateOfBirth": {
-          "type": "date"
+          "type": "date",
+          "format" : "YYYY-MM-dd"
         },
         "districtOfOrigin": {
           "type": "text",
@@ -133,10 +134,12 @@
           }
         },
         "dateOfBirth": {
-          "type": "date"
+          "type": "date",
+          "format" : "YYYY-MM-dd"
         },
         "visitDate": {
-          "type": "date"
+          "type": "date",
+          "format" : "YYYY-MM-dd"
         },
         "encounterId": {
           "type": "text"
@@ -246,7 +249,8 @@
     "register": {
       "properties": {
         "dateCreated": {
-          "type": "date"
+          "type": "date",
+          "format" : "YYYY-MM-dd"
         },
         "locationType": {
           "type": "text",
@@ -331,7 +335,8 @@
           }
         },
         "visitDate": {
-          "type": "date"
+          "type": "date",
+          "format" : "YYYY-MM-dd"
         },
         "entryCode": {
           "type": "text",

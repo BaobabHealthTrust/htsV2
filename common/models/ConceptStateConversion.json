@@ -85,7 +85,7 @@
     "replaceOnPUT": true,
     "idInjection": false,
     "mysql": {
-      "schema": "openmrs",
+      "schema": "hts",
       "table": "concept_state_conversion"
     }
   }

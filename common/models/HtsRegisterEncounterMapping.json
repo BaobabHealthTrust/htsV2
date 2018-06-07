@@ -55,7 +55,7 @@
     "replaceOnPUT": true,
     "idInjection": false,
     "mysql": {
-      "schema": "openmrs",
+      "schema": "hts",
       "table": "hts_register_encounter_mapping"
     }
   }

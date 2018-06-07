@@ -44,7 +44,7 @@
     "replaceOnPUT": true,
     "idInjection": false,
     "mysql": {
-      "schema": "openmrs",
+      "schema": "hts",
       "table": "logic_token_registration_tag"
     }
   }

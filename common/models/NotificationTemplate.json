@@ -130,7 +130,7 @@
     "replaceOnPUT": true,
     "idInjection": false,
     "mysql": {
-      "schema": "openmrs",
+      "schema": "hts",
       "table": "notification_template"
     }
   }

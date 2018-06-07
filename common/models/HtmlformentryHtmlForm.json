@@ -145,7 +145,7 @@
     "replaceOnPUT": true,
     "idInjection": false,
     "mysql": {
-      "schema": "openmrs",
+      "schema": "hts",
       "table": "htmlformentry_html_form"
     }
   }

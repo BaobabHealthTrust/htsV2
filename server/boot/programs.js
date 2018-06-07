@@ -1593,7 +1593,7 @@ module.exports = function (app) {
       primaryId = json.primaryId;
     }
 
-    const today = new Date().format("d/mmm/YYYY"); 
+    const today = new Date().format("YYYY-mm-dd");
     /*(json.date
       ? new Date(json.date)
       : new Date()).format("d/mmm/YYYY")*/;
@@ -1684,7 +1684,7 @@ module.exports = function (app) {
     });
 
     let dateOfBirth = person
-      ? person.birthdate
+      ? (new Date(person.birthdate)).format("YYYY-mm-dd")
       : null;
 
     let encounterName = "HTS Visit";
@@ -1818,7 +1818,7 @@ module.exports = function (app) {
           if (["HTS Referral Slips Recipients"].indexOf(name) < 0) {
 
             let row = {
-              visitDate: new Date(today),
+              visitDate: (new Date(today)).format("YYYY-mm-dd"),
               encounterType: encType.name,
               identifier: clinicId,
               observation: name,
@@ -1846,7 +1846,11 @@ module.exports = function (app) {
               }
             };
 
-            new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) { });
+            new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) {
+
+              debug(JSON.stringify(result));
+
+            });
 
           }
 
@@ -2455,7 +2459,7 @@ module.exports = function (app) {
                   });
 
                   let row = {
-                    visitDate: new Date(today),
+                    visitDate: (new Date(today)).format("YYYY-mm-dd"),
                     encounterType: encType.name,
                     identifier: clinicId,
                     observation: conceptName,
@@ -2603,7 +2607,7 @@ module.exports = function (app) {
           }
 
           let row = {
-            visitDate: new Date(today),
+            visitDate: (new Date(today)).format("YYYY-mm-dd"),
             encounterType: encType.name,
             identifier: clinicId,
             observation: conceptname,
@@ -2703,7 +2707,7 @@ module.exports = function (app) {
             month: monthNames[(new Date(today)).getMonth()],
             year: (new Date(today)).getFullYear(),
             age,
-            visitDate: (new Date(today)),
+            visitDate: (new Date(today)).format("YYYY-mm-dd"),
             entryCode: clinicId,
             htsSetting,
             htsModality,
@@ -3503,7 +3507,7 @@ module.exports = function (app) {
         locationTypeId: locationType.locationTypeId,
         serviceDeliveryPointId: serviceDeliveryPoint.serviceDeliveryPointId,
         closed: 0,
-        dateCreated: (new Date()),
+        dateCreated: (new Date()).format("YYYY-mm-dd"),
         createdBy: user.id,
         uuid: uuid.v4()
       })
@@ -3513,7 +3517,7 @@ module.exports = function (app) {
           registerNumber: parseInt(json['Register Number'], 10),
           locationType: json['Location Type'],
           serviceDeliveryPoint: json['Service Delivery Point'],
-          dateCreated: register.dateCreated
+          dateCreated: (new Date(register.dateCreated)).format("YYYY-mm-dd")
         },
         headers: {
           "Content-Type": "application/json"
