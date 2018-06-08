@@ -103,9 +103,11 @@ const loadDataType = async (dataType, data) => {
 
 const loadConceptNames = async (data) => {
 
-  for (let e of data) {
+  let result;
 
-    let result;
+  result = await runCmd("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'INSERT INTO concept_name_tag (tag, description, creator, date_created, uuid) VALUES (\"preferred_hts\", \"HTS concept names tag\", 1, NOW(), (SELECT UUID()))'").catch(e => { console.log(e) });
+
+  for (let e of data) {
 
     debug("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT * FROM concept_name WHERE name = \"" + e + "\" LIMIT 1'");
 
@@ -119,7 +121,7 @@ const loadConceptNames = async (data) => {
         " uuid) VALUES (0, 4, 11, 1, NOW(), (SELECT UUID())); SELECT @id := LAST_INSERT_I" +
         "D(); INSERT INTO concept_name (concept_id, name, locale, creator, date_created, " +
         "voided, uuid, concept_name_type) VALUES (@id, \"" + e + "\", \"en\", (SELECT user_id FROM users LIMIT 1), NOW(), 0, (SELECT UUID()), \"FU" +
-        "LLY_SPECIFIED\")'").catch(e => { console.log(e) });
+        "LLY_SPECIFIED\"); INSERT INTO concept_name_tag_map VALUES ((SELECT last_insert_id()), (SELECT concept_name_tag_id FROM concept_name_tag WHERE tag = \"preferred_hts\"))'").catch(e => { console.log(e) });
 
       console.log("Added concept:" + e);
 

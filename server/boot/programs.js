@@ -2273,7 +2273,7 @@ module.exports = function (app) {
 
     let age = ((new Date(today)) - (new Date(birthdate))) / (365.0 * 24.0 * 60.0 * 60.0 * 1000.0);
 
-    let buffer = {
+    /*let buffer = {
       otherId: clinicId,
       otherIdType: "Entry code",
       age,
@@ -2288,7 +2288,7 @@ module.exports = function (app) {
       }
     };
 
-    new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/patient/" + clinicId, args, function (result) { });
+    new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/patient/" + clinicId, args, function (result) { });*/
 
     let programId = program
       ? program.programId
