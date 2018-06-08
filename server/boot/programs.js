@@ -742,138 +742,137 @@ module.exports = function (app) {
   }
 
   /* GET home page. */
-  router
-    .get("/programs", function (req, res, next) {
+  router.get("/programs", function (req, res, next) {
 
-      const url_parts = url.parse(req.url, true);
+    const url_parts = url.parse(req.url, true);
 
-      const query = url_parts.query;
+    const query = url_parts.query;
 
-      const role = query.role
-        ? query.role
-        : "regular";
+    const role = query.role
+      ? query.role
+      : "regular";
 
-      const programs = [];
+    const programs = [];
 
-      const root = path.resolve(".", "programs");
+    const root = path.resolve(".", "programs");
 
-      if (fs.existsSync(root)) {
-        const folders = glob.sync(root + "/*");
+    if (fs.existsSync(root)) {
+      const folders = glob.sync(root + "/*");
 
-        folders.map(f => {
-          return f.match(/([^\/]+)$/)[1];
-        }).filter(f => {
+      folders.map(f => {
+        return f.match(/([^\/]+)$/)[1];
+      }).filter(f => {
 
-          switch (role.toLowerCase()) {
+        switch (role.toLowerCase()) {
 
-            case "admin":
+          case "admin":
 
-              // return true;
+            // return true;
 
-              return f
+            return f
+              .toLowerCase()
+              .trim() !== "registration" && f
                 .toLowerCase()
-                .trim() !== "registration" && f
-                  .toLowerCase()
-                  .trim() !== "user management";
+                .trim() !== "user management";
 
-            case "hts coordinator":
+          case "hts coordinator":
 
-              return f
+            return f
+              .toLowerCase()
+              .trim() !== "registration" && f
                 .toLowerCase()
-                .trim() !== "registration" && f
-                  .toLowerCase()
-                  .trim() !== "user management";
+                .trim() !== "user management";
 
-            case "counselor":
+          case "counselor":
 
-              return f
+            return f
+              .toLowerCase()
+              .trim() === "hts" && f
                 .toLowerCase()
-                .trim() === "hts" && f
-                  .toLowerCase()
-                  .trim() !== "user management";
+                .trim() !== "user management";
 
-            default:
+          default:
 
-              return f
+            return f
+              .toLowerCase()
+              .trim() === "registration" && f
                 .toLowerCase()
-                .trim() === "registration" && f
-                  .toLowerCase()
-                  .trim() !== "user management";
+                .trim() !== "user management";
 
-          }
+        }
 
-        }).forEach(folder => {
-          let icon = "";
+      }).forEach(folder => {
+        let icon = "";
 
-          if (fs.existsSync(path.resolve(root, folder, "icon.png"))) {
-            const file = path.resolve(root, folder, "icon.png");
+        if (fs.existsSync(path.resolve(root, folder, "icon.png"))) {
+          const file = path.resolve(root, folder, "icon.png");
 
-            const bitmap = fs.readFileSync(file);
+          const bitmap = fs.readFileSync(file);
 
-            icon = "data:image/png;base64," + new Buffer(bitmap).toString("base64");
-          }
+          icon = "data:image/png;base64," + new Buffer(bitmap).toString("base64");
+        }
 
-          const taskList = glob.sync(root + "/" + folder + "/*.json");
+        const taskList = glob.sync(root + "/" + folder + "/*.json");
 
-          const tasks = taskList.map(f => {
-            return {
-              label: f.match(/([^\/]+)\.json$/)[1],
-              url: "/" + f
-                .match(/([^\/]+)\.json$/)[1]
-                .trim()
-                .toLowerCase()
-                .replace(/\s|\-/g, "_"),
-              path: f,
-              done: false
-            };
-          });
-
-          const userFile = path.resolve(root, folder, "userTasks.tsk");
-
-          debug(userFile);
-
-          let userDashTasks = fs.existsSync(userFile)
-            ? JSON.parse(fs.readFileSync(userFile).toString("utf8"))[role]
-            : [];
-
-          if (!userDashTasks || (userDashTasks && userDashTasks.length <= 0)) {
-
-            userDashTasks = JSON.parse(fs.readFileSync(userFile).toString("utf8"))['regular'];
-
-          }
-
-          const entry = {
-            name: folder,
-            icon: icon,
-            tasks: tasks,
-            visits: [],
-            userDashTasks: userDashTasks
+        const tasks = taskList.map(f => {
+          return {
+            label: f.match(/([^\/]+)\.json$/)[1],
+            url: "/" + f
+              .match(/([^\/]+)\.json$/)[1]
+              .trim()
+              .toLowerCase()
+              .replace(/\s|\-/g, "_"),
+            path: f,
+            done: false
           };
-
-          programs.push(entry);
         });
-      }
 
-      const json = {
-        patientActivated: false,
-        formActive: false,
-        module: "",
-        icon: "",
-        tasks: [],
-        selectedTask: "",
-        selectedVisit: "",
-        today: new Date().format("d mmm YYYY"),
-        facility: site.facility,
-        location: query.location,
-        currentSection: "home",
-        programs: programs,
-        userDashTasks: []
-      };
+        const userFile = path.resolve(root, folder, "userTasks.tsk");
 
-      res
-        .status(200)
-        .json(json);
-    });
+        debug(userFile);
+
+        let userDashTasks = fs.existsSync(userFile)
+          ? JSON.parse(fs.readFileSync(userFile).toString("utf8"))[role]
+          : [];
+
+        if (!userDashTasks || (userDashTasks && userDashTasks.length <= 0)) {
+
+          userDashTasks = JSON.parse(fs.readFileSync(userFile).toString("utf8"))['regular'];
+
+        }
+
+        const entry = {
+          name: folder,
+          icon: icon,
+          tasks: tasks,
+          visits: [],
+          userDashTasks: userDashTasks
+        };
+
+        programs.push(entry);
+      });
+    }
+
+    const json = {
+      patientActivated: false,
+      formActive: false,
+      module: "",
+      icon: "",
+      tasks: [],
+      selectedTask: "",
+      selectedVisit: "",
+      today: new Date().format("d mmm YYYY"),
+      facility: site.facility,
+      location: query.location,
+      currentSection: "home",
+      programs: programs,
+      userDashTasks: []
+    };
+
+    res
+      .status(200)
+      .json(json);
+  });
 
   router.post("/programs/save_demographics", async function (req, res, next) {
 
@@ -2268,8 +2267,8 @@ module.exports = function (app) {
       ? location.locationId
       : 1;
 
-    let today = json["Set Date"]
-      ? json["Set Date"]
+    let today = json["Testing Date"]
+      ? json["Testing Date"]
       : new Date().format("YYYY-mm-dd");
 
     let age = ((new Date(today)) - (new Date(birthdate))) / (365.0 * 24.0 * 60.0 * 60.0 * 1000.0);
