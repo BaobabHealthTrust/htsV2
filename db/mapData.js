@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
 const readline = require('readline');
+const fs = require('fs');
+const glob = require('glob');
+const async = require('async');
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -17,95 +20,178 @@ const type = (process.argv.indexOf("--type") >= 0 ? process.argv[process.argv.in
 
 let encMap = {};
 let pending = {};
+let dumps = [];
+let encounters = {};
 
-rl.on('line', (line) => {
+async.series([
 
-    const row = line.split("\t");
+    function (cb) {
 
-    if (fields.length <= 0) {
+        if (!fs.existsSync(__dirname + '/dumps')) {
 
-        fields = Object.assign([], row);
+            fs.mkdirSync(__dirname + '/dumps');
 
-    } else {
-
-        let entry = {};
-        let header = {
-            index: {
-                _index: es.index,
-                _type: type,
-                _id: null
-            }
-        };
-
-        for (let i = 0; i < fields.length; i++) {
-
-            if (fields[i] === "_id") {
-
-                header.index._id = String(row[i]).trim();
-
-            } else {
-
-                entry[fields[i]] = String(row[i]).trim();
-
-            }
-
-        }
-
-        if (type === "patient") {
-
-            if (String(entry.observation).trim() === "HTS Entry Code") {
-
-                encMap[entry.encounterId] = entry.observationValue;
-
-                if (Object.keys(pending).indexOf(entry.encounterId) >= 0) {
-
-                    for (let k = 0; k < pending[entry.encounterId].length; k++) {
-
-                        pending[entry.encounterId][k].identifier = entry.observationValue;
-
-                        data.push(JSON.stringify(header));
-
-                        data.push(JSON.stringify(pending[entry.encounterId][k]));
-
-                    }
-
-                }
-
-            } else {
-
-                if (Object.keys(encMap).indexOf(entry.encounterId) >= 0) {
-
-                    entry.identifier = encMap[entry.encounterId]
-
-                    data.push(JSON.stringify(header));
-
-                    data.push(JSON.stringify(entry));
-
-                } else {
-
-                    if (Object.keys(pending).indexOf(entry.encounterId) < 0)
-                        pending[entry.encounterId] = [];
-
-                    pending[entry.encounterId].push(entry);
-
-                }
-
-            }
+            cb();
 
         } else {
 
-            data.push(JSON.stringify(header));
+            glob(__dirname + '/dumps/*.json', (err, files) => {
 
-            data.push(JSON.stringify(entry));
+                async.mapSeries(files, (file, iCb) => {
+
+                    console.log('Deleting file %s ...', file);
+
+                    fs.unlinkSync(file, err => {
+                        if (err) throw err;
+
+                        iCb();
+
+                    });
+
+                }, (err) => {
+
+                    if (err)
+                        throw err;
+
+                    cb();
+
+                })
+
+                /*files.forEach(file => {
+
+                    console.log('Deleting file %s ...', file);
+
+                    fs.unlinkSync(file, err => {
+                        if (err) throw err;
+                    });
+
+                })*/
+
+            })
 
         }
 
     }
 
-})
+], (err) => {
 
-rl.on('close', () => {
+    if (err)
+        throw err;
 
-    process.stdout.write(data.join("\n") + "\n");
+    rl.on('line', (line) => {
 
-})
+        const row = line.split("\t");
+
+        if (fields.length <= 0) {
+
+            fields = Object.assign([], row);
+
+        } else {
+
+            let entry = {};
+            let header = {
+                index: {
+                    _index: es.index,
+                    _type: type,
+                    _id: null
+                }
+            };
+
+            for (let i = 0; i < fields.length; i++) {
+
+                if (fields[i] === "_id") {
+
+                    header.index._id = String(row[i]).trim();
+
+                } else {
+
+                    entry[fields[i]] = String(row[i]).trim();
+
+                }
+
+            }
+
+            if (type === "visit") {
+
+                if (String(entry.observation).trim() === "HTS Entry Code") {
+
+                    encMap[entry.encounterId] = entry.observationValue;
+
+                    if (Object.keys(pending).indexOf(entry.encounterId) >= 0) {
+
+                        for (let k = 0; k < pending[entry.encounterId].length; k++) {
+
+                            pending[entry.encounterId][k].identifier = entry.observationValue;
+
+                            data.push(JSON.stringify(header));
+
+                            data.push(JSON.stringify(pending[entry.encounterId][k]));
+
+                            if (Object.keys(encounters).indexOf(entry.encounterId) < 0)
+                                encounters[entry.encounterId] = [];
+
+                            encounters[entry.encounterId].push(pending[entry.encounterId][k]);
+
+                        }
+
+                    }
+
+                } else {
+
+                    if (Object.keys(encMap).indexOf(entry.encounterId) >= 0) {
+
+                        entry.identifier = encMap[entry.encounterId]
+
+                        data.push(JSON.stringify(header));
+
+                        data.push(JSON.stringify(entry));
+
+                        if (Object.keys(encounters).indexOf(entry.encounterId) < 0)
+                            encounters[entry.encounterId] = [];
+
+                        encounters[entry.encounterId].push(entry);
+
+                    } else {
+
+                        if (Object.keys(pending).indexOf(entry.encounterId) < 0)
+                            pending[entry.encounterId] = [];
+
+                        pending[entry.encounterId].push(entry);
+
+                    }
+
+                }
+
+                if (String(entry.observation).trim() === "Result Given to Client" && ["New Negative", "New Positive"].indexOf(entry.observationValue) >= 0) {
+
+                    dumps.push(entry.encounterId);
+
+                }
+
+            } else {
+
+                data.push(JSON.stringify(header));
+
+                data.push(JSON.stringify(entry));
+
+            }
+
+        }
+
+    })
+
+    rl.on('close', () => {
+
+        process.stdout.write(data.join("\n") + "\n");
+
+        for (let i = 0; i < dumps.length; i++) {
+
+            const id = dumps[i];
+
+            fs.writeFileSync(__dirname + '/dumps/' + id + '.json', JSON.stringify(encounters[id], null, 2));
+
+        }
+
+    })
+
+});
