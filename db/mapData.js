@@ -15,6 +15,9 @@ let fields = [];
 let data = [];
 const type = (process.argv.indexOf("--type") >= 0 ? process.argv[process.argv.indexOf("--type") + 1] : "register");
 
+let encMap = {};
+let pending = {};
+
 rl.on('line', (line) => {
 
     const row = line.split("\t");
@@ -48,9 +51,54 @@ rl.on('line', (line) => {
 
         }
 
-        data.push(JSON.stringify(header));
+        if (type === "patient") {
 
-        data.push(JSON.stringify(entry));
+            if (String(entry.observation).trim() === "HTS Entry Code") {
+
+                encMap[entry.encounterId] = entry.observationValue;
+
+                if (Object.keys(pending).indexOf(entry.encounterId) >= 0) {
+
+                    for (let k = 0; k < pending[entry.encounterId].length; k++) {
+
+                        pending[entry.encounterId][k].identifier = entry.observationValue;
+
+                        data.push(JSON.stringify(header));
+
+                        data.push(JSON.stringify(pending[entry.encounterId][k]));
+
+                    }
+
+                }
+
+            } else {
+
+                if (Object.keys(encMap).indexOf(entry.encounterId) >= 0) {
+
+                    entry.identifier = encMap[entry.encounterId]
+
+                    data.push(JSON.stringify(header));
+
+                    data.push(JSON.stringify(entry));
+
+                } else {
+
+                    if (Object.keys(pending).indexOf(entry.encounterId) < 0)
+                        pending[entry.encounterId] = [];
+
+                    pending[entry.encounterId].push(entry);
+
+                }
+
+            }
+
+        } else {
+
+            data.push(JSON.stringify(header));
+
+            data.push(JSON.stringify(entry));
+
+        }
 
     }
 
