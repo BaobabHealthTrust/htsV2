@@ -890,11 +890,11 @@ module.exports = function (app) {
 
     ddeData = {};
 
-    if (raw['Find Client By Name']) {
+    if (raw['Find or Register Client']) {
 
-      let tmp = Object.assign({}, raw['Find Client By Name'], raw);
+      let tmp = Object.assign({}, raw['Find or Register Client'], raw);
 
-      delete tmp['Find Client By Name'];
+      delete tmp['Find or Register Client'];
 
       raw = tmp;
 
