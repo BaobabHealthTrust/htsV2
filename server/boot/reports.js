@@ -24,6 +24,67 @@ module.exports = function (app) {
 
   }
 
+  const padZeros = (number, positions) => {
+    const zeros = parseInt(positions) - String(number).length;
+    let padded = "";
+
+    for (let i = 0; i < zeros; i++) {
+      padded += "0";
+    }
+
+    padded += String(number);
+
+    return padded;
+  };
+
+  if (Object.getOwnPropertyNames(Date.prototype).indexOf("format") < 0) {
+    // eslint-disable-next-line
+    Object.defineProperty(Date.prototype, "format", {
+      value: function (format) {
+        var date = this;
+
+        var result = "";
+
+        if (!format) {
+          format = "";
+        }
+
+        var months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec"
+        ];
+
+        if (format.match(/YYYY-mm-dd\sHH:MM:SS/)) {
+          result = date.getFullYear() + "-" + padZeros(parseInt(date.getMonth()) + 1, 2) + "-" + padZeros(date.getDate(), 2) + " " + padZeros(date.getHours(), 2) + ":" + padZeros(date.getMinutes(), 2) + ":" + padZeros(date.getSeconds(), 2);
+        } else if (format.match(/YYYY-mm-dd/)) {
+          result = date.getFullYear() + "-" + padZeros(parseInt(date.getMonth()) + 1, 2) + "-" + padZeros(date.getDate(), 2);
+        } else if (format.match(/mmm\/d\/YYYY/)) {
+          result = months[parseInt(date.getMonth())] + "/" + date.getDate() + "/" + date.getFullYear();
+        } else if (format.match(/d\smmmm,\sYYYY/)) {
+          result = date.getDate() + " " + monthNames[parseInt(date.getMonth())] + ", " + date.getFullYear();
+        } else if (format.match(/d\smmm\sYYYY/)) {
+
+          result = date.getDate() + " " + months[parseInt(date.getMonth(), 10)] + " " + date.getFullYear();
+
+        } else {
+          result = date.getDate() + "/" + months[parseInt(date.getMonth())] + "/" + date.getFullYear();
+        }
+
+        return result;
+      }
+    });
+  }
+
   function fetchFNP(field, sMonth, sYear, eMonth, eYear, location, res) {
 
     let args = {
@@ -38,8 +99,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -80,8 +141,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -122,8 +183,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -164,8 +225,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -206,8 +267,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -248,8 +309,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -290,8 +351,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -332,8 +393,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -374,8 +435,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -416,8 +477,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -458,8 +519,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -500,8 +561,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -538,13 +599,13 @@ module.exports = function (app) {
               {
                 query_string: {
                   query: 'observation:"Partner Present" AND observationValue:"Yes" AND serviceDeliveryPoin' +
-                      't:"' + location + '"'
+                    't:"' + location + '"'
                 }
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -581,13 +642,13 @@ module.exports = function (app) {
               {
                 query_string: {
                   query: 'observation:"Partner Present" AND observationValue:"No" AND locationType' +
-                      ':"' + location + '"'
+                    ':"' + location + '"'
                 }
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -628,8 +689,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -670,8 +731,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -712,8 +773,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -754,8 +815,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -796,8 +857,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -838,8 +899,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -880,8 +941,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -922,8 +983,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -964,8 +1025,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1006,8 +1067,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1048,8 +1109,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1090,8 +1151,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1132,8 +1193,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1174,8 +1235,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1216,8 +1277,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1263,13 +1324,13 @@ module.exports = function (app) {
               {
                 query_string: {
                   query: "(observation:\"Immediate Repeat Test 1 Result\" OR observation:\"First Pass Test" +
-                      " 1 Result\") AND locationType:\"" + location + "\""
+                    " 1 Result\") AND locationType:\"" + location + "\""
                 }
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1306,13 +1367,13 @@ module.exports = function (app) {
               {
                 query_string: {
                   query: "(observation:\"Immediate Repeat Test 2 Result\" OR observation:\"First Pass Test" +
-                      " 2 Result\") AND locationType:\"" + location + "\""
+                    " 2 Result\") AND locationType:\"" + location + "\""
                 }
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)),
-                    lte: (new Date(eYear, eMonth, 30))
+                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1339,67 +1400,66 @@ module.exports = function (app) {
 
   }
 
-  router
-    .get('/reports', function (req, res, next) {
+  router.get('/reports', function (req, res, next) {
 
-      const url_parts = url.parse(req.url, true);
+    const url_parts = url.parse(req.url, true);
 
-      const query = url_parts.query;
+    const query = url_parts.query;
 
-      const field = decodeURIComponent(query.f);
-      const location = decodeURIComponent(query.l);
-      const sMonth = decodeURIComponent(query.sm);
-      const sYear = decodeURIComponent(query.sy);
-      const eMonth = decodeURIComponent(query.em);
-      const eYear = decodeURIComponent(query.ey);
+    const field = decodeURIComponent(query.f);
+    const location = decodeURIComponent(query.l);
+    const sMonth = decodeURIComponent(query.sm);
+    const sYear = decodeURIComponent(query.sy);
+    const eMonth = decodeURIComponent(query.em);
+    const eYear = decodeURIComponent(query.ey);
 
-      const concepts = {
-        "Male": fetchML,
-        "Female Non-Pregnant": fetchFNP,
-        "Female Pregnant": fetchFP,
-        "0-11 months": fetch0to1,
-        "1-14 years": fetch1to14,
-        "15-24 years": fetch12to24,
-        "25+ years": fetch25plus,
-        "Never Tested": fetchNT,
-        "Last Negative": fetchPN,
-        "Last Positive": fetchPP,
-        "Last Exposed infant": fetchPEI,
-        "Last Inconclusive": fetchPI,
-        "Partner Present": fetchPPr,
-        "Partner not present": fetchPNP,
-        "Single Negative": fetchSN,
-        "Single Positive": fetchSP,
-        "Test 1 & 2 Negative": fetchT12N,
-        "Test 1 & 2 Positive": fetchT12P,
-        "Test 1 & 2 Discordant": fetchT12D,
-        "New negative": fetchNN,
-        "New positive": fetchNP,
-        "New exposed infant": fetchNEI,
-        "New inconclusive": fetchNI,
-        "Confirmatory positive": fetchCP,
-        "Confirmatory Inconclusive": fetchCI,
-        "Routine HTS (PITC) within Health Service": fetchPITC,
-        "Comes with HTS Family Referral Slip": fetchFRS,
-        "Other (VCT, etc.)": fetchOV,
-        "Sum of all slips": fetchSS,
-        "Test 1 Used for Clients": fetchTest1UsedForClients,
-        "Test 2 Used for Clients": fetchTest2UsedForClients
-      };
+    const concepts = {
+      "Male": fetchML,
+      "Female Non-Pregnant": fetchFNP,
+      "Female Pregnant": fetchFP,
+      "0-11 months": fetch0to1,
+      "1-14 years": fetch1to14,
+      "15-24 years": fetch12to24,
+      "25+ years": fetch25plus,
+      "Never Tested": fetchNT,
+      "Last Negative": fetchPN,
+      "Last Positive": fetchPP,
+      "Last Exposed infant": fetchPEI,
+      "Last Inconclusive": fetchPI,
+      "Partner Present": fetchPPr,
+      "Partner not present": fetchPNP,
+      "Single Negative": fetchSN,
+      "Single Positive": fetchSP,
+      "Test 1 & 2 Negative": fetchT12N,
+      "Test 1 & 2 Positive": fetchT12P,
+      "Test 1 & 2 Discordant": fetchT12D,
+      "New negative": fetchNN,
+      "New positive": fetchNP,
+      "New exposed infant": fetchNEI,
+      "New inconclusive": fetchNI,
+      "Confirmatory positive": fetchCP,
+      "Confirmatory Inconclusive": fetchCI,
+      "Routine HTS (PITC) within Health Service": fetchPITC,
+      "Comes with HTS Family Referral Slip": fetchFRS,
+      "Other (VCT, etc.)": fetchOV,
+      "Sum of all slips": fetchSS,
+      "Test 1 Used for Clients": fetchTest1UsedForClients,
+      "Test 2 Used for Clients": fetchTest2UsedForClients
+    };
 
-      if (field && concepts[field]) {
+    if (field && concepts[field]) {
 
-        concepts[field](field, sMonth, sYear, eMonth, eYear, location, res);
+      concepts[field](field, sMonth, sYear, eMonth, eYear, location, res);
 
-      } else {
+    } else {
 
-        res
-          .status(200)
-          .json({});
+      res
+        .status(200)
+        .json({});
 
-      }
+    }
 
-    });
+  });
 
   router.get('/raw', function (req, res, next) {
 
@@ -1495,9 +1555,9 @@ module.exports = function (app) {
       }
     }, (e, resp) => {
 
-      if (!resp.aggregations) 
+      if (!resp.aggregations)
         return res.end();
-      
+
       for (let row of resp.aggregations.raw.buckets) {
 
         const location = row.key;
@@ -1607,9 +1667,9 @@ module.exports = function (app) {
                 query_string: {
                   query: (kitType.match(/1/)
                     ? "(observation:\"Immediate Repeat Test 1 Result\" OR observation:\"First Pass Test" +
-                      " 1 Result\")"
+                    " 1 Result\")"
                     : "(observation:\"Immediate Repeat Test 2 Result\" OR observation:\"First Pass Test" +
-                      " 2 Result\")") + " AND locationType:\"" + locationName + "\""
+                    " 2 Result\")") + " AND locationType:\"" + locationName + "\""
                 }
               }, {
                 range: {
@@ -1633,9 +1693,9 @@ module.exports = function (app) {
       }
     }, (e, resp) => {
 
-      if (!resp.aggregations) 
+      if (!resp.aggregations)
         return res.end();
-      
+
       for (let visit of resp.aggregations.visit.buckets) {
 
         const visitDate = (new Date(visit.key)).format("d mmm YYYY");
@@ -1792,9 +1852,9 @@ module.exports = function (app) {
         }
       }, (e, resp) => {
 
-        if (!resp.aggregations) 
+        if (!resp.aggregations)
           return cb();
-        
+
         for (let year of resp.aggregations.year.buckets) {
 
           for (let month of year.month.buckets) {
@@ -1848,9 +1908,9 @@ module.exports = function (app) {
 
     }, (e) => {
 
-      if (e) 
+      if (e)
         console.log(e);
-      
+
       res.end();
 
     })
@@ -1929,9 +1989,9 @@ module.exports = function (app) {
       }
     }, (e, resp) => {
 
-      if (!resp.aggregations) 
+      if (!resp.aggregations)
         return res.end();
-      
+
       for (let row of resp.aggregations.location.buckets) {
 
         const location = row.key;
@@ -2238,13 +2298,13 @@ module.exports = function (app) {
                               query_string: {
                                 query: (group.length === 1
                                   ? `age:${group[0]}`
-                                  : `age:>=${group[0]} AND age:<=${parseFloat(group[1]) + 0.99999}`) + ` AND htsModality:"${htsModality}" AND htsAccessType:"${htsAccessTypeMappings[htsAccessType]}" AND gender:"${gender}" AND resultGiven:"${resultGiven}"`
+                                  : `age:>=${group[0]} AND age:<=${parseFloat(group[1]) + 0.99999}`) + ` AND htsModality:"${htsModality}" AND htsAccessType:"${htsAccessType}" AND gender:"${gender}" AND resultGiven:"${resultGiven}"`
                               }
                             }, {
                               range: {
                                 visitDate: {
-                                  gte: (new Date(year, months.indexOf(month), 1)),
-                                  lte: (new Date(year, months.indexOf(month), 30))
+                                  gte: (new Date(year, months.indexOf(month), 1)).format('YYYY-mm-dd'),
+                                  lte: (new Date(year, months.indexOf(month), 30)).format('YYYY-mm-dd')
                                 }
                               }
                             }
@@ -2275,9 +2335,9 @@ module.exports = function (app) {
                         (group[0] === ">=50"
                           ? "50+"
                           : group.join("-")), {
-                          "M": "Male",
-                          "F": "Female"
-                        }[gender],
+                            "M": "Male",
+                            "F": "Female"
+                          }[gender],
                         resultGiven,
                         count
                       ];
@@ -2296,9 +2356,9 @@ module.exports = function (app) {
                         (group[0] === ">=50"
                           ? "50+"
                           : group.join("-")), {
-                          "M": "Male",
-                          "F": "Female"
-                        }[gender],
+                            "M": "Male",
+                            "F": "Female"
+                          }[gender],
                         resultGiven,
                         count
                       ];
