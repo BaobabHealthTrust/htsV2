@@ -2693,33 +2693,33 @@ module.exports = function (app) {
 
       debug("$$$$$$$$$$$$$$$$$$$$$$$");
 
-      new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, function (result) {
+      // new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, function (result) {
 
-        let args = {
-          data: {
-            htsAccessType: json["HTS Access Type"],
-            resultGiven: String(json["Result Given to Client"])
-              .replace(/new/i, "")
-              .trim(),
-            gender,
-            serviceDeliveryPoint,
-            month: monthNames[(new Date(today)).getMonth()],
-            year: (new Date(today)).getFullYear(),
-            age,
-            visitDate: (new Date(today)).format("YYYY-mm-dd"),
-            entryCode: clinicId,
-            htsSetting,
-            htsModality,
-            locationType
-          },
-          headers: {
-            "Content-Type": "application/json"
-          }
-        };
+      let args = {
+        data: {
+          htsAccessType: htsAccessTypeMappings[json["HTS Access Type"]],
+          resultGiven: String(json["Result Given to Client"])
+            .replace(/new/i, "")
+            .trim(),
+          gender,
+          serviceDeliveryPoint,
+          month: monthNames[(new Date(today)).getMonth()],
+          year: (new Date(today)).getFullYear(),
+          age,
+          visitDate: (new Date(today)).format("YYYY-mm-dd"),
+          entryCode: clinicId,
+          htsSetting,
+          htsModality,
+          locationType
+        },
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
 
-        new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) { })
+      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) { })
 
-      });
+      // });
 
     }
 
@@ -3298,7 +3298,7 @@ module.exports = function (app) {
 
         let args = {
           data: {
-            htsAccessType: json.client[entryCode]["HTS Visit"]["HTS Access Type"],
+            htsAccessType: htsAccessTypeMappings[json.client[entryCode]["HTS Visit"]["HTS Access Type"]],
             resultGiven: String(json.client[entryCode]["HTS Visit"]["Result Given to Client"])
               .replace(/new/i, "")
               .trim(),
