@@ -1244,6 +1244,20 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
       }
 
+    } else if (props.wf[state.currentWorkflow].currentNode.label === "Set Month to July") {
+
+      props.handleInputChange("Month of Birth", "July", state.currentWorkflow);
+
+      props.handleInputChange("Date of Birth", "01", state.currentWorkflow);
+
+    } else if (props.wf[state.currentWorkflow].currentNode.label === "Set Date to 1") {
+
+      props.handleInputChange("Date of Birth", "01", state.currentWorkflow);
+
+    } else if (props.wf[state.currentWorkflow].currentNode.label === "Set Date to 15") {
+
+      props.handleInputChange("Date of Birth", "15", state.currentWorkflow);
+
     } else if (props.wf[state.currentWorkflow].currentNode.label === "Set Date of Birth") {
 
       const months = {
