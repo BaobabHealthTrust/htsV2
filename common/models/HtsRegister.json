@@ -18,21 +18,6 @@
       },
       "updateOnly": false
     },
-    "registerNumber": {
-      "type": "number",
-      "required": false,
-      "length": null,
-      "precision": 10,
-      "scale": 0,
-      "mysql": {
-        "columnName": "register_number",
-        "dataType": "int",
-        "dataLength": null,
-        "dataPrecision": 10,
-        "dataScale": 0,
-        "nullable": "Y"
-      }
-    },
     "locationTypeId": {
       "type": "number",
       "required": true,
@@ -148,6 +133,21 @@
         "columnName": "uuid",
         "dataType": "char",
         "dataLength": 38,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "registerNumber": {
+      "type": "string",
+      "required": false,
+      "length": 45,
+      "precision": null,
+      "scale": 0,
+      "mysql": {
+        "columnName": "register_number",
+        "dataType": "char",
+        "dataLength": 45,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "Y"

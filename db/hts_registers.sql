@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `hts_register`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hts_register` (
   `register_id` int(11) NOT NULL AUTO_INCREMENT,
-  `register_number` int(11) DEFAULT NULL,
+  `register_number` varchar(45) DEFAULT NULL,
   `location_type_id` int(11) NOT NULL,
   `service_delivery_point_id` int(11) NOT NULL,
   `closed` tinyint(4) NOT NULL DEFAULT '0',

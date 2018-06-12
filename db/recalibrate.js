@@ -307,6 +307,10 @@ const recalibrate = async () => {
 
     let commands = [
         {
+            message: "Modifying hts_register table ...",
+            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "ALTER TABLE hts_register CHANGE COLUMN register_number register_number VARCHAR(45) NULL DEFAULT NULL"'
+        },
+        {
             message: "Resetting Elasticsearch ...",
             cmd: "curl -H \"Content-Type: application/json\" -X DELETE \"" + es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "\" -s"
         },
