@@ -2268,7 +2268,7 @@ module.exports = function (app) {
       : 1;
 
     let today = json["Testing Date"]
-      ? json["Testing Date"]
+      ? new Date(json["Testing Date"]).format("YYYY-mm-dd")
       : new Date().format("YYYY-mm-dd");
 
     let age = ((new Date(today)) - (new Date(birthdate))) / (365.0 * 24.0 * 60.0 * 60.0 * 1000.0);
