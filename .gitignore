@@ -48,3 +48,4 @@ output
 # client-src/src/config/*.json
 # client/static/js/main*
 programs/*/.*.json
+db/dumps

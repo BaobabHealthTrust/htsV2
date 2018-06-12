@@ -3,8 +3,11 @@
 const connection = require("../configs/database.json");
 const es = require("../configs/elasticsearch.json");
 const pepfarSynthesis = require(__dirname + "/../lib/pepfarSynthesis.js");
+const htsIndicatorsMapping = require(__dirname + "/../configs/htsIndicatorsMapping.json");
 const fs = require('fs');
 const glob = require('glob');
+const client = require("node-rest-client").Client;
+const async = require('async');
 
 String.prototype.toUnderScore = function () {
     return this.replace(/^[A-Z]/, ($1) => {
@@ -13,6 +16,82 @@ String.prototype.toUnderScore = function () {
         return '_' + $1.toLowerCase()
     });
 };
+
+const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+];
+
+const padZeros = (number, positions) => {
+    const zeros = parseInt(positions) - String(number).length;
+    let padded = "";
+
+    for (let i = 0; i < zeros; i++) {
+        padded += "0";
+    }
+
+    padded += String(number);
+
+    return padded;
+};
+
+if (Object.getOwnPropertyNames(Date.prototype).indexOf("format") < 0) {
+    // eslint-disable-next-line
+    Object.defineProperty(Date.prototype, "format", {
+        value: function (format) {
+            var date = this;
+
+            var result = "";
+
+            if (!format) {
+                format = "";
+            }
+
+            var months = [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec"
+            ];
+
+            if (format.match(/YYYY-mm-dd\sHH:MM:SS/)) {
+                result = date.getFullYear() + "-" + padZeros(parseInt(date.getMonth()) + 1, 2) + "-" + padZeros(date.getDate(), 2) + " " + padZeros(date.getHours(), 2) + ":" + padZeros(date.getMinutes(), 2) + ":" + padZeros(date.getSeconds(), 2);
+            } else if (format.match(/YYYY-mm-dd/)) {
+                result = date.getFullYear() + "-" + padZeros(parseInt(date.getMonth()) + 1, 2) + "-" + padZeros(date.getDate(), 2);
+            } else if (format.match(/mmm\/d\/YYYY/)) {
+                result = months[parseInt(date.getMonth())] + "/" + date.getDate() + "/" + date.getFullYear();
+            } else if (format.match(/d\smmmm,\sYYYY/)) {
+                result = date.getDate() + " " + monthNames[parseInt(date.getMonth())] + ", " + date.getFullYear();
+            } else if (format.match(/d\smmm\sYYYY/)) {
+
+                result = date.getDate() + " " + months[parseInt(date.getMonth(), 10)] + " " + date.getFullYear();
+
+            } else {
+                result = date.getDate() + "/" + months[parseInt(date.getMonth())] + "/" + date.getFullYear();
+            }
+
+            return result;
+        }
+    });
+}
 
 const debug = (msg) => {
 
@@ -74,15 +153,147 @@ const loadPepfarData = async () => {
 
     console.log("Loading Pepfar data ...");
 
+    const clientAges = {
+        "0-13Y": [
+            0, 13.9999
+        ],
+        "Any": [
+            0, 120
+        ],
+        "0-4Y": [
+            0, 4.9999
+        ],
+        "5Y+": [5, 120]
+    };
+
+    const htsAccessTypeMappings = {
+        "Routine HTS (PITC) within Health Service": "PITC",
+        "Comes with HTS Family Referral Slip": "FRS/Index",
+        "Other (VCT, etc.)": "VCT/Other"
+    };
+
     if (fs.existsSync(__dirname + '/dumps')) {
 
         glob(__dirname + '/dumps/*.json', (err, files) => {
 
+            let j = 0;
+
             files.forEach(file => {
+
+                j++;
+
+                process.stdout.write("Loading Pepfar data " + (j / files.length) + "% ...\r");
+
+                let htsSetting = "";
+                let htsModality = "";
 
                 const raw = JSON.parse(fs.readFileSync(file, 'utf-8'))
 
-                console.log(raw);
+                let accessType = null;
+
+                let partnerHIVStatus = null;
+
+                let resultGiven = null;
+
+                let locationType = null;
+
+                let serviceDeliveryPoint = null;
+
+                let age = null;
+
+                let gender = null;
+
+                let today = null;
+
+                let clinicId = null;
+
+                for (let i = 0; i < raw.length; i++) {
+
+                    const row = raw[i];
+
+                    if (accessType !== null && partnerHIVStatus !== null && resultGiven !== null && locationType !== null && serviceDeliveryPoint !== null && age !== null && gender !== null && today !== null && clinicId !== null)
+                        break;
+
+                    switch (row.observation) {
+
+                        case 'HTS Access Type':
+
+                            accessType = row.observationValue;
+
+                            break;
+
+                        case 'Partner HIV Status':
+
+                            partnerHIVStatus = row.observationValue;
+
+                            break;
+
+                        case 'Result Given to Client':
+
+                            resultGiven = row.observationValue;
+
+                            break;
+
+                        case 'Sex/Pregnancy':
+
+                            gender = row.observationValue
+                                ? String(row.observationValue)
+                                    .trim()
+                                    .substring(0, 1)
+                                    .toUpperCase()
+                                : null;
+
+                            break;
+
+                        default:
+
+                            locationType = row.locationType;
+
+                            serviceDeliveryPoint = row.serviceDeliveryPoint;
+
+                            age = row.age;
+
+                            today = row.visitDate;
+
+                            clinicId = row.identifier;
+
+                            break;
+
+                    }
+
+                }
+
+                const result = pepfarSynthesis.ps.classifyLocation(
+                    htsIndicatorsMapping, locationType, serviceDeliveryPoint,
+                    accessType, partnerHIVStatus, age
+                );
+
+                htsSetting = result.htsSetting;
+                htsModality = result.htsModality;
+
+                let args = {
+                    data: {
+                        htsAccessType: htsAccessTypeMappings[accessType],
+                        resultGiven: String(resultGiven)
+                            .replace(/new/i, "")
+                            .trim(),
+                        gender,
+                        serviceDeliveryPoint,
+                        month: monthNames[(new Date(today)).getMonth()],
+                        year: (new Date(today)).getFullYear(),
+                        age,
+                        visitDate: (new Date(today)).format("YYYY-mm-dd"),
+                        entryCode: clinicId,
+                        htsSetting,
+                        htsModality,
+                        locationType
+                    },
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) { })
 
             })
 
@@ -125,4 +336,51 @@ const recalibrate = async () => {
 
 }
 
-recalibrate();
+async.series([
+
+    function (cb) {
+
+        if (!fs.existsSync(__dirname + '/dumps')) {
+
+            fs.mkdirSync(__dirname + '/dumps');
+
+            cb();
+
+        } else {
+
+            glob(__dirname + '/dumps/*.json', (err, files) => {
+
+                async.mapSeries(files, (file, iCb) => {
+
+                    console.log('Deleting file %s ...', file);
+
+                    fs.unlink(file, err => {
+                        if (err) throw err;
+
+                        iCb();
+
+                    });
+
+                }, (err) => {
+
+                    if (err)
+                        throw err;
+
+                    cb();
+
+                })
+
+            })
+
+        }
+
+    }
+
+], (err) => {
+
+    if (err)
+        throw err;
+
+    recalibrate();
+
+});
