@@ -4,6 +4,7 @@ import icoRegisters from '../images/registers';
 import icoUsers from '../images/users';
 import icoPrint from '../images/print';
 import icoLocations from '../images/locations';
+import icoTAs from '../images/sites';
 
 class Admin extends Component {
 
@@ -65,6 +66,23 @@ class Admin extends Component {
             }} />
           <br />
           Add Location
+        </div>
+        <div
+          className="sectionButton"
+          onMouseDown={() => {
+            this
+              .props
+              .addVillages()
+          }} id="btnAddVillages">
+          <img
+            src={icoTAs}
+            height="80"
+            alt=""
+            style={{
+              margin: "8px"
+            }} />
+          <br />
+          Add Villages
         </div>
         <div
           className="sectionButton"

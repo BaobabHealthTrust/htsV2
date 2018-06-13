@@ -3345,6 +3345,74 @@ class App extends Component {
 
   }
 
+  async addVillages() {
+
+    await this.setState({ currentWorkflow: "primary" });
+
+    await this.setState({
+      loaded: Object.assign({}, this.state.loaded, {
+        [this.state.currentWorkflow]: true
+      })
+    });
+
+    await this
+      .props
+      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Add Village"].data);
+
+    await this
+      .props
+      .updateApp({
+        selectedTask: "Add Village",
+        formActive: true,
+        currentSection: "add village",
+        configs: {
+          Region: {
+            ajaxURL: "/dde/search_by_region?name=",
+            autoNext: true,
+            lockList: true,
+            validationMessage: "Region \n must be entered",
+            title: "Missing Data",
+            className: "longSelectList"
+          },
+          District: {
+            ajaxURL: "/dde/search_by_district?region=REGION&district=",
+            ajaxURLDummies: {
+              Region: "REGION",
+              autoNext: true
+            },
+            fieldType: "text",
+            validationMessage: "District \n must be entered",
+            title: "Missing Data"
+          },
+          "T/A": {
+            ajaxURL: "/dde/search_by_t_a?district=DISTRICT&ta=",
+            ajaxURLDummies: {
+              District: "DISTRICT"
+            },
+            fieldType: "text",
+            validationMessage: "T/A \n must be entered",
+            title: "Missing Data"
+          },
+          Village: {
+            ajaxURL: "/dde/search_by_village?ta=TA&village=",
+            ajaxURLDummies: {
+              TA: "T/A"
+            },
+            fieldType: "text",
+            validationMessage: "Village \n must be entered",
+            title: "Missing Data"
+          },
+          action: "/add_village"
+        },
+        summaryIgnores: [],
+        sectionHeader: "Add Village",
+        fieldPos: 0
+      });
+
+      this.queryOptions("");
+
+  }
+
   render() {
 
     const nextLabel = (this.props.app.currentSection === "home" || this.props.app.currentSection === "registration"
@@ -4167,7 +4235,8 @@ class App extends Component {
                         .printLabel
                         .bind(this)}
                       addLocation={this.addLocation.bind(this)}
-                      clearField={this.props.clearField.bind(this)} />
+                      clearField={this.props.clearField.bind(this)}
+                      addVillages={this.addVillages.bind(this)} />
                   </div>
                 )}
         <U13 buttons={buttons} version={this.props.app.version} />

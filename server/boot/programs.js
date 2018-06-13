@@ -33,6 +33,10 @@ module.exports = function (app) {
   const User = app.models.User;
   const Role = app.models.Role;
   const Location = app.models.Location;
+  const Region = app.models.Region;
+  const District = app.models.District;
+  const TA = app.models.TraditionalAuthority;
+  const Village = app.models.Village;
   const site = require(__dirname + "/../../client-src/src/config/site.json");
   const es = require(__dirname + "/../../configs/elasticsearch.json");
   const htsIndicatorsMapping = require(__dirname + "/../../configs/htsIndicatorsMapping.json");
@@ -5038,6 +5042,176 @@ module.exports = function (app) {
     debug(JSON.stringify(results));
 
     res.status(200).json(results);
+
+  })
+
+  router.post('/add_village', async function (req, res, next) {
+
+    debug(JSON.stringify(req.body));
+
+    const data = req.body['Add Village'];
+
+    const district = data.District;
+
+    const ta = data['T/A'];
+
+    const village = data.Village;
+
+    const username = data.username;
+
+    let isDirty = false;
+
+    const region = await Region.findOne({
+      where: {
+        name: data.Region
+      }
+    });
+
+    const regionId = (region ? region.regionId : null);
+
+    const user = await Users.findOne({
+      where: {
+        username
+      }
+    });
+
+    const userId = (user ? user.userId : null);
+
+    debug(district + "\n" + ta + "\n" + village + "\n" + username);
+
+    const existingDistrict = await District.findOne(
+      {
+        where: {
+          name: district
+        }
+      }
+    ).catch(e => { return null });
+
+    debug(existingDistrict);
+
+    let districtId = null;
+    let traditionalAuthorityId = null;
+    let villageId = null;
+
+    if (!existingDistrict) {
+
+      const result = await District.create(
+        {
+          name: district,
+          regionId,
+          creator: userId,
+          dateCreated: (new Date()),
+          retired: 0
+        }
+      ).catch(e => { return null });
+
+      debug(result);
+
+      if (!result)
+        return res.status(400).json({ error: true, message: "Failed to save District!" });
+
+      districtId = (result ? result.districtId : null);
+
+      isDirty = true;
+
+    } else {
+
+      districtId = (existingDistrict ? existingDistrict.districtId : null);
+
+    }
+
+    debug(districtId);
+
+    const existingTA = await TA.findOne(
+      {
+        where: {
+          name: ta
+        }
+      }
+    ).catch(e => { return null });
+
+    debug(existingTA);
+
+    if (!existingTA) {
+
+      const result = await TA.create(
+        {
+          name: ta,
+          districtId,
+          creator: userId,
+          dateCreated: (new Date()),
+          retired: 0
+        }
+      ).catch(e => { return null });
+
+      debug(result);
+
+      if (!result)
+        return res.status(400).json({ error: true, message: "Failed to save T/A!" });
+
+      traditionalAuthorityId = (result ? result.traditionalAuthorityId : null);
+
+      isDirty = true;
+
+    } else {
+
+      traditionalAuthorityId = (existingTA ? existingTA.traditionalAuthorityId : null);
+
+    }
+
+    debug(traditionalAuthorityId);
+
+    const existingVillage = await Village.findOne(
+      {
+        where: {
+          name: village
+        }
+      }
+    ).catch(e => { return null });
+
+    debug(existingVillage);
+
+    if (!existingVillage) {
+
+      const result = await Village.create(
+        {
+          name: village,
+          traditionalAuthorityId,
+          creator: userId,
+          dateCreated: (new Date()),
+          retired: 0
+        }
+      ).catch(e => {
+        console.log(e);
+        return null;
+      });
+
+      debug(result);
+
+      if (!result)
+        return res.status(400).json({ error: true, message: "Failed to save village!" });
+
+      villageId = (result ? result.villageId : null);
+
+      isDirty = true;
+
+    } else {
+
+      villageId = (existingVillage ? existingVillage.villageId : null);
+
+    }
+
+    debug(villageId);
+
+    if (isDirty) {
+
+      res.status(200).json({ message: "Entry added!" });
+
+    } else {
+
+      res.status(200).json({ message: "No new changes found!" });
+
+    }
 
   })
 

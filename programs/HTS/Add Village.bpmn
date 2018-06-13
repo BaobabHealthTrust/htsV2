@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bonitaConnector="http://www.bonitasoft.org/studio/connector/definition/6.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di_1="http://www.omg.org/spec/DD/20100524/DI" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:model="http://www.omg.org/spec/BPMN/20100524/MODEL" xsi:schemaLocation="schemaLocation http://www.omg.org/spec/BPMN/20100524/MODEL schemas/BPMN20.xsd" exporter="BonitaSoft" exporterVersion="7.6.3" expressionLanguage="http://groovy.apache.org/" targetNamespace="http://bonitasoft.com/_Q_8MkG8IEei2-piNECtp1g">
+  <model:collaboration id="_Q_8MkG8IEei2-piNECtp1g">
+    <model:participant id="_9IhugG8NEei2-piNECtp1g" name="Add Village" processRef="_Q_8MkW8IEei2-piNECtp1g"/>
+    <model:participant id="_Q_8M128IEei2-piNECtp1g" name="Employee actor">
+      <model:documentation>This is an example of actor that is mapped to any ACME users</model:documentation>
+    </model:participant>
+  </model:collaboration>
+  <model:process id="_Q_8MkW8IEei2-piNECtp1g" name="Add Village">
+    <model:ioSpecification id="_9IiVkG8NEei2-piNECtp1g">
+      <model:inputSet id="_9IiVkW8NEei2-piNECtp1g"/>
+      <model:outputSet id="_9IiVkm8NEei2-piNECtp1g"/>
+    </model:ioSpecification>
+    <model:laneSet id="Add Village_laneSet">
+      <model:lane id="_Q_8Mkm8IEei2-piNECtp1g" name="Add Village lane">
+        <model:flowNodeRef>_Q_8Mk28IEei2-piNECtp1g</model:flowNodeRef>
+        <model:flowNodeRef>_Q_8MmG8IEei2-piNECtp1g</model:flowNodeRef>
+        <model:flowNodeRef>_Q_8Mom8IEei2-piNECtp1g</model:flowNodeRef>
+        <model:flowNodeRef>_Q_8MrG8IEei2-piNECtp1g</model:flowNodeRef>
+        <model:flowNodeRef>_Q_8Mtm8IEei2-piNECtp1g</model:flowNodeRef>
+        <model:flowNodeRef>_iSANcG8MEei2-piNECtp1g</model:flowNodeRef>
+      </model:lane>
+    </model:laneSet>
+    <model:startEvent id="_Q_8Mk28IEei2-piNECtp1g" name="Start"/>
+    <model:task id="_Q_8MmG8IEei2-piNECtp1g" name="District"/>
+    <model:task id="_Q_8Mom8IEei2-piNECtp1g" name="T/A"/>
+    <model:task id="_Q_8MrG8IEei2-piNECtp1g" name="Village"/>
+    <model:endEvent id="_Q_8Mtm8IEei2-piNECtp1g" name="End1"/>
+    <model:task id="_iSANcG8MEei2-piNECtp1g" name="Region"/>
+    <model:sequenceFlow id="_Q_8Mzm8IEei2-piNECtp1g" name="" sourceRef="_Q_8MmG8IEei2-piNECtp1g" targetRef="_Q_8Mom8IEei2-piNECtp1g"/>
+    <model:sequenceFlow id="_Q_8M0W8IEei2-piNECtp1g" name="" sourceRef="_Q_8Mom8IEei2-piNECtp1g" targetRef="_Q_8MrG8IEei2-piNECtp1g"/>
+    <model:sequenceFlow id="_Q_8M1G8IEei2-piNECtp1g" name="" sourceRef="_Q_8MrG8IEei2-piNECtp1g" targetRef="_Q_8Mtm8IEei2-piNECtp1g"/>
+    <model:sequenceFlow id="_ho_FoG8MEei2-piNECtp1g" name="" sourceRef="_Q_8Mk28IEei2-piNECtp1g" targetRef="_iSANcG8MEei2-piNECtp1g"/>
+    <model:sequenceFlow id="_kWiRAG8MEei2-piNECtp1g" name="" sourceRef="_iSANcG8MEei2-piNECtp1g" targetRef="_Q_8MmG8IEei2-piNECtp1g"/>
+  </model:process>
+  <di:BPMNDiagram name="Add Village">
+    <di:BPMNPlane id="plane__Q_8MkG8IEei2-piNECtp1g" bpmnElement="_Q_8MkG8IEei2-piNECtp1g">
+      <di:BPMNShape id="_Q_8M8m8IEei2-piNECtp1g" bpmnElement="_9IhugG8NEei2-piNECtp1g" isHorizontal="true">
+        <dc:Bounds height="250.0" width="1615.0" x="0.0" y="0.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_Q_8M9W8IEei2-piNECtp1g" bpmnElement="_Q_8Mkm8IEei2-piNECtp1g" isHorizontal="true">
+        <dc:Bounds height="250.0" width="1585.0" x="30.0" y="0.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_Q_8M-G8IEei2-piNECtp1g" bpmnElement="_Q_8Mk28IEei2-piNECtp1g">
+        <dc:Bounds height="30.0" width="30.0" x="90.0" y="68.0"/>
+        <di:BPMNLabel id="_9IiVlG8NEei2-piNECtp1g" labelStyle="_9IiVk28NEei2-piNECtp1g">
+          <dc:Bounds height="13.0" width="27.0" x="92.0" y="103.0"/>
+        </di:BPMNLabel>
+      </di:BPMNShape>
+      <di:BPMNShape id="_Q_8M_G8IEei2-piNECtp1g" bpmnElement="_Q_8MmG8IEei2-piNECtp1g">
+        <dc:Bounds height="50.0" width="100.0" x="436.0" y="60.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_Q_8M_28IEei2-piNECtp1g" bpmnElement="_Q_8Mom8IEei2-piNECtp1g">
+        <dc:Bounds height="50.0" width="100.0" x="664.0" y="60.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_Q_8NAm8IEei2-piNECtp1g" bpmnElement="_Q_8MrG8IEei2-piNECtp1g">
+        <dc:Bounds height="50.0" width="100.0" x="841.0" y="60.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_Q_8NBW8IEei2-piNECtp1g" bpmnElement="_Q_8Mtm8IEei2-piNECtp1g">
+        <dc:Bounds height="30.0" width="30.0" x="1044.0" y="70.0"/>
+        <di:BPMNLabel id="_9JG9UG8NEei2-piNECtp1g" labelStyle="_9IiVk28NEei2-piNECtp1g">
+          <dc:Bounds height="17.0" width="35.0" x="1042.0" y="105.0"/>
+        </di:BPMNLabel>
+      </di:BPMNShape>
+      <di:BPMNShape id="_iSA0gG8MEei2-piNECtp1g" bpmnElement="_iSANcG8MEei2-piNECtp1g">
+        <dc:Bounds height="50.0" width="100.0" x="227.0" y="60.0"/>
+      </di:BPMNShape>
+      <di:BPMNEdge id="_Q_8NGW8IEei2-piNECtp1g" bpmnElement="_Q_8Mzm8IEei2-piNECtp1g">
+        <di_1:waypoint x="536.0" y="85.0"/>
+        <di_1:waypoint x="664.0" y="85.0"/>
+        <di:BPMNLabel/>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_Q_8NHm8IEei2-piNECtp1g" bpmnElement="_Q_8M0W8IEei2-piNECtp1g">
+        <di_1:waypoint x="764.0" y="85.0"/>
+        <di_1:waypoint x="841.0" y="85.0"/>
+        <di:BPMNLabel/>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_Q_8NI28IEei2-piNECtp1g" bpmnElement="_Q_8M1G8IEei2-piNECtp1g">
+        <di_1:waypoint x="941.0" y="85.0"/>
+        <di_1:waypoint x="1044.0" y="85.0"/>
+        <di:BPMNLabel/>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_ho_ssG8MEei2-piNECtp1g" bpmnElement="_ho_FoG8MEei2-piNECtp1g">
+        <di_1:waypoint x="120.0" y="84.0"/>
+        <di_1:waypoint x="227.0" y="84.0"/>
+        <di:BPMNLabel/>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_kWiRA28MEei2-piNECtp1g" bpmnElement="_kWiRAG8MEei2-piNECtp1g">
+        <di_1:waypoint x="327.0" y="85.0"/>
+        <di_1:waypoint x="436.0" y="85.0"/>
+        <di:BPMNLabel/>
+      </di:BPMNEdge>
+    </di:BPMNPlane>
+    <di:BPMNLabelStyle id="_9IiVk28NEei2-piNECtp1g">
+      <dc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Ubuntu" size="9.0"/>
+    </di:BPMNLabelStyle>
+  </di:BPMNDiagram>
+</model:definitions>

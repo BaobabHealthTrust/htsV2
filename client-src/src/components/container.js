@@ -298,7 +298,8 @@ class Container extends Component {
           reports={this.props.reports}
           changePassword={this.props.changePassword}
           printLabel={this.props.printLabel}
-          addLocation={this.props.addLocation} />))
+          addLocation={this.props.addLocation}
+          addVillages={this.props.addVillages} />))
   }
   render() {
     return (

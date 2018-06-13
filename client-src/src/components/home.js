@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './home.css';
 import U3 from './u3';
 import U4 from './u4';
@@ -13,8 +13,8 @@ class Home extends Component {
       <table
         width="100%"
         style={{
-        borderCollapse: "collapse"
-      }}
+          borderCollapse: "collapse"
+        }}
         border="0">
         <tbody>
           <tr>
@@ -24,7 +24,7 @@ class Home extends Component {
               <U3
                 programs={this.props.programs}
                 handleSwitchProgram={this.props.handleSwitchProgram}
-                selectedModule={this.props.selectedModule}/>
+                selectedModule={this.props.selectedModule} />
             </td>
             <td style={{
               verticalAlign: "top"
@@ -32,8 +32,8 @@ class Home extends Component {
               <U4
                 handleVisitUrl={this.props.handleVisitUrl}
                 visits={this.props.programs && this.props.programs[this.props.selectedModule]
-                ? this.props.programs[this.props.selectedModule].visits
-                : []}
+                  ? this.props.programs[this.props.selectedModule].visits
+                  : []}
                 selectedVisit={this.props.selectedVisit}
                 selectedModule={this.props.selectedModule}
                 icon={this.props.icon}
@@ -49,7 +49,8 @@ class Home extends Component {
                 handleSwitchProgram={this.props.handleSwitchProgram}
                 changePassword={this.props.changePassword}
                 printLabel={this.props.printLabel}
-                addLocation={this.props.addLocation}/>
+                addLocation={this.props.addLocation}
+                addVillages={this.props.addVillages} />
             </td>
             <td style={{
               width: "200px"
@@ -61,7 +62,7 @@ class Home extends Component {
                 activeSection={this.props.activeSection}
                 order={this.props.order}
                 switchTab={this.props.switchTab}
-                updateApp={this.props.updateApp}/>
+                updateApp={this.props.updateApp} />
             </td>
           </tr>
         </tbody>
