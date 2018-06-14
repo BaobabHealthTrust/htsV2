@@ -3,6 +3,9 @@ module.exports = function (app) {
   const User = app.models.User;
   const Users = app.models.Users;
   const Person = app.models.Person;
+  const PersonAddress = app.models.PersonAddress;
+  const Patient = app.models.Patient;
+  const PatientIdentifier = app.models.PatientIdentifier;
   const PersonName = app.models.PersonName;
   const Role = app.models.Role;
   const RoleMapping = app.models.RoleMapping;
@@ -38,6 +41,16 @@ module.exports = function (app) {
   HtsRegister.hasMany(HtsRegisterServiceDeliveryPoint, {
     foreignKey: 'serviceDeliveryPointId',
     as: 'serviceDeliveryPoint'
+  })
+
+  Person.hasMany(PersonName, {
+    foreignKey: 'personId',
+    as: 'personName'
+  })
+
+  Person.hasMany(PersonAddress, {
+    foreignKey: 'personId',
+    as: 'personAddress'
   })
 
 };
