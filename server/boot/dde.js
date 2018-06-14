@@ -512,6 +512,10 @@ module.exports = function (app) {
         }
       })
 
+    } else {
+
+      res.status(200).json({});
+
     }
 
   })
@@ -1034,6 +1038,10 @@ module.exports = function (app) {
 
       })
 
+    } else {
+
+      res.status(200).json({});
+
     }
 
   })
@@ -1318,7 +1326,9 @@ module.exports = function (app) {
                     regionId
                   },
                   {
-                    name: (query.name ? query.name : '') + '%'
+                    name: {
+                      like: (query.name ? query.name : '') + '%'
+                    }
                   }
                 ]
               }
