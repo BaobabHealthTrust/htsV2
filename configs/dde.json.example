@@ -13,6 +13,7 @@
   "protocol": "",
   "port": "",
   "use_art": false,
+  "use_dde": false,
   "art_settings": {
     "protocol": "",
     "username": "",

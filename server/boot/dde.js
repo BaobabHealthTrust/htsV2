@@ -15,6 +15,11 @@ module.exports = function (app) {
   const dde = require('../../lib/dde').DDE;
   const PatientIdentifier = app.models.PatientIdentifier;
   const PatientIdentifierType = app.models.PatientIdentifierType;
+  const PersonName = app.models.PersonName;
+  const Region = app.models.Region;
+  const District = app.models.District;
+  const TA = app.models.TraditionalAuthority;
+  const Village = app.models.Village;
 
   const ddePath = ddeConfig.protocol + '://' + ddeConfig.host + ':' + ddeConfig.port;
 
@@ -99,19 +104,18 @@ module.exports = function (app) {
     return padded;
   };
 
-  router
-    .get('/dde/fetch_token', function (req, res, next) {
-      const ddePath = ddeConfig.protocol + '://' + ddeConfig.host + ':' + ddeConfig.port;
+  router.get('/dde/fetch_token', function (req, res, next) {
+    const ddePath = ddeConfig.protocol + '://' + ddeConfig.host + ':' + ddeConfig.port;
 
-      dde.init(client, ddePath, ddeConfig);
+    dde.init(client, ddePath, ddeConfig);
 
-      dde.checkIfDDEAuthenticated(function (data) {
-        res
-          .status(200)
-          .json(data);
-      });
-
+    dde.checkIfDDEAuthenticated(function (data) {
+      res
+        .status(200)
+        .json(data);
     });
+
+  });
 
   router.post('/dde/authenticate', function (req, res, next) {
 
@@ -1028,15 +1032,39 @@ module.exports = function (app) {
 
     const query = url_parts.query;
 
-    (new client()).get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/list_first_names/json?name=" + (query.name
-      ? query.name
-      : ""), function (data) {
+    let data = [];
+
+    PersonName.find(
+      {
+        where: {
+          name: {
+            like: (query.name ? query.name : '') + '%'
+          }
+        }
+      }, (err, results) => {
+
+        debug(JSON.stringify(results));
+
+        if (!err && results) {
+
+          results.forEach(row => {
+
+            if (data.indexOf(row.givenName) < 0)
+              data.push(row.givenName);
+
+            if (row.middleName && data.indexOf(row.middleName) < 0)
+              data.push(row.middleName);
+
+          });
+
+        }
 
         res
           .status(200)
           .json(data);
 
-      })
+      }
+    )
 
   })
 
@@ -1046,15 +1074,36 @@ module.exports = function (app) {
 
     const query = url_parts.query;
 
-    (new client()).get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/list_last_names/json?name=" + (query.name
-      ? query.name
-      : ""), function (data) {
+    let data = [];
+
+    PersonName.find(
+      {
+        where: {
+          name: {
+            like: (query.name ? query.name : '') + '%'
+          }
+        }
+      }, (err, results) => {
+
+        debug(JSON.stringify(results));
+
+        if (!err && results) {
+
+          results.forEach(row => {
+
+            if (data.indexOf(row.familyName) < 0)
+              data.push(row.familyName);
+
+          });
+
+        }
 
         res
           .status(200)
           .json(data);
 
-      })
+      }
+    )
 
   })
 
@@ -1064,15 +1113,38 @@ module.exports = function (app) {
 
     const query = url_parts.query;
 
-    (new client()).get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/search_by_region/json?region=" + (query.name
-      ? query.name
-      : ""), function (data) {
+    let data = [];
+
+    debug(query);
+
+    Region.find(
+      {
+        where: {
+          name: {
+            like: (query.name ? query.name : '') + '%'
+          }
+        }
+      }, (err, results) => {
+
+        debug(JSON.stringify(results));
+
+        if (!err && results) {
+
+          results.forEach(row => {
+
+            if (data.indexOf(row.name) < 0)
+              data.push(row.name);
+
+          });
+
+        }
 
         res
           .status(200)
           .json(data);
 
-      })
+      }
+    )
 
   })
 
@@ -1082,17 +1154,77 @@ module.exports = function (app) {
 
     const query = url_parts.query;
 
-    (new client()).get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/search_by_district/json?region=" + (query.region
-      ? query.region
-      : "") + "&district=" + (query.district
-        ? query.district
-        : ""), function (data) {
+    let data = [];
+
+    debug(query);
+
+    Region.find(
+      {
+        where: {
+          name: {
+            like: (query.region ? query.region : '') + '%'
+          }
+        }
+      }, (err, results) => {
+
+        debug(JSON.stringify(results));
+
+        if (!err && results) {
+
+          const regionId = (results && Array.isArray(results) && results.length > 0 ? results[0].regionId : null);
+
+          if (regionId !== null) {
+
+            District.find({
+              where: {
+                and: [
+                  {
+                    regionId
+                  },
+                  {
+                    name: (query.name ? query.name : '') + '%'
+                  }
+                ]
+              }
+            }, (err, results) => {
+
+              debug(JSON.stringify(results));
+
+              if (!err && results) {
+
+                results.forEach(row => {
+
+                  if (data.indexOf(row.name) < 0)
+                    data.push(row.name);
+
+                });
+
+              }
+
+              res
+                .status(200)
+                .json(data);
+
+            })
+
+          } else {
+
+            res
+              .status(200)
+              .json(data);
+
+          }
+
+        } else {
 
           res
             .status(200)
             .json(data);
 
-        })
+        }
+
+      }
+    )
 
   })
 
@@ -1102,17 +1234,77 @@ module.exports = function (app) {
 
     const query = url_parts.query;
 
-    (new client()).get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/search_by_t_a/json?district=" + (query.district
-      ? query.district
-      : "") + "&ta=" + (query.ta
-        ? query.ta
-        : ""), function (data) {
+    let data = [];
+
+    debug(query);
+
+    District.find(
+      {
+        where: {
+          name: (query.district ? query.district : '')
+        }
+      }, (err, results) => {
+
+        debug(JSON.stringify(results));
+
+        if (!err && results) {
+
+          const districtId = (results && Array.isArray(results) && results.length > 0 ? results[0].districtId : null);
+
+          debug(districtId);
+
+          if (districtId !== null) {
+
+            TA.find({
+              where: {
+                and: [
+                  {
+                    districtId
+                  },
+                  {
+                    name: { like: (query.name ? query.name : '') + '%' }
+                  }
+                ]
+              }
+            }, (err, results) => {
+
+              debug(JSON.stringify(results));
+
+              if (!err && results) {
+
+                results.forEach(row => {
+
+                  if (data.indexOf(row.name) < 0)
+                    data.push(row.name);
+
+                });
+
+              }
+
+              res
+                .status(200)
+                .json(data);
+
+            })
+
+          } else {
+
+            res
+              .status(200)
+              .json(data);
+
+          }
+
+        } else {
 
           res
             .status(200)
             .json(data);
 
-        })
+        }
+
+      }
+    )
 
   })
 
@@ -1122,17 +1314,77 @@ module.exports = function (app) {
 
     const query = url_parts.query;
 
-    (new client()).get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/search_by_village/json?ta=" + (query.ta
-      ? query.ta
-      : "") + "&village=" + (query.village
-        ? query.village
-        : ""), function (data) {
+    let data = [];
+
+    debug(query);
+
+    TA.find(
+      {
+        where: {
+          name: (query.ta ? query.ta : '')
+        }
+      }, (err, results) => {
+
+        debug(JSON.stringify(results));
+
+        if (!err && results) {
+
+          const traditionalAuthorityId = (results && Array.isArray(results) && results.length > 0 ? results[0].traditionalAuthorityId : null);
+
+          debug(traditionalAuthorityId);
+
+          if (traditionalAuthorityId !== null) {
+
+            Village.find({
+              where: {
+                and: [
+                  {
+                    traditionalAuthorityId
+                  },
+                  {
+                    name: { like: (query.name ? query.name : '') + '%' }
+                  }
+                ]
+              }
+            }, (err, results) => {
+
+              debug(JSON.stringify(results));
+
+              if (!err && results) {
+
+                results.forEach(row => {
+
+                  if (data.indexOf(row.name) < 0)
+                    data.push(row.name);
+
+                });
+
+              }
+
+              res
+                .status(200)
+                .json(data);
+
+            })
+
+          } else {
+
+            res
+              .status(200)
+              .json(data);
+
+          }
+
+        } else {
 
           res
             .status(200)
             .json(data);
 
-        })
+        }
+
+      }
+    )
 
   })
 
