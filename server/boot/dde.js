@@ -514,7 +514,147 @@ module.exports = function (app) {
 
     } else {
 
-      res.status(200).json({});
+      debug(JSON.stringify(req.params.identifier));
+
+      PatientIdentifier.findOne({
+        where: {
+          identifier: req.params.identifier
+        }
+      }, (err, patient) => {
+
+        debug(patient);
+
+        if (!patient)
+          return res.status(200).json({});
+
+        PersonName.find({
+          where: {
+            and: [
+              {
+                voided: 0
+              },
+              {
+                personId: patient.patientId
+              }
+            ]
+          }
+        }, (err, names) => {
+
+          let personIds = [];
+
+          names.forEach(name => {
+
+            personIds.push(name.personId);
+
+          });
+
+          debug(JSON.stringify(personIds));
+
+          Person.find({
+            where: {
+              and: [
+                {
+                  voided: 0
+                },
+                {
+                  personId: {
+                    inq: personIds
+                  }
+                }
+              ]
+            },
+            include: ['personName', 'personAddress']
+          }, async (err, rows) => {
+
+            debug(JSON.stringify(rows));
+
+            let json = [];
+
+            for (let row of rows) {
+
+              debug(JSON.stringify(row, null, 2));
+
+              const idType = await PatientIdentifierType.findOne({
+                where: {
+                  name: 'HTS Number'
+                }
+              });
+
+              const idTypeId = (idType ? idType.patientIdentifierTypeId : null);
+
+              const identifier = await PatientIdentifier.findOne(
+                {
+                  where: {
+                    and: [
+                      {
+                        voided: 0
+                      },
+                      {
+                        patientId: row.personId
+                      },
+                      {
+                        idTypeId: (idTypeId ? idTypeId : 21)
+                      }
+                    ]
+                  }
+                }
+              );
+
+              debug(identifier);
+
+              const clinicId = (identifier ? identifier.identifier : null);
+
+              const data = JSON.parse(JSON.stringify(row));
+
+              debug(clinicId);
+
+              json.push({
+                "names": {
+                  "family_name": (data.personName && data.personName[0] && data.personName[0].familyName ? data.personName[0].familyName : null),
+                  "given_name": (data.personName && data.personName[0] && data.personName[0].givenName ? data.personName[0].givenName : null),
+                  "middle_name": (data.personName && data.personName[0] && data.personName[0].middleName ? data.personName[0].middleName : null)
+                },
+                "gender": (data.gender ? data.gender : null),
+                "birthdate": (data.birthdate ? data.birthdate : "0000-00-00"),
+                "birthdate_estimated": (data.person && data.person.age_estimate === 1 ? true : false),
+                "addresses": {
+                  "current_residence": (data.personAddress && data.personAddress[0] ? data.personAddress[0].address1 : null),
+                  "current_village": (data.personAddress && data.personAddress[0] ? data.personAddress[0].cityVillage : null),
+                  "current_ta": (data.personAddress && data.personAddress[0] ? data.personAddress[0].townshipDivision : null),
+                  "current_district": (data.personAddress && data.personAddress[0] ? data.personAddress[0].stateProvince : null),
+                  "home_village": (data.personAddress && data.personAddress[0] ? data.personAddress[0].neighborhoodCell : null),
+                  "home_ta": (data.personAddress && data.personAddress[0] ? data.personAddress[0].countyDistrict : null),
+                  "home_district": (data.personAddress && data.personAddress[0] ? data.personAddress[0].address2 : null),
+                },
+                "npid": clinicId,
+                "_id": clinicId,
+                "age": (data.birthdate ? (new Date()).getFullYear() - (new Date(data.birthdate)).getFullYear() : 0)
+              });
+
+            }
+
+            debug(JSON.stringify(json));
+
+            return res
+              .status(200)
+              .json({
+                data: {
+                  hits: json,
+                  matches: (Array.isArray(json)
+                    ? json.length
+                    : Object.keys(json).length > 0
+                      ? 1
+                      : 0)
+                }
+              });
+
+          })
+
+        })
+
+      })
+
+      // res.status(200).json({});
 
     }
 
