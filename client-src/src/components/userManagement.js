@@ -87,6 +87,16 @@ class UserManagement extends Component {
                     this.activateUser(this, e.username)
                   }} />}
             </td>
+            <td>
+              {this.props.app.activeUser === e.username
+                ? <span>&nbsp;</span>
+                : <Button
+                  label="Change Password"
+                  buttonClass={"blue"}
+                  handleMouseDown={() => {
+                    this.changePassword(this, e.username)
+                  }} />}
+            </td>
           </tr>
         })}
       </tbody>
@@ -107,6 +117,16 @@ class UserManagement extends Component {
     this
       .props
       .fetchUsers(page);
+
+  }
+
+  changePassword(e, username) {
+
+    const password = uuid.v4().replace(/[-BIOQSZ81052]/gi, "").substring(0, 8).toLowerCase();
+
+    this.props.showInfoMsg("New Password for '" + username + "'", password);
+
+    this.props.updatePassword(username, password);
 
   }
 
@@ -191,6 +211,9 @@ class UserManagement extends Component {
                   <th style={{
                     width: "60px"
                   }}>Activate</th>
+                  <th style={{
+                    width: "60px"
+                  }}>Change Password</th>
                 </tr>
               </tbody>
               {this.loadUserList()}

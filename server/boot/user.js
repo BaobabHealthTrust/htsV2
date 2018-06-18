@@ -843,6 +843,18 @@ module.exports = function (app) {
 
   })
 
+  router.post('/user/change_password', async function (req, res, next) {
+
+    debug(req.body);
+
+    await User.upsertWithWhere({
+      username: req.body.username
+    }, { password: req.body.password });
+
+    res.status(200).json({});
+
+  })
+
   app.use(router);
 
 };

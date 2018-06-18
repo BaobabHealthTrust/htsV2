@@ -251,3 +251,11 @@ export function usernameValid(username) {
   return { type: 'USERNAME_VALID', payload: request };
 
 }
+
+export function updatePassword(username, password) {
+
+  const request = axios.post('/user/change_password', { username, password });
+
+  return { type: 'UPDATE_PASSWORD', payload: request };
+
+}

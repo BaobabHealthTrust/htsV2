@@ -24,7 +24,8 @@ import {
   flagRegisterFilled,
   updatePartnerRecord,
   getVersion,
-  usernameValid
+  usernameValid,
+  updatePassword
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -84,6 +85,8 @@ import Axios from 'axios';
 import FileDownload from 'react-file-download';
 // eslint-disable-next-line
 import uuid from 'uuid';
+// eslint-disable-next-line
+import password from "./images/password";
 
 class App extends Component {
 
@@ -3409,7 +3412,7 @@ class App extends Component {
         fieldPos: 0
       });
 
-      this.queryOptions("");
+    this.queryOptions("");
 
   }
 
@@ -4008,7 +4011,8 @@ class App extends Component {
                     .props
                     .fetchUsers
                     .bind(this)}
-                  findUser={this.findUser.bind(this)} />
+                  findUser={this.findUser.bind(this)}
+                  updatePassword={this.props.updatePassword.bind(this)} />
                 : (
                   <div>
                     <Topbar
@@ -4626,6 +4630,9 @@ const mapDispatchToProps = dispatch => {
     },
     usernameValid: async (username) => {
       return await dispatch(usernameValid(username));
+    },
+    updatePassword: async (username, password) => {
+      return await dispatch(updatePassword(username, password));
     }
   };
 };

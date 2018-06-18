@@ -96,7 +96,8 @@ class UsersViewer extends Component {
           blockUser={this.props.blockUser}
           activateUser={this.props.activateUser}
           editUser={this.props.editUser}
-          findUser={this.props.findUser} />
+          findUser={this.props.findUser}
+          updatePassword={this.props.updatePassword} />
 
         <div
           style={{
