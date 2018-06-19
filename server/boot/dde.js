@@ -1333,10 +1333,10 @@ module.exports = function (app) {
 
           results.forEach(row => {
 
-            if (data.indexOf(row.givenName) < 0)
+            if (data.indexOf(row.givenName) < 0 && [null, undefined, ""].indexOf(row.givenName) < 0)
               data.push(row.givenName);
 
-            if (row.middleName && data.indexOf(row.middleName) < 0)
+            if ([null, undefined, ""].indexOf(row.middleName) < 0 && data.indexOf(row.middleName) < 0)
               data.push(row.middleName);
 
           });
