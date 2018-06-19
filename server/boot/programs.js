@@ -3238,7 +3238,7 @@ module.exports = function (app) {
 
     debug("@@@@@@@@@@@@@@@@@@@@@@");
 
-    debug(json.client[entryCode]);
+    debug(json.client[entryCode]["HTS Visit"]["Result Given to Client"]);
 
     debug("@@@@@@@@@@@@@@@@@@@@@@");
 
@@ -3300,6 +3300,8 @@ module.exports = function (app) {
 
       new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, function (result) {
 
+        debug(result);
+
         let args = {
           data: {
             htsAccessType: htsAccessTypeMappings[json.client[entryCode]["HTS Visit"]["HTS Access Type"]],
@@ -3311,7 +3313,7 @@ module.exports = function (app) {
             month: monthNames[(new Date()).getMonth()],
             year: (new Date()).getFullYear(),
             age,
-            visitDate: new Date(),
+            visitDate: (new Date()).format("YYYY-mm-dd"),
             entryCode: clinicId,
             htsSetting,
             htsModality,
@@ -3322,7 +3324,11 @@ module.exports = function (app) {
           }
         };
 
-        new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) { })
+        new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) {
+
+          debug(result);
+
+        })
 
       });
 
