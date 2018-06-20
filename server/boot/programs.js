@@ -2277,23 +2277,6 @@ module.exports = function (app) {
 
     let age = ((new Date(today)) - (new Date(birthdate))) / (365.0 * 24.0 * 60.0 * 60.0 * 1000.0);
 
-    /*let buffer = {
-      otherId: clinicId,
-      otherIdType: "Entry code",
-      age,
-      gender: gender,
-      patientName: "- -"
-    };
-
-    const args = {
-      data: buffer,
-      headers: {
-        "Content-Type": "application/json"
-      }
-    };
-
-    new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/patient/" + clinicId, args, function (result) { });*/
-
     let programId = program
       ? program.programId
       : null;
@@ -2697,8 +2680,6 @@ module.exports = function (app) {
 
       debug("$$$$$$$$$$$$$$$$$$$$$$$");
 
-      // new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, function (result) {
-
       let args = {
         data: {
           htsAccessType: htsAccessTypeMappings[json["HTS Access Type"]],
@@ -2722,8 +2703,6 @@ module.exports = function (app) {
       };
 
       new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) { })
-
-      // });
 
     }
 
@@ -2849,7 +2828,7 @@ module.exports = function (app) {
                 json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 2"] = row.observationValue;
               }
 
-            } else if (row.observation === "Last HIV Test Result") {
+            } else if (row.observation === "Last HIV Test Result" || row.observation === "Last HIV test") {
 
               json["Last HIV Test"] = row.observationValue;
 
@@ -3805,7 +3784,7 @@ module.exports = function (app) {
                           json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 2"] = row.observationValue;
                         }
 
-                      } else if (row.observation === "Last HIV Test Result") {
+                      } else if (row.observation === "Last HIV Test Result" || row.observation === "Last HIV test") {
 
                         json["Last HIV Test"] = row.observationValue;
 
