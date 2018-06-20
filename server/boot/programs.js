@@ -2848,6 +2848,10 @@ module.exports = function (app) {
 
               json["Number of Items Given:Condoms:Male"] = String(row.observationValue);
 
+            } else if(row.observation === "Partner HIV Status" && String(row.observationValue).toLowerCase().trim() === "no partner") {
+
+              json["Partner HIV Status"] = "No Partner";
+
             } else {
 
               json[row.observation] = row.observationValue;
@@ -3808,6 +3812,10 @@ module.exports = function (app) {
 
                         json["Time Since Last Test"] = row.observationValue;
 
+                      } else if(row.observation === "Partner HIV Status" && String(row.observationValue).toLowerCase().trim() === "no partner") {
+
+                        json["Partner HIV Status"] = "No Partner";
+          
                       } else {
 
                         json[row.observation] = row.observationValue;

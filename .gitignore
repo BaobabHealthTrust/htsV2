@@ -49,3 +49,4 @@ output
 # client/static/js/main*
 programs/*/.*.json
 db/dumps
+tmp/
