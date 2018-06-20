@@ -2859,15 +2859,15 @@ module.exports = function (app) {
 
             } else if (row.observation === "HTS Family Referral Slips") {
 
-              json["Number of Items Given:HTS Family Referral Slips"] = row.observationValue;
+              json["Number of Items Given:HTS Family Referral Slips"] = String(row.observationValue);
 
             } else if (row.observation === "Number of female condoms given") {
 
-              json["Number of Items Given:Condoms:Female"] = row.observationValue;
+              json["Number of Items Given:Condoms:Female"] = String(row.observationValue);
 
             } else if (row.observation === "Number of male condoms given") {
 
-              json["Number of Items Given:Condoms:Male"] = row.observationValue;
+              json["Number of Items Given:Condoms:Male"] = String(row.observationValue);
 
             } else {
 
@@ -3815,15 +3815,15 @@ module.exports = function (app) {
 
                       } else if (row.observation === "HTS Family Referral Slips") {
 
-                        json["Number of Items Given:HTS Family Referral Slips"] = row.observationValue;
+                        json["Number of Items Given:HTS Family Referral Slips"] = String(row.observationValue);
 
                       } else if (row.observation === "Number of female condoms given") {
 
-                        json["Number of Items Given:Condoms:Female"] = row.observationValue;
+                        json["Number of Items Given:Condoms:Female"] = String(row.observationValue);
 
                       } else if (row.observation === "Number of male condoms given") {
 
-                        json["Number of Items Given:Condoms:Male"] = row.observationValue;
+                        json["Number of Items Given:Condoms:Male"] = String(row.observationValue);
 
                       } else if (row.observation === "Time since last HIV Test") {
 
