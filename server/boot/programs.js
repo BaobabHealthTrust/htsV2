@@ -2809,9 +2809,9 @@ module.exports = function (app) {
               }
 
               if (row.observation.match(/test\s1/i)) {
-                json["HIV Rapid Test Outcomes"]["First Pass"]["Test 1"] = row.observationValue;
+                json["HIV Rapid Test Outcomes"]["First Pass"]["Test 1"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
               } else if (row.observation.match(/test\s2/i)) {
-                json["HIV Rapid Test Outcomes"]["First Pass"]["Test 2"] = row.observationValue;
+                json["HIV Rapid Test Outcomes"]["First Pass"]["Test 2"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
               }
             } else if (row.observation.match(/immediate\srepeat/i)) {
               if (!json["HIV Rapid Test Outcomes"]) {
@@ -2823,9 +2823,9 @@ module.exports = function (app) {
               }
 
               if (row.observation.match(/test\s1/i)) {
-                json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 1"] = row.observationValue;
+                json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 1"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
               } else if (row.observation.match(/test\s2/i)) {
-                json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 2"] = row.observationValue;
+                json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 2"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
               }
 
             } else if (row.observation === "Last HIV Test Result" || row.observation === "Last HIV test") {
@@ -2851,6 +2851,10 @@ module.exports = function (app) {
             } else if(row.observation === "Partner HIV Status" && String(row.observationValue).toLowerCase().trim() === "no partner") {
 
               json["Partner HIV Status"] = "No Partner";
+
+            } else if(String(row.observation).toLowerCase().trim() === "referral for re-testing") {
+
+              json["Referral for Re-Testing"] = (["No Re-Test needed", "No Re-test needed"].indexOf(row.observationValue) >= 0 ? "No Re-Test needed" : row.observationValue);
 
             } else {
 
@@ -3769,9 +3773,9 @@ module.exports = function (app) {
                         }
 
                         if (row.observation.match(/test\s1/i)) {
-                          json["HIV Rapid Test Outcomes"]["First Pass"]["Test 1"] = row.observationValue;
+                          json["HIV Rapid Test Outcomes"]["First Pass"]["Test 1"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
                         } else if (row.observation.match(/test\s2/i)) {
-                          json["HIV Rapid Test Outcomes"]["First Pass"]["Test 2"] = row.observationValue;
+                          json["HIV Rapid Test Outcomes"]["First Pass"]["Test 2"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
                         }
                       } else if (row.observation.match(/immediate\srepeat/i)) {
                         if (!json["HIV Rapid Test Outcomes"]) {
@@ -3783,9 +3787,9 @@ module.exports = function (app) {
                         }
 
                         if (row.observation.match(/test\s1/i)) {
-                          json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 1"] = row.observationValue;
+                          json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 1"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
                         } else if (row.observation.match(/test\s2/i)) {
-                          json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 2"] = row.observationValue;
+                          json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 2"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
                         }
 
                       } else if (row.observation === "Last HIV Test Result" || row.observation === "Last HIV test") {
@@ -3815,6 +3819,10 @@ module.exports = function (app) {
                       } else if(row.observation === "Partner HIV Status" && String(row.observationValue).toLowerCase().trim() === "no partner") {
 
                         json["Partner HIV Status"] = "No Partner";
+          
+                      } else if(String(row.observation).toLowerCase().trim() === "referral for re-testing") {
+
+                        json["Referral for Re-Testing"] = (["No Re-Test needed", "No Re-test needed"].indexOf(row.observationValue) >= 0 ? "No Re-Test needed" : row.observationValue);
           
                       } else {
 
