@@ -2848,13 +2848,13 @@ module.exports = function (app) {
 
               json["Number of Items Given:Condoms:Male"] = String(row.observationValue);
 
-            } else if(row.observation === "Partner HIV Status" && String(row.observationValue).toLowerCase().trim() === "no partner") {
+            } else if (row.observation === "Partner HIV Status" && String(row.observationValue).toLowerCase().trim() === "no partner") {
 
               json["Partner HIV Status"] = "No Partner";
 
-            } else if(String(row.observation).toLowerCase().trim() === "referral for re-testing") {
+            } else if (String(row.observation).toLowerCase().trim() === "referral for re-testing") {
 
-              json["Referral for Re-Testing"] = (["No Re-Test needed", "No Re-test needed"].indexOf(row.observationValue) >= 0 ? "No Re-Test needed" : row.observationValue);
+              json["Referral for Re-Testing"] = (["No Re-Test needed", "No Re-test needed"].indexOf(row.observationValue) >= 0 ? "No Re-Test needed" : (["Re-Test", "Re-test"].indexOf(row.observationValue) ? "Re-Test" : row.observationValue));
 
             } else {
 
@@ -3816,14 +3816,14 @@ module.exports = function (app) {
 
                         json["Time Since Last Test"] = row.observationValue;
 
-                      } else if(row.observation === "Partner HIV Status" && String(row.observationValue).toLowerCase().trim() === "no partner") {
+                      } else if (row.observation === "Partner HIV Status" && String(row.observationValue).toLowerCase().trim() === "no partner") {
 
                         json["Partner HIV Status"] = "No Partner";
-          
-                      } else if(String(row.observation).toLowerCase().trim() === "referral for re-testing") {
 
-                        json["Referral for Re-Testing"] = (["No Re-Test needed", "No Re-test needed"].indexOf(row.observationValue) >= 0 ? "No Re-Test needed" : row.observationValue);
-          
+                      } else if (String(row.observation).toLowerCase().trim() === "referral for re-testing") {
+
+                        json["Referral for Re-Testing"] = (["No Re-Test needed", "No Re-test needed"].indexOf(row.observationValue) >= 0 ? "No Re-Test needed" : (["Re-Test", "Re-test"].indexOf(row.observationValue) ? "Re-Test" : row.observationValue));
+
                       } else {
 
                         json[row.observation] = row.observationValue;
