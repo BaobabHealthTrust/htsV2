@@ -1375,7 +1375,7 @@ module.exports = function (app) {
 
           results.forEach(row => {
 
-            if (data.indexOf(row.familyName) < 0)
+            if (data.indexOf(row.familyName) < 0 && [null, undefined, ""].indexOf(row.familyName) < 0)
               data.push(row.familyName);
 
           });
@@ -1416,7 +1416,7 @@ module.exports = function (app) {
 
           results.forEach(row => {
 
-            if (data.indexOf(row.name) < 0)
+            if (data.indexOf(row.name) < 0 && [null, undefined, ""].indexOf(row.name) < 0)
               data.push(row.name);
 
           });
@@ -1480,7 +1480,7 @@ module.exports = function (app) {
 
                 results.forEach(row => {
 
-                  if (data.indexOf(row.name) < 0)
+                  if (data.indexOf(row.name) < 0 && [null, undefined, ""].indexOf(row.name) < 0)
                     data.push(row.name);
 
                 });
@@ -1560,7 +1560,7 @@ module.exports = function (app) {
 
                 results.forEach(row => {
 
-                  if (data.indexOf(row.name) < 0)
+                  if (data.indexOf(row.name) < 0 && [null, undefined, ""].indexOf(row.name) < 0)
                     data.push(row.name);
 
                 });
@@ -1640,7 +1640,7 @@ module.exports = function (app) {
 
                 results.forEach(row => {
 
-                  if (data.indexOf(row.name) < 0)
+                  if (data.indexOf(row.name) < 0 && [null, undefined, ""].indexOf(row.name) < 0)
                     data.push(row.name);
 
                 });
