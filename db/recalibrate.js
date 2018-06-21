@@ -308,6 +308,16 @@ const loadConceptNames = async (data) => {
 
     let result;
 
+    result = await runCmd("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT concept_name_tag_id FROM concept_name_tag WHERE tag = \"preferred_hts\"'");
+
+    debug(result);
+
+    if (result.length <= 0) {
+
+        result = await runCmd("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'INSERT INTO concept_name_tag (tag, description, creator, date_created, uuid) VALUES (\"preferred_hts\", \"HTS concept names tag\", 1, NOW(), (SELECT UUID()))'").catch(e => { console.log(e) });
+
+    }
+
     for (let e of data) {
 
         debug("export MYSQL_PWD=" + password + " && mysql -h " + host + " -u " + user + " " + database + " -e 'SELECT concept_name_id FROM concept_name WHERE name = \"" + e + "\" LIMIT 1'");
