@@ -51,3 +51,4 @@ programs/*/.*.json
 db/dumps
 tmp/
 package-lock.json
+client-src/package-lock.json
