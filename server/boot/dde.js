@@ -610,9 +610,9 @@ module.exports = function (app) {
 
               json.push({
                 "names": {
-                  "family_name": (data.personName && data.personName[0] && data.personName[0].familyName ? data.personName[0].familyName : null),
-                  "given_name": (data.personName && data.personName[0] && data.personName[0].givenName ? data.personName[0].givenName : null),
-                  "middle_name": (data.personName && data.personName[0] && data.personName[0].middleName ? data.personName[0].middleName : null)
+                  "family_name": (data.personName && data.personName[0] && data.personName[0].familyName ? data.personName[0].familyName : '-'),
+                  "given_name": (data.personName && data.personName[0] && data.personName[0].givenName ? data.personName[0].givenName : '-'),
+                  "middle_name": (data.personName && data.personName[0] && data.personName[0].middleName ? data.personName[0].middleName : '-')
                 },
                 "gender": (data.gender ? data.gender : null),
                 "birthdate": (data.birthdate ? data.birthdate : "0000-00-00"),

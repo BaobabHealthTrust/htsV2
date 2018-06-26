@@ -536,6 +536,14 @@ class App extends Component {
           ? "Yes"
           : "No"), this.state.currentWorkflow);
 
+      if (this.state.currentWorkflow === "secondary") {
+
+        await this
+          .props
+          .handleInputChange("Partner HIV Status", "HIV Unknown", this.state.currentWorkflow);
+
+      }
+
     }
 
     switch (group) {

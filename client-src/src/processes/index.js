@@ -378,6 +378,8 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
               props.handleInputChange("Partner Present", "Yes", "secondary");
 
+              props.handleInputChange("Partner HIV Status", "HIV Unknown", "secondary");
+
             } else if (partnerId && props.app.patientData && props.app.module && props.app.selectedVisit && props.app.patientData[partnerId] && props.app.patientData[partnerId][props.app.module] && props.app.patientData[partnerId][props.app.module].visits && props.app.patientData[partnerId][props.app.module].visits.filter((e) => {
               return Object.keys(e)[0] === props.app.selectedVisit
             }) && props.app.patientData[partnerId][props.app.module].visits.filter((e) => {
@@ -423,6 +425,8 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
                 await parent.navigateToRoute(props.app.order[0], "/", "secondary");
 
                 props.handleInputChange("Partner Present", "Yes", "secondary");
+
+                props.handleInputChange("Partner HIV Status", "HIV Unknown", "secondary");
 
               }
 
@@ -528,6 +532,8 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
                   props.handleInputChange("Partner Present", "Yes", "secondary");
 
+                  props.handleInputChange("Partner HIV Status", "HIV Unknown", "secondary");
+
                 } else if (partnerId && props.app.patientData && props.app.module && props.app.selectedVisit && props.app.patientData[partnerId] && props.app.patientData[partnerId][props.app.module] && props.app.patientData[partnerId][props.app.module].visits && props.app.patientData[partnerId][props.app.module].visits.filter((e) => {
                   return Object.keys(e)[0] === props.app.selectedVisit
                 }) && props.app.patientData[partnerId][props.app.module].visits.filter((e) => {
@@ -573,6 +579,8 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
                     await parent.navigateToRoute(props.app.order[0], "/", "secondary");
 
                     props.handleInputChange("Partner Present", "Yes", "secondary");
+
+                    props.handleInputChange("Partner HIV Status", "HIV Unknown", "secondary");
 
                   }
 
@@ -785,6 +793,8 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
                 props.handleInputChange("Partner Present", "Yes", "secondary");
 
+                props.handleInputChange("Partner HIV Status", "HIV Unknown", "secondary");
+
               } else if (partnerId && props.app.patientData && props.app.module && props.app.selectedVisit && props.app.patientData[partnerId] && props.app.patientData[partnerId][props.app.module] && props.app.patientData[partnerId][props.app.module].visits && props.app.patientData[partnerId][props.app.module].visits.filter((e) => {
                 return Object.keys(e)[0] === props.app.selectedVisit
               }) && props.app.patientData[partnerId][props.app.module].visits.filter((e) => {
@@ -830,6 +840,8 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
                   await parent.navigateToRoute(props.app.order[0], "/", "secondary");
 
                   props.handleInputChange("Partner Present", "Yes", "secondary");
+
+                  props.handleInputChange("Partner HIV Status", "HIV Unknown", "secondary");
 
                 }
 
@@ -1041,6 +1053,8 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
                 props.handleInputChange("Partner Present", "Yes", "secondary");
 
+                props.handleInputChange("Partner HIV Status", "HIV Unknown", "secondary");
+
               } else if (partnerId && props.app.patientData && props.app.module && props.app.selectedVisit && props.app.patientData[partnerId] && props.app.patientData[partnerId][props.app.module] && props.app.patientData[partnerId][props.app.module].visits && props.app.patientData[partnerId][props.app.module].visits.filter((e) => {
                 return Object.keys(e)[0] === props.app.selectedVisit
               }) && props.app.patientData[partnerId][props.app.module].visits.filter((e) => {
@@ -1086,6 +1100,8 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
                   await parent.navigateToRoute(props.app.order[0], "/", "secondary");
 
                   props.handleInputChange("Partner Present", "Yes", "secondary");
+
+                  props.handleInputChange("Partner HIV Status", "HIV Unknown", "secondary");
 
                 }
 

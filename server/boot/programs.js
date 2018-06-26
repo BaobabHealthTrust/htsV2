@@ -4847,7 +4847,7 @@ module.exports = function (app) {
           const programName = (program ? program.name : "");
 
           let row = {
-            visitDate: new Date(req.body.visitDate),
+            visitDate: (new Date(req.body.visitDate)).format("YYYY-mm-dd"),
             encounterType: (encounterType ? encounterType.name : null),
             identifier: clinicId,
             observation: req.body.concept,
@@ -4857,7 +4857,7 @@ module.exports = function (app) {
             provider,
             user: req.body.currentUser,
             encounterId: newObs.encounterId,
-            dateOfBirth: person.birthdate,
+            dateOfBirth: (new Date(person.birthdate)).format("YYYY-mm-dd"),
             registerNumber,
             locationType,
             serviceDeliveryPoint,
@@ -4873,6 +4873,8 @@ module.exports = function (app) {
           };
 
           new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) {
+
+            debug(JSON.stringify(result));
 
             res.status(200).json({});
 
