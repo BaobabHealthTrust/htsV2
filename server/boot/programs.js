@@ -4957,6 +4957,12 @@ module.exports = function (app) {
 
         res.status(200).json({ version: "3.0.0" });
 
+      } else {
+
+        const value = String(version).substring(1).trim();
+
+        res.status(200).json({ version: value });
+
       }
 
     }
