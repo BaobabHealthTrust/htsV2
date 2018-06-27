@@ -1952,15 +1952,18 @@ module.exports = function (app) {
           }
         },
         aggs: {
-          location: {
+          visit: {
             terms: {
-              field: "serviceDeliveryPoint.keyword",
-              size: 10000
+              field: "visitDate",
+              size: 10000,
+              order: {
+                _term: "desc"
+              }
             },
             aggs: {
-              visit: {
+              location: {
                 terms: {
-                  field: "visitDate",
+                  field: "serviceDeliveryPoint.keyword",
                   size: 10000,
                   order: {
                     _term: "desc"
@@ -1970,7 +1973,10 @@ module.exports = function (app) {
                   user: {
                     terms: {
                       field: "user.keyword",
-                      size: 10000
+                      size: 10000,
+                      order: {
+                        _term: "desc"
+                      }
                     },
                     aggs: {
                       clients: {
@@ -1992,15 +1998,15 @@ module.exports = function (app) {
       if (!resp.aggregations)
         return res.end();
 
-      for (let row of resp.aggregations.location.buckets) {
+      for (let visit of resp.aggregations.visit.buckets) {
 
-        const location = row.key;
+        const visitDate = (new Date(visit.key)).format("d mmm YYYY");
 
-        for (let visit of row.visit.buckets) {
+        for (let row of visit.location.buckets) {
 
-          const visitDate = (new Date(visit.key)).format("d mmm YYYY");
+          const location = row.key;
 
-          for (let user of visit.user.buckets) {
+          for (let user of row.user.buckets) {
 
             const username = user.key;
 
