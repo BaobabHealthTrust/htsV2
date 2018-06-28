@@ -27,6 +27,7 @@ CREATE TABLE `hts_register` (
   `register_number` varchar(45) DEFAULT NULL,
   `location_type_id` int(11) NOT NULL,
   `service_delivery_point_id` int(11) NOT NULL,
+  `location_id` int(11) NOT NULL,
   `closed` tinyint(4) NOT NULL DEFAULT '0',
   `date_created` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
