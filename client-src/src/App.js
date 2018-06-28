@@ -3587,7 +3587,7 @@ class App extends Component {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: !this.props.app.formActive || (this.props.app.formActive && this.props.app.fieldPos < 1)
+        disabled: !this.props.app.formActive || (this.props.app.formActive && (this.props.app.fieldPos < 1 || (this.$('u14HelpText') && this.$('u14HelpText').innerHTML.trim() === 'Partner present')))
           ? true
           : false,
         inactive: this.props.app.module === "" && !this.props.app.formActive
