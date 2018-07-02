@@ -1732,7 +1732,7 @@ class App extends Component {
           })
           .map((e) => {
             return Object.keys(e[Object.keys(e)[0]])
-          })[0];
+          }).sort().pop();
 
         this.transcribe(entryCode);
 
@@ -2584,7 +2584,7 @@ class App extends Component {
 
     await this
       .props
-      .updateApp({ entryCode: (Array.isArray(entryCode) ? entryCode[0] : entryCode) });
+      .updateApp({ entryCode: (Array.isArray(entryCode) ? entryCode.sort().pop() : entryCode) });
 
     const configs = {
       "Register Number (from cover)": {
@@ -3592,7 +3592,7 @@ class App extends Component {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: !this.props.app.formActive || (this.props.app.formActive && this.props.app.fieldPos < 1)
+        disabled: !this.props.app.formActive || (this.props.app.formActive && (this.props.app.fieldPos < 1 || (this.$('u14HelpText') && this.$('u14HelpText').innerHTML.trim() === 'Partner present')))
           ? true
           : false,
         inactive: this.props.app.module === "" && !this.props.app.formActive
@@ -3670,16 +3670,17 @@ class App extends Component {
             })
             .map((e) => {
               return Object.keys(e[Object.keys(e)[0]])
-            })[0];
+            }).sort().pop();
 
           this.transcribe(entryCode);
+
         },
         label: "Transcribe",
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: true // !this.props.app.patientActivated || this.props.app.formActive
+        disabled: true // !this.props.app.patientActivated || this.props.app.formActive 
           ? true
           : false,
         inactive: this.props.app.module === "" && !this.props.app.formActive
