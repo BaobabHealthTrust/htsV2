@@ -167,7 +167,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
                 })
                 .map((e) => {
                   return Object.keys(e[Object.keys(e)[0]])
-                })[0];
+                }).sort().pop();
 
               parent.transcribe(entryCode);
 
