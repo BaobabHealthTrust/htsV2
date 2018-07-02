@@ -379,7 +379,7 @@ const recalibrate = async () => {
         },
         {
             message: "Modifying hts_register table ...",
-            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "SET @preparedStatement = (SELECT IF((SELECT COUNT(*) FROM information_schema.COLUMNS WHERE COLUMN_NAME=\'location_id\' AND TABLE_NAME=\'hts_register\') > 0, \'SELECT 1\', \'ALTER TABLE hts_register ADD COLUMN location_id INT NOT NULL AFTER service_delivery_point_id\')); PREPARE alterIfNotExists FROM @preparedStatement; EXECUTE alterIfNotExists; DEALLOCATE PREPARE alterIfNotExists;"'
+            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "SET @preparedStatement = (SELECT IF((SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=\'' + database + '\' AND COLUMN_NAME=\'location_id\' AND TABLE_NAME=\'hts_register\') > 0, \'SELECT 1\', \'ALTER TABLE hts_register ADD COLUMN location_id INT NOT NULL AFTER service_delivery_point_id\')); PREPARE alterIfNotExists FROM @preparedStatement; EXECUTE alterIfNotExists; DEALLOCATE PREPARE alterIfNotExists;"'
         },
         {
             message: "Loading registers ...",
