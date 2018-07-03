@@ -2712,6 +2712,11 @@ class App extends Component {
               : ""],
             className: "longSelectList"
           },
+          "HTS Location": {
+            fieldType: "text",
+            ajaxURL: "/list_locations?name=",
+            lockList: true
+          },
           action: "/programs/add_register"
         },
         summaryIgnores: [],
