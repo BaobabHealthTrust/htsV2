@@ -278,6 +278,15 @@
               "ignore_above": 256
             }
           }
+        },
+        "htsLocation": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
         }
       }
     },
