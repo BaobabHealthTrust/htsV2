@@ -220,7 +220,7 @@ class App extends Component {
 
       });
 
-    if (this.props.app.refresh) {
+    if (this.props.app.refresh && this.props.app.currentId) {
 
       setTimeout(() => {
 
@@ -1634,9 +1634,10 @@ class App extends Component {
 
           this.cancelForm();
 
-          this
-            .props
-            .fetchVisits(this.props.app.currentId);
+          if (this.props.app.currentId)
+            this
+              .props
+              .fetchVisits(this.props.app.currentId);
 
         }
 
@@ -1715,9 +1716,10 @@ class App extends Component {
 
           await this.autoReroute(this.state.currentWorkflow, currentEncounter);
 
-          this
-            .props
-            .fetchVisits(this.props.app.currentId);
+          if (this.props.app.currentId)
+            this
+              .props
+              .fetchVisits(this.props.app.currentId);
 
         });
 
