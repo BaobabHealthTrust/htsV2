@@ -2085,7 +2085,7 @@ class App extends Component {
 
       const label = this.props.wf.responses[this.state.currentWorkflow]["Label Text"];
 
-      const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB50,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
+      const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB10,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
 
       const uri = 'data:application/label; charset=utf-8; filename=label.lbl; disposition=inline,' + encodeURIComponent(data);
 
@@ -3282,7 +3282,7 @@ class App extends Component {
     residence: ""
   }) {
 
-    const text = "\nN\nq801\nQ329,026\nZT\nB50,180,0,1,5,15,120,N,\"" + data.npid + "\"\nA40,50,0,2,2,2,N,\"" + data.first_name + " " + data.family_name + "\"\nA40,96,0,2,2,2,N,\"" + data
+    const text = "\nN\nq801\nQ329,026\nZT\nB10,180,0,1,5,15,120,N,\"" + data.npid + "\"\nA40,50,0,2,2,2,N,\"" + data.first_name + " " + data.family_name + "\"\nA40,96,0,2,2,2,N,\"" + data
       .npid
       .replace(/\B(?=([A-Za-z0-9]{3})+(?![A-Za-z0-9]))/g, "-") + " " + (parseInt(data.date_of_birth_estimated, 10) === 1
         ? "~"
