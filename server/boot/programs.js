@@ -5237,6 +5237,20 @@ module.exports = function (app) {
 
   })
 
+  router.get('/redirect_to_portal', async function (req, res, next) {
+
+    const filename = __dirname + "/../../configs/site.json";
+
+    debug(filename);
+
+    debug(fs.existsSync(filename));
+
+    const site = (fs.existsSync(filename) ? JSON.parse(fs.readFileSync(filename, "utf-8")) : {});
+
+    res.status(200).json({ redirect_to_portal: site.redirect_to_portal, portal_url: site.portal_url });
+
+  })
+
   app.use(router);
 
 };
