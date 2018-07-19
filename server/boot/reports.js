@@ -1925,6 +1925,7 @@ module.exports = function (app) {
 
     const month = decodeURIComponent(query.m);
     const year = decodeURIComponent(query.y);
+    const date = padZeros((new Date()).getDate(), 2)
 
     res.set('Content-Type', 'application/json');
 
@@ -1938,17 +1939,8 @@ module.exports = function (app) {
         : 10000),
       body: {
         query: {
-          bool: {
-            must: [
-              {
-                range: {
-                  visitDate: {
-                    gte: (new Date(year, month, 0)).format("YYYY-mm-dd"),
-                    lte: (new Date(year, month, 30)).format("YYYY-mm-dd")
-                  }
-                }
-              }
-            ]
+          match: {
+            visitDate: (new Date(year, month, date)).format("YYYY-mm-dd")
           }
         },
         aggs: {
