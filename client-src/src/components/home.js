@@ -50,7 +50,8 @@ class Home extends Component {
                 changePassword={this.props.changePassword}
                 printLabel={this.props.printLabel}
                 addLocation={this.props.addLocation}
-                addVillages={this.props.addVillages} />
+                addVillages={this.props.addVillages}
+                showUserStats={this.props.showUserStats} />
             </td>
             <td style={{
               width: "200px"
