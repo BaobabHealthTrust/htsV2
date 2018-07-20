@@ -13,10 +13,10 @@ class ShowUserStats extends Component {
         return ((this.props.reports.filteredData || []).map((row) => {
             return (row.User && row.Total
                 ? <tr key={uuid.v4()} id={uuid.v4()}>
-                    <td align="center">{row.Date}</td>
-                    <td align="center">{row.User}</td>
+                    <td align="center" width="200px">{row.Date}</td>
+                    <td align="center" width="200px">{row.User}</td>
+                    <td align="center" width="200px">{row.Total}</td>
                     <td>{row.Location}</td>
-                    <td align="center">{row.Total}</td>
                 </tr>
                 : <tr>
                     <td colSpan="4"></td>
@@ -49,15 +49,41 @@ class ShowUserStats extends Component {
             .props
             .fetchFilteredVisitSummaries(month1, year1, date1, month2, year2, date2);
 
+        if (this.$("btnClear")) {
+
+            this.$("btnClear").style.display = "none";
+
+        }
+
+        if (this.$("btnNext")) {
+
+            this.$("btnNext").innerHTML = "Finish";
+
+        }
+
+    }
+
+    componentWillUnmount() {
+
+        if (this.$("btnClear")) {
+
+            this.$("btnClear").style.display = "block";
+
+        }
+
+        if (this.$("btnNext")) {
+
+            this.$("btnNext").innerHTML = "Next";
+
+        }
+
     }
 
     render() {
 
         return (
             <div style={{
-                padding: "5px",
-                overflow: "auto",
-                height: "calc(100vh - 270px)"
+                padding: "5px"
             }}>
                 <table
                     style={{
@@ -74,16 +100,31 @@ class ShowUserStats extends Component {
                                 color: "#333333",
                                 border: "1px solid #eeeeee"
                             }}>
-                            <th>Date</th>
-                            <th>User</th>
+                            <th width="200px">Date</th>
+                            <th width="200px">User</th>
+                            <th width="200px">Total</th>
                             <th align="left">Location</th>
-                            <th>Total</th>
                         </tr>
                     </tbody>
-                    <tbody id="grid">
-                        {this.loadVisits()}
-                    </tbody>
                 </table>
+                <div
+                    style={{
+                        overflow: "auto",
+                        height: "calc(100vh - 305px)"
+                    }} >
+                    <table
+                        style={{
+                            borderCollapse: "collapse",
+                            width: "100%",
+                            borderColor: "#cccccc"
+                        }}
+                        cellPadding="10"
+                        border="1">
+                        <tbody>
+                            {this.loadVisits()}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         )
