@@ -68,7 +68,8 @@ import {
   fetchDailyRegister,
   fetchVisitSummaries,
   fetchPepfarData,
-  resetPepfarData
+  resetPepfarData,
+  fetchFilteredVisitSummaries
 } from "./actions/reportsActions";
 import { processes } from './processes';
 import { barcode } from './validations/barcodeEvents';
@@ -3431,6 +3432,140 @@ class App extends Component {
 
   }
 
+  async showUserStats() {
+
+
+    await this.setState({ currentWorkflow: "primary" });
+
+    await this.setState({
+      loaded: Object.assign({}, this.state.loaded, {
+        [this.state.currentWorkflow]: true
+      })
+    });
+
+    await this
+      .props
+      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Show User Stats"].data);
+
+    await this
+      .props
+      .updateApp({
+        selectedTask: "Show User Stats",
+        formActive: true,
+        currentSection: "show user stats",
+        configs: {
+          "Start Month": {
+            options: [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ],
+            className: "longSelectList",
+            title: "Missing Data",
+            message: "Start Month \n must be selected"
+          },
+          "End Month": {
+            options: [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ],
+            className: "longSelectList",
+            title: "Missing Data",
+            message: "Start Month \n must be selected"
+          },
+          "Start Year": {
+            fieldType: "number",
+            validationRule: "^\\d{4}$",
+            min: "thisYear - 10",
+            max: "thisYear",
+            validationMessage: "Start Year \n must between {{thisYear - 10}} and {{thisYear}}",
+            hiddenButtons: [
+              "clear",
+              "/",
+              ".",
+              "-",
+              "abc",
+              "qwe",
+              "Unknown"
+            ]
+          },
+          "End Year": {
+            fieldType: "number",
+            validationRule: "^\\d{4}$",
+            min: "thisYear - 10",
+            max: "thisYear",
+            validationMessage: "End Year \n must between {{thisYear - 10}} and {{thisYear}}",
+            hiddenButtons: [
+              "clear",
+              "/",
+              ".",
+              "-",
+              "abc",
+              "qwe",
+              "Unknown"
+            ]
+          },
+          "Start Date": {
+            fieldType: "days",
+            yearField: "Start Year",
+            monthField: "Start Month",
+            title: "Missing Data",
+            message: "Start Date \n must be entered",
+            validationRule: "^\\d+$",
+            validationMessage: "Start Date \n must be entered",
+            hiddenButtons: [
+              "Unknown"
+            ]
+          },
+          "End Date": {
+            fieldType: "days",
+            yearField: "End Year",
+            monthField: "End Month",
+            title: "Missing Data",
+            message: "End Date \n must be entered",
+            validationRule: "^\\d+$",
+            validationMessage: "End Date \n must be entered",
+            hiddenButtons: [
+              "Unknown"
+            ]
+          },
+          "Display Stats": {
+            customComponent: "ShowUserStats",
+            properties: {
+              label: "User Stats"
+            },
+            optional: true
+          },
+          action: null
+        },
+        summaryIgnores: [],
+        sectionHeader: "Show User Stats",
+        fieldPos: 0
+      });
+
+    this.queryOptions("");
+
+  }
+
   render() {
 
     const nextLabel = (this.props.app.currentSection === "home" || this.props.app.currentSection === "registration"
@@ -4256,7 +4391,9 @@ class App extends Component {
                         .bind(this)}
                       addLocation={this.addLocation.bind(this)}
                       clearField={this.props.clearField.bind(this)}
-                      addVillages={this.addVillages.bind(this)} />
+                      addVillages={this.addVillages.bind(this)}
+                      showUserStats={this.showUserStats.bind(this)}
+                      fetchFilteredVisitSummaries={this.props.fetchFilteredVisitSummaries} />
                   </div>
                 )}
         <U13 buttons={buttons} version={this.props.app.version} />
@@ -4649,6 +4786,9 @@ const mapDispatchToProps = dispatch => {
     },
     updatePassword: async (username, password) => {
       return await dispatch(updatePassword(username, password));
+    },
+    fetchFilteredVisitSummaries: async (month1, year1, date1, month2, year2, date2) => {
+      return await dispatch(fetchFilteredVisitSummaries(month1, year1, date1, month2, year2, date2));
     }
   };
 };

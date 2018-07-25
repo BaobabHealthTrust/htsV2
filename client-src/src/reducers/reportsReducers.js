@@ -19,13 +19,13 @@ export default function reportsReducers(state = {
 
     case "FETCH_REPORT_PENDING":
 
-      newState = Object.assign({}, state, {processing: true});
+      newState = Object.assign({}, state, { processing: true });
 
       return newState;
 
     case "FETCH_REPORT_FULFILLED":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
       newState = Object.assign({}, newState, action.payload.data);
 
@@ -52,19 +52,19 @@ export default function reportsReducers(state = {
 
     case "FETCH_RAW_DATA_FULFILLED":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
       return newState;
 
     case "RESET_RAW_DATA":
 
-      newState = Object.assign({}, state, {rawData: []});
+      newState = Object.assign({}, state, { rawData: [] });
 
       return newState;
 
     case "SET_DATA_HEADERS":
 
-      newState = Object.assign({}, state, {dataHeaders: action.payload});
+      newState = Object.assign({}, state, { dataHeaders: action.payload });
 
       return newState;
 
@@ -89,7 +89,7 @@ export default function reportsReducers(state = {
 
     case "FETCH_DAILY_REGISTER_FULFILLED":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
       return newState;
 
@@ -114,13 +114,13 @@ export default function reportsReducers(state = {
 
     case "FETCH_VISIT_SUMMARIES_FULFILLED":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
       return newState;
 
     case "FETCH_PEPFAR_DATA_PENDING":
 
-      newState = Object.assign({}, state, {processing: true});
+      newState = Object.assign({}, state, { processing: true });
 
       return newState;
 
@@ -136,13 +136,38 @@ export default function reportsReducers(state = {
 
     case "FETCH_PEPFAR_DATA_FULFILLED":
 
-      newState = Object.assign({}, state, {processing: false});
+      newState = Object.assign({}, state, { processing: false });
 
       return newState;
 
     case "RESET_PEPFAR_DATA":
 
-      newState = Object.assign({}, state, {pepfarData: []});
+      newState = Object.assign({}, state, { pepfarData: [] });
+
+      return newState;
+
+    case "FETCH_FILTERED_VISIT_SUMMARIES":
+
+      newState = Object.assign({}, state);
+
+      newState
+        .filteredData
+        .push(action.payload);
+
+      return newState;
+
+    case "FETCH_FILTERED_VISIT_SUMMARIES_FULFILLED":
+
+      newState = Object.assign({}, state, { processing: false });
+
+      return newState;
+
+    case "FETCH_FILTERED_VISIT_SUMMARIES_PENDING":
+
+      newState = Object.assign({}, state, {
+        filteredData: [],
+        processing: true
+      });
 
       return newState;
 
