@@ -1687,7 +1687,7 @@ class App extends Component {
               : new Date().getTime(),
             program: this.props.app.module,
             group: this.state.currentWorkflow,
-            location: this.props.app.activeLocation,
+            location: this.props.app.currentLocation,
             user: this.props.app.activeUser
           }))
         .catch((e) => {
