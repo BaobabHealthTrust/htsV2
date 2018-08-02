@@ -68,7 +68,8 @@ import {
   fetchDailyRegister,
   fetchVisitSummaries,
   fetchPepfarData,
-  resetPepfarData
+  resetPepfarData,
+  fetchFilteredVisitSummaries
 } from "./actions/reportsActions";
 import { processes } from './processes';
 import { barcode } from './validations/barcodeEvents';
@@ -220,7 +221,7 @@ class App extends Component {
 
       });
 
-    if (this.props.app.refresh) {
+    if (this.props.app.refresh && this.props.app.currentId) {
 
       setTimeout(() => {
 
@@ -1634,9 +1635,10 @@ class App extends Component {
 
           this.cancelForm();
 
-          this
-            .props
-            .fetchVisits(this.props.app.currentId);
+          if (this.props.app.currentId)
+            this
+              .props
+              .fetchVisits(this.props.app.currentId);
 
         }
 
@@ -1715,9 +1717,10 @@ class App extends Component {
 
           await this.autoReroute(this.state.currentWorkflow, currentEncounter);
 
-          this
-            .props
-            .fetchVisits(this.props.app.currentId);
+          if (this.props.app.currentId)
+            this
+              .props
+              .fetchVisits(this.props.app.currentId);
 
         });
 
@@ -2083,7 +2086,7 @@ class App extends Component {
 
       const label = this.props.wf.responses[this.state.currentWorkflow]["Label Text"];
 
-      const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB50,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
+      const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB10,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
 
       const uri = 'data:application/label; charset=utf-8; filename=label.lbl; disposition=inline,' + encodeURIComponent(data);
 
@@ -3280,7 +3283,7 @@ class App extends Component {
     residence: ""
   }) {
 
-    const text = "\nN\nq801\nQ329,026\nZT\nB50,180,0,1,5,15,120,N,\"" + data.npid + "\"\nA40,50,0,2,2,2,N,\"" + data.first_name + " " + data.family_name + "\"\nA40,96,0,2,2,2,N,\"" + data
+    const text = "\nN\nq801\nQ329,026\nZT\nB10,180,0,1,5,15,120,N,\"" + data.npid + "\"\nA40,50,0,2,2,2,N,\"" + data.first_name + " " + data.family_name + "\"\nA40,96,0,2,2,2,N,\"" + data
       .npid
       .replace(/\B(?=([A-Za-z0-9]{3})+(?![A-Za-z0-9]))/g, "-") + " " + (parseInt(data.date_of_birth_estimated, 10) === 1
         ? "~"
@@ -3422,6 +3425,140 @@ class App extends Component {
         },
         summaryIgnores: [],
         sectionHeader: "Add Village",
+        fieldPos: 0
+      });
+
+    this.queryOptions("");
+
+  }
+
+  async showUserStats() {
+
+
+    await this.setState({ currentWorkflow: "primary" });
+
+    await this.setState({
+      loaded: Object.assign({}, this.state.loaded, {
+        [this.state.currentWorkflow]: true
+      })
+    });
+
+    await this
+      .props
+      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Show User Stats"].data);
+
+    await this
+      .props
+      .updateApp({
+        selectedTask: "Show User Stats",
+        formActive: true,
+        currentSection: "show user stats",
+        configs: {
+          "Start Month": {
+            options: [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ],
+            className: "longSelectList",
+            title: "Missing Data",
+            message: "Start Month \n must be selected"
+          },
+          "End Month": {
+            options: [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ],
+            className: "longSelectList",
+            title: "Missing Data",
+            message: "Start Month \n must be selected"
+          },
+          "Start Year": {
+            fieldType: "number",
+            validationRule: "^\\d{4}$",
+            min: "thisYear - 10",
+            max: "thisYear",
+            validationMessage: "Start Year \n must between {{thisYear - 10}} and {{thisYear}}",
+            hiddenButtons: [
+              "clear",
+              "/",
+              ".",
+              "-",
+              "abc",
+              "qwe",
+              "Unknown"
+            ]
+          },
+          "End Year": {
+            fieldType: "number",
+            validationRule: "^\\d{4}$",
+            min: "thisYear - 10",
+            max: "thisYear",
+            validationMessage: "End Year \n must between {{thisYear - 10}} and {{thisYear}}",
+            hiddenButtons: [
+              "clear",
+              "/",
+              ".",
+              "-",
+              "abc",
+              "qwe",
+              "Unknown"
+            ]
+          },
+          "Start Date": {
+            fieldType: "days",
+            yearField: "Start Year",
+            monthField: "Start Month",
+            title: "Missing Data",
+            message: "Start Date \n must be entered",
+            validationRule: "^\\d+$",
+            validationMessage: "Start Date \n must be entered",
+            hiddenButtons: [
+              "Unknown"
+            ]
+          },
+          "End Date": {
+            fieldType: "days",
+            yearField: "End Year",
+            monthField: "End Month",
+            title: "Missing Data",
+            message: "End Date \n must be entered",
+            validationRule: "^\\d+$",
+            validationMessage: "End Date \n must be entered",
+            hiddenButtons: [
+              "Unknown"
+            ]
+          },
+          "Display Stats": {
+            customComponent: "ShowUserStats",
+            properties: {
+              label: "User Stats"
+            },
+            optional: true
+          },
+          action: null
+        },
+        summaryIgnores: [],
+        sectionHeader: "Show User Stats",
         fieldPos: 0
       });
 
@@ -4254,7 +4391,9 @@ class App extends Component {
                         .bind(this)}
                       addLocation={this.addLocation.bind(this)}
                       clearField={this.props.clearField.bind(this)}
-                      addVillages={this.addVillages.bind(this)} />
+                      addVillages={this.addVillages.bind(this)}
+                      showUserStats={this.showUserStats.bind(this)}
+                      fetchFilteredVisitSummaries={this.props.fetchFilteredVisitSummaries} />
                   </div>
                 )}
         <U13 buttons={buttons} version={this.props.app.version} />
@@ -4647,6 +4786,9 @@ const mapDispatchToProps = dispatch => {
     },
     updatePassword: async (username, password) => {
       return await dispatch(updatePassword(username, password));
+    },
+    fetchFilteredVisitSummaries: async (month1, year1, date1, month2, year2, date2) => {
+      return await dispatch(fetchFilteredVisitSummaries(month1, year1, date1, month2, year2, date2));
     }
   };
 };

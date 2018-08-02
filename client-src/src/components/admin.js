@@ -5,6 +5,7 @@ import icoUsers from '../images/users';
 import icoPrint from '../images/print';
 import icoLocations from '../images/locations';
 import icoTAs from '../images/sites';
+import icoStats from '../images/stats';
 
 class Admin extends Component {
 
@@ -49,6 +50,23 @@ class Admin extends Component {
             }} />
           <br />
           Manage Users
+        </div>
+        <div
+          className="sectionButton"
+          onMouseDown={() => {
+            this
+              .props
+              .showUserStats()
+          }} id="btnUserStats">
+          <img
+            src={icoStats}
+            height="80"
+            alt=""
+            style={{
+              margin: "8px"
+            }} />
+          <br />
+          User Stats
         </div>
         <div
           className="sectionButton"

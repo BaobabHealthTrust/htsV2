@@ -1924,6 +1924,7 @@ module.exports = function (app) {
 
     const month = decodeURIComponent(query.m);
     const year = decodeURIComponent(query.y);
+    const date = padZeros((new Date()).getDate(), 2)
 
     res.set('Content-Type', 'application/json');
 
@@ -1937,17 +1938,8 @@ module.exports = function (app) {
         : 10000),
       body: {
         query: {
-          bool: {
-            must: [
-              {
-                range: {
-                  visitDate: {
-                    gte: (new Date(year, month, 0)).format("YYYY-mm-dd"),
-                    lte: (new Date(year, month, 30)).format("YYYY-mm-dd")
-                  }
-                }
-              }
-            ]
+          match: {
+            visitDate: (new Date(year, month, date)).format("YYYY-mm-dd")
           }
         },
         aggs: {
@@ -1962,7 +1954,7 @@ module.exports = function (app) {
             aggs: {
               location: {
                 terms: {
-                  field: "serviceDeliveryPoint.keyword",
+                  field: "location.keyword",
                   size: 10000,
                   order: {
                     _term: "desc"
@@ -2524,6 +2516,148 @@ module.exports = function (app) {
       }
 
     })
+
+  })
+
+  router.get('/filtered_visit_summaries', function (req, res, next) {
+
+    const url_parts = url.parse(req.url, true);
+
+    const query = url_parts.query;
+
+    debug(JSON.stringify(query));
+
+    const months = {
+      January: 0,
+      February: 1,
+      March: 2,
+      April: 3,
+      May: 4,
+      June: 5,
+      July: 6,
+      August: 7,
+      September: 8,
+      October: 9,
+      November: 10,
+      December: 11
+    };
+
+    const month1 = months[decodeURIComponent(query.m1)];
+    const year1 = decodeURIComponent(query.y1);
+    const date1 = decodeURIComponent(query.d1);
+
+    const month2 = months[decodeURIComponent(query.m2)];
+    const year2 = decodeURIComponent(query.y2);
+    const date2 = decodeURIComponent(query.d2);
+
+    res.set('Content-Type', 'application/json');
+
+    esClient.search({
+      index: es.index,
+      from: (query.f
+        ? query.f
+        : 0),
+      size: (query.s
+        ? query.s
+        : 10000),
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                range: {
+                  visitDate: {
+                    gte: (new Date(year1, month1, date1)).format("YYYY-mm-dd"),
+                    lte: (new Date(year2, month2, date2)).format("YYYY-mm-dd")
+                  }
+                }
+              }
+            ]
+          }
+        },
+        aggs: {
+          visit: {
+            terms: {
+              field: (month1 !== month2 ? "visitDate" : "visitDate"),
+              size: 10000,
+              order: {
+                _term: "desc"
+              }
+            },
+            aggs: {
+              location: {
+                terms: {
+                  field: "location.keyword",
+                  size: 10000,
+                  order: {
+                    _term: "desc"
+                  }
+                },
+                aggs: {
+                  user: {
+                    terms: {
+                      field: "user.keyword",
+                      size: 10000,
+                      order: {
+                        _term: "desc"
+                      }
+                    },
+                    aggs: {
+                      clients: {
+                        terms: {
+                          field: "identifier.keyword",
+                          size: 10000
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }, (e, resp) => {
+
+      if (!resp.aggregations)
+        return res.end();
+
+      for (let visit of resp.aggregations.visit.buckets) {
+
+        const visitDate = (new Date(visit.key)).format("d mmm YYYY");
+
+        for (let row of visit.location.buckets) {
+
+          const location = row.key;
+
+          for (let user of row.user.buckets) {
+
+            const username = user.key;
+
+            let chunk = {
+              Location: location,
+              User: username,
+              Date: visitDate,
+              Total: user.clients.buckets.length
+            };
+
+            res.write(JSON.stringify([
+              {
+                row: chunk
+              }
+            ]));
+
+          }
+
+        }
+
+      }
+
+      res.end();
+
+    });
+
+    
 
   })
 

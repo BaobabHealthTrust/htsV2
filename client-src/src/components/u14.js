@@ -10,6 +10,7 @@ import Transcribe from './transcribe';
 import FamilyRefs from './familyRefs';
 import EntryCode from './entryCode';
 import FindEnteredRecord from './findEnteredRecord';
+import ShowUserStats from './showUserStats';
 
 class U14 extends Component {
 
@@ -176,6 +177,10 @@ class U14 extends Component {
 
       CustomComponent = FindEnteredRecord;
 
+    } else if (this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].customComponent && this.props.configs[this.props.label].customComponent === "ShowUserStats") {
+
+      CustomComponent = ShowUserStats;
+
     }
 
     if (this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].properties) {
@@ -250,7 +255,9 @@ class U14 extends Component {
                   showInfoMsg={this.props.showInfoMsg}
                   activeWorkflow={this.props.activeWorkflow}
                   wf={this.props.wf}
-                  clearField={this.props.clearField} />
+                  clearField={this.props.clearField}
+                  reports={this.props.reports}
+                  fetchFilteredVisitSummaries={this.props.fetchFilteredVisitSummaries} />
                 : <div>
                   <table
                     width="100%"

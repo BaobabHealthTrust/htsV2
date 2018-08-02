@@ -61,7 +61,8 @@ class U4 extends Component {
                             switchTab={this.props.switchTab}
                             printLabel={this.props.printLabel}
                             addLocation={this.props.addLocation}
-                            addVillages={this.props.addVillages} />
+                            addVillages={this.props.addVillages}
+                            showUserStats={this.props.showUserStats} />
                           : this.props.currentTab === "manage registers"
                             ? <ManageRegisters
                               updateApp={this.props.updateApp}
