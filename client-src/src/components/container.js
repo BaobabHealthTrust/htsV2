@@ -273,7 +273,9 @@ class Container extends Component {
             showInfoMsg={this.props.showInfoMsg}
             activeWorkflow={this.props.activeWorkflow}
             wf={this.props.wf}
-            clearField={this.props.clearField} />)
+            clearField={this.props.clearField}
+            reports={this.props.reports}
+            fetchFilteredVisitSummaries={this.props.fetchFilteredVisitSummaries} />)
         : <Home
           programs={this.props.programs}
           handleSwitchProgram={this.props.handleSwitchProgram}
@@ -299,7 +301,8 @@ class Container extends Component {
           changePassword={this.props.changePassword}
           printLabel={this.props.printLabel}
           addLocation={this.props.addLocation}
-          addVillages={this.props.addVillages} />))
+          addVillages={this.props.addVillages}
+          showUserStats={this.props.showUserStats} />))
   }
   render() {
     return (
