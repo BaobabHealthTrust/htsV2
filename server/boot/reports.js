@@ -598,8 +598,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Partner Present" AND observationValue:"Yes" AND serviceDeliveryPoin' +
-                    't:"' + location + '"'
+                  query: 'observation:"Partner Present" AND observationValue:"Yes" AND locationType:"' + location + '"'
                 }
               }, {
                 range: {
