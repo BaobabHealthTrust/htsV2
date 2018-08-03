@@ -1405,6 +1405,8 @@ module.exports = function (app) {
 
     const query = url_parts.query;
 
+    debug(JSON.stringify(query));
+
     const field = decodeURIComponent(query.f);
     const location = decodeURIComponent(query.l);
     const sMonth = decodeURIComponent(query.sm);
@@ -1640,6 +1642,8 @@ module.exports = function (app) {
     const url_parts = url.parse(req.url, true);
 
     const query = url_parts.query;
+
+    debug(JSON.stringify(query));
 
     const sMonth = decodeURIComponent(query.sm);
     const sYear = decodeURIComponent(query.sy);
@@ -2040,7 +2044,7 @@ module.exports = function (app) {
     const gender = decodeURIComponent(query.s);
     const resultGiven = decodeURIComponent(query.r);
 
-    console.log(group);
+    debug(group);
 
     let args = {
       data: {
@@ -2070,11 +2074,11 @@ module.exports = function (app) {
       }
     };
 
-    console.log(JSON.stringify(args));
+    debug(JSON.stringify(args));
 
     (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/_search", args, function (result) {
 
-      console.log(result);
+      debug(result);
 
       res
         .status(200)
@@ -2657,7 +2661,7 @@ module.exports = function (app) {
 
     });
 
-    
+
 
   })
 
