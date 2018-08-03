@@ -179,11 +179,13 @@ const loadPepfarData = async () => {
 
             let j = 0;
 
-            files.forEach(file => {
+            // files.forEach(file => {
+
+            async.mapSeries(files, (file, cb) => {
 
                 j++;
 
-                process.stdout.write("Loading Pepfar data " + (j / files.length) + "% ...\r");
+                process.stdout.write("Loading Pepfar data " + (100 * (j / files.length)).toFixed(1) + "% ...\r");
 
                 let htsSetting = "";
                 let htsModality = "";
@@ -294,7 +296,13 @@ const loadPepfarData = async () => {
                     }
                 };
 
-                new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) { })
+                new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) {
+
+                    fs.writeFileSync(file.replace(/dumps/, 'logs'), JSON.stringify(result));
+
+                    cb();
+
+                })
 
             })
 
@@ -416,6 +424,45 @@ async.series([
         } else {
 
             glob(__dirname + '/dumps/*.json', (err, files) => {
+
+                async.mapSeries(files, (file, iCb) => {
+
+                    console.log('Deleting file %s ...', file);
+
+                    fs.unlink(file, err => {
+                        if (err) throw err;
+
+                        iCb();
+
+                    });
+
+                }, (err) => {
+
+                    if (err)
+                        throw err;
+
+                    cb();
+
+                })
+
+            })
+
+        }
+
+    },
+
+
+    function (cb) {
+
+        if (!fs.existsSync(__dirname + '/logs')) {
+
+            fs.mkdirSync(__dirname + '/logs');
+
+            cb();
+
+        } else {
+
+            glob(__dirname + '/logs/*.json', (err, files) => {
 
                 async.mapSeries(files, (file, iCb) => {
 
