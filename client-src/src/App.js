@@ -2495,7 +2495,10 @@ class App extends Component {
 
   }
 
-  scrollPepfarData(startPos, endPos) {
+  async scrollPepfarData(startPos, endPos) {
+
+    if (!this.props.reports || (this.props.reports && !this.props.reports.start) || (this.props.reports && !this.props.reports.end))
+      return;
 
     this
       .props
