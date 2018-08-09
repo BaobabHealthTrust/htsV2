@@ -1914,6 +1914,7 @@ module.exports = function (app) {
       if (e)
         console.log(e);
 
+
       res.end();
 
     })
@@ -2097,6 +2098,8 @@ module.exports = function (app) {
     const url_parts = url.parse(req.url, true);
 
     const query = url_parts.query;
+
+    console.log(JSON.stringify(query));
 
     if (!fs.existsSync("./data")) {
 
