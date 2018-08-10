@@ -87,6 +87,12 @@ module.exports = function (app) {
 
   function fetchFNP(field, sMonth, sYear, eMonth, eYear, location, res) {
 
+    debug(sMonth);
+    debug(eMonth);
+    debug(eYear);
+    debug(parseInt(eMonth, 10) + 1);
+    debug((new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd'));
+
     let args = {
       data: {
         query: {
@@ -100,7 +106,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -142,7 +148,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -184,7 +190,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -226,7 +232,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -268,7 +274,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -310,7 +316,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -352,7 +358,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -394,7 +400,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -436,7 +442,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -478,7 +484,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -520,7 +526,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -562,7 +568,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -604,7 +610,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -647,7 +653,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -689,7 +695,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -731,7 +737,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -773,7 +779,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -815,7 +821,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -857,7 +863,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -899,7 +905,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -941,7 +947,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -983,7 +989,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1025,7 +1031,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1067,7 +1073,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1109,7 +1115,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1151,7 +1157,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1193,7 +1199,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1235,7 +1241,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1277,7 +1283,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1329,7 +1335,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1372,7 +1378,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1492,7 +1498,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format("YYYY-mm-dd"),
-                    lte: (new Date(eYear, eMonth, 30)).format("YYYY-mm-dd")
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format("YYYY-mm-dd")
                   }
                 }
               }
@@ -1678,7 +1684,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format("YYYY-mm-dd"),
-                    lte: (new Date(sYear, sMonth, 30)).format("YYYY-mm-dd")
+                    lte: (new Date(sYear, sMonth + 1, 1)).format("YYYY-mm-dd")
                   }
                 }
               }
@@ -1797,7 +1803,7 @@ module.exports = function (app) {
                   range: {
                     visitDate: {
                       gte: (new Date(sYear, sMonth, 1)).format("YYYY-mm-dd"),
-                      lte: (new Date(eYear, eMonth, 30)).format("YYYY-mm-dd")
+                      lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 1)).format("YYYY-mm-dd")
                     }
                   }
                 }
@@ -2062,7 +2068,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(year, month, 1)),
-                    lte: (new Date(year, month, 30))
+                    lte: (new Date(year, month + 1, 1))
                   }
                 }
               }
@@ -2308,7 +2314,7 @@ module.exports = function (app) {
                               range: {
                                 visitDate: {
                                   gte: (new Date(year, months.indexOf(month), 1)).format('YYYY-mm-dd'),
-                                  lte: (new Date(year, months.indexOf(month), 30)).format('YYYY-mm-dd')
+                                  lte: (new Date(year, months.indexOf(month) + 1, 1)).format('YYYY-mm-dd')
                                 }
                               }
                             }
