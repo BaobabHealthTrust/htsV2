@@ -485,6 +485,102 @@ const cleaDuplicateObsData = async () => {
 
     }
 
+    result = await runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'SELECT obs_id, value_text FROM obs WHERE COALESCE(value_text, \"\") != \"\" AND voided = 0 AND concept_id IN (SELECT concept_id FROM concept_name WHERE name IN (\"Age\", \"Time since last test\"))'").catch(e => { console.log(e) });
+
+    debug(result);
+
+    if (result.trim().length > 0) {
+
+        let rows = result.split('\n');
+
+        debug(JSON.stringify(rows));
+
+        async.mapSeries(rows, async (row, cb) => {
+
+            let parts = row.split('\t');
+
+            if (parts.length > 1) {
+
+                debug(parts);
+
+                let period = parts[1].match(/^(\d+)([A-Z])$/);
+
+                if (period) {
+
+                    const cmd = "export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'UPDATE obs SET value_numeric = \"" + period[1] + "\", value_modifier=\"" + period[2] + "\", value_text=NULL WHERE obs_id=\"" + parts[0] + "\"'";
+
+                    console.log(cmd);
+
+                    result = await runCmd(cmd).catch(e => { console.log(e) });
+
+                    debug(result);
+
+                    cb();
+
+                } else {
+
+                    cb();
+
+                }
+
+            } else {
+
+                cb();
+
+            }
+
+        }, (err) => {
+
+            if (err)
+                console.log(err);
+
+        });
+
+    }
+
+    result = await runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'SELECT obs_id, value_text FROM obs WHERE COALESCE(value_text, \"\") != \"\" AND voided = 0 AND concept_id IN (SELECT concept_id FROM concept_name WHERE name IN (\"Appointment date given\"))'").catch(e => { console.log(e) });
+
+    debug(result);
+
+    if (result.trim().length > 0) {
+
+        let rows = result.split('\n');
+
+        debug(JSON.stringify(rows));
+
+        async.mapSeries(rows, async (row, cb) => {
+
+            let parts = row.split('\t');
+
+            if (parts.length > 1) {
+
+                debug(parts);
+
+                const cmd = "export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'UPDATE obs SET value_datetime = \"" + (new Date(parts[1])).format('YYYY-mm-dd') + "\", value_text=NULL WHERE obs_id=\"" + parts[0] + "\"'";
+
+                console.log(cmd);
+
+                result = await runCmd(cmd).catch(e => { console.log(e) });
+
+                debug(result);
+
+                cb();
+
+            } else {
+
+                cb();
+
+            }
+
+        }, (err) => {
+
+            if (err)
+                console.log(err);
+
+        });
+
+    }
+
 }
 
 const recalibrate = async () => {
