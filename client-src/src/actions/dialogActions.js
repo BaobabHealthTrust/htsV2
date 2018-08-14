@@ -63,7 +63,7 @@ export function scrollTestDown() {
 export function updateReportField(field, value, group) {
 
   return {
-      type: "UPDATE_FIELD",
+      type: "UPDATE_REPORT_FIELD",
       payload: {
           field: field,
           result: value,

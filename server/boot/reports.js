@@ -2099,439 +2099,6 @@ module.exports = function (app) {
 
   })
 
-  router.get('/full_disaggregated', function (req, res, next) {
-
-    const url_parts = url.parse(req.url, true);
-
-    const query = url_parts.query;
-
-    console.log(JSON.stringify(query));
-
-    if (!fs.existsSync("./data")) {
-
-      fs.mkdirSync("./data");
-
-    }
-
-    const sMonth = decodeURIComponent(query.sm);
-    const sYear = decodeURIComponent(query.sy);
-    const eMonth = decodeURIComponent(query.em);
-    const eYear = decodeURIComponent(query.ey);
-    const download = (query.d
-      ? true
-      : false);
-    const csvJSON = (query.j
-      ? true
-      : false);
-    let csv = [];
-    let json = [];
-    let dump = [];
-
-    if (fs.existsSync(`./data/${sMonth}.${sYear}.${eMonth}.${eYear}.json`)) {
-
-      dump = JSON.parse(fs.readFileSync(`./data/${sMonth}.${sYear}.${eMonth}.${eYear}.json`).toString('utf8'));
-
-    }
-
-    const startPos = (query.s
-      ? query.s
-      : 0);
-    const endPos = (query.e
-      ? query.e
-      : 20);
-
-    if (dump.length > 0) {
-
-      if (!download && !csvJSON) {
-
-        res.set('Content-Type', 'application/json');
-
-        for (let chunk of dump.splice(startPos, (endPos - startPos))) {
-
-          res.write(JSON.stringify([
-            {
-              row: chunk
-            }
-          ]));
-
-        }
-
-        return res.end();
-
-      }
-
-    }
-
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ];
-
-    const htsAccessTypes = ["PITC", "FRS/Index", "VCT/Other"];
-
-    const htsAccessTypeMappings = {
-      "PITC": "Routine HTS (PITC) within Health Service",
-      "FRS/Index": "Comes with HTS Family Referral Slip",
-      "VCT/Other": "Other (VCT, etc.)"
-    };
-
-    const htsAccessTypeReverseMappings = {
-      "Routine HTS (PITC) within Health Service": "PITC",
-      "Comes with HTS Family Referral Slip": "FRS/Index",
-      "Other (VCT, etc.)": "VCT/Other"
-    };
-
-    const genders = ["M", "F"];
-
-    const resultGivens = ["Negative", "Positive"];
-
-    const facility = site.facility;
-
-    const district = site.location;
-
-    let years = {};
-
-    let period = parseInt((((new Date(eYear, eMonth, 1)) - (new Date(sYear, sMonth, 1))) / (1000 * 60 * 60 * 24 * 30)), 10);
-
-    let trackDate = (new Date(sYear, sMonth, 1));
-
-    for (let i = 0; i <= period; i++) {
-
-      if (!years[trackDate.getFullYear()]) {
-
-        years[trackDate.getFullYear()] = [];
-
-      }
-
-      if (years[trackDate.getFullYear()].indexOf(months[trackDate.getMonth()]) < 0) {
-
-        years[trackDate.getFullYear()].push(months[trackDate.getMonth()]);
-
-      }
-
-      trackDate.setMonth(trackDate.getMonth() + 1);
-
-    }
-
-    let ageGroups = [
-      "<1",
-      "1-4",
-      "5-9",
-      "10-14",
-      "15-19",
-      "20-24",
-      "25-29",
-      "30-34",
-      "35-39",
-      "40-44",
-      "45-49",
-      ">=50"
-    ];
-
-    if (download) {
-
-      csv.push([
-        "District",
-        "Site",
-        "Month",
-        "Year",
-        "HTS Modality",
-        "HTS Access Type",
-        "Age Group",
-        "Sex",
-        "Result Given",
-        "Count"
-      ].join("\t"));
-
-      res.setHeader('Content-disposition', 'attachment; filename=data.csv');
-      res.set('Content-Type', 'text/csv');
-
-    } else if (csvJSON) {
-
-      json.push([
-        "District",
-        "Site",
-        "Month",
-        "Year",
-        "HTS Modality",
-        "HTS Access Type",
-        "Age Group",
-        "Sex",
-        "Result Given",
-        "Count"
-      ]);
-
-      res.set('Content-Type', 'application/json');
-
-    } else {
-
-      res.set('Content-Type', 'application/json');
-
-    }
-
-    let k = 0;
-
-    async.mapSeries(Object.keys(years), (year, yCb) => {
-
-      async.mapSeries(years[year], (month, mCb) => {
-
-        async.mapSeries(htsModalities, (htsModality, lCb) => {
-
-          async.mapSeries(htsAccessTypes, (htsAccessType, hCb) => {
-
-            async.mapSeries(ageGroups, (ageGroup, aCb) => {
-
-              async.mapSeries(genders, (gender, gCb) => {
-
-                async.mapSeries(resultGivens, (resultGiven, rCb) => {
-
-                  k++;
-
-                  const group = ageGroup.split("-");
-
-                  let args = {
-                    data: {
-                      query: {
-                        bool: {
-                          must: [
-                            {
-                              query_string: {
-                                query: (group.length === 1
-                                  ? `age:${group[0]}`
-                                  : `age:>=${group[0]} AND age:<=${parseFloat(group[1]) + 0.99999}`) + ` AND htsModality:"${htsModality}" AND htsAccessType:"${htsAccessType}" AND gender:"${gender}" AND resultGiven:"${resultGiven}"`
-                              }
-                            }, {
-                              range: {
-                                visitDate: {
-                                  gte: (new Date(year, months.indexOf(month), 1)).format('YYYY-mm-dd'),
-                                  lte: (new Date(year, months.indexOf(month) + 1, 0)).format('YYYY-mm-dd')
-                                }
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    headers: {
-                      "Content-Type": "application/json"
-                    }
-                  };
-
-                  (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/_search", args, function (result) {
-
-                    const count = (result && result.hits && result.hits.total
-                      ? result.hits.total
-                      : 0)
-
-                    if (download) {
-
-                      let row = [
-                        district,
-                        facility,
-                        month,
-                        year,
-                        htsModality,
-                        htsAccessType,
-                        (group[0] === ">=50"
-                          ? "50+"
-                          : group.join("-")), {
-                            "M": "Male",
-                            "F": "Female"
-                          }[gender],
-                        resultGiven,
-                        count
-                      ];
-
-                      csv.push(row.join("\t"));
-
-                    } else if (csvJSON) {
-
-                      let row = [
-                        district,
-                        facility,
-                        month,
-                        year,
-                        htsModality,
-                        htsAccessType,
-                        (group[0] === ">=50"
-                          ? "50+"
-                          : group.join("-")), {
-                            "M": "Male",
-                            "F": "Female"
-                          }[gender],
-                        resultGiven,
-                        count
-                      ];
-
-                      json.push(row);
-
-                    } else {
-
-                      let chunk = {
-                        "Pos": k,
-                        "District": district,
-                        "Site": facility,
-                        "Age Group": (group[0] === ">=50"
-                          ? "50+"
-                          : group.join("-")),
-                        "Month": month,
-                        "Year": year,
-                        "HTS Modality": htsModality,
-                        "HTS Access Type": htsAccessType,
-                        "Sex": {
-                          "M": "Male",
-                          "F": "Female"
-                        }[gender],
-                        "Result Given": resultGiven,
-                        "Count": count
-                      };
-
-                      dump.push(chunk);
-
-                      if (k >= startPos && k <= endPos) {
-
-                        res.write(JSON.stringify([
-                          {
-                            row: chunk
-                          }
-                        ]));
-
-                      }
-
-                    }
-
-                    process.nextTick(() => {
-
-                      rCb();
-
-                    })
-
-                  });
-
-                }, (e) => {
-
-                  if (e) {
-                    console.log(e);
-                  }
-
-                  process.nextTick(() => {
-
-                    gCb();
-
-                  })
-
-                });
-
-              }, (e) => {
-
-                if (e) {
-                  console.log(e);
-                }
-
-                process.nextTick(() => {
-
-                  aCb();
-
-                });
-
-              });
-
-            }, (e) => {
-
-              if (e) {
-                console.log(e);
-              }
-
-              process.nextTick(() => {
-
-                hCb();
-
-              });
-
-            });
-
-          }, (e) => {
-
-            if (e) {
-              console.log(e);
-            }
-
-            process.nextTick(() => {
-
-              lCb();
-
-            });
-
-          });
-
-        }, (e) => {
-
-          if (e) {
-            console.log(e);
-          }
-
-          process.nextTick(() => {
-
-            mCb();
-
-          });
-
-        });
-
-      }, (e) => {
-
-        if (e) {
-          console.log(e);
-        }
-
-        process.nextTick(() => {
-
-          yCb();
-
-        });
-
-      });
-
-    }, (e) => {
-
-      if (e) {
-        console.log(e);
-      }
-
-      if (download) {
-
-        res
-          .status(200)
-          .send(csv.join("\n"));
-
-      } else if (csvJSON) {
-
-        res
-          .status(200)
-          .json(json);
-
-      } else {
-
-        fs.writeFileSync(`./data/${sMonth}.${sYear}.${eMonth}.${eYear}.json`, JSON.stringify(dump));
-
-        res.end();
-
-      }
-
-    })
-
-  })
-
   router.get('/filtered_visit_summaries', function (req, res, next) {
 
     const url_parts = url.parse(req.url, true);
@@ -2674,7 +2241,7 @@ module.exports = function (app) {
 
   })
 
-  router.get('/disaggregated_report', (req, res, next) => {
+  router.get('/full_disaggregated', (req, res, next) => {
 
     const query = req.query;
 
@@ -2712,9 +2279,9 @@ module.exports = function (app) {
 
     let years = {};
 
-    let period = parseInt((((new Date(eYear, months.indexOf(eMonth), 1)) - (new Date(sYear, months.indexOf(sMonth), 1))) / (1000 * 60 * 60 * 24 * 30)), 10);
+    let period = parseInt((((new Date(eYear, parseInt(eMonth, 10), 1)) - (new Date(sYear, parseInt(sMonth, 10), 1))) / (1000 * 60 * 60 * 24 * 30)), 10);
 
-    let trackDate = (new Date(sYear, months.indexOf(sMonth), 1));
+    let trackDate = (new Date(sYear, parseInt(sMonth, 10), 1));
 
     for (let i = 0; i <= period; i++) {
 
@@ -2778,7 +2345,7 @@ module.exports = function (app) {
       ? query.e
       : 20);
 
-    debug((new Date(eYear, months.indexOf(eMonth) + 1, 0)).format('YYYY-mm-dd'));
+    debug((new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd'));
 
     const args = {
       data: {
@@ -2786,8 +2353,8 @@ module.exports = function (app) {
         query: {
           range: {
             visitDate: {
-              gte: (new Date(sYear, months.indexOf(sMonth), 1)).format('YYYY-mm-dd'),
-              lte: (new Date(eYear, months.indexOf(eMonth) + 1, 0)).format('YYYY-mm-dd')
+              gte: (new Date(sYear, parseInt(sMonth, 10), 1)).format('YYYY-mm-dd'),
+              lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
             }
           }
         },
@@ -2979,9 +2546,15 @@ module.exports = function (app) {
 
       let json = [];
 
-      // json = data;
+      if (download) {
 
-      // json.push(header.join('\t'));
+        json.push(header.join('\t'));
+
+      } else {
+
+        res.set('Content-Type', 'application/json');
+
+      }
 
       let k = 0;
 
@@ -3020,8 +2593,6 @@ module.exports = function (app) {
                     if (!ageGroup)
                       return res.status(200).json(json);
 
-                    k++;
-
                     const group = ageGroup.split("-");
 
                     let count = 0;
@@ -3044,24 +2615,55 @@ module.exports = function (app) {
 
                     }
 
-                    let row = {
-                      "Pos": k,
-                      "District": district,
-                      "Site": facility,
-                      "Age Group": ageGroup,
-                      "Month": month,
-                      "Year": year,
-                      "HTS Modality": modality,
-                      "HTS Access Type": accessType,
-                      "Sex": {
-                        "M": "Male",
-                        "F": "Female"
-                      }[gender],
-                      "Result Given": result,
-                      "Count": count
+                    if ((k >= startPos && k < endPos) && !download) {
+
+                      let row = {
+                        "Pos": k,
+                        "District": district,
+                        "Site": facility,
+                        "Age Group": ageGroup,
+                        "Month": month,
+                        "Year": year,
+                        "HTS Modality": modality,
+                        "HTS Access Type": accessType,
+                        "Sex": {
+                          "M": "Male",
+                          "F": "Female"
+                        }[gender],
+                        "Result Given": result,
+                        "Count": count
+                      }
+
+                      res.write(JSON.stringify([
+                        {
+                          row
+                        }
+                      ]));
+
+                    } else if (download) {
+
+                      const entry = [
+                        district,
+                        facility,
+                        month,
+                        year,
+                        modality,
+                        accessType,
+                        ageGroup,
+                        gender,
+                        result,
+                        count
+                      ];
+
+                      json.push(entry.join('\t'));
+
+                    } else if (k >= endPos) {
+
+                      return yCb();
+
                     }
 
-                    json.push(row);
+                    k++;
 
                     process.nextTick(() => {
 
@@ -3152,7 +2754,18 @@ module.exports = function (app) {
         if (err)
           console.log(err);
 
-        res.status(200).json(json);
+        if (download) {
+
+          res.setHeader('Content-disposition', 'attachment; filename=data.csv');
+          res.set('Content-Type', 'text/csv');
+
+          res.status(200).send(json.join("\n"));
+
+        } else {
+
+          res.end();
+
+        }
 
       })
 

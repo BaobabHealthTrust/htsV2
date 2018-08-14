@@ -225,7 +225,7 @@ export default function dialogReducers(state = {
 
       return newState;
 
-    case "UPDATE_FIELD":
+    case "UPDATE_REPORT_FIELD":
 
       newState = Object.assign({}, state);
 
