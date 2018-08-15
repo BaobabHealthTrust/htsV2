@@ -2117,10 +2117,6 @@ module.exports = function (app) {
       ? json["Current User"]
       : null;
 
-    let currentLocationName = json["Current Location"]
-      ? json["Current Location"]
-      : "Unknown";
-
     const user = await Users.findOne({
       where: {
         username: currentUser
@@ -2231,6 +2227,8 @@ module.exports = function (app) {
     let registerNumber = parts[1].trim();
     let locationType = parts[5].trim();
     let serviceDeliveryPoint = parts[3].trim();
+
+    let currentLocationName = parts[4].trim();
 
     let gender = json["Sex/Pregnancy"]
       ? String(json["Sex/Pregnancy"])
@@ -3085,6 +3083,8 @@ module.exports = function (app) {
     let registerNumber = parts[1].trim();
     let locationType = parts[5].trim();
     let serviceDeliveryPoint = parts[3].trim();
+
+    let currentLocationName = parts[4].trim();
 
     let concept = await ConceptName.findOne({
       where: {

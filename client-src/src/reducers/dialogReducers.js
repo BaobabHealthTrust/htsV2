@@ -59,7 +59,7 @@ export default function dialogReducers(state = {
 
     case "CLOSE_DIALOG":
 
-      newState = Object.assign({}, state, {title: null});
+      newState = Object.assign({}, state, { title: null });
 
       return newState;
 
@@ -133,9 +133,9 @@ export default function dialogReducers(state = {
 
       }
 
-      if (index >= 0) 
+      if (index >= 0)
         newState.location = locations[index];
-      
+
       return newState;
 
     case "SCROLL_LOCATION_DOWN":
@@ -156,9 +156,9 @@ export default function dialogReducers(state = {
 
       }
 
-      if (index >= 0) 
+      if (index >= 0)
         newState.location = locations[index];
-      
+
       return newState;
 
     case "SCROLL_TEST_UP":
@@ -222,6 +222,18 @@ export default function dialogReducers(state = {
           })[0];
 
       }
+
+      return newState;
+
+    case "UPDATE_REPORT_FIELD":
+
+      newState = Object.assign({}, state);
+
+      const entry = {};
+
+      entry[action.payload.field] = action.payload.result;
+
+      newState[action.payload.group] = Object.assign({}, newState[action.payload.group], entry);
 
       return newState;
 

@@ -142,7 +142,13 @@
           "format" : "YYYY-MM-dd"
         },
         "encounterId": {
-          "type": "text"
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
         },
         "registerNumber": {
           "type": "text",
