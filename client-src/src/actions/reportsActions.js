@@ -91,13 +91,13 @@ export function fetchVisitSummaries(month, year) {
 
 }
 
-export function fetchPepfarData(baseUrl, sMonth, sYear, eMonth, eYear, startPos = 0, endPos = 20) {
+export function fetchPepfarData(baseUrl, sMonth, sYear, eMonth, eYear, modality, startPos = 0, endPos = 20) {
 
   return (dispatch) => {
 
     dispatch({ type: "FETCH_PEPFAR_DATA_PENDING" });
 
-    oboe(baseUrl + "?sm=" + sMonth + "&sy=" + sYear + "&em=" + eMonth + "&ey=" + eYear + "&s=" + startPos + "&e=" + endPos).on('node', 'row', function (row) {
+    oboe(baseUrl + "?sm=" + sMonth + "&sy=" + sYear + "&em=" + eMonth + "&ey=" + eYear + "&s=" + startPos + "&e=" + endPos + (modality ? "&m=" + modality : "")).on('node', 'row', function (row) {
 
       dispatch({ type: "FETCH_PEPFAR_DATA", payload: row })
 

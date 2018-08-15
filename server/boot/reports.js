@@ -2094,6 +2094,8 @@ module.exports = function (app) {
 
     const query = url_parts.query;
 
+    console.log(JSON.stringify(query));
+
     if (!fs.existsSync("./data")) {
 
       fs.mkdirSync("./data");

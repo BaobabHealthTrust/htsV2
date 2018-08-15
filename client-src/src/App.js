@@ -82,6 +82,7 @@ import algorithm from './lib/dhaAlgorithm.js';
 import Login from './components/login';
 import tests from './config/tests';
 import locations from './config/pepfarLocations';
+import modalities from './config/htsModalities';
 import Axios from 'axios';
 import FileDownload from 'react-file-download';
 // eslint-disable-next-line
@@ -2389,7 +2390,8 @@ class App extends Component {
         },
         location: this.props.app.report.location,
         test: this.props.app.report.test,
-        testType: this.props.app.report.testType
+        testType: this.props.app.report.testType,
+        modality: this.props.app.report.modality
       });
 
     const monthlReport = [
@@ -2463,7 +2465,7 @@ class App extends Component {
 
       this
         .props
-        .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear);
+        .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality);
 
     }
 
@@ -2473,7 +2475,7 @@ class App extends Component {
 
     this
       .props
-      .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, startPos, endPos);
+      .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality, startPos, endPos);
 
   }
 
@@ -3177,6 +3179,17 @@ class App extends Component {
             visible: false,
             condition: "'{{activeReport}}' !== 'daily register'"
           },
+          "Filter by Modality?": {
+            visible: true,
+            options: [
+              "Yes",
+              "No"
+            ]
+          },
+          "Pepfar report?": {
+            visible: false,
+            condition: "'{{activeReport}}' === 'pepfar report'"
+          },
           "End Month": {
             options: [
               "January",
@@ -3192,6 +3205,11 @@ class App extends Component {
               "November",
               "December"
             ],
+            className: "longSelectList",
+            autoNext: true
+          },
+          "Modality": {
+            options: modalities,
             className: "longSelectList",
             autoNext: true
           },
