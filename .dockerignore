@@ -1,0 +1,10 @@
+node_modules
+bin
+client-src
+designs
+redis
+Dockerfile
+.dockerignore
+.gitignore
+README.md
+db
