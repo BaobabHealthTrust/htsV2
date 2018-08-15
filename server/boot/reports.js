@@ -2105,13 +2105,7 @@ module.exports = function (app) {
 
     const query = url_parts.query;
 
-<<<<<<< HEAD
-    console.log(JSON.stringify(query));
-
-    if (!fs.existsSync("./data")) {
-=======
     debug(JSON.stringify(query));
->>>>>>> 72352357563fdb9f099efc9b9d1a6c041746f455
 
     const months = {
       January: 0,
@@ -2353,15 +2347,23 @@ module.exports = function (app) {
 
     debug((new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd'));
 
-    const args = {
+    // args.data.query.bool.must
+
+    let args = {
       data: {
         _source: "enteryCode",
         query: {
-          range: {
-            visitDate: {
-              gte: (new Date(sYear, parseInt(sMonth, 10), 1)).format('YYYY-mm-dd'),
-              lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
-            }
+          bool: {
+            must: [
+              {
+                range: {
+                  visitDate: {
+                    gte: (new Date(sYear, parseInt(sMonth, 10), 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                  }
+                }
+              }
+            ]
           }
         },
         aggs: {
@@ -2475,6 +2477,16 @@ module.exports = function (app) {
       }
     };
 
+    if (query.m) {
+
+      args.data.query.bool.must.push({
+        query_string: {
+          query: "htsModality:\"" + String(query.m).trim() + "\""
+        }
+      });
+
+    }
+
     (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/_search", args, function (result) {
 
       const header = [
@@ -2574,7 +2586,7 @@ module.exports = function (app) {
           if (!month)
             return res.status(200).json(json);
 
-          async.mapSeries(htsModalities, (modality, lCb) => {
+          async.mapSeries((query.m ? [query.m] : htsModalities), (modality, lCb) => {
 
             if (!modality)
               return res.status(200).json(json);

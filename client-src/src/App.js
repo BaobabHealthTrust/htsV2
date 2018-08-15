@@ -2529,7 +2529,7 @@ class App extends Component {
     if (this.props.app.activeReport === "pepfar report") {
 
       Axios
-        .get("/full_disaggregated?sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&d=1")
+        .get("/full_disaggregated?sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&d=1" + (this.props.reports.modality ? "&m=" + this.props.reports.modality : ""))
         .then(response => {
           FileDownload(response.data, 'report.csv');
         })
