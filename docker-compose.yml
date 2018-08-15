@@ -1,0 +1,83 @@
+version: "2.1"
+
+services:
+  hts:
+    build: .
+    environment:
+      PORT: 3000
+      REDIS_HOST: redis
+      USE_ART: 0
+      DDE_HOST: dde
+      DDE_PROTOCOL: http
+      DDE_PORT: 3009
+      ART_HOST: 172.17.0.1
+      ART_USERNAME: admin
+      ART_PASSWORD: test
+      ART_PORT: 3005
+      ART_PROTOCOL: http
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    container_name: hts
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    links:
+      - elasticsearch
+      - redis
+      - mysql
+    networks: 
+      - ntwk
+  elasticsearch:
+    image: elasticsearch:5.3.0
+    container_name: es
+    volumes:
+      - /opt/es_data:/usr/share/elasticsearch/data
+    ports:
+      - 9201:9200
+    healthcheck:
+      test: curl 0.0.0.0:9200
+    networks: 
+      - ntwk
+  kibana:
+    image: kibana:5.3.0
+    container_name: kb
+    ports:
+      - 5602:5601
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+    networks: 
+      - ntwk
+  mysql:
+    build: ./db/
+    container_name: ms
+    healthcheck:
+      test: mysqladmin --silent --wait -uroot -ppassword ping || exit 1
+    volumes:
+      - /opt/mysql_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks: 
+      - ntwk
+  redis:
+    image: redis:4.0.8
+    container_name: rd
+    healthcheck:
+      test: redis-cli ping
+    ports:
+      - "6479:6379"
+    networks: 
+      - ntwk
+volumes:
+  esdata:
+    driver: local
+  mysqldata:
+networks: 
+  ntwk:
