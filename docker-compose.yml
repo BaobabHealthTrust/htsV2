@@ -16,6 +16,11 @@ services:
       ART_PASSWORD: test
       ART_PORT: 3005
       ART_PROTOCOL: http
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_DATABASE: hts
+      DB_PORT: 3307
     ports:
       - "3000:3000"
     volumes:
