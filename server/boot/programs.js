@@ -1760,7 +1760,7 @@ module.exports = function (app) {
 
           let obs;
 
-          if (name === "Age") {
+          if (["age", "time since last hiv test", "time since last test"].indexOf(name.toLowerCase()) >= 0) {
 
             obs = await Obs.create({
               personId: patientId,
@@ -1782,6 +1782,20 @@ module.exports = function (app) {
                   .trim()
                   .match(/^(\d+)(.+)$/)[2]
                 : null,
+              creator: userId,
+              dateCreated: new Date(),
+              uuid: uuid.v4()
+            });
+
+          } else if (["appointment date given"].indexOf(name.toLowerCase()) >= 0) {
+
+            obs = await Obs.create({
+              personId: patientId,
+              conceptId,
+              encounterId,
+              obsDatetime: new Date(today),
+              locationId,
+              valueDatetime: (new Date(String(value))).format('YYYY-mm-dd'),
               creator: userId,
               dateCreated: new Date(),
               uuid: uuid.v4()
@@ -2534,7 +2548,7 @@ module.exports = function (app) {
 
           let obs;
 
-          if (conceptname === "Age") {
+          if (["age", "time since last hiv test", "time since last test"].indexOf(conceptname.toLowerCase()) >= 0) {
 
             obs = await Obs.create({
               personId: patientId,
@@ -2556,6 +2570,20 @@ module.exports = function (app) {
                   .trim()
                   .match(/^(\d+)(.+)$/)[2]
                 : null,
+              creator: userId,
+              dateCreated: new Date(),
+              uuid: uuid.v4()
+            });
+
+          } else if (["appointment date given"].indexOf(conceptname.toLowerCase()) >= 0) {
+
+            obs = await Obs.create({
+              personId: patientId,
+              conceptId,
+              encounterId,
+              obsDatetime: new Date(today),
+              locationId,
+              valueDatetime: (new Date(String(value))).format('YYYY-mm-dd'),
               creator: userId,
               dateCreated: new Date(),
               uuid: uuid.v4()

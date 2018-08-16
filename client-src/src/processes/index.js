@@ -100,6 +100,8 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
               ? Object.keys(tests).filter((e) => {
                 return tests[e] === props.wf.responses[state.currentWorkflow]["Test"]
               })[0]
+              : null),
+            modality: (props.wf.responses[state.currentWorkflow]["Modality"] ? props.wf.responses[state.currentWorkflow]["Modality"]
               : null)
           }
         });
