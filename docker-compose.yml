@@ -3,6 +3,7 @@ version: "2.1"
 services:
   hts:
     build: .
+    image: hts:3.0.2
     environment:
       PORT: 3000
       REDIS_HOST: redis
