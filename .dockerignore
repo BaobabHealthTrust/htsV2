@@ -1,6 +1,5 @@
 node_modules
 bin
-client-src
 designs
 redis
 Dockerfile
