@@ -107,7 +107,7 @@ rl.on('line', (line) => {
 
             }
 
-            if (String(entry.observation).trim() === "Result Given to Client" && ["New Negative", "New Positive"].indexOf(entry.observationValue) >= 0) {
+            if (String(entry.observation).trim() === "Result Given to Client" && ["New Negative", "New Positive"].indexOf(entry.observationValue.trim()) >= 0) {
 
                 dumps.push(entry.encounterId);
 

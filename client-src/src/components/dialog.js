@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './dialog.css';
 import Button from './button';
 import Input from './input';
@@ -20,24 +20,24 @@ class Dialog extends Component {
       <div
         className="dialogShield"
         style={{
-        display: (this.props.dialog && this.props.dialog.title
-          ? "block"
-          : "none")
-      }}>
+          display: (this.props.dialog && this.props.dialog.title
+            ? "block"
+            : "none")
+        }}>
         <div className="dialogPopup">
           <table>
             <tbody>
               <tr>
                 <th
                   style={{
-                  padding: "5px",
-                  color: "white",
-                  backgroundColor: "#345cb4",
-                  border: "2px outset #345cb4",
-                  borderTopLeftRadius: "8px",
-                  borderTopRightRadius: "8px",
-                  fontSize: "18px"
-                }}>
+                    padding: "5px",
+                    color: "white",
+                    backgroundColor: "#345cb4",
+                    border: "2px outset #345cb4",
+                    borderTopLeftRadius: "8px",
+                    borderTopRightRadius: "8px",
+                    fontSize: "18px"
+                  }}>
                   {this.props.dialog.title
                     ? this.props.dialog.title
                     : "Title"}
@@ -58,7 +58,7 @@ class Dialog extends Component {
                           </th>
                           {this.props.app.activeReport !== "daily register"
                             ? <th>
-                                End Month
+                              End Month
                               </th>
                             : <td></td>}
                         </tr>
@@ -67,8 +67,8 @@ class Dialog extends Component {
                             <table
                               width="100%"
                               style={{
-                              margin: "auto"
-                            }}>
+                                margin: "auto"
+                              }}>
                               <tbody>
                                 <tr>
                                   <th>
@@ -82,26 +82,26 @@ class Dialog extends Component {
                                   <td
                                     align="center"
                                     style={{
-                                    padding: "10px"
-                                  }}
+                                      padding: "10px"
+                                    }}
                                     onMouseDown={() => {
-                                    this
-                                      .props
-                                      .incrementReportMonth("start")
-                                  }}>
-                                    <div className="arrow-up"/>
+                                      this
+                                        .props
+                                        .incrementReportMonth("start")
+                                    }}>
+                                    <div className="arrow-up" />
                                   </td>
                                   <td
                                     align="center"
                                     style={{
-                                    padding: "10px"
-                                  }}
+                                      padding: "10px"
+                                    }}
                                     onMouseDown={() => {
-                                    this
-                                      .props
-                                      .incrementReportYear("start")
-                                  }}>
-                                    <div className="arrow-up"/>
+                                      this
+                                        .props
+                                        .incrementReportYear("start")
+                                    }}>
+                                    <div className="arrow-up" />
                                   </td>
                                 </tr>
                                 <tr>
@@ -109,39 +109,39 @@ class Dialog extends Component {
                                     <Input
                                       className="dialogText"
                                       readOnly={true}
-                                      value={this.props.dialog.start.reportMonth}/>
+                                      value={this.props.dialog.start.reportMonth} />
                                   </td>
                                   <td>
                                     <Input
                                       className="dialogText"
                                       readOnly={true}
-                                      value={this.props.dialog.start.reportYear}/>
+                                      value={this.props.dialog.start.reportYear} />
                                   </td>
                                 </tr>
                                 <tr>
                                   <td
                                     align="center"
                                     style={{
-                                    padding: "10px"
-                                  }}
+                                      padding: "10px"
+                                    }}
                                     onMouseDown={() => {
-                                    this
-                                      .props
-                                      .decrementReportMonth("start")
-                                  }}>
-                                    <div className="arrow-down"/>
+                                      this
+                                        .props
+                                        .decrementReportMonth("start")
+                                    }}>
+                                    <div className="arrow-down" />
                                   </td>
                                   <td
                                     align="center"
                                     style={{
-                                    padding: "10px"
-                                  }}
+                                      padding: "10px"
+                                    }}
                                     onMouseDown={() => {
-                                    this
-                                      .props
-                                      .decrementReportYear("start")
-                                  }}>
-                                    <div className="arrow-down"/>
+                                      this
+                                        .props
+                                        .decrementReportYear("start")
+                                    }}>
+                                    <div className="arrow-down" />
                                   </td>
                                 </tr>
                               </tbody>
@@ -149,206 +149,206 @@ class Dialog extends Component {
                           </td>
                           {this.props.app.activeReport !== "daily register"
                             ? <td
-                                style={{
+                              style={{
                                 borderLeft: "2px outset #cccccc"
                               }}>
-                                <table
-                                  width="100%"
-                                  style={{
+                              <table
+                                width="100%"
+                                style={{
                                   margin: "auto"
                                 }}>
-                                  <tbody>
-                                    <tr>
-                                      <th>
-                                        Month
+                                <tbody>
+                                  <tr>
+                                    <th>
+                                      Month
                                       </th>
-                                      <th>
-                                        Year
+                                    <th>
+                                      Year
                                       </th>
-                                    </tr>
-                                    <tr>
-                                      <td
-                                        align="center"
-                                        style={{
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      align="center"
+                                      style={{
                                         padding: "10px"
                                       }}
-                                        onMouseDown={() => {
+                                      onMouseDown={() => {
                                         this
                                           .props
                                           .incrementReportMonth("end")
                                       }}>
-                                        <div className="arrow-up"/>
-                                      </td>
-                                      <td
-                                        align="center"
-                                        style={{
+                                      <div className="arrow-up" />
+                                    </td>
+                                    <td
+                                      align="center"
+                                      style={{
                                         padding: "10px"
                                       }}
-                                        onMouseDown={() => {
+                                      onMouseDown={() => {
                                         this
                                           .props
                                           .incrementReportYear("end")
                                       }}>
-                                        <div className="arrow-up"/>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <Input
-                                          className="dialogText"
-                                          readOnly={true}
-                                          value={this.props.dialog.end.reportMonth}/>
-                                      </td>
-                                      <td>
-                                        <Input
-                                          className="dialogText"
-                                          readOnly={true}
-                                          value={this.props.dialog.end.reportYear}/>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td
-                                        align="center"
-                                        style={{
+                                      <div className="arrow-up" />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>
+                                      <Input
+                                        className="dialogText"
+                                        readOnly={true}
+                                        value={this.props.dialog.end.reportMonth} />
+                                    </td>
+                                    <td>
+                                      <Input
+                                        className="dialogText"
+                                        readOnly={true}
+                                        value={this.props.dialog.end.reportYear} />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      align="center"
+                                      style={{
                                         padding: "10px"
                                       }}
-                                        onMouseDown={() => {
+                                      onMouseDown={() => {
                                         this
                                           .props
                                           .decrementReportMonth("end")
                                       }}>
-                                        <div className="arrow-down"/>
-                                      </td>
-                                      <td
-                                        align="center"
-                                        style={{
+                                      <div className="arrow-down" />
+                                    </td>
+                                    <td
+                                      align="center"
+                                      style={{
                                         padding: "10px"
                                       }}
-                                        onMouseDown={() => {
+                                      onMouseDown={() => {
                                         this
                                           .props
                                           .decrementReportYear("end")
                                       }}>
-                                        <div className="arrow-down"/>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
+                                      <div className="arrow-down" />
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
                             : <td></td>}
                         </tr>
                         {this.props.app.activeReport === "daily register" || this.props.app.activeReport === "monthly report"
                           ? <tr>
-                              <td
-                                align="center"
-                                colSpan={this.props.app.activeReport === "monthly report"
+                            <td
+                              align="center"
+                              colSpan={this.props.app.activeReport === "monthly report"
                                 ? 2
                                 : 1}>
-                                <table
-                                  width="100%"
-                                  style={{
+                              <table
+                                width="100%"
+                                style={{
                                   margin: "auto"
                                 }}>
-                                  <tbody>
-                                    <tr>
-                                      <th>
-                                        Location
+                                <tbody>
+                                  <tr>
+                                    <th>
+                                      Location
                                       </th>
-                                    </tr>
-                                    <tr>
-                                      <td
-                                        align="center"
-                                        style={{
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      align="center"
+                                      style={{
                                         padding: "10px"
                                       }}
-                                        onMouseDown={() => {
+                                      onMouseDown={() => {
                                         this
                                           .props
                                           .scrollLocationUp();
                                       }}>
-                                        <div className="arrow-up"/>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <Input
-                                          className="dialogText"
-                                          readOnly={true}
-                                          value={this.props.dialog.location || ""}/>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td
-                                        align="center"
-                                        style={{
+                                      <div className="arrow-up" />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>
+                                      <Input
+                                        className="dialogText"
+                                        readOnly={true}
+                                        value={this.props.dialog.location || ""} />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      align="center"
+                                      style={{
                                         padding: "10px"
                                       }}
-                                        onMouseDown={() => {
+                                      onMouseDown={() => {
                                         this
                                           .props
                                           .scrollLocationDown();
                                       }}>
-                                        <div className="arrow-down"/>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
+                                      <div className="arrow-down" />
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
                           : <tr>
                             <td></td>
                           </tr>}
                         {this.props.app.activeReport === "daily register"
                           ? <tr>
-                              <td align="center">
-                                <table
-                                  width="100%"
-                                  style={{
+                            <td align="center">
+                              <table
+                                width="100%"
+                                style={{
                                   margin: "auto"
                                 }}>
-                                  <tbody>
-                                    <tr>
-                                      <th>
-                                        Test
+                                <tbody>
+                                  <tr>
+                                    <th>
+                                      Test
                                       </th>
-                                    </tr>
-                                    <tr>
-                                      <td
-                                        align="center"
-                                        style={{
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      align="center"
+                                      style={{
                                         padding: "10px"
                                       }}
-                                        onMouseDown={() => {
+                                      onMouseDown={() => {
                                         this
                                           .props
                                           .scrollTestUp();
                                       }}>
-                                        <div className="arrow-up"/>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <Input className="dialogText" readOnly={true} value={this.props.dialog.test || ""}/>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td
-                                        align="center"
-                                        style={{
+                                      <div className="arrow-up" />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>
+                                      <Input className="dialogText" readOnly={true} value={this.props.dialog.test || ""} />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      align="center"
+                                      style={{
                                         padding: "10px"
                                       }}
-                                        onMouseDown={() => {
+                                      onMouseDown={() => {
                                         this
                                           .props
                                           .scrollTestDown();
                                       }}>
-                                        <div className="arrow-down"/>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
+                                      <div className="arrow-down" />
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
                           : <tr>
                             <td></td>
                           </tr>}
@@ -364,23 +364,23 @@ class Dialog extends Component {
                   <Button
                     label="Cancel"
                     extraStyles={{
-                    width: "100px"
-                  }}
+                      width: "100px"
+                    }}
                     buttonClass="red"
                     handleMouseDown={() => {
-                    this.closePopup()
-                  }}/>
+                      this.closePopup()
+                    }} />
                   <Button
                     label="Set"
                     extraStyles={{
-                    width: "100px"
-                  }}
+                      width: "100px"
+                    }}
                     handleMouseDown={() => {
-                    this
-                      .props
-                      .setReportingPeriod();
-                    this.closePopup()
-                  }}/>
+                      this
+                        .props
+                        .setReportingPeriod();
+                      this.closePopup()
+                    }} />
                 </td>
               </tr>
             </tbody>

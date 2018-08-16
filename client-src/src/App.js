@@ -57,7 +57,8 @@ import {
   scrollLocationUp,
   scrollLocationDown,
   scrollTestUp,
-  scrollTestDown
+  scrollTestDown,
+  updateReportField
 } from "./actions/dialogActions";
 import {
   fetchReport,
@@ -1687,7 +1688,7 @@ class App extends Component {
               : new Date().getTime(),
             program: this.props.app.module,
             group: this.state.currentWorkflow,
-            location: this.props.app.activeLocation,
+            location: this.props.app.currentLocation,
             user: this.props.app.activeUser
           }))
         .catch((e) => {
@@ -2426,6 +2427,31 @@ class App extends Component {
       "Test 2 Used for Clients"
     ];
 
+    const monthValues = {
+      January: 0,
+      February: 1,
+      March: 2,
+      April: 3,
+      May: 4,
+      June: 5,
+      July: 6,
+      August: 7,
+      September: 8,
+      October: 9,
+      November: 10,
+      December: 11
+    };
+
+    const startNumericalMonth = monthValues[this.props.app.report.start.reportMonth];
+    const startYear = this.props.app.report.start.reportYear;
+    const endNumericalMonth = monthValues[this.props.app.report.end.reportMonth];
+    const endYear = this.props.app.report.end.reportYear;
+
+    await this.props.updateReportField('numericalMonth', startNumericalMonth, 'start');
+    await this.props.updateReportField('reportYear', startYear, 'start');
+    await this.props.updateReportField('numericalMonth', endNumericalMonth, 'end');
+    await this.props.updateReportField('reportYear', endYear, 'end');
+
     if (this.props.app.activeReport === "monthly report") {
 
       monthlReport.forEach(field => {
@@ -2469,7 +2495,10 @@ class App extends Component {
 
   }
 
-  scrollPepfarData(startPos, endPos) {
+  async scrollPepfarData(startPos, endPos) {
+
+    if (!this.props.reports || (this.props.reports && !this.props.reports.start) || (this.props.reports && !this.props.reports.end))
+      return;
 
     this
       .props
@@ -4789,6 +4818,9 @@ const mapDispatchToProps = dispatch => {
     },
     fetchFilteredVisitSummaries: async (month1, year1, date1, month2, year2, date2) => {
       return await dispatch(fetchFilteredVisitSummaries(month1, year1, date1, month2, year2, date2));
+    },
+    updateReportField: async (field, value, group) => {
+      return await dispatch(updateReportField(field, value, group));
     }
   };
 };
