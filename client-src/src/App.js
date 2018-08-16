@@ -25,7 +25,8 @@ import {
   updatePartnerRecord,
   getVersion,
   usernameValid,
-  updatePassword
+  updatePassword,
+  checkRedirectToPortal
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -186,6 +187,8 @@ class App extends Component {
 
   componentWillMount() {
 
+    this.props.checkRedirectToPortal();
+    
     this.props.getVersion();
 
   }
@@ -3479,8 +3482,13 @@ class App extends Component {
 
   }
 
-  async showUserStats() {
+  redirectToPortal() {
 
+    window.location = this.props.app.portal_url;
+
+  }
+
+  async showUserStats() {
 
     await this.setState({ currentWorkflow: "primary" });
 
@@ -3659,14 +3667,14 @@ class App extends Component {
             return this.props.updateApp({ selectedTask: "reports", formActive: false, configs: {} });
 
           this.props.app.currentSection === "home" && !this.props.app.formActive
-            ? this.logout()
+            ? !this.props.app.activeUser ? this.redirectToPortal() : this.logout()
             : this.props.app.formActive && this.props.app.currentSection !== "reports"
               ? this.cancelForm()
               : this.cancelSession();
 
         },
         label: this.props.app.currentSection === "home" && !this.props.app.formActive
-          ? "Logout"
+          ? this.props.app.activeUser ? "Logout" : "Home"
           : "Cancel",
         extraStyles: {
           cssFloat: "left",
@@ -3674,7 +3682,7 @@ class App extends Component {
           marginLeft: "15px"
         },
         disabled: ((this.props.app.userManagementActive === true && !this.props.app.formActive) || !this.props.app.activeUser
-          ? true
+          ? (!this.props.app.activeUser && this.props.app.redirect_to_portal ? false : true)
           : false)
       }, {
         id: "btnNext",
@@ -4833,6 +4841,9 @@ const mapDispatchToProps = dispatch => {
     },
     updatePassword: async (username, password) => {
       return await dispatch(updatePassword(username, password));
+    },
+    checkRedirectToPortal: async () => {
+      return await dispatch(checkRedirectToPortal());
     },
     fetchFilteredVisitSummaries: async (month1, year1, date1, month2, year2, date2) => {
       return await dispatch(fetchFilteredVisitSummaries(month1, year1, date1, month2, year2, date2));

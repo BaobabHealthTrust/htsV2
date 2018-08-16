@@ -4,5 +4,7 @@
     "htc location": "",
     "reset month": "",
     "facility_code": "",
-    "entry_code_max_digits": 6
+    "entry_code_max_digits": 6,
+    "redirect_to_portal": true,
+    "portal_url": ""
 }
