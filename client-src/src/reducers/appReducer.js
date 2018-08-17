@@ -1343,6 +1343,12 @@ export default function appReducer(state = {
 
       return newState;
 
+    case "REDIRECT_TO_PORTAL_FULFILLED":
+
+      newState = Object.assign({}, state, { redirect_to_portal: action.payload.data.redirect_to_portal, portal_url: action.payload.data.portal_url });
+
+      return newState;
+
     default:
 
       return state;

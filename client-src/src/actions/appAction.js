@@ -259,3 +259,11 @@ export function updatePassword(username, password) {
   return { type: 'UPDATE_PASSWORD', payload: request };
 
 }
+
+export function checkRedirectToPortal() {
+
+  const request = axios.get('/redirect_to_portal');
+
+  return { type: 'REDIRECT_TO_PORTAL', payload: request };
+
+}

@@ -25,7 +25,8 @@ import {
   updatePartnerRecord,
   getVersion,
   usernameValid,
-  updatePassword
+  updatePassword,
+  checkRedirectToPortal
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -57,7 +58,8 @@ import {
   scrollLocationUp,
   scrollLocationDown,
   scrollTestUp,
-  scrollTestDown
+  scrollTestDown,
+  updateReportField
 } from "./actions/dialogActions";
 import {
   fetchReport,
@@ -82,6 +84,7 @@ import algorithm from './lib/dhaAlgorithm.js';
 import Login from './components/login';
 import tests from './config/tests';
 import locations from './config/pepfarLocations';
+import modalities from './config/htsModalities';
 import Axios from 'axios';
 import FileDownload from 'react-file-download';
 // eslint-disable-next-line
@@ -184,6 +187,8 @@ class App extends Component {
 
   componentWillMount() {
 
+    this.props.checkRedirectToPortal();
+    
     this.props.getVersion();
 
   }
@@ -1687,7 +1692,7 @@ class App extends Component {
               : new Date().getTime(),
             program: this.props.app.module,
             group: this.state.currentWorkflow,
-            location: this.props.app.activeLocation,
+            location: this.props.app.currentLocation,
             user: this.props.app.activeUser
           }))
         .catch((e) => {
@@ -2389,7 +2394,8 @@ class App extends Component {
         },
         location: this.props.app.report.location,
         test: this.props.app.report.test,
-        testType: this.props.app.report.testType
+        testType: this.props.app.report.testType,
+        modality: this.props.app.report.modality
       });
 
     const monthlReport = [
@@ -2425,6 +2431,31 @@ class App extends Component {
       "Test 1 Used for Clients",
       "Test 2 Used for Clients"
     ];
+
+    const monthValues = {
+      January: 0,
+      February: 1,
+      March: 2,
+      April: 3,
+      May: 4,
+      June: 5,
+      July: 6,
+      August: 7,
+      September: 8,
+      October: 9,
+      November: 10,
+      December: 11
+    };
+
+    const startNumericalMonth = monthValues[this.props.app.report.start.reportMonth];
+    const startYear = this.props.app.report.start.reportYear;
+    const endNumericalMonth = monthValues[this.props.app.report.end.reportMonth];
+    const endYear = this.props.app.report.end.reportYear;
+
+    await this.props.updateReportField('numericalMonth', startNumericalMonth, 'start');
+    await this.props.updateReportField('reportYear', startYear, 'start');
+    await this.props.updateReportField('numericalMonth', endNumericalMonth, 'end');
+    await this.props.updateReportField('reportYear', endYear, 'end');
 
     if (this.props.app.activeReport === "monthly report") {
 
@@ -2463,17 +2494,20 @@ class App extends Component {
 
       this
         .props
-        .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear);
+        .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality);
 
     }
 
   }
 
-  scrollPepfarData(startPos, endPos) {
+  async scrollPepfarData(startPos, endPos) {
+
+    if (!this.props.reports || (this.props.reports && !this.props.reports.start) || (this.props.reports && !this.props.reports.end))
+      return;
 
     this
       .props
-      .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, startPos, endPos);
+      .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality, startPos, endPos);
 
   }
 
@@ -2498,7 +2532,7 @@ class App extends Component {
     if (this.props.app.activeReport === "pepfar report") {
 
       Axios
-        .get("/full_disaggregated?sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&d=1")
+        .get("/full_disaggregated?sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&d=1" + (this.props.reports.modality ? "&m=" + this.props.reports.modality : ""))
         .then(response => {
           FileDownload(response.data, 'report.csv');
         })
@@ -3177,6 +3211,17 @@ class App extends Component {
             visible: false,
             condition: "'{{activeReport}}' !== 'daily register'"
           },
+          "Filter by Modality?": {
+            visible: true,
+            options: [
+              "Yes",
+              "No"
+            ]
+          },
+          "Pepfar report?": {
+            visible: false,
+            condition: "'{{activeReport}}' === 'pepfar report'"
+          },
           "End Month": {
             options: [
               "January",
@@ -3192,6 +3237,11 @@ class App extends Component {
               "November",
               "December"
             ],
+            className: "longSelectList",
+            autoNext: true
+          },
+          "Modality": {
+            options: modalities,
             className: "longSelectList",
             autoNext: true
           },
@@ -3432,8 +3482,13 @@ class App extends Component {
 
   }
 
-  async showUserStats() {
+  redirectToPortal() {
 
+    window.location = this.props.app.portal_url;
+
+  }
+
+  async showUserStats() {
 
     await this.setState({ currentWorkflow: "primary" });
 
@@ -3612,14 +3667,14 @@ class App extends Component {
             return this.props.updateApp({ selectedTask: "reports", formActive: false, configs: {} });
 
           this.props.app.currentSection === "home" && !this.props.app.formActive
-            ? this.logout()
+            ? !this.props.app.activeUser ? this.redirectToPortal() : this.logout()
             : this.props.app.formActive && this.props.app.currentSection !== "reports"
               ? this.cancelForm()
               : this.cancelSession();
 
         },
         label: this.props.app.currentSection === "home" && !this.props.app.formActive
-          ? "Logout"
+          ? this.props.app.activeUser ? "Logout" : "Home"
           : "Cancel",
         extraStyles: {
           cssFloat: "left",
@@ -3627,7 +3682,7 @@ class App extends Component {
           marginLeft: "15px"
         },
         disabled: ((this.props.app.userManagementActive === true && !this.props.app.formActive) || !this.props.app.activeUser
-          ? true
+          ? (!this.props.app.activeUser && this.props.app.redirect_to_portal ? false : true)
           : false)
       }, {
         id: "btnNext",
@@ -4787,8 +4842,14 @@ const mapDispatchToProps = dispatch => {
     updatePassword: async (username, password) => {
       return await dispatch(updatePassword(username, password));
     },
+    checkRedirectToPortal: async () => {
+      return await dispatch(checkRedirectToPortal());
+    },
     fetchFilteredVisitSummaries: async (month1, year1, date1, month2, year2, date2) => {
       return await dispatch(fetchFilteredVisitSummaries(month1, year1, date1, month2, year2, date2));
+    },
+    updateReportField: async (field, value, group) => {
+      return await dispatch(updateReportField(field, value, group));
     }
   };
 };

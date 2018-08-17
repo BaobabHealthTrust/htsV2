@@ -1760,7 +1760,7 @@ module.exports = function (app) {
 
           let obs;
 
-          if (name === "Age") {
+          if (["age", "time since last hiv test", "time since last test"].indexOf(name.toLowerCase()) >= 0) {
 
             obs = await Obs.create({
               personId: patientId,
@@ -1782,6 +1782,20 @@ module.exports = function (app) {
                   .trim()
                   .match(/^(\d+)(.+)$/)[2]
                 : null,
+              creator: userId,
+              dateCreated: new Date(),
+              uuid: uuid.v4()
+            });
+
+          } else if (["appointment date given"].indexOf(name.toLowerCase()) >= 0) {
+
+            obs = await Obs.create({
+              personId: patientId,
+              conceptId,
+              encounterId,
+              obsDatetime: new Date(today),
+              locationId,
+              valueDatetime: (new Date(String(value))).format('YYYY-mm-dd'),
               creator: userId,
               dateCreated: new Date(),
               uuid: uuid.v4()
@@ -2117,10 +2131,6 @@ module.exports = function (app) {
       ? json["Current User"]
       : null;
 
-    let currentLocationName = json["Current Location"]
-      ? json["Current Location"]
-      : "Unknown";
-
     const user = await Users.findOne({
       where: {
         username: currentUser
@@ -2231,6 +2241,8 @@ module.exports = function (app) {
     let registerNumber = parts[1].trim();
     let locationType = parts[5].trim();
     let serviceDeliveryPoint = parts[3].trim();
+
+    let currentLocationName = parts[4].trim();
 
     let gender = json["Sex/Pregnancy"]
       ? String(json["Sex/Pregnancy"])
@@ -2536,7 +2548,7 @@ module.exports = function (app) {
 
           let obs;
 
-          if (conceptname === "Age") {
+          if (["age", "time since last hiv test", "time since last test"].indexOf(conceptname.toLowerCase()) >= 0) {
 
             obs = await Obs.create({
               personId: patientId,
@@ -2558,6 +2570,20 @@ module.exports = function (app) {
                   .trim()
                   .match(/^(\d+)(.+)$/)[2]
                 : null,
+              creator: userId,
+              dateCreated: new Date(),
+              uuid: uuid.v4()
+            });
+
+          } else if (["appointment date given"].indexOf(conceptname.toLowerCase()) >= 0) {
+
+            obs = await Obs.create({
+              personId: patientId,
+              conceptId,
+              encounterId,
+              obsDatetime: new Date(today),
+              locationId,
+              valueDatetime: (new Date(String(value))).format('YYYY-mm-dd'),
               creator: userId,
               dateCreated: new Date(),
               uuid: uuid.v4()
@@ -3085,6 +3111,8 @@ module.exports = function (app) {
     let registerNumber = parts[1].trim();
     let locationType = parts[5].trim();
     let serviceDeliveryPoint = parts[3].trim();
+
+    let currentLocationName = parts[4].trim();
 
     let concept = await ConceptName.findOne({
       where: {
@@ -5234,6 +5262,20 @@ module.exports = function (app) {
       res.status(200).json({ message: "No new changes found!" });
 
     }
+
+  })
+
+  router.get('/redirect_to_portal', async function (req, res, next) {
+
+    const filename = __dirname + "/../../configs/site.json";
+
+    debug(filename);
+
+    debug(fs.existsSync(filename));
+
+    const site = (fs.existsSync(filename) ? JSON.parse(fs.readFileSync(filename, "utf-8")) : {});
+
+    res.status(200).json({ redirect_to_portal: site.redirect_to_portal, portal_url: site.portal_url });
 
   })
 

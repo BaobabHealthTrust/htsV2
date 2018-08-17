@@ -87,6 +87,12 @@ module.exports = function (app) {
 
   function fetchFNP(field, sMonth, sYear, eMonth, eYear, location, res) {
 
+    debug(sMonth);
+    debug(eMonth);
+    debug(eYear);
+    debug(parseInt(eMonth, 10) + 1);
+    debug((new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd'));
+
     let args = {
       data: {
         query: {
@@ -100,7 +106,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -142,7 +148,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -184,7 +190,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -226,7 +232,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -268,7 +274,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -310,7 +316,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -352,7 +358,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -394,7 +400,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -436,7 +442,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -478,7 +484,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -520,7 +526,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -562,7 +568,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -604,7 +610,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -647,7 +653,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -689,7 +695,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -731,7 +737,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -773,7 +779,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -815,7 +821,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -857,7 +863,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -899,7 +905,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -941,7 +947,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -983,7 +989,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1025,7 +1031,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1067,7 +1073,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1109,7 +1115,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1151,7 +1157,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1193,7 +1199,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1235,7 +1241,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1277,7 +1283,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1329,7 +1335,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1372,7 +1378,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, eMonth, 30)).format('YYYY-mm-dd')
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1404,6 +1410,8 @@ module.exports = function (app) {
     const url_parts = url.parse(req.url, true);
 
     const query = url_parts.query;
+
+    debug(JSON.stringify(query));
 
     const field = decodeURIComponent(query.f);
     const location = decodeURIComponent(query.l);
@@ -1490,7 +1498,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format("YYYY-mm-dd"),
-                    lte: (new Date(eYear, eMonth, 30)).format("YYYY-mm-dd")
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format("YYYY-mm-dd")
                   }
                 }
               }
@@ -1641,6 +1649,8 @@ module.exports = function (app) {
 
     const query = url_parts.query;
 
+    debug(JSON.stringify(query));
+
     const sMonth = decodeURIComponent(query.sm);
     const sYear = decodeURIComponent(query.sy);
     const kitType = decodeURIComponent(query.t);
@@ -1674,7 +1684,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(sYear, sMonth, 1)).format("YYYY-mm-dd"),
-                    lte: (new Date(sYear, sMonth, 30)).format("YYYY-mm-dd")
+                    lte: (new Date(sYear, sMonth + 1, 0)).format("YYYY-mm-dd")
                   }
                 }
               }
@@ -1793,7 +1803,7 @@ module.exports = function (app) {
                   range: {
                     visitDate: {
                       gte: (new Date(sYear, sMonth, 1)).format("YYYY-mm-dd"),
-                      lte: (new Date(eYear, eMonth, 30)).format("YYYY-mm-dd")
+                      lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format("YYYY-mm-dd")
                     }
                   }
                 }
@@ -1909,6 +1919,7 @@ module.exports = function (app) {
 
       if (e)
         console.log(e);
+
 
       res.end();
 
@@ -2040,7 +2051,7 @@ module.exports = function (app) {
     const gender = decodeURIComponent(query.s);
     const resultGiven = decodeURIComponent(query.r);
 
-    console.log(group);
+    debug(group);
 
     let args = {
       data: {
@@ -2057,7 +2068,7 @@ module.exports = function (app) {
                 range: {
                   visitDate: {
                     gte: (new Date(year, month, 1)),
-                    lte: (new Date(year, month, 30))
+                    lte: (new Date(year, month + 1, 0))
                   }
                 }
               }
@@ -2070,11 +2081,11 @@ module.exports = function (app) {
       }
     };
 
-    console.log(JSON.stringify(args));
+    debug(JSON.stringify(args));
 
     (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/_search", args, function (result) {
 
-      console.log(result);
+      debug(result);
 
       res
         .status(200)
@@ -2085,437 +2096,6 @@ module.exports = function (app) {
         });
 
     });
-
-  })
-
-  router.get('/full_disaggregated', function (req, res, next) {
-
-    const url_parts = url.parse(req.url, true);
-
-    const query = url_parts.query;
-
-    if (!fs.existsSync("./data")) {
-
-      fs.mkdirSync("./data");
-
-    }
-
-    const sMonth = decodeURIComponent(query.sm);
-    const sYear = decodeURIComponent(query.sy);
-    const eMonth = decodeURIComponent(query.em);
-    const eYear = decodeURIComponent(query.ey);
-    const download = (query.d
-      ? true
-      : false);
-    const csvJSON = (query.j
-      ? true
-      : false);
-    let csv = [];
-    let json = [];
-    let dump = [];
-
-    if (fs.existsSync(`./data/${sMonth}.${sYear}.${eMonth}.${eYear}.json`)) {
-
-      dump = JSON.parse(fs.readFileSync(`./data/${sMonth}.${sYear}.${eMonth}.${eYear}.json`).toString('utf8'));
-
-    }
-
-    const startPos = (query.s
-      ? query.s
-      : 0);
-    const endPos = (query.e
-      ? query.e
-      : 20);
-
-    if (dump.length > 0) {
-
-      if (!download && !csvJSON) {
-
-        res.set('Content-Type', 'application/json');
-
-        for (let chunk of dump.splice(startPos, (endPos - startPos))) {
-
-          res.write(JSON.stringify([
-            {
-              row: chunk
-            }
-          ]));
-
-        }
-
-        return res.end();
-
-      }
-
-    }
-
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ];
-
-    const htsAccessTypes = ["PITC", "FRS/Index", "VCT/Other"];
-
-    const htsAccessTypeMappings = {
-      "PITC": "Routine HTS (PITC) within Health Service",
-      "FRS/Index": "Comes with HTS Family Referral Slip",
-      "VCT/Other": "Other (VCT, etc.)"
-    };
-
-    const htsAccessTypeReverseMappings = {
-      "Routine HTS (PITC) within Health Service": "PITC",
-      "Comes with HTS Family Referral Slip": "FRS/Index",
-      "Other (VCT, etc.)": "VCT/Other"
-    };
-
-    const genders = ["M", "F"];
-
-    const resultGivens = ["Negative", "Positive"];
-
-    const facility = site.facility;
-
-    const district = site.location;
-
-    let years = {};
-
-    let period = parseInt((((new Date(eYear, eMonth, 1)) - (new Date(sYear, sMonth, 1))) / (1000 * 60 * 60 * 24 * 30)), 10);
-
-    let trackDate = (new Date(sYear, sMonth, 1));
-
-    for (let i = 0; i <= period; i++) {
-
-      if (!years[trackDate.getFullYear()]) {
-
-        years[trackDate.getFullYear()] = [];
-
-      }
-
-      if (years[trackDate.getFullYear()].indexOf(months[trackDate.getMonth()]) < 0) {
-
-        years[trackDate.getFullYear()].push(months[trackDate.getMonth()]);
-
-      }
-
-      trackDate.setMonth(trackDate.getMonth() + 1);
-
-    }
-
-    let ageGroups = [
-      "<1",
-      "1-4",
-      "5-9",
-      "10-14",
-      "15-19",
-      "20-24",
-      "25-29",
-      "30-34",
-      "35-39",
-      "40-44",
-      "45-49",
-      ">=50"
-    ];
-
-    if (download) {
-
-      csv.push([
-        "District",
-        "Site",
-        "Month",
-        "Year",
-        "HTS Modality",
-        "HTS Access Type",
-        "Age Group",
-        "Sex",
-        "Result Given",
-        "Count"
-      ].join("\t"));
-
-      res.setHeader('Content-disposition', 'attachment; filename=data.csv');
-      res.set('Content-Type', 'text/csv');
-
-    } else if (csvJSON) {
-
-      json.push([
-        "District",
-        "Site",
-        "Month",
-        "Year",
-        "HTS Modality",
-        "HTS Access Type",
-        "Age Group",
-        "Sex",
-        "Result Given",
-        "Count"
-      ]);
-
-      res.set('Content-Type', 'application/json');
-
-    } else {
-
-      res.set('Content-Type', 'application/json');
-
-    }
-
-    let k = 0;
-
-    async.mapSeries(Object.keys(years), (year, yCb) => {
-
-      async.mapSeries(years[year], (month, mCb) => {
-
-        async.mapSeries(htsModalities, (htsModality, lCb) => {
-
-          async.mapSeries(htsAccessTypes, (htsAccessType, hCb) => {
-
-            async.mapSeries(ageGroups, (ageGroup, aCb) => {
-
-              async.mapSeries(genders, (gender, gCb) => {
-
-                async.mapSeries(resultGivens, (resultGiven, rCb) => {
-
-                  k++;
-
-                  const group = ageGroup.split("-");
-
-                  let args = {
-                    data: {
-                      query: {
-                        bool: {
-                          must: [
-                            {
-                              query_string: {
-                                query: (group.length === 1
-                                  ? `age:${group[0]}`
-                                  : `age:>=${group[0]} AND age:<=${parseFloat(group[1]) + 0.99999}`) + ` AND htsModality:"${htsModality}" AND htsAccessType:"${htsAccessType}" AND gender:"${gender}" AND resultGiven:"${resultGiven}"`
-                              }
-                            }, {
-                              range: {
-                                visitDate: {
-                                  gte: (new Date(year, months.indexOf(month), 1)).format('YYYY-mm-dd'),
-                                  lte: (new Date(year, months.indexOf(month), 30)).format('YYYY-mm-dd')
-                                }
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    headers: {
-                      "Content-Type": "application/json"
-                    }
-                  };
-
-                  (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/_search", args, function (result) {
-
-                    const count = (result && result.hits && result.hits.total
-                      ? result.hits.total
-                      : 0)
-
-                    if (download) {
-
-                      let row = [
-                        district,
-                        facility,
-                        month,
-                        year,
-                        htsModality,
-                        htsAccessType,
-                        (group[0] === ">=50"
-                          ? "50+"
-                          : group.join("-")), {
-                            "M": "Male",
-                            "F": "Female"
-                          }[gender],
-                        resultGiven,
-                        count
-                      ];
-
-                      csv.push(row.join("\t"));
-
-                    } else if (csvJSON) {
-
-                      let row = [
-                        district,
-                        facility,
-                        month,
-                        year,
-                        htsModality,
-                        htsAccessType,
-                        (group[0] === ">=50"
-                          ? "50+"
-                          : group.join("-")), {
-                            "M": "Male",
-                            "F": "Female"
-                          }[gender],
-                        resultGiven,
-                        count
-                      ];
-
-                      json.push(row);
-
-                    } else {
-
-                      let chunk = {
-                        "Pos": k,
-                        "District": district,
-                        "Site": facility,
-                        "Age Group": (group[0] === ">=50"
-                          ? "50+"
-                          : group.join("-")),
-                        "Month": month,
-                        "Year": year,
-                        "HTS Modality": htsModality,
-                        "HTS Access Type": htsAccessType,
-                        "Sex": {
-                          "M": "Male",
-                          "F": "Female"
-                        }[gender],
-                        "Result Given": resultGiven,
-                        "Count": count
-                      };
-
-                      dump.push(chunk);
-
-                      if (k >= startPos && k <= endPos) {
-
-                        res.write(JSON.stringify([
-                          {
-                            row: chunk
-                          }
-                        ]));
-
-                      }
-
-                    }
-
-                    process.nextTick(() => {
-
-                      rCb();
-
-                    })
-
-                  });
-
-                }, (e) => {
-
-                  if (e) {
-                    console.log(e);
-                  }
-
-                  process.nextTick(() => {
-
-                    gCb();
-
-                  })
-
-                });
-
-              }, (e) => {
-
-                if (e) {
-                  console.log(e);
-                }
-
-                process.nextTick(() => {
-
-                  aCb();
-
-                });
-
-              });
-
-            }, (e) => {
-
-              if (e) {
-                console.log(e);
-              }
-
-              process.nextTick(() => {
-
-                hCb();
-
-              });
-
-            });
-
-          }, (e) => {
-
-            if (e) {
-              console.log(e);
-            }
-
-            process.nextTick(() => {
-
-              lCb();
-
-            });
-
-          });
-
-        }, (e) => {
-
-          if (e) {
-            console.log(e);
-          }
-
-          process.nextTick(() => {
-
-            mCb();
-
-          });
-
-        });
-
-      }, (e) => {
-
-        if (e) {
-          console.log(e);
-        }
-
-        process.nextTick(() => {
-
-          yCb();
-
-        });
-
-      });
-
-    }, (e) => {
-
-      if (e) {
-        console.log(e);
-      }
-
-      if (download) {
-
-        res
-          .status(200)
-          .send(csv.join("\n"));
-
-      } else if (csvJSON) {
-
-        res
-          .status(200)
-          .json(json);
-
-      } else {
-
-        fs.writeFileSync(`./data/${sMonth}.${sYear}.${eMonth}.${eYear}.json`, JSON.stringify(dump));
-
-        res.end();
-
-      }
-
-    })
 
   })
 
@@ -2657,9 +2237,559 @@ module.exports = function (app) {
 
     });
 
-    
+
 
   })
+
+  router.get('/full_disaggregated', (req, res, next) => {
+
+    const query = req.query;
+
+    debug(JSON.stringify(query));
+
+    const sMonth = decodeURIComponent(query.sm);
+    const sYear = decodeURIComponent(query.sy);
+    const eMonth = decodeURIComponent(query.em);
+    const eYear = decodeURIComponent(query.ey);
+
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+
+    const htsAccessTypes = ["PITC", "FRS/Index", "VCT/Other"];
+
+    const genders = ["M", "F"];
+
+    const resultGivens = ["Negative", "Positive"];
+
+    const facility = site.facility;
+
+    const district = site.location;
+
+    let years = {};
+
+    let period = parseInt((((new Date(eYear, parseInt(eMonth, 10), 1)) - (new Date(sYear, parseInt(sMonth, 10), 1))) / (1000 * 60 * 60 * 24 * 30)), 10);
+
+    let trackDate = (new Date(sYear, parseInt(sMonth, 10), 1));
+
+    for (let i = 0; i <= period; i++) {
+
+      if (!years[trackDate.getFullYear()]) {
+
+        years[trackDate.getFullYear()] = [];
+
+      }
+
+      if (years[trackDate.getFullYear()].indexOf(months[trackDate.getMonth()]) < 0) {
+
+        years[trackDate.getFullYear()].push(months[trackDate.getMonth()]);
+
+      }
+
+      trackDate.setMonth(trackDate.getMonth() + 1);
+
+    }
+
+    debug(JSON.stringify(years));
+
+    debug(trackDate);
+
+    const ageGroups = {
+      "0.0-0.9999999": "<1",
+      "1.0-4.9999999": "1-4",
+      "5.0-9.9999999": "5-9",
+      "10.0-14.9999999": "10-14",
+      "15.0-19.9999999": "15-19",
+      "20.0-24.9999999": "20-24",
+      "25.0-29.9999999": "25-29",
+      "30.0-34.9999999": "30-34",
+      "35.0-39.9999999": "35-39",
+      "40.0-44.9999999": "40-44",
+      "45.0-49.9999999": "45-49",
+      "50.0-120.0": ">=50"
+    };
+
+    const ageRanges = [
+      "<1",
+      "1-4",
+      "5-9",
+      "10-14",
+      "15-19",
+      "20-24",
+      "25-29",
+      "30-34",
+      "35-39",
+      "40-44",
+      "45-49",
+      ">=50"
+    ];
+
+    const download = (query.d
+      ? true
+      : false);
+    const startPos = (query.s
+      ? query.s
+      : 0);
+    const endPos = (query.e
+      ? query.e
+      : 20);
+
+    debug((new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd'));
+
+    // args.data.query.bool.must
+
+    let args = {
+      data: {
+        _source: "enteryCode",
+        query: {
+          bool: {
+            must: [
+              {
+                range: {
+                  visitDate: {
+                    gte: (new Date(sYear, parseInt(sMonth, 10), 1)).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                  }
+                }
+              }
+            ]
+          }
+        },
+        aggs: {
+          year: {
+            terms: {
+              field: "year",
+              size: 10000
+            },
+            aggs: {
+              month: {
+                terms: {
+                  field: "month.keyword",
+                  size: 10000
+                },
+                aggs: {
+                  modality: {
+                    terms: {
+                      field: "htsModality.keyword",
+                      size: 10000
+                    },
+                    aggs: {
+                      accessType: {
+                        terms: {
+                          field: "htsAccessType.keyword",
+                          size: 10000
+                        },
+                        aggs: {
+                          gender: {
+                            terms: {
+                              field: "gender.keyword",
+                              size: 10000
+                            },
+                            aggs: {
+                              result: {
+                                terms: {
+                                  field: "resultGiven.keyword",
+                                  size: 10000
+                                },
+                                aggs: {
+                                  age: {
+                                    range: {
+                                      field: "age",
+                                      ranges: [
+                                        {
+                                          from: 0,
+                                          to: 0.9999999
+                                        },
+                                        {
+                                          from: 1,
+                                          to: 4.9999999
+                                        },
+                                        {
+                                          from: 5,
+                                          to: 9.9999999
+                                        },
+                                        {
+                                          from: 10,
+                                          to: 14.9999999
+                                        },
+                                        {
+                                          from: 15,
+                                          to: 19.9999999
+                                        },
+                                        {
+                                          from: 20,
+                                          to: 24.9999999
+                                        },
+                                        {
+                                          from: 25,
+                                          to: 29.9999999
+                                        },
+                                        {
+                                          from: 30,
+                                          to: 34.9999999
+                                        },
+                                        {
+                                          from: 35,
+                                          to: 39.9999999
+                                        },
+                                        {
+                                          from: 40,
+                                          to: 44.9999999
+                                        },
+                                        {
+                                          from: 45,
+                                          to: 49.9999999
+                                        },
+                                        {
+                                          from: 50,
+                                          to: 120
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    if (query.m) {
+
+      args.data.query.bool.must.push({
+        query_string: {
+          query: "htsModality:\"" + String(query.m).trim() + "\""
+        }
+      });
+
+    }
+
+    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/_search", args, function (result) {
+
+      const header = [
+        "District",
+        "Site",
+        "Month",
+        "Year",
+        "HTS Modality",
+        "HTS Access Type",
+        "Age Group",
+        "Sex",
+        "Result Given",
+        "Count"
+      ];
+
+      let data = {};
+
+      result.aggregations.year.buckets.map(rowY => {
+
+        const year = rowY.key;
+
+        data[year] = {};
+
+        rowY.month.buckets.map(rowM => {
+
+          const month = rowM.key;
+
+          data[year][month] = {};
+
+          rowM.modality.buckets.map(rowD => {
+
+            const modality = rowD.key;
+
+            data[year][month][modality] = {};
+
+            rowD.accessType.buckets.map(rowA => {
+
+              const accessType = rowA.key;
+
+              data[year][month][modality][accessType] = {};
+
+              rowA.gender.buckets.map(rowG => {
+
+                const gender = rowG.key;
+
+                data[year][month][modality][accessType][gender] = {};
+
+                rowG.result.buckets.map(rowR => {
+
+                  const result = rowR.key;
+
+                  data[year][month][modality][accessType][gender][result] = {};
+
+                  rowR.age.buckets.map(rowE => {
+
+                    const age = ageGroups[rowE.key];
+
+                    data[year][month][modality][accessType][gender][result][age] = rowE.doc_count;
+
+                  })
+
+                })
+
+              })
+
+            })
+
+          })
+
+        })
+
+      });
+
+      debug(JSON.stringify(data, null, 2));
+
+      let json = [];
+
+      if (download) {
+
+        json.push(header.join('\t'));
+
+      } else {
+
+        res.set('Content-Type', 'application/json');
+
+      }
+
+      let k = 0;
+
+      async.mapSeries(Object.keys(years), (year, yCb) => {
+
+        if (!year)
+          return res.status(200).json(json);
+
+        async.mapSeries(years[year], (month, mCb) => {
+
+          if (!month)
+            return res.status(200).json(json);
+
+          async.mapSeries((query.m ? [query.m] : htsModalities), (modality, lCb) => {
+
+            if (!modality)
+              return res.status(200).json(json);
+
+            async.mapSeries(htsAccessTypes, (accessType, hCb) => {
+
+              if (!accessType)
+                return res.status(200).json(json);
+
+              async.mapSeries(genders, (gender, gCb) => {
+
+                if (!gender)
+                  return res.status(200).json(json);
+
+                async.mapSeries(resultGivens, (result, rCb) => {
+
+                  if (!result)
+                    return res.status(200).json(json);
+
+                  async.mapSeries(ageRanges, (ageGroup, aCb) => {
+
+                    if (!ageGroup)
+                      return res.status(200).json(json);
+
+                    const group = ageGroup.split("-");
+
+                    let count = 0;
+
+                    if (Object.keys(data).indexOf(year) >= 0 &&
+                      Object.keys(data[year]).indexOf(month) >= 0 &&
+                      Object.keys(data[year][month]).indexOf(modality) >= 0 &&
+                      Object.keys(data[year][month][modality]).indexOf(accessType) >= 0 &&
+                      Object.keys(data[year][month][modality][accessType]).indexOf(gender) >= 0 &&
+                      Object.keys(data[year][month][modality][accessType][gender]).indexOf(result) >= 0 &&
+                      Object.keys(data[year][month][modality][accessType][gender][result]).indexOf(ageGroup) >= 0) {
+
+                      count = data[year][month][modality][accessType][gender][result][ageGroup];
+
+                      if (count > 0) {
+
+                        debug(modality + " : " + accessType + " : " + count);
+
+                      }
+
+                    }
+
+                    if ((k >= startPos && k < endPos) && !download) {
+
+                      let row = {
+                        "Pos": k,
+                        "District": district,
+                        "Site": facility,
+                        "Age Group": ageGroup,
+                        "Month": month,
+                        "Year": year,
+                        "HTS Modality": modality,
+                        "HTS Access Type": accessType,
+                        "Sex": {
+                          "M": "Male",
+                          "F": "Female"
+                        }[gender],
+                        "Result Given": result,
+                        "Count": count
+                      }
+
+                      res.write(JSON.stringify([
+                        {
+                          row
+                        }
+                      ]));
+
+                    } else if (download) {
+
+                      const entry = [
+                        district,
+                        facility,
+                        month,
+                        year,
+                        modality,
+                        accessType,
+                        ageGroup,
+                        gender,
+                        result,
+                        count
+                      ];
+
+                      json.push(entry.join('\t'));
+
+                    } else if (k >= endPos) {
+
+                      return yCb();
+
+                    }
+
+                    k++;
+
+                    process.nextTick(() => {
+
+                      aCb();
+
+                    });
+
+                  }, (err) => {
+
+                    if (err)
+                      console.log(err);
+
+                    process.nextTick(() => {
+
+                      rCb();
+
+                    });
+
+                  });
+
+                }, (err) => {
+
+                  if (err)
+                    console.log(err);
+
+                  process.nextTick(() => {
+
+                    gCb();
+
+                  });
+
+                });
+
+              }, (err) => {
+
+                if (err)
+                  console.log(err);
+
+                process.nextTick(() => {
+
+                  hCb();
+
+                });
+
+              });
+
+            }, (err) => {
+
+              if (err)
+                console.log(err);
+
+              process.nextTick(() => {
+
+                lCb();
+
+              });
+
+            });
+
+          }, (err) => {
+
+            if (err)
+              console.log(err);
+
+            process.nextTick(() => {
+
+              mCb();
+
+            });
+
+          });
+
+        }, (err) => {
+
+          if (err)
+            console.log(err);
+
+          process.nextTick(() => {
+
+            yCb();
+
+          });
+
+        });
+
+      }, (err) => {
+
+        if (err)
+          console.log(err);
+
+        if (download) {
+
+          res.setHeader('Content-disposition', 'attachment; filename=data.csv');
+          res.set('Content-Type', 'text/csv');
+
+          res.status(200).send(json.join("\n"));
+
+        } else {
+
+          res.end();
+
+        }
+
+      })
+
+    });
+
+  });
 
   app.use(router);
 

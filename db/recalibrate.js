@@ -179,11 +179,13 @@ const loadPepfarData = async () => {
 
             let j = 0;
 
-            files.forEach(file => {
+            // files.forEach(file => {
+
+            async.mapSeries(files, (file, cb) => {
 
                 j++;
 
-                process.stdout.write("Loading Pepfar data " + (j / files.length) + "% ...\r");
+                process.stdout.write("Loading Pepfar data " + (100 * (j / files.length)).toFixed(1) + "% ...\r");
 
                 let htsSetting = "";
                 let htsModality = "";
@@ -294,7 +296,13 @@ const loadPepfarData = async () => {
                     }
                 };
 
-                new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) { })
+                new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) {
+
+                    fs.writeFileSync(file.replace(/dumps/, 'logs'), JSON.stringify(result));
+
+                    cb();
+
+                })
 
             })
 
@@ -360,6 +368,221 @@ const loadConceptNames = async (data) => {
 
 }
 
+const cleaDuplicateObsData = async () => {
+
+    let result;
+
+    result = await runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'SELECT person_id, encounter_id, concept_id, COUNT(*) found FROM hts.obs WHERE voided = 0 GROUP BY encounter_id, concept_id HAVING found > 1;'").catch(e => { console.log(e) });
+
+    debug(result);
+
+    if (result.trim().length > 0) {
+
+        let rows = result.split('\n');
+
+        debug(JSON.stringify(rows));
+
+        async.mapSeries(rows, (row, cb) => {
+
+            let parts = row.split('\t');
+
+            if (parts.length > 1) {
+
+                debug(parts);
+
+                let personId = parseInt(parts[0], 10);
+                let encounterId = parseInt(parts[1], 10);
+                let conceptId = parseInt(parts[2], 10);
+                let limit = parseInt(parts[3], 10) - 1;
+                let i = 0;
+
+                async.series([
+
+                    (iCb) => {
+
+                        runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'SELECT obs_id FROM hts.obs WHERE voided = 0 AND encounter_id = " + encounterId + " AND concept_id = " + conceptId + " LIMIT " + limit + ";'")
+                            .then(iResult => {
+
+                                debug("SELECT obs_id FROM hts.obs WHERE voided = 0 AND encounter_id = " + encounterId + " AND concept_id = " + conceptId + " LIMIT " + limit + "");
+
+                                async.mapSeries(iResult.split('\n'), (obsId, oCb) => {
+
+                                    if (obsId.trim().length <= 0)
+                                        return oCb();
+
+                                    debug(obsId);
+
+                                    debug("UPDATE hts.obs SET voided = 1, voided_by = 1, date_voided = NOW(), void_reason = \"Voided by script as duplicate\" WHERE obs_id = " + obsId + ";");
+
+                                    runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'UPDATE hts.obs SET voided = 1, voided_by = 1, date_voided = NOW(), void_reason = \"Voided by script as duplicate\" WHERE obs_id = " + obsId + ";'")
+                                        .then(iResult => {
+
+                                            oCb();
+
+                                        })
+                                        .catch(e => {
+
+                                            console.log(e);
+
+                                            oCb();
+
+                                        });
+
+                                }, (err) => {
+
+                                    iCb();
+
+                                })
+
+                            })
+                            .catch(e => {
+
+                                console.log(e);
+
+                                iCb();
+
+                            });
+
+                    }
+
+                ], (err) => {
+
+                    if (err)
+                        console.log(err);
+
+                    async.whilst(
+                        () => {
+                            return i < limit;
+                        },
+                        (iCb) => {
+                            i++;
+                            debug(limit + ' -> ' + encounterId);
+                            iCb();
+                        },
+                        (err) => {
+                            if (err)
+                                console.log(err);
+                            cb();
+                        }
+                    );
+
+                })
+
+            } else {
+
+                cb();
+
+            }
+
+        }, (err) => {
+
+            if (err)
+                console.log(err);
+
+            return;
+
+        })
+
+    }
+
+    result = await runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'SELECT obs_id, value_text FROM obs WHERE COALESCE(value_text, \"\") != \"\" AND voided = 0 AND concept_id IN (SELECT concept_id FROM concept_name WHERE name IN (\"Age\", \"Time since last test\"))'").catch(e => { console.log(e) });
+
+    debug(result);
+
+    if (result.trim().length > 0) {
+
+        let rows = result.split('\n');
+
+        debug(JSON.stringify(rows));
+
+        async.mapSeries(rows, async (row, cb) => {
+
+            let parts = row.split('\t');
+
+            if (parts.length > 1) {
+
+                debug(parts);
+
+                let period = parts[1].match(/^(\d+)([A-Z])$/);
+
+                if (period) {
+
+                    const cmd = "export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'UPDATE obs SET value_numeric = \"" + period[1] + "\", value_modifier=\"" + period[2] + "\", value_text=NULL WHERE obs_id=\"" + parts[0] + "\"'";
+
+                    console.log(cmd);
+
+                    result = await runCmd(cmd).catch(e => { console.log(e) });
+
+                    debug(result);
+
+                    cb();
+
+                } else {
+
+                    cb();
+
+                }
+
+            } else {
+
+                cb();
+
+            }
+
+        }, (err) => {
+
+            if (err)
+                console.log(err);
+
+        });
+
+    }
+
+    result = await runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'SELECT obs_id, value_text FROM obs WHERE COALESCE(value_text, \"\") != \"\" AND voided = 0 AND concept_id IN (SELECT concept_id FROM concept_name WHERE name IN (\"Appointment date given\"))'").catch(e => { console.log(e) });
+
+    debug(result);
+
+    if (result.trim().length > 0) {
+
+        let rows = result.split('\n');
+
+        debug(JSON.stringify(rows));
+
+        async.mapSeries(rows, async (row, cb) => {
+
+            let parts = row.split('\t');
+
+            if (parts.length > 1) {
+
+                debug(parts);
+
+                const cmd = "export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'UPDATE obs SET value_datetime = \"" + (new Date(parts[1])).format('YYYY-mm-dd') + "\", value_text=NULL WHERE obs_id=\"" + parts[0] + "\"'";
+
+                console.log(cmd);
+
+                result = await runCmd(cmd).catch(e => { console.log(e) });
+
+                debug(result);
+
+                cb();
+
+            } else {
+
+                cb();
+
+            }
+
+        }, (err) => {
+
+            if (err)
+                console.log(err);
+
+        });
+
+    }
+
+}
+
 const recalibrate = async () => {
 
     await loadConceptNames(seed.concepts)
@@ -383,11 +606,11 @@ const recalibrate = async () => {
         },
         {
             message: "Loading registers ...",
-            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "DROP TABLE IF EXISTS t1; CREATE TEMPORARY TABLE IF NOT EXISTS t1 (INDEX(register_id), INDEX(registerNumber)) ENGINE MyISAM AS (SELECT register_id, CASE WHEN register_number REGEXP \'[[:digit:]]\-[^\-]+\-[^\-]+\' THEN register_number WHEN register_number REGEXP \'[[:digit:]]\-\' THEN CONCAT(register_number, \'-\', (SELECT name FROM location WHERE location_id = (CASE WHEN COALESCE(hts_register.location_id, 0) = 0 THEN 1 ELSE hts_register.location_id END) LIMIT 1)) ELSE CONCAT(register_number, \'-\', (SELECT name FROM location WHERE location_id = (CASE WHEN COALESCE(hts_register.location_id, 0) = 0 THEN 1 ELSE hts_register.location_id END) LIMIT 1)) END AS registerNumber FROM hts_register LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id); UPDATE hts_register SET register_number = (SELECT registerNumber FROM t1 WHERE register_id = hts_register.register_id LIMIT 1); SELECT register_number AS _id, register_number AS registerNumber, hts_register_location_type.name AS locationType, hts_register_service_delivery_point.name AS serviceDeliveryPoint, DATE_FORMAT(date_created, \'%Y-%m-%d\') AS dateCreated FROM hts_register LEFT OUTER JOIN hts_register_location_type ON hts_register_location_type.location_type_id = hts_register.location_type_id LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id" | ./mapData.js --type register | curl -H "Content-Type: application/x-ndjson" -X POST --data-binary @- "' + es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + '/_bulk" -s'
+            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "DROP TABLE IF EXISTS t1; CREATE TEMPORARY TABLE IF NOT EXISTS t1 (INDEX(register_id), INDEX(registerNumber)) ENGINE MyISAM AS (SELECT register_id, CASE WHEN register_number REGEXP \'^[[:digit:]]+$\' THEN CONCAT(register_number, \'-\', (SELECT name FROM hts_register_service_delivery_point WHERE hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id LIMIT 1), \'-\', (SELECT name FROM location WHERE location_id = (CASE WHEN COALESCE(hts_register.location_id, 0) = 0 THEN 1 ELSE hts_register.location_id END) LIMIT 1)) WHEN register_number REGEXP \'[[:digit:]]\-[^\-]+\-[^\-]+\' THEN register_number WHEN register_number REGEXP \'[[:digit:]]\-\' THEN CONCAT(register_number, \'-\', (SELECT name FROM location WHERE location_id = (CASE WHEN COALESCE(hts_register.location_id, 0) = 0 THEN 1 ELSE hts_register.location_id END) LIMIT 1)) ELSE CONCAT(register_number, \'-\', (SELECT name FROM location WHERE location_id = (CASE WHEN COALESCE(hts_register.location_id, 0) = 0 THEN 1 ELSE hts_register.location_id END) LIMIT 1)) END AS registerNumber FROM hts_register LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id); UPDATE hts_register SET register_number = (SELECT registerNumber FROM t1 WHERE register_id = hts_register.register_id LIMIT 1); SELECT register_number AS _id, register_number AS registerNumber, hts_register_location_type.name AS locationType, hts_register_service_delivery_point.name AS serviceDeliveryPoint, DATE_FORMAT(date_created, \'%Y-%m-%d\') AS dateCreated FROM hts_register LEFT OUTER JOIN hts_register_location_type ON hts_register_location_type.location_type_id = hts_register.location_type_id LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id" | ./mapData.js --type register | curl -H "Content-Type: application/x-ndjson" -X POST --data-binary @- "' + es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + '/_bulk" -s'
         },
         {
             message: "Loading obs data ...",
-            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "SELECT DATE_FORMAT(encounter_datetime, \'%Y-%m-%d\') AS visitDate, encounter_type.name AS encounterType, concept_name.name AS observation, CASE WHEN COALESCE(obs.value_coded_name_id, \'\') != \'\' THEN (SELECT name FROM concept_name WHERE concept_name_id = obs.value_coded_name_id LIMIT 1) WHEN COALESCE(obs.value_datetime, \'\') != \'\' THEN DATE_FORMAT(obs.value_datetime, \'%Y-%m-%d\') WHEN COALESCE(obs.value_numeric, \'\') != \'\' THEN CONCAT(obs.value_numeric, CASE WHEN COALESCE(obs.value_modifier, \'\') != \'\' THEN obs.value_modifier ELSE \'\' END)  ELSE obs.value_text END AS observationValue, \'HTS PROGRAM\' AS program, location.name AS location, u.username AS provider, users.username AS user, encounter.encounter_id AS encounterId, person.birthdate AS dateOfBirth, hts_register.register_number AS registerNumber, hts_register_location_type.name AS locationType, hts_register_service_delivery_point.name AS serviceDeliveryPoint, DATEDIFF(CURRENT_DATE, person.birthdate) / 365.0 AS age, obs.obs_id AS obsId, obs.obs_id AS _id FROM encounter LEFT OUTER JOIN patient_program ON patient_program.patient_program_id = encounter.patient_program_id LEFT OUTER JOIN program ON program.program_id = patient_program.program_id LEFT OUTER JOIN encounter_type ON encounter_type.encounter_type_id = encounter.encounter_type LEFT OUTER JOIN obs ON obs.encounter_id = encounter.encounter_id LEFT OUTER JOIN concept ON concept.concept_id = obs.concept_id LEFT OUTER JOIN concept_name ON concept_name.concept_id = concept.concept_id LEFT OUTER JOIN location ON location.location_id = encounter.location_id LEFT OUTER JOIN users ON users.user_id = encounter.creator LEFT OUTER JOIN users u ON u.person_id = encounter.provider_id LEFT OUTER JOIN person ON person.person_id = obs.person_id LEFT OUTER JOIN hts_register_encounter_mapping ON hts_register_encounter_mapping.encounter_id = encounter.encounter_id LEFT OUTER JOIN hts_register ON hts_register.register_id = hts_register_encounter_mapping.register_id LEFT OUTER JOIN hts_register_location_type ON hts_register_location_type.location_type_id = hts_register.location_type_id LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id WHERE program.name = \'HTS PROGRAM\' AND concept_name.concept_name_id IN (SELECT concept_name_id FROM concept_name_tag_map WHERE concept_name_tag_id = (SELECT concept_name_tag_id FROM concept_name_tag WHERE tag = \'preferred_hts\' AND encounter.encounter_id IN (SELECT encounter_id FROM hts_register_encounter_mapping) LIMIT 1));" | ./mapData.js --type visit | curl -H "Content-Type: application/x-ndjson" -X POST --data-binary @- "' + es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + '/_bulk" -s'
+            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "SELECT DISTINCT DATE_FORMAT(encounter_datetime, \'%Y-%m-%d\') AS visitDate, encounter_type.name AS encounterType, concept_name.name AS observation, CASE WHEN COALESCE(obs.value_coded_name_id, \'\') != \'\' THEN (SELECT name FROM concept_name WHERE concept_name_id = obs.value_coded_name_id LIMIT 1) WHEN COALESCE(obs.value_datetime, \'\') != \'\' THEN DATE_FORMAT(obs.value_datetime, \'%Y-%m-%d\') WHEN COALESCE(obs.value_numeric, \'\') != \'\' THEN CONCAT(obs.value_numeric, CASE WHEN COALESCE(obs.value_modifier, \'\') != \'\' THEN obs.value_modifier ELSE \'\' END)  ELSE obs.value_text END AS observationValue, \'HTS PROGRAM\' AS program, location.name AS location, u.username AS provider, users.username AS user, encounter.encounter_id AS encounterId, person.birthdate AS dateOfBirth, hts_register.register_number AS registerNumber, hts_register_location_type.name AS locationType, hts_register_service_delivery_point.name AS serviceDeliveryPoint, DATEDIFF(CURRENT_DATE, person.birthdate) / 365.0 AS age, obs.obs_id AS obsId, obs.obs_id AS _id FROM encounter LEFT OUTER JOIN patient_program ON patient_program.patient_program_id = encounter.patient_program_id LEFT OUTER JOIN program ON program.program_id = patient_program.program_id LEFT OUTER JOIN encounter_type ON encounter_type.encounter_type_id = encounter.encounter_type LEFT OUTER JOIN obs ON obs.encounter_id = encounter.encounter_id LEFT OUTER JOIN concept ON concept.concept_id = obs.concept_id LEFT OUTER JOIN concept_name ON concept_name.concept_id = concept.concept_id LEFT OUTER JOIN location ON location.location_id = encounter.location_id LEFT OUTER JOIN users ON users.user_id = encounter.creator LEFT OUTER JOIN users u ON u.person_id = encounter.provider_id LEFT OUTER JOIN person ON person.person_id = obs.person_id LEFT OUTER JOIN hts_register_encounter_mapping ON hts_register_encounter_mapping.encounter_id = encounter.encounter_id LEFT OUTER JOIN hts_register ON hts_register.register_id = hts_register_encounter_mapping.register_id LEFT OUTER JOIN hts_register_location_type ON hts_register_location_type.location_type_id = hts_register.location_type_id LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id WHERE program.name = \'HTS PROGRAM\' AND concept_name.concept_name_id IN (SELECT concept_name_id FROM concept_name_tag_map WHERE concept_name_tag_id = (SELECT concept_name_tag_id FROM concept_name_tag WHERE tag = \'preferred_hts\' AND encounter.encounter_id IN (SELECT encounter_id FROM hts_register_encounter_mapping) LIMIT 1)) AND obs.voided = 0 AND encounter.voided = 0;" | ./mapData.js --type visit | curl -H "Content-Type: application/x-ndjson" -X POST --data-binary @- "' + es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + '/_bulk" -s'
         }
     ];
 
@@ -441,6 +664,45 @@ async.series([
 
         }
 
+    },
+
+
+    function (cb) {
+
+        if (!fs.existsSync(__dirname + '/logs')) {
+
+            fs.mkdirSync(__dirname + '/logs');
+
+            cb();
+
+        } else {
+
+            glob(__dirname + '/logs/*.json', (err, files) => {
+
+                async.mapSeries(files, (file, iCb) => {
+
+                    console.log('Deleting file %s ...', file);
+
+                    fs.unlink(file, err => {
+                        if (err) throw err;
+
+                        iCb();
+
+                    });
+
+                }, (err) => {
+
+                    if (err)
+                        throw err;
+
+                    cb();
+
+                })
+
+            })
+
+        }
+
     }
 
 ], (err) => {
@@ -448,6 +710,11 @@ async.series([
     if (err)
         throw err;
 
-    recalibrate();
+    cleaDuplicateObsData()
+        .then(() => {
+
+            recalibrate();
+
+        })
 
 });
