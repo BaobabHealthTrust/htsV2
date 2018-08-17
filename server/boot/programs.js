@@ -3711,7 +3711,7 @@ module.exports = function (app) {
 
   })
 
-  router.get("/programs/fetch_edit_record/:id", function (req, res, next) {
+  router.get("/programs/fetch_edit_records/:id", function (req, res, next) {
 
     let args = {
       data: {
@@ -3719,6 +3719,18 @@ module.exports = function (app) {
           match_all: {}
         },
         size: 10000,
+        sort: [
+          {
+            "registerNumber.keyword": {
+              order: "desc"
+            }
+          },
+          {
+            "identifier.keyword": {
+              order: "desc"
+            }
+          }
+        ],
         aggs: {
           registerNumber: {
             terms: {
@@ -3899,6 +3911,238 @@ module.exports = function (app) {
       res
         .status(200)
         .json(output);
+
+    });
+
+  });
+
+  const loadJSON = (result) => {
+
+    let json = {};
+
+    result
+      .hits
+      .hits
+      .forEach(data => {
+
+        const row = data._source;
+
+        if (!json["HTS Provider ID"]) {
+          json["HTS Provider ID"] = row.user;
+        } else if (!json["id"]) {
+          json.id = row.identifier;
+        }
+
+        json.dateOfBirth = row.dateOfBirth;
+
+        fetchAge(json);
+
+        if (json.age) {
+
+          json.Age = String(json.age);
+
+          delete json.age;
+          delete json.dateOfBirth;
+
+        }
+
+        if (row.observation.match(/first\spass/i)) {
+
+          if (!json["HIV Rapid Test Outcomes"]) {
+            json["HIV Rapid Test Outcomes"] = {};
+          }
+
+          if (!json["HIV Rapid Test Outcomes"]["First Pass"]) {
+            json["HIV Rapid Test Outcomes"]["First Pass"] = {};
+          }
+
+          if (row.observation.match(/test\s1/i)) {
+            json["HIV Rapid Test Outcomes"]["First Pass"]["Test 1"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
+          } else if (row.observation.match(/test\s2/i)) {
+            json["HIV Rapid Test Outcomes"]["First Pass"]["Test 2"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
+          }
+        } else if (row.observation.match(/immediate\srepeat/i)) {
+          if (!json["HIV Rapid Test Outcomes"]) {
+            json["HIV Rapid Test Outcomes"] = {};
+          }
+
+          if (!json["HIV Rapid Test Outcomes"]["Immediate Repeat"]) {
+            json["HIV Rapid Test Outcomes"]["Immediate Repeat"] = {};
+          }
+
+          if (row.observation.match(/test\s1/i)) {
+            json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 1"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
+          } else if (row.observation.match(/test\s2/i)) {
+            json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 2"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
+          }
+
+        } else if (row.observation === "Last HIV Test Result" || row.observation === "Last HIV test") {
+
+          json["Last HIV Test"] = row.observationValue;
+
+        } else if (row.observation === "Comments") {
+
+          json["Comments:Comments"] = row.observationValue;
+
+        } else if (row.observation === "HTS Family Referral Slips") {
+
+          json["Number of Items Given:HTS Family Referral Slips"] = String(row.observationValue);
+
+        } else if (row.observation === "Number of female condoms given") {
+
+          json["Number of Items Given:Condoms:Female"] = String(row.observationValue);
+
+        } else if (row.observation === "Number of male condoms given") {
+
+          json["Number of Items Given:Condoms:Male"] = String(row.observationValue);
+
+        } else if (row.observation === "Time since last HIV Test") {
+
+          json["Time Since Last Test"] = row.observationValue;
+
+        } else if (row.observation === "Partner HIV Status" && String(row.observationValue).toLowerCase().trim() === "no partner") {
+
+          json["Partner HIV Status"] = "No Partner";
+
+        } else if (String(row.observation).toLowerCase().trim() === "referral for re-testing") {
+
+          json["Referral for Re-Testing"] = (["No Re-Test needed", "No Re-test needed"].indexOf(row.observationValue) >= 0 ? "No Re-Test needed" : (["Re-Test", "Re-test"].indexOf(row.observationValue) ? "Re-Test" : row.observationValue));
+
+        } else {
+
+          json[row.observation] = row.observationValue;
+
+        }
+
+      });
+
+    return json;
+
+  }
+
+  router.get("/programs/fetch_edit_record/:id", function (req, res, next) {
+
+    let output = [];
+
+    let args = {
+      data: {
+        query: {
+          query_string: {
+            query: 'identifier:"' + req.params.id + '"'
+          }
+        },
+        size: 1000
+      },
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+
+      debug(JSON.stringify(result));
+
+      let editJSON = loadJSON(result);
+
+      const registerNumber = result.hits.hits[0]._source.registerNumber;
+
+      console.log(registerNumber);
+
+      args = {
+        data: {
+          query: {
+            query_string: {
+              query: 'registerNumber:"' + registerNumber + '"'
+            }
+          },
+          size: 1000,
+          sort: [
+            {
+              "identifier.keyword": {
+                order: "desc"
+              }
+            }
+          ],
+          aggs: {
+            registerNumber: {
+              terms: {
+                field: "registerNumber.keyword",
+                size: 10000
+              },
+              aggs: {
+                entryCode: {
+                  terms: {
+                    field: "identifier.keyword",
+                    size: 1000,
+                    order: {
+                      _term: "desc"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+
+      new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+
+        debug(JSON.stringify(result));
+
+        const indices = result.aggregations.registerNumber.buckets[0].entryCode.buckets.map(e => { return e.key });
+
+        debug(JSON.stringify(indices));
+
+        const index = indices.indexOf(req.params.id) - 1;
+
+        debug(index);
+
+        const id = (index >= 0 ? indices[index] : null);
+
+        debug(id);
+
+        if (id !== null) {
+
+          let args = {
+            data: {
+              query: {
+                query_string: {
+                  query: 'identifier:"' + id + '"'
+                }
+              },
+              size: 1000
+            },
+            headers: {
+              "Content-Type": "application/json"
+            }
+          };
+
+          new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+
+            debug(JSON.stringify(result));
+
+            let previousJSON = loadJSON(result);
+
+            output.push(editJSON);
+
+            output.push(previousJSON);
+
+            res.status(200).json(output);
+
+          });
+
+        } else {
+
+          output.push(editJSON);
+
+          res.status(200).json(output);
+
+        }
+
+      });
 
     });
 

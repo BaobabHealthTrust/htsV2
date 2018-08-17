@@ -19,11 +19,12 @@ To run the application,
         npm install --save --verbose && npm install pm2 -g --verbose
     ```
 7. Install [Redis](https://redis.io/download)
-8. To run the application, execute
+8. Setup the database by following instructions in the db/ folder
+9. To run the application, execute
     ```
         ./start.sh
     ```
-9. To automatically start the application on reboot, run the following command and follow the instructions:
+10. To automatically start the application on reboot, run the following command and follow the instructions:
     ```
         pm2 startup
     ```
