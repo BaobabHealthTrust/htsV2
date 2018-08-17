@@ -21,8 +21,11 @@ services:
       DB_PASSWORD: password
       DB_DATABASE: hts
       DB_PORT: 3307
+      ES_PROTOCOL: http
+      ES_HOST: es
+      ES_PORT: 9201
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - .:/usr/src/app
     container_name: hts

@@ -119,7 +119,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -161,7 +161,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -203,7 +203,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -245,7 +245,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -287,7 +287,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -329,7 +329,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -371,7 +371,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -413,7 +413,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -455,7 +455,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -497,7 +497,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -539,7 +539,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -581,7 +581,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -623,7 +623,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -666,7 +666,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -708,7 +708,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -750,7 +750,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -792,7 +792,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -834,7 +834,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -876,7 +876,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -918,7 +918,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -960,7 +960,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -1002,7 +1002,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -1044,7 +1044,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -1086,7 +1086,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -1128,7 +1128,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -1170,7 +1170,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -1212,7 +1212,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -1254,7 +1254,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -1303,7 +1303,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       debug(JSON.stringify(result));
 
@@ -1348,7 +1348,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -1391,7 +1391,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       res
         .status(200)
@@ -2083,7 +2083,7 @@ module.exports = function (app) {
 
     debug(JSON.stringify(args));
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/pepfar/_search", args, function (result) {
 
       debug(result);
 
@@ -2487,7 +2487,7 @@ module.exports = function (app) {
 
     }
 
-    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/_search", args, function (result) {
+    (new client()).get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/pepfar/_search", args, function (result) {
 
       const header = [
         "District",

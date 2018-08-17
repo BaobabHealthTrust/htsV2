@@ -1427,7 +1427,7 @@ module.exports = function (app) {
       }
     };
 
-    new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/patient/" + primaryId, args, function (result) {
+    new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/patient/" + primaryId, args, function (result) {
 
       debug(result);
 
@@ -1863,7 +1863,7 @@ module.exports = function (app) {
               }
             };
 
-            new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) {
+            new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit", args, function (result) {
 
               debug(JSON.stringify(result));
 
@@ -1978,7 +1978,7 @@ module.exports = function (app) {
     }
 
     new client()
-      .get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/patient/" + primaryId, function (result) {
+      .get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/patient/" + primaryId, function (result) {
 
         debug(result);
 
@@ -2050,7 +2050,7 @@ module.exports = function (app) {
       }
     };
 
-    new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    new client().get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       if (result && result.hits && result.hits.hits) {
 
@@ -2094,7 +2094,7 @@ module.exports = function (app) {
             }
           };
 
-          new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_bulk", bulkArgs, function (result) {
+          new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_bulk", bulkArgs, function (result) {
 
             setTimeout(() => {
               res
@@ -2482,7 +2482,7 @@ module.exports = function (app) {
                     }
                   };
 
-                  new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) { });
+                  new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit", args, function (result) { });
 
                 }
 
@@ -2650,7 +2650,7 @@ module.exports = function (app) {
             }
           };
 
-          new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) { });
+          new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit", args, function (result) { });
 
         }
 
@@ -2728,7 +2728,7 @@ module.exports = function (app) {
         }
       };
 
-      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) { })
+      new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/pepfar/" + clinicId, args, function (result) { })
 
     }
 
@@ -2780,7 +2780,7 @@ module.exports = function (app) {
       }
     };
 
-    new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    new client().get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       let json = {};
 
@@ -3184,7 +3184,7 @@ module.exports = function (app) {
         }
       };
 
-      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+      new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
         if (result && result.hits && result.hits.hits) {
 
@@ -3221,7 +3221,7 @@ module.exports = function (app) {
                 }
               };
 
-              new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/" + hit._id, args, function (result) { });
+              new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/" + hit._id, args, function (result) { });
 
             });
 
@@ -3313,7 +3313,7 @@ module.exports = function (app) {
         ? entryCode
         : null);
 
-      new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, function (result) {
+      new client().get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/pepfar/" + clinicId, function (result) {
 
         debug(result);
 
@@ -3339,7 +3339,7 @@ module.exports = function (app) {
           }
         };
 
-        new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/" + clinicId, args, function (result) {
+        new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/pepfar/" + clinicId, args, function (result) {
 
           debug(result);
 
@@ -3442,7 +3442,7 @@ module.exports = function (app) {
         }
       };
 
-      new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+      new client().get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
         if (result && result.hits && result.hits.hits) {
           let bulk = [];
@@ -3468,7 +3468,7 @@ module.exports = function (app) {
               }
             };
 
-            new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_bulk", bulkArgs, function (result) { });
+            new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_bulk", bulkArgs, function (result) { });
           }
         }
       });
@@ -3567,7 +3567,7 @@ module.exports = function (app) {
         }
       };
 
-      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + (json['Register Number'] + "-" + json['Service Delivery Point'] + "-" + json['HTS Location']), args, function (result) {
+      new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/register/" + (json['Register Number'] + "-" + json['Service Delivery Point'] + "-" + json['HTS Location']), args, function (result) {
 
         res
           .status(200)
@@ -3626,7 +3626,7 @@ module.exports = function (app) {
           closedBy: user.id
         })
 
-      new client().delete(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + registerNumber, function (result) {
+      new client().delete((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/register/" + registerNumber, function (result) {
 
         res
           .status(200)
@@ -3685,7 +3685,7 @@ module.exports = function (app) {
       }
     };
 
-    new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/_search", args, function (result) {
+    new client().get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/register/_search", args, function (result) {
 
       let json = [];
 
@@ -3744,7 +3744,7 @@ module.exports = function (app) {
       }
     };
 
-    new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    new client().get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       let output = [];
 
@@ -4051,7 +4051,7 @@ module.exports = function (app) {
       }
     };
 
-    new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, async function (result) {
+    new client().get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, async function (result) {
 
       let bulk = [];
 
@@ -4540,7 +4540,7 @@ module.exports = function (app) {
         }
       };
 
-      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/_bulk", bulkArgs, async function (result) {
+      new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/_bulk", bulkArgs, async function (result) {
 
         res
           .status(200)
@@ -4769,7 +4769,7 @@ module.exports = function (app) {
 
       debug(registerNumber);
 
-      new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", {
+      new client().get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", {
         data: {
           query: {
             bool: {
@@ -4837,7 +4837,7 @@ module.exports = function (app) {
 
           if (result && result.hits && result.hits.total && result.hits.total > 0) {
 
-            new client().delete(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/" + result.hits.hits[0]._id, function (result) {
+            new client().delete((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/" + result.hits.hits[0]._id, function (result) {
 
               debug(result);
 
@@ -4913,7 +4913,7 @@ module.exports = function (app) {
             }
           };
 
-          new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit", args, function (result) {
+          new client().post((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit", args, function (result) {
 
             debug(JSON.stringify(result));
 
@@ -4955,7 +4955,7 @@ module.exports = function (app) {
       }
     };
 
-    new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+    new client().get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL :  es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST :  es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT :  es.port) + "/" + es.index + "/visit/_search", args, function (result) {
 
       debug(result);
 
