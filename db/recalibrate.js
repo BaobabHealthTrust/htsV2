@@ -372,7 +372,7 @@ const cleaDuplicateObsData = async () => {
 
     let result;
 
-    result = await runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'SELECT person_id, encounter_id, concept_id, COUNT(*) found FROM hts.obs WHERE voided = 0 GROUP BY encounter_id, concept_id HAVING found > 1;'").catch(e => { console.log(e) });
+    result = await runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'SELECT person_id, encounter_id, concept_id, COUNT(*) found FROM obs WHERE voided = 0 GROUP BY encounter_id, concept_id HAVING found > 1;'").catch(e => { console.log(e) });
 
     debug(result);
 
@@ -400,10 +400,10 @@ const cleaDuplicateObsData = async () => {
 
                     (iCb) => {
 
-                        runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'SELECT obs_id FROM hts.obs WHERE voided = 0 AND encounter_id = " + encounterId + " AND concept_id = " + conceptId + " LIMIT " + limit + ";'")
+                        runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'SELECT obs_id FROM obs WHERE voided = 0 AND encounter_id = " + encounterId + " AND concept_id = " + conceptId + " LIMIT " + limit + ";'")
                             .then(iResult => {
 
-                                debug("SELECT obs_id FROM hts.obs WHERE voided = 0 AND encounter_id = " + encounterId + " AND concept_id = " + conceptId + " LIMIT " + limit + "");
+                                debug("SELECT obs_id FROM obs WHERE voided = 0 AND encounter_id = " + encounterId + " AND concept_id = " + conceptId + " LIMIT " + limit + "");
 
                                 async.mapSeries(iResult.split('\n'), (obsId, oCb) => {
 
@@ -412,9 +412,9 @@ const cleaDuplicateObsData = async () => {
 
                                     debug(obsId);
 
-                                    debug("UPDATE hts.obs SET voided = 1, voided_by = 1, date_voided = NOW(), void_reason = \"Voided by script as duplicate\" WHERE obs_id = " + obsId + ";");
+                                    debug("UPDATE obs SET voided = 1, voided_by = 1, date_voided = NOW(), void_reason = \"Voided by script as duplicate\" WHERE obs_id = " + obsId + ";");
 
-                                    runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'UPDATE hts.obs SET voided = 1, voided_by = 1, date_voided = NOW(), void_reason = \"Voided by script as duplicate\" WHERE obs_id = " + obsId + ";'")
+                                    runCmd("export MYSQL_PWD=" + password + " && mysql -sN -h " + host + " -u " + user + " " + database + " -e 'UPDATE obs SET voided = 1, voided_by = 1, date_voided = NOW(), void_reason = \"Voided by script as duplicate\" WHERE obs_id = " + obsId + ";'")
                                         .then(iResult => {
 
                                             oCb();
