@@ -67,6 +67,7 @@ services:
       - ntwk
   mysql:
     build: ./db/
+    image: db:5.5.59
     container_name: ms
     healthcheck:
       test: mysqladmin --silent --wait -uroot -ppassword ping || exit 1
