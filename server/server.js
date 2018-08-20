@@ -153,6 +153,32 @@ boot(app, { appRootDir: __dirname, masterConfigsInJavascript: true }, function (
   if (err)
     throw err;
 
+  const client = require("node-rest-client").Client;
+  const es = require(__dirname + "/../configs/elasticsearch.json");
+
+  new client().get((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL : es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST : es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT : es.port) + "/" + es.index, function (result) {
+
+    if (result.error) {
+
+      const indices = require(path.resolve('.', 'db', 'es-mapping.json'));
+
+      const args = {
+        data: indices,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+
+      new client().put((process.env.ES_PROTOCOL ? process.env.ES_PROTOCOL : es.protocol) + "://" + (process.env.ES_HOST ? process.env.ES_HOST : es.host) + ":" + (process.env.ES_PORT ? process.env.ES_PORT : es.port) + "/" + es.index, args, function (result) {
+
+        console.log(JSON.stringify(result, null, 2));
+
+      });
+
+    }
+
+  });
+
   // start the server if `$ node server.js`
   if (require.main === module)
     app.start();
