@@ -404,7 +404,7 @@ module.exports = function (app) {
     }
   };
 
-  const generateEntryCode = async (patientId, username, locationName, prefix, encounterId) => {
+  const generateEntryCode = async (patientId, username, locationName, prefix, encounterId, today = (new Date()).format('YYYY-mm-dd')) => {
 
     return await mutex
       .lock("id_lock")
@@ -502,7 +502,7 @@ module.exports = function (app) {
 
         let voided = 0;
 
-        let dateCreated = new Date();
+        let dateCreated = new Date(today);
 
         /*result = await PatientIdentifier.create({
           patientId,
@@ -1718,11 +1718,11 @@ module.exports = function (app) {
 
     json[encounterName].encounterId = encounterId;
 
-    clinicId = await generateEntryCode(patientId, currentUser, currentLocationName, "EC", encounterId);
+    clinicId = await generateEntryCode(patientId, currentUser, currentLocationName, "EC", encounterId, today);
 
     while (!clinicId || clinicId === "Locked") {
       setTimeout(async () => {
-        clinicId = await generateEntryCode(patientId, currentUser, currentLocationName, "EC", encounterId);
+        clinicId = await generateEntryCode(patientId, currentUser, currentLocationName, "EC", encounterId, today);
       }, 1000);
     }
 
@@ -2382,11 +2382,11 @@ module.exports = function (app) {
     let registerMap = await HtsRegisterEncounterMapping.create({ encounterId, registerId });
 
     if (!clinicId)
-      clinicId = await generateEntryCode(personId, currentUser, currentLocationName, "EC", encounterId);
+      clinicId = await generateEntryCode(personId, currentUser, currentLocationName, "EC", encounterId, today);
 
     while (!clinicId || clinicId === "Locked") {
       setTimeout(async () => {
-        clinicId = await generateEntryCode(personId, currentUser, currentLocationName, "EC", encounterId);
+        clinicId = await generateEntryCode(personId, currentUser, currentLocationName, "EC", encounterId, today);
       }, 1000);
     }
 
