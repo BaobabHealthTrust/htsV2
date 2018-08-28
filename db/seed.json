@@ -220,6 +220,7 @@
         "HIV Unknown",
         "Partner Negative",
         "Partner Positive",
-        "Last HIV Test"
+        "Last HIV Test",
+        "Started ART"
     ]
 }
