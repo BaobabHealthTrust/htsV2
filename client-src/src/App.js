@@ -46,7 +46,7 @@ import {
 } from "./actions/ddeActions";
 import Alert from "./components/alert";
 import Dialog from "./components/dialog";
-import { showInfoMsg, showErrorMsg, showConfirmMsg, closeMsg } from "./actions/alertActions";
+import { showInfoMsg, showErrorMsg, showConfirmMsg, closeMsg, updateAlertKey } from "./actions/alertActions";
 import ReportsViewer from "./components/reportsViewer";
 import {
   showDialog,
@@ -188,7 +188,7 @@ class App extends Component {
   componentWillMount() {
 
     this.props.checkRedirectToPortal();
-    
+
     this.props.getVersion();
 
   }
@@ -3969,7 +3969,8 @@ class App extends Component {
           close={this
             .props
             .closeMsg
-            .bind(this)} />
+            .bind(this)}
+          updateAlertKey={this.props.updateAlertKey.bind(this)} />
         <Dialog
           dialog={this.props.dialog}
           close={this
@@ -4632,9 +4633,9 @@ const mapDispatchToProps = dispatch => {
         resolve();
       });
     },
-    showConfirmMsg: (title, msg, label, action) => {
+    showConfirmMsg: (title, msg, label, action, cancelAction) => {
       return new Promise(resolve => {
-        dispatch(showConfirmMsg(title, msg, label, action));
+        dispatch(showConfirmMsg(title, msg, label, action, cancelAction));
         resolve();
       });
     },
@@ -4850,6 +4851,9 @@ const mapDispatchToProps = dispatch => {
     },
     updateReportField: async (field, value, group) => {
       return await dispatch(updateReportField(field, value, group));
+    },
+    updateAlertKey: async (key, value) => {
+      return await dispatch(updateAlertKey(key, value));
     }
   };
 };

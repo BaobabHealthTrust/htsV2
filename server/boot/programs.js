@@ -2251,19 +2251,46 @@ module.exports = function (app) {
         .toUpperCase()
       : null;
 
-    let person = await Person.create({
-      gender,
-      birthdate,
-      birthdateEstimated: 1,
-      creator: userId,
-      dateCreated: new Date(),
-      uuid: uuid.v4()
-    });
+    let person, patient;
 
-    let personId = person.personId;
+    console.log(Object.keys(json).indexOf('personId'));
+
+    if (Object.keys(json).indexOf('personId') >= 0) {
+
+      person = await Person.findOne({
+        where: {
+          personId: json.personId
+        }
+      });
+
+    }
+
+    let personId;
+
+    debug(person);
+
+    if (!person) {
+
+      person = await Person.create({
+        gender,
+        birthdate,
+        birthdateEstimated: 1,
+        creator: userId,
+        dateCreated: new Date(),
+        uuid: uuid.v4()
+      });
+
+      personId = person.personId;
+
+      patient = await Patient.create({ patientId: personId, creator: userId, dateCreated: new Date() });
+
+    }
+
+    debug(person);
+
+    personId = person.personId;
+
     let patientId = personId;
-
-    let patient = await Patient.create({ patientId: personId, creator: userId, dateCreated: new Date() });
 
     let programName = "HTS";
 
@@ -2733,6 +2760,7 @@ module.exports = function (app) {
     }
 
     json.id = clinicId;
+    json.personId = personId;
 
     debug("#########################");
 
