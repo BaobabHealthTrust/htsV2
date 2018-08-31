@@ -1762,26 +1762,60 @@ module.exports = function (app) {
 
           if (["age", "time since last hiv test", "time since last test"].indexOf(name.toLowerCase()) >= 0) {
 
+            const number = String(value)
+              .trim()
+              .match(/^(\d+)(.+)$/)
+              ? Number(String(value)
+                .trim()
+                .match(/^(\d+)(.+)$/)[1])
+              : 0;
+
+            const unit = String(value)
+              .trim()
+              .match(/^(\d+)(.+)$/)
+              ? String(value)
+                .trim()
+                .match(/^(\d+)(.+)$/)[2]
+              : null;
+
+            let iValue = value;
+
+            switch (String(unit).toLowerCase().trim()) {
+
+              case 'y':
+
+                iValue = number * 365;
+
+                break;
+
+              case 'm':
+
+                iValue = number * 30;
+
+                break;
+
+              case 'w':
+
+                iValue = number * 7;
+
+                break;
+
+              default:
+
+                iValue = number;
+
+                break;
+
+            }
+
             obs = await Obs.create({
               personId: patientId,
               conceptId,
               encounterId,
               obsDatetime: new Date(today),
               locationId,
-              valueNumeric: String(value)
-                .trim()
-                .match(/^(\d+)(.+)$/)
-                ? String(value)
-                  .trim()
-                  .match(/^(\d+)(.+)$/)[1]
-                : null,
-              valueModifier: String(value)
-                .trim()
-                .match(/^(\d+)(.+)$/)
-                ? String(value)
-                  .trim()
-                  .match(/^(\d+)(.+)$/)[2]
-                : null,
+              valueNumeric: iValue,
+              valueModifier: 'D',
               creator: userId,
               dateCreated: new Date(),
               uuid: uuid.v4()
@@ -2403,7 +2437,7 @@ module.exports = function (app) {
               .forEach(async f => {
 
                 const conceptName = e + " " + f + " Result";
-                const value = json[name][e][f];
+                let value = json[name][e][f];
 
                 let concept = await ConceptName.findOne({
                   where: {
@@ -2550,26 +2584,60 @@ module.exports = function (app) {
 
           if (["age", "time since last hiv test", "time since last test"].indexOf(conceptname.toLowerCase()) >= 0) {
 
+            const number = String(value)
+              .trim()
+              .match(/^(\d+)(.+)$/)
+              ? Number(String(value)
+                .trim()
+                .match(/^(\d+)(.+)$/)[1])
+              : 0;
+
+            const unit = String(value)
+              .trim()
+              .match(/^(\d+)(.+)$/)
+              ? String(value)
+                .trim()
+                .match(/^(\d+)(.+)$/)[2]
+              : null;
+
+            let iValue = value;
+
+            switch (String(unit).toLowerCase().trim()) {
+
+              case 'y':
+
+                iValue = number * 365;
+
+                break;
+
+              case 'm':
+
+                iValue = number * 30;
+
+                break;
+
+              case 'w':
+
+                iValue = number * 7;
+
+                break;
+
+              default:
+
+                iValue = number;
+
+                break;
+
+            }
+
             obs = await Obs.create({
               personId: patientId,
               conceptId,
               encounterId,
               obsDatetime: new Date(today),
               locationId,
-              valueNumeric: String(value)
-                .trim()
-                .match(/^(\d+)(.+)$/)
-                ? String(value)
-                  .trim()
-                  .match(/^(\d+)(.+)$/)[1]
-                : null,
-              valueModifier: String(value)
-                .trim()
-                .match(/^(\d+)(.+)$/)
-                ? String(value)
-                  .trim()
-                  .match(/^(\d+)(.+)$/)[2]
-                : null,
+              valueNumeric: iValue,
+              valueModifier: 'D',
               creator: userId,
               dateCreated: new Date(),
               uuid: uuid.v4()
