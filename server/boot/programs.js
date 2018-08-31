@@ -4044,9 +4044,12 @@ module.exports = function (app) {
 
       let editJSON = loadJSON(result);
 
-      const registerNumber = result.hits.hits[0]._source.registerNumber;
+      const registerNumber = (result && result.hits && result.hits.hits && result.hits.hits.length > 0 && result.hits.hits[0]._source && result.hits.hits[0]._source.registerNumber ? result.hits.hits[0]._source.registerNumber : null);
 
       console.log(registerNumber);
+
+      if (registerNumber === null)
+        return res.status(200).json([]);
 
       args = {
         data: {
