@@ -2685,7 +2685,7 @@ module.exports = function (app) {
 
       let partnerHIVStatus = json["Partner HIV Status"];
 
-      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age);
+      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age, null, gender);
 
       htsSetting = result.htsSetting;
       htsModality = result.htsModality;
@@ -3286,7 +3286,11 @@ module.exports = function (app) {
 
       let referrer = json.client[entryCode]["HTS Visit"]['Who referred slip'];
 
-      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age, referrer);
+      let gender = (json.client[entryCode]["HTS Visit"]["Sex/Pregnancy"]
+        ? String(json.client[entryCode]["HTS Visit"]["Sex/Pregnancy"]).substring(0, 1).toUpperCase()
+        : null);
+
+      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age, referrer, gender);
 
       htsSetting = result.htsSetting;
       htsModality = result.htsModality;
@@ -3306,10 +3310,6 @@ module.exports = function (app) {
       debug(partnerHIVStatus);
 
       debug("$$$$$$$$$$$$$$$$$$$$$$$");
-
-      let gender = (json.client[entryCode]["HTS Visit"]["Sex/Pregnancy"]
-        ? String(json.client[entryCode]["HTS Visit"]["Sex/Pregnancy"]).substring(0, 1).toUpperCase()
-        : null);
 
       let clinicId = (entryCode
         ? entryCode
