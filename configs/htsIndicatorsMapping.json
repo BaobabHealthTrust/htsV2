@@ -247,7 +247,7 @@
         "Any other": {
           "Any": {
             "HTS Setting": "Facility",
-            "HTS Modality": "Emergency"
+            "HTS Modality": "Other PITC"
           }
         },
         "Partner Positive": {
@@ -261,7 +261,7 @@
         "Any": {
           "Any": {
             "HTS Setting": "Facility",
-            "HTS Modality": "Emergency"
+            "HTS Modality": "Other PITC"
           }
         }
       },
