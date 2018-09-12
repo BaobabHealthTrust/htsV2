@@ -3284,7 +3284,9 @@ module.exports = function (app) {
 
       let partnerHIVStatus = json.client[entryCode]["HTS Visit"]["Partner HIV Status"];
 
-      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age);
+      let referrer = json.client[entryCode]["HTS Visit"]['Who referred slip'];
+
+      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age, referrer);
 
       htsSetting = result.htsSetting;
       htsModality = result.htsModality;

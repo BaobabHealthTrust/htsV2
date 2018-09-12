@@ -210,6 +210,8 @@ const loadPepfarData = async () => {
 
                 let clinicId = null;
 
+                let referrer = null;
+
                 for (let i = 0; i < raw.length; i++) {
 
                     const row = raw[i];
@@ -234,6 +236,12 @@ const loadPepfarData = async () => {
                         case 'Result Given to Client':
 
                             resultGiven = row.observationValue;
+
+                            break;
+
+                        case 'Who referred slip':
+
+                            referrer = row.observationValue;
 
                             break;
 
@@ -268,7 +276,7 @@ const loadPepfarData = async () => {
 
                 const result = pepfarSynthesis.ps.classifyLocation(
                     htsIndicatorsMapping, locationType, serviceDeliveryPoint,
-                    accessType, partnerHIVStatus, age
+                    accessType, partnerHIVStatus, age, referrer
                 );
 
                 htsSetting = result.htsSetting;
