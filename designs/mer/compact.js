@@ -5,8 +5,8 @@ if (process.argv.indexOf('-f') > 0) {
   const fs = require('fs');
 
   const file = process.argv[process
-      .argv
-      .indexOf('-f') + 1];
+    .argv
+    .indexOf('-f') + 1];
 
   if (fs.existsSync(file)) {
 
@@ -15,6 +15,7 @@ if (process.argv.indexOf('-f') > 0) {
     let mappings = {
       serviceDeliveryPoints: [],
       partnerHIVStatuses: [],
+      genders: [],
       clientAges: [],
       htsSettings: [],
       htsModalities: []
@@ -40,37 +41,43 @@ if (process.argv.indexOf('-f') > 0) {
         const htsSetting = cells[6];
         const htsModality = cells[7];
 
-        if (mappings.serviceDeliveryPoints.indexOf(serviceDeliveryPoint) < 0) 
+        if (mappings.serviceDeliveryPoints.indexOf(serviceDeliveryPoint) < 0)
           mappings.serviceDeliveryPoints.push(serviceDeliveryPoint);
-        
-        if (mappings.partnerHIVStatuses.indexOf(partnerHIVStatus) < 0) 
+
+        if (mappings.partnerHIVStatuses.indexOf(partnerHIVStatus) < 0)
           mappings.partnerHIVStatuses.push(partnerHIVStatus);
-        
-        if (mappings.clientAges.indexOf(clientAge) < 0) 
+
+        if (mappings.clientAges.indexOf(clientAge) < 0)
           mappings.clientAges.push(clientAge);
-        
-        if (mappings.htsSettings.indexOf(htsSetting) < 0) 
+
+        if (mappings.genders.indexOf(gender) < 0)
+          mappings.genders.push(gender);
+
+        if (mappings.htsSettings.indexOf(htsSetting) < 0)
           mappings.htsSettings.push(htsSetting);
-        
-        if (mappings.htsModalities.indexOf(htsModality) < 0) 
+
+        if (mappings.htsModalities.indexOf(htsModality) < 0)
           mappings.htsModalities.push(htsModality);
-        
-        if (!json[locationType]) 
+
+        if (!json[locationType])
           json[locationType] = {};
-        
-        if (!json[locationType][serviceDeliveryPoint]) 
+
+        if (!json[locationType][serviceDeliveryPoint])
           json[locationType][serviceDeliveryPoint] = {};
-        
-        if (!json[locationType][serviceDeliveryPoint][htsAccessType]) 
+
+        if (!json[locationType][serviceDeliveryPoint][htsAccessType])
           json[locationType][serviceDeliveryPoint][htsAccessType] = {};
-        
-        if (!json[locationType][serviceDeliveryPoint][htsAccessType][partnerHIVStatus]) 
+
+        if (!json[locationType][serviceDeliveryPoint][htsAccessType][partnerHIVStatus])
           json[locationType][serviceDeliveryPoint][htsAccessType][partnerHIVStatus] = {};
-        
-        if (!json[locationType][serviceDeliveryPoint][htsAccessType][partnerHIVStatus][clientAge]) 
-          json[locationType][serviceDeliveryPoint][htsAccessType][partnerHIVStatus][clientAge] = {};
-        
-        json[locationType][serviceDeliveryPoint][htsAccessType][partnerHIVStatus][clientAge] = {
+
+        if (!json[locationType][serviceDeliveryPoint][htsAccessType][partnerHIVStatus][gender])
+          json[locationType][serviceDeliveryPoint][htsAccessType][partnerHIVStatus][gender] = {};
+
+        if (!json[locationType][serviceDeliveryPoint][htsAccessType][partnerHIVStatus][gender][clientAge])
+          json[locationType][serviceDeliveryPoint][htsAccessType][partnerHIVStatus][gender][clientAge] = {};
+
+        json[locationType][serviceDeliveryPoint][htsAccessType][partnerHIVStatus][gender][clientAge] = {
           "HTS Setting": htsSetting,
           "HTS Modality": htsModality
         };
@@ -81,6 +88,7 @@ if (process.argv.indexOf('-f') > 0) {
 
     fs.writeFileSync("./serviceDeliveryPoints.json", JSON.stringify(mappings.serviceDeliveryPoints, null, 2));
     fs.writeFileSync("./partnerHIVStatuses.json", JSON.stringify(mappings.partnerHIVStatuses, null, 2));
+    fs.writeFileSync("./genders.json", JSON.stringify(mappings.genders, null, 2));
     fs.writeFileSync("./clientAges.json", JSON.stringify(mappings.clientAges, null, 2));
     fs.writeFileSync("./htsSettings.json", JSON.stringify(mappings.htsSettings, null, 2));
     fs.writeFileSync("./htsModalities.json", JSON.stringify(mappings.htsModalities, null, 2));
