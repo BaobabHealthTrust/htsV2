@@ -11,6 +11,7 @@ class Pepfar extends Component {
     "Site",
     "Month",
     "Year",
+    "HTS Setting",
     "HTS Modality",
     "HTS Access Type",
     "Age Group",
