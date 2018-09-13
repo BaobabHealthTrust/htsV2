@@ -188,7 +188,7 @@ class App extends Component {
   componentWillMount() {
 
     this.props.checkRedirectToPortal();
-    
+
     this.props.getVersion();
 
   }
@@ -1656,6 +1656,55 @@ class App extends Component {
         this.cancelSession();
 
       }
+
+    } else if (this.props.app.currentSection === "registration") {
+
+      this
+        .props
+        .submitForm(this.props.app.configs.action, Object.assign({}, this.props.wf.responses[this.state.currentWorkflow], {
+          primaryId: this.props.app.currentId,
+          date: this.props.app.selectedVisit && new Date(this.props.app.selectedVisit)
+            ? new Date(this.props.app.selectedVisit).getTime()
+            : new Date().getTime(),
+          program: this.props.app.module,
+          group: this.state.currentWorkflow,
+          location: this.props.app.currentLocation,
+          user: this.props.app.activeUser
+        }))
+        .then(async () => {
+
+          if (!this.state.busy && this.props.app.canPrint === true) {
+
+            await this.setState({ busy: true });
+
+            await this.props.updateApp({ canPrint: null });
+
+            window.alert('');
+
+            /*
+            const client = this.props.app.patientData[this.props.app.clientId];
+                const data = {
+                  npid: this.props.app.clientId || "",
+                  first_name: client.firstName || "-",
+                  family_name: client.lastName || "-",
+                  date_of_birth_estimated: "",
+                  date_of_birth: client.dateOfBirth || "",
+                  gender: client.gender || "",
+                  residence: client.currentVillage || ""
+                };
+                this.printBarcode(data);
+            */
+
+            await this.setState({ busy: false });
+
+          }
+
+        })
+        .catch((e) => {
+          this
+            .props
+            .showErrorMsg('Error', this.props.app.errorMessage);
+        });
 
     } else if (this.props.app.configs.action) {
 

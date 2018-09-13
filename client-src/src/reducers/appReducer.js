@@ -835,9 +835,17 @@ export default function appReducer(state = {
 
       newState.ignore = true;
 
-      if (action.payload && action.payload && action.payload.data && action.payload.data.message) {
+      if (action.payload && action.payload.data && action.payload.data.message) {
 
         newState.infoMessage = action.payload.data.message;
+
+      }
+
+      console.log(action);
+
+      if (action.payload && action.payload.data && action.payload.data.canPrint) {
+
+        newState.canPrint = action.payload.data.canPrint;
 
       }
 
