@@ -2233,16 +2233,16 @@ module.exports = function (app) {
 
     let parts = json[name]
       .trim()
-      .match(/^(([^-]+)-([^-]+)-([^\(]+))\(([^\)]+)\)/);
+      .match(/^(([^-]+)-([^\(]+))\(([^\)]+)\)/);
 
     if (!parts)
       return res.status(400).json({ error: true, message: "Error occured when picking locations" });
 
     let registerNumber = parts[1].trim();
-    let locationType = parts[5].trim();
+    let locationType = parts[4].trim();
     let serviceDeliveryPoint = parts[3].trim();
 
-    let currentLocationName = parts[4].trim();
+    let currentLocationName = json['Current Location'];
 
     let gender = json["Sex/Pregnancy"]
       ? String(json["Sex/Pregnancy"])
@@ -3103,16 +3103,14 @@ module.exports = function (app) {
 
     let parts = json[name]
       .trim()
-      .match(/^(([^-]+)-([^-]+)-([^\(]+))\(([^\)]+)\)/);
+      .match(/^(([^-]+)-([^\(]+))\(([^\)]+)\)/);
 
     if (!parts)
       return res.status(400).json({ error: true, message: "Error occured when picking locations" });
 
     let registerNumber = parts[1].trim();
-    let locationType = parts[5].trim();
+    let locationType = parts[4].trim();
     let serviceDeliveryPoint = parts[3].trim();
-
-    let currentLocationName = parts[4].trim();
 
     let concept = await ConceptName.findOne({
       where: {
