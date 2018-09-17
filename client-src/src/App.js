@@ -193,6 +193,8 @@ class App extends Component {
 
   }
 
+  tmrHandle = null;
+
   async componentDidUpdate() {
 
     updateClient(this.props, this.state, this);
@@ -249,6 +251,24 @@ class App extends Component {
       this.props.showErrorMsg("Invalid Entry", message);
 
       await this.setState({ busy: false });
+
+    }
+
+    if (this.tmrHandle === null && this.props.app.canPrint === true) {
+
+      this.tmrHandle = setTimeout(async () => {
+
+        if (!this.state.busy && this.props.app.canPrint === true && !this.state.printingLabel) {
+
+          await this.setState({ busy: true, printingLabel: true });
+
+          await this.props.updateApp({ canPrint: null });
+
+          await this.doPrint();
+
+        }
+
+      }, 1000);
 
     }
 
@@ -1607,6 +1627,28 @@ class App extends Component {
 
   }
 
+  async doPrint() {
+
+    const client = this.props.app.patientData[this.props.app.clientId];
+    const data = {
+      npid: this.props.app.clientId || "",
+      first_name: client.firstName || "-",
+      family_name: client.lastName || "-",
+      date_of_birth_estimated: "",
+      date_of_birth: client.dateOfBirth || "",
+      gender: client.gender || "",
+      residence: client.currentVillage || ""
+    };
+    this.printBarcode(data);
+
+    await this.setState({ busy: false, printingLabel: null });
+
+    this.tmrHandle = null;
+
+    return
+
+  }
+
   async submitForm() {
 
     await this.props.updateApp({ processing: true });
@@ -1671,35 +1713,6 @@ class App extends Component {
           location: this.props.app.currentLocation,
           user: this.props.app.activeUser
         }))
-        .then(async () => {
-
-          if (!this.state.busy && this.props.app.canPrint === true) {
-
-            await this.setState({ busy: true });
-
-            await this.props.updateApp({ canPrint: null });
-
-            window.alert('');
-
-            /*
-            const client = this.props.app.patientData[this.props.app.clientId];
-                const data = {
-                  npid: this.props.app.clientId || "",
-                  first_name: client.firstName || "-",
-                  family_name: client.lastName || "-",
-                  date_of_birth_estimated: "",
-                  date_of_birth: client.dateOfBirth || "",
-                  gender: client.gender || "",
-                  residence: client.currentVillage || ""
-                };
-                this.printBarcode(data);
-            */
-
-            await this.setState({ busy: false });
-
-          }
-
-        })
         .catch((e) => {
           this
             .props
