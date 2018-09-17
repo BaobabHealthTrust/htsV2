@@ -268,9 +268,9 @@ export function checkRedirectToPortal() {
 
 }
 
-export function fetchARTReferral(startDate, endDate, page = 0) {
+export function fetchARTReferral(month1, year1, date1, month2, year2, date2, page = 1) {
 
-  const request = axios.get('/programs/fetch_art_referrals?startdate=' + startDate + '&enddate=' + endDate + '&page=' + page);
+  const request = axios.get('/programs/fetch_art_referrals?month1=' + month1 + "&year1=" + year1 + "&date1=" + date1 + "& month2=" + month2 + "& year2=" + year2 + "& date2=" + date2 + '&page=' + page);
 
   return { type: 'FETCH_ART_REFERRALS', payload: request };
 

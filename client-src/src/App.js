@@ -3662,8 +3662,7 @@ class App extends Component {
             ],
             className: "longSelectList",
             title: "Missing Data",
-            message: "Start Month \n must be selected",
-            visible: false
+            message: "Start Month \n must be selected"
           },
           "End Month": {
             options: [
@@ -3682,8 +3681,7 @@ class App extends Component {
             ],
             className: "longSelectList",
             title: "Missing Data",
-            message: "Start Month \n must be selected",
-            visible: false
+            message: "Start Month \n must be selected"
           },
           "Start Year": {
             fieldType: "number",
@@ -3699,8 +3697,7 @@ class App extends Component {
               "abc",
               "qwe",
               "Unknown"
-            ],
-            visible: false
+            ]
           },
           "End Year": {
             fieldType: "number",
@@ -3716,8 +3713,7 @@ class App extends Component {
               "abc",
               "qwe",
               "Unknown"
-            ],
-            visible: false
+            ]
           },
           "Start Date": {
             fieldType: "days",
@@ -3729,8 +3725,7 @@ class App extends Component {
             validationMessage: "Start Date \n must be entered",
             hiddenButtons: [
               "Unknown"
-            ],
-            visible: false
+            ]
           },
           "End Date": {
             fieldType: "days",
@@ -3742,8 +3737,7 @@ class App extends Component {
             validationMessage: "End Date \n must be entered",
             hiddenButtons: [
               "Unknown"
-            ],
-            visible: false
+            ]
           },
           "Referral Outcome": {
             customComponent: "ReferralOutcome",
@@ -5007,8 +5001,8 @@ const mapDispatchToProps = dispatch => {
     updateReportField: async (field, value, group) => {
       return await dispatch(updateReportField(field, value, group));
     },
-    fetchARTReferral: async (startDate, endDate, page) => {
-      return await dispatch(fetchARTReferral(startDate, endDate, page));
+    fetchARTReferral: async (month1, year1, date1, month2, year2, date2, page) => {
+      return await dispatch(fetchARTReferral(month1, year1, date1, month2, year2, date2, page));
     }
   };
 };
