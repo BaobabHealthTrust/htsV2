@@ -11,6 +11,7 @@ import FamilyRefs from './familyRefs';
 import EntryCode from './entryCode';
 import FindEnteredRecord from './findEnteredRecord';
 import ShowUserStats from './showUserStats';
+import ReferralOutcome from './ReferralOutcome';
 
 class U14 extends Component {
 
@@ -180,6 +181,10 @@ class U14 extends Component {
     } else if (this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].customComponent && this.props.configs[this.props.label].customComponent === "ShowUserStats") {
 
       CustomComponent = ShowUserStats;
+
+    } else if (this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].customComponent && this.props.configs[this.props.label].customComponent === "ReferralOutcome") {
+
+      CustomComponent = ReferralOutcome;
 
     }
 

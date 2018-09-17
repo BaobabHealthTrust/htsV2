@@ -3621,6 +3621,137 @@ class App extends Component {
 
   }
 
+  async artReferral() {
+
+    await this.setState({ currentWorkflow: "primary" });
+
+    await this.setState({
+      loaded: Object.assign({}, this.state.loaded, {
+        [this.state.currentWorkflow]: true
+      })
+    });
+
+    await this
+      .props
+      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["ART Referral"].data);
+
+    this
+      .props
+      .updateApp({
+        selectedTask: "ART Referral",
+        formActive: true,
+        currentSection: "home",
+        sectionHeader: "ART Referral",
+        fieldPos: 0,
+        configs: {
+          "Start Month": {
+            options: [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ],
+            className: "longSelectList",
+            title: "Missing Data",
+            message: "Start Month \n must be selected"
+          },
+          "End Month": {
+            options: [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ],
+            className: "longSelectList",
+            title: "Missing Data",
+            message: "Start Month \n must be selected"
+          },
+          "Start Year": {
+            fieldType: "number",
+            validationRule: "^\\d{4}$",
+            min: "thisYear - 10",
+            max: "thisYear",
+            validationMessage: "Start Year \n must between {{thisYear - 10}} and {{thisYear}}",
+            hiddenButtons: [
+              "clear",
+              "/",
+              ".",
+              "-",
+              "abc",
+              "qwe",
+              "Unknown"
+            ]
+          },
+          "End Year": {
+            fieldType: "number",
+            validationRule: "^\\d{4}$",
+            min: "thisYear - 10",
+            max: "thisYear",
+            validationMessage: "End Year \n must between {{thisYear - 10}} and {{thisYear}}",
+            hiddenButtons: [
+              "clear",
+              "/",
+              ".",
+              "-",
+              "abc",
+              "qwe",
+              "Unknown"
+            ]
+          },
+          "Start Date": {
+            fieldType: "days",
+            yearField: "Start Year",
+            monthField: "Start Month",
+            title: "Missing Data",
+            message: "Start Date \n must be entered",
+            validationRule: "^\\d+$",
+            validationMessage: "Start Date \n must be entered",
+            hiddenButtons: [
+              "Unknown"
+            ]
+          },
+          "End Date": {
+            fieldType: "days",
+            yearField: "End Year",
+            monthField: "End Month",
+            title: "Missing Data",
+            message: "End Date \n must be entered",
+            validationRule: "^\\d+$",
+            validationMessage: "End Date \n must be entered",
+            hiddenButtons: [
+              "Unknown"
+            ]
+          },
+          "Referral Outcome": {
+            customComponent: "ReferralOutcome",
+            properties: {
+              label: "Referral Outcome"
+            },
+            optional: true
+          },
+          action: null
+        },
+        summaryIgnores: Object.assign([], ["Referral Outcome"])
+      });
+
+  }
+
   render() {
 
     const nextLabel = (this.props.app.currentSection === "home" || this.props.app.currentSection === "registration"
@@ -3885,6 +4016,23 @@ class App extends Component {
           this.findEnteredRecord()
         },
         label: "Find Entered Record",
+        extraStyles: {
+          cssFloat: "right",
+          marginTop: "15px"
+        },
+        disabled: this.props.app.currentSection !== "home" || this.props.app.formActive || this.props.app.module !== "HTS" || this.props.app.userManagementActive === true
+          ? true
+          : false,
+        inactive: this.props.app.module === "" && !this.props.app.formActive
+          ? true
+          : false
+      }, {
+        id: "btnART",
+        buttonClass: "blue nav-buttons",
+        onMouseDown: () => {
+          this.artReferral()
+        },
+        label: "ART Referral",
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px"
