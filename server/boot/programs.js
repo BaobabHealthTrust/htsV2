@@ -3515,15 +3515,22 @@ module.exports = function (app) {
 
     const locationId = (htsLocation ? htsLocation.locationId : null);
 
-    let existingRegister = (locationTypeId !== null && serviceDeliveryPointId !== null ? await HtsRegister.findOne({
+    debug(json['Register Number']);
+
+    let existingRegister = await HtsRegister.findOne({
       where: {
-        registerNumber: (json['Register Number'] + "-" + json['Service Delivery Point'] + "-" + json['HTS Location']),
-        serviceDeliveryPointId,
-        locationTypeId,
-        locationId,
-        closed: 0
+        and: [
+          {
+            registerNumber: {
+              like: String(json['Register Number']).trim() + '-%'
+            }
+          },
+          {
+            closed: 0
+          }
+        ]
       }
-    }) : null);
+    });
 
     debug("$$$$$$$$$$$$$$$$");
 
