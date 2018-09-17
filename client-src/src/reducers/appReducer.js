@@ -1349,6 +1349,12 @@ export default function appReducer(state = {
 
       return newState;
 
+    case 'FETCH_ART_REFERRALS_FULFILLED':
+
+      newState = Object.assign({}, state, { referrals: action.payload.data });
+
+      return newState;
+
     default:
 
       return state;

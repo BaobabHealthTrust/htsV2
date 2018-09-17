@@ -267,3 +267,11 @@ export function checkRedirectToPortal() {
   return { type: 'REDIRECT_TO_PORTAL', payload: request };
 
 }
+
+export function fetchARTReferral(startDate, endDate, page = 0) {
+
+  const request = axios.get('/programs/fetch_art_referrals?startdate=' + startDate + '&enddate=' + endDate + '&page=' + page);
+
+  return { type: 'FETCH_ART_REFERRALS', payload: request };
+
+}

@@ -5523,6 +5523,33 @@ module.exports = function (app) {
 
   })
 
+  router.get('/programs/fetch_art_referrals', function (req, res, next) {
+
+    const query = req.query;
+
+    const pageSize = 10;
+    const startPos = ((!isNaN(query.page) ? Number(query.page) : 1) - 1) * pageSize;
+
+    const statement = 'SELECT COALESCE(given_name, "-") AS given_name, COALESCE(family_name, "-") AS family_name, obs.value_text, obs.obs_datetime, obs.encounter_id FROM obs LEFT OUTER JOIN person_name ON person_name.person_id = obs.person_id WHERE concept_id = (SELECT concept_id FROM concept_name WHERE name = "HTS Entry Code" LIMIT 1) AND obs.encounter_id IN (SELECT encounter_id FROM hts.obs where concept_id = (SELECT concept_id FROM concept_name WHERE name = "Referral for Re-Testing") AND value_coded = (SELECT concept_id FROM concept_name WHERE name = "Confirmatory Test at HIV Clinic")) AND obs.voided = 0 AND obs_datetime >= ? AND obs_datetime <= ? LIMIT ?, ?';
+
+    const datasource = app.dataSources.hts;
+
+    const params = [
+      (query.startdate ? query.startdate : (new Date()).format('YYYY-mm-dd')),
+      (query.enddate ? query.enddate : (new Date()).format('YYYY-mm-dd')),
+      startPos, pageSize];
+
+    datasource.connector.execute(statement, params, (err, data) => {
+
+      if (err)
+        console.log(err);
+
+      res.status(200).json(data);
+
+    });
+
+  })
+
   app.use(router);
 
 };

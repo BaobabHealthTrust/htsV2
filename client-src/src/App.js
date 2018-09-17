@@ -26,7 +26,8 @@ import {
   getVersion,
   usernameValid,
   updatePassword,
-  checkRedirectToPortal
+  checkRedirectToPortal,
+  fetchARTReferral
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -188,7 +189,7 @@ class App extends Component {
   componentWillMount() {
 
     this.props.checkRedirectToPortal();
-    
+
     this.props.getVersion();
 
   }
@@ -3661,7 +3662,8 @@ class App extends Component {
             ],
             className: "longSelectList",
             title: "Missing Data",
-            message: "Start Month \n must be selected"
+            message: "Start Month \n must be selected",
+            visible: false
           },
           "End Month": {
             options: [
@@ -3680,7 +3682,8 @@ class App extends Component {
             ],
             className: "longSelectList",
             title: "Missing Data",
-            message: "Start Month \n must be selected"
+            message: "Start Month \n must be selected",
+            visible: false
           },
           "Start Year": {
             fieldType: "number",
@@ -3696,7 +3699,8 @@ class App extends Component {
               "abc",
               "qwe",
               "Unknown"
-            ]
+            ],
+            visible: false
           },
           "End Year": {
             fieldType: "number",
@@ -3712,7 +3716,8 @@ class App extends Component {
               "abc",
               "qwe",
               "Unknown"
-            ]
+            ],
+            visible: false
           },
           "Start Date": {
             fieldType: "days",
@@ -3724,7 +3729,8 @@ class App extends Component {
             validationMessage: "Start Date \n must be entered",
             hiddenButtons: [
               "Unknown"
-            ]
+            ],
+            visible: false
           },
           "End Date": {
             fieldType: "days",
@@ -3736,7 +3742,8 @@ class App extends Component {
             validationMessage: "End Date \n must be entered",
             hiddenButtons: [
               "Unknown"
-            ]
+            ],
+            visible: false
           },
           "Referral Outcome": {
             customComponent: "ReferralOutcome",
@@ -4420,6 +4427,7 @@ class App extends Component {
                         : {}}
                       wf={this.props.wf} />
                     <Container
+                      fetchARTReferral={this.props.fetchARTReferral}
                       activeSection={this.props.app.currentSection}
                       handleSwitchProgram={this
                         .switchProgram
@@ -4998,6 +5006,9 @@ const mapDispatchToProps = dispatch => {
     },
     updateReportField: async (field, value, group) => {
       return await dispatch(updateReportField(field, value, group));
+    },
+    fetchARTReferral: async (startDate, endDate, page) => {
+      return await dispatch(fetchARTReferral(startDate, endDate, page));
     }
   };
 };
