@@ -1692,6 +1692,14 @@ module.exports = function (app) {
 
     let encounterName = "HTS Visit";
 
+    let result = { dateOfBirth };
+
+    fetchAge(result);
+
+    debug(result);
+
+    json[encounterName].Age = result.age;
+
     encType = await EncounterType.findOne({
       where: {
         name: encounterName
