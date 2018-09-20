@@ -189,7 +189,22 @@ class ReferralOutcome extends Component {
 
     handleUpdateField(id, field, encounterId) {
 
-        console.log("%s, %s", id, field);
+        console.log("%s, %s, %s", id, field, encounterId);
+
+    }
+
+    async handleUpdateOutcome(id, field, encounter_id, value) {
+
+        console.log("%s, %s, %s, %s", id, field, encounter_id, value);
+
+        let data = (this.state.edited ? this.state.edited : {});
+
+        if (Object.keys(data).indexOf(id) < 0)
+            data[id] = { encounter_id };
+
+        data[id][field] = value;
+
+        await this.setState({ edited: data });
 
     }
 
@@ -215,22 +230,22 @@ class ReferralOutcome extends Component {
                 <td align='center' style={{ borderRight: '1px solid #333' }}>
                     {row.ec_code}
                 </td>
-                <td align='center' className='refValue'>
-                    ART
+                <td align='center' className='refValue' onClick={this.handleUpdateOutcome.bind(this, id, 'Referral Outcome', row.encounter_id, 'Started ART')}>
+                    <div className={this.state.edited && this.state.edited[id] && this.state.edited[id].outcome ? (this.state.edited[id].outcome === 'Started ART' ? 'refCircled' : 'refNormal') : row.outcome ? (row.outcome === 'Started ART' ? 'refCircled' : 'refNormal') : 'refNormal'}>ART</div>
                 </td>
-                <td align='center' className='refValue'>
-                    REF
+                <td align='center' className='refValue' onClick={this.handleUpdateOutcome.bind(this, id, 'Referral Outcome', row.encounter_id, 'Refused / not ready')}>
+                    <div className={this.state.edited && this.state.edited[id] && this.state.edited[id].outcome ? (this.state.edited[id].outcome === 'Refused / not ready' ? 'refCircled' : 'refNormal') : row.outcome ? (row.outcome === 'Refused / not ready' ? 'refCircled' : 'refNormal') : 'refNormal'}>REF</div>
                 </td>
-                <td align='center' className='refValue'>
-                    D
+                <td align='center' className='refValue' onClick={this.handleUpdateOutcome.bind(this, id, 'Referral Outcome', row.encounter_id, 'Died')}>
+                    <div className={this.state.edited && this.state.edited[id] && this.state.edited[id].outcome ? (this.state.edited[id].outcome === 'Died' ? 'refCircled' : 'refNormal') : row.outcome ? (row.outcome === 'Died' ? 'refCircled' : 'refNormal') : 'refNormal'}>D</div>
                 </td>
-                <td align='center' className='refValue' style={{ borderRight: '1px solid #333' }}>
-                    UNK
+                <td align='center' className='refValue' style={{ borderRight: '1px solid #333' }} onClick={this.handleUpdateOutcome.bind(this, id, 'Referral Outcome', row.encounter_id, 'Unknown')}>
+                    <div className={this.state.edited && this.state.edited[id] && this.state.edited[id].outcome ? (this.state.edited[id].outcome === 'Unknown' ? 'refCircled' : 'refNormal') : row.outcome ? (row.outcome === 'Unknown' ? 'refCircled' : 'refNormal') : 'refNormal'}>UNK</div>
                 </td>
                 <td style={{ borderRight: '1px solid #333', padding: '0px' }} align='center'>
                     <div id={id + '-outcome-date'} key={uuid.v1()} className='refText' onMouseDown={this.handleUpdateField.bind(this, id, 'Outcome Date', row.encounter_id)} >{this.state.edited && this.state.edited[id] && this.state.edited[id].outcome_date ? this.state.edited[id].outcome_date : row.outcome_date ? (new Date(row.outcome_date).format("d mmm YYYY")) : <span>&nbsp;</span>}</div>
                 </td>
-                <td style={{ borderRight: '1px solid #333' }} align='center'>
+                <td style={{ borderRight: '1px solid #333' }} align='left'>
                     <div id={id + '-actual-art-site'} key={uuid.v1()} className='refText' onMouseDown={this.handleUpdateField.bind(this, id, 'Actual ART Site', row.encounter_id)} >{this.state.edited && this.state.edited[id] && this.state.edited[id].art_site ? this.state.edited[id].art_site : row.art_site ? row.art_site : <span>&nbsp;</span>}</div>
                 </td>
                 <td align='center' style={{ borderRight: '1px solid #333' }}>
