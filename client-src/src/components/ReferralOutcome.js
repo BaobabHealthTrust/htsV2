@@ -189,38 +189,40 @@ class ReferralOutcome extends Component {
 
     loadClients() {
 
+        let i = 0;
+
         return ((this.props.app.referrals && this.props.app.referrals.data ? this.props.app.referrals.data : []) || []).map(row => {
 
-            return <tr>
+            i++;
 
-                <td>
+            return <tr style={{ fontSize: '14px', backgroundColor: (i % 2 > 0 ? '#ccc' : '') }}>
+                <td style={{ borderRight: '1px solid #333' }}>
                     {row.given_name} {row.family_name}
                 </td>
-                <td align='center'>
+                <td align='center' style={{ borderRight: '1px solid #333' }}>
                     {row.ec_code}
                 </td>
-                <td align='center'>
+                <td align='center' className='refValue'>
                     ART
                 </td>
-                <td align='center'>
+                <td align='center' className='refValue'>
                     REF
                 </td>
-                <td align='center'>
+                <td align='center' className='refValue'>
                     D
                 </td>
-                <td align='center'>
+                <td align='center' className='refValue' style={{ borderRight: '1px solid #333' }}>
                     UNK
                 </td>
-                <td>
-                    <input type='text' key={uuid.v1()} />
+                <td style={{ borderRight: '1px solid #333' }} align='center'>
+                    <input type='text' key={uuid.v1()} className='refText' style={{ width: '150px' }} />
                 </td>
-                <td>
-                    <input type='text' key={uuid.v1()} />
+                <td style={{ borderRight: '1px solid #333' }} align='center'>
+                    <input type='text' key={uuid.v1()} className='refText' />
                 </td>
-                <td>
-                    <input type='text' key={uuid.v1()} />
+                <td align='center'>
+                    <input type='text' key={uuid.v1()} className='refText' />
                 </td>
-
             </tr>
 
         })
@@ -230,11 +232,11 @@ class ReferralOutcome extends Component {
     render() {
 
         return (
-            <div>
+            <div style={{ border: '1px inset #888', overflow: 'auto', width: 'calc(100vw - 20px)', height: 'calc(100vh - 320px)', margin: '1px' }}>
                 <table width='100%' style={{ borderCollapse: 'collapse' }} cellPadding='10' border='0'>
                     <tbody>
                         <tr className='refHeader'>
-                            <th colSpan='2'>
+                            <th colSpan='2' style={{ borderRight: '1px solid #333' }}>
                                 Patient
                         </th>
                             <th colSpan='7'>
@@ -242,31 +244,31 @@ class ReferralOutcome extends Component {
                         </th>
                         </tr>
                         <tr>
-                            <td align='center'>
+                            <td align='center' style={{ borderRight: '1px solid #333', verticalAlign: 'bottom' }}>
                                 Name
                             </td>
-                            <td align='center'>
+                            <td align='center' style={{ borderRight: '1px solid #333', verticalAlign: 'bottom' }}>
                                 Visit Entry Code
                             </td>
-                            <td align='center'>
+                            <td className='vertHeader'>
                                 Started ART
                             </td>
-                            <td align='center'>
-                                Refused/not ready
+                            <td className='vertHeader'>
+                                Refused/not<br /> ready
                             </td>
-                            <td align='center'>
-                                Died
+                            <td className='vertHeader'>
+                                Died<span style={{ color: 'white' }}>_______</span>
                             </td>
-                            <td align='center'>
-                                Unknown
+                            <td className='vertHeader' style={{ borderRight: '1px solid #333' }}>
+                                Unknown<span style={{ color: 'white' }}>__</span>
                             </td>
-                            <td align='center'>
+                            <td align='center' style={{ borderRight: '1px solid #333', verticalAlign: 'bottom' }}>
                                 Outcome Date
                             </td>
-                            <td align='center'>
+                            <td align='center' style={{ borderRight: '1px solid #333', verticalAlign: 'bottom' }}>
                                 Actual ART Site
                             </td>
-                            <td align='center'>
+                            <td align='center' style={{ verticalAlign: 'bottom' }}>
                                 ART Reg No
                             </td>
                         </tr>
