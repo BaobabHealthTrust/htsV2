@@ -5523,48 +5523,85 @@ module.exports = function (app) {
 
   })
 
-  router.get('/programs/fetch_art_referrals', function (req, res, next) {
+  router.get('/programs/fetch_art_referrals', async function (req, res, next) {
 
     const query = req.query;
 
     const pageSize = 5;
-    let startPos = ((!isNaN(query.page) ? Number(query.page) : 1) - 1) * pageSize;
 
-    if (startPos < 0)
-      startPos = 0;
-
-    const statement = 'SELECT COALESCE(given_name, "-") AS given_name, COALESCE(family_name, "-") AS family_name, obs.value_text AS ec_code, obs.obs_datetime, obs.encounter_id FROM obs LEFT OUTER JOIN person_name ON person_name.person_id = obs.person_id WHERE concept_id = (SELECT concept_id FROM concept_name WHERE name = "HTS Entry Code" LIMIT 1) AND obs.encounter_id IN (SELECT encounter_id FROM hts.obs where concept_id = (SELECT concept_id FROM concept_name WHERE name = "Referral for Re-Testing") AND value_coded = (SELECT concept_id FROM concept_name WHERE name = "Confirmatory Test at HIV Clinic")) AND obs.voided = 0 AND obs_datetime >= ? AND obs_datetime <= ? LIMIT ?, ?';
+    let totalPages = 0;
 
     const datasource = app.dataSources.hts;
 
     const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "january",
+      "february",
+      "march",
+      "april",
+      "may",
+      "june",
+      "july",
+      "august",
+      "september",
+      "october",
+      "november",
+      "december"
     ];
 
-    const params = [
+    const sql = 'SELECT COUNT(*) AS total FROM obs LEFT OUTER JOIN person_name ON person_name.person_id = obs.person_id WHERE concept_id = (SELECT concept_id FROM concept_name WHERE name = "HTS Entry Code" LIMIT 1) AND obs.encounter_id IN (SELECT encounter_id FROM hts.obs where concept_id = (SELECT concept_id FROM concept_name WHERE name = "Referral for Re-Testing") AND value_coded = (SELECT concept_id FROM concept_name WHERE name = "Confirmatory Test at HIV Clinic")) AND obs.voided = 0 AND obs_datetime >= ? AND obs_datetime <= ?';
+
+    const sqlParams = [
       (query.month1 && query.year1 && query.date1 ?
-        (new Date(Number(query.year1), months.indexOf(String(query.month1).trim().toLowerCase(), Number(query.date1)))).format('YYYY-mm-dd') : (new Date()).format('YYYY-mm-dd')),
+        (new Date(Number(query.year1), months.indexOf(String(query.month1).trim().toLowerCase()), Number(query.date1))).format('YYYY-mm-dd') : (new Date()).format('YYYY-mm-dd')),
       (query.month2 && query.year2 && query.date2 ?
-        (new Date(Number(query.year2), months.indexOf(String(query.month2).trim().toLowerCase(), Number(query.date2)))).format('YYYY-mm-dd') : (new Date()).format('YYYY-mm-dd')),
-      startPos, pageSize];
+        (new Date(Number(query.year2), months.indexOf(String(query.month2).trim().toLowerCase()), Number(query.date2))).format('YYYY-mm-dd') : (new Date()).format('YYYY-mm-dd'))];
 
-    datasource.connector.execute(statement, params, (err, data) => {
+    datasource.connector.execute(sql, sqlParams, (err, data) => {
 
-      if (err)
+      if (err) {
+
         console.log(err);
 
-      res.status(200).json(data);
+        query.page = 1;
+
+      } else {
+
+        debug(data);
+
+        let total = data[0].total;
+
+        totalPages = ((total - (total % pageSize)) / pageSize);
+
+        if (Number(query.page) === -1) {
+
+          query.page = totalPages;
+
+        }
+
+      }
+
+      let startPos = ((!isNaN(query.page) ? Number(query.page) : 1) - 1) * pageSize;
+
+      if (startPos < 0)
+        startPos = 0;
+
+      const statement = 'SELECT COALESCE(given_name, "-") AS given_name, COALESCE(family_name, "-") AS family_name, obs.value_text AS ec_code, obs.obs_datetime, obs.encounter_id FROM obs LEFT OUTER JOIN person_name ON person_name.person_id = obs.person_id WHERE concept_id = (SELECT concept_id FROM concept_name WHERE name = "HTS Entry Code" LIMIT 1) AND obs.encounter_id IN (SELECT encounter_id FROM hts.obs where concept_id = (SELECT concept_id FROM concept_name WHERE name = "Referral for Re-Testing") AND value_coded = (SELECT concept_id FROM concept_name WHERE name = "Confirmatory Test at HIV Clinic")) AND obs.voided = 0 AND obs_datetime >= ? AND obs_datetime <= ? LIMIT ?, ?';
+
+      const params = [
+        (query.month1 && query.year1 && query.date1 ?
+          (new Date(Number(query.year1), months.indexOf(String(query.month1).trim().toLowerCase()), Number(query.date1))).format('YYYY-mm-dd') : (new Date()).format('YYYY-mm-dd')),
+        (query.month2 && query.year2 && query.date2 ?
+          (new Date(Number(query.year2), months.indexOf(String(query.month2).trim().toLowerCase()), Number(query.date2))).format('YYYY-mm-dd') : (new Date()).format('YYYY-mm-dd')),
+        startPos, pageSize];
+
+      datasource.connector.execute(statement, params, (err, data) => {
+
+        if (err)
+          console.log(err);
+
+        res.status(200).json({ page: query.page, totalPages, data });
+
+      });
 
     });
 

@@ -87,11 +87,9 @@ class ReferralOutcome extends Component {
         const date2 = (this.props.responses && this.props.responses["End Date"]
             ? this.props.responses["End Date"] : "");
 
-        if (this.state.page > 1) {
+        if (this.props.app.referrals && this.props.app.referrals.page && this.props.app.referrals.page > 1) {
 
-            let page = this.state.page - 1;
-
-            await this.setState({ page });
+            let page = Number(this.props.app.referrals.page) - 1;
 
             await this
                 .props
@@ -121,11 +119,9 @@ class ReferralOutcome extends Component {
         const date2 = (this.props.responses && this.props.responses["End Date"]
             ? this.props.responses["End Date"] : "");
 
-        if (this.props.app.referrals && this.props.app.referrals.length > 0) {
+        if (this.props.app.referrals && this.props.app.referrals.page && this.props.app.referrals.totalPages && this.props.app.referrals.page < this.props.app.referrals.totalPages) {
 
-            let page = this.state.page + 1;
-
-            await this.setState({ page });
+            let page = Number(this.props.app.referrals.page) + 1;
 
             await this
                 .props
@@ -157,7 +153,33 @@ class ReferralOutcome extends Component {
 
         let page = 1;
 
-        await this.setState({ page });
+        await this
+            .props
+            .fetchARTReferral(month1, year1, date1, month2, year2, date2, page);
+
+    }
+
+    async navLast() {
+
+        const year1 = (this.props.responses && this.props.responses["Start Year"]
+            ? this.props.responses["Start Year"] : "");
+
+        const month1 = (this.props.responses && this.props.responses["Start Month"]
+            ? this.props.responses["Start Month"] : "");
+
+        const date1 = (this.props.responses && this.props.responses["Start Date"]
+            ? this.props.responses["Start Date"] : "");
+
+        const year2 = (this.props.responses && this.props.responses["End Year"]
+            ? this.props.responses["End Year"] : "");
+
+        const month2 = (this.props.responses && this.props.responses["End Month"]
+            ? this.props.responses["End Month"] : "");
+
+        const date2 = (this.props.responses && this.props.responses["End Date"]
+            ? this.props.responses["End Date"] : "");
+
+        let page = -1;
 
         await this
             .props
@@ -167,7 +189,7 @@ class ReferralOutcome extends Component {
 
     loadClients() {
 
-        return (this.props.app.referrals || []).map(row => {
+        return ((this.props.app.referrals && this.props.app.referrals.data ? this.props.app.referrals.data : []) || []).map(row => {
 
             return <tr>
 
@@ -255,13 +277,18 @@ class ReferralOutcome extends Component {
                     <tbody>
                         <tr>
                             <th colSpan='9'>
-                                <Button id='btnNavFirst' className='blue' label='|<' handleMouseDown={this.navFirst.bind(this)} />
-                                <Button id='btnNavPrev' className='blue' label={<span>&lt;</span>} handleMouseDown={this.navBack.bind(this)} />
-                                <Button id='btnNavNext' className='blue' label={<span>&gt;</span>} handleMouseDown={this.navNext.bind(this)} />
+
                             </th>
                         </tr>
                     </tbody>
                 </table>
+                <div style={{ position: 'absolute', bottom: '90px', width: '100%', textAlign: 'center' }}>
+                    <Button id='btnNavFirst' className='blue' label='|<' handleMouseDown={this.navFirst.bind(this)} extraStyles={{ display: 'inline' }} />
+                    <Button id='btnNavPrev' className='blue' label={<span>&lt;</span>} handleMouseDown={this.navBack.bind(this)} extraStyles={{ display: 'inline' }} />
+                    <div style={{ border: '1px inset #999', borderRadius: '5px', textAlign: 'center', width: '380px', display: 'inline', padding: '15px', fontSize: '20px', marginLeft: '10px', marginRight: '10px' }}>{(this.props.app.referrals && this.props.app.referrals.page && this.props.app.referrals.totalPages ? this.props.app.referrals.page + ' of ' + this.props.app.referrals.totalPages : '- of -')}</div>
+                    <Button id='btnNavNext' className='blue' label={<span>&gt;</span>} handleMouseDown={this.navNext.bind(this)} extraStyles={{ display: 'inline' }} />
+                    <Button id='btnNavLast' className='blue' label='>|' handleMouseDown={this.navLast.bind(this)} extraStyles={{ display: 'inline' }} />
+                </div>
             </div>
 
         )
