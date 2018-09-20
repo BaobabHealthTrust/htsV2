@@ -5527,7 +5527,7 @@ module.exports = function (app) {
 
     const query = req.query;
 
-    const pageSize = 5;
+    const pageSize = 3;
 
     let totalPages = 0;
 
@@ -5548,7 +5548,7 @@ module.exports = function (app) {
       "december"
     ];
 
-    const sql = 'SELECT COUNT(*) AS total FROM obs LEFT OUTER JOIN person_name ON person_name.person_id = obs.person_id WHERE concept_id = (SELECT concept_id FROM concept_name WHERE name = "HTS Entry Code" LIMIT 1) AND obs.encounter_id IN (SELECT encounter_id FROM hts.obs where concept_id = (SELECT concept_id FROM concept_name WHERE name = "Referral for Re-Testing") AND value_coded = (SELECT concept_id FROM concept_name WHERE name = "Confirmatory Test at HIV Clinic")) AND obs.voided = 0 AND obs_datetime >= ? AND obs_datetime <= ?';
+    const sql = 'SELECT COUNT(*) AS total FROM obs LEFT OUTER JOIN person_name ON person_name.person_id = obs.person_id WHERE concept_id = (SELECT concept_id FROM concept_name WHERE name = "HTS Entry Code" LIMIT 1) AND obs.encounter_id IN (SELECT encounter_id FROM obs where concept_id = (SELECT concept_id FROM concept_name WHERE name = "Referral for Re-Testing") AND value_coded = (SELECT concept_id FROM concept_name WHERE name = "Confirmatory Test at HIV Clinic")) AND obs.voided = 0 AND obs_datetime >= ? AND obs_datetime <= ?';
 
     const sqlParams = [
       (query.month1 && query.year1 && query.date1 ?
@@ -5585,7 +5585,7 @@ module.exports = function (app) {
       if (startPos < 0)
         startPos = 0;
 
-      const statement = 'SELECT COALESCE(given_name, "-") AS given_name, COALESCE(family_name, "-") AS family_name, obs.value_text AS ec_code, obs.obs_datetime, obs.encounter_id FROM obs LEFT OUTER JOIN person_name ON person_name.person_id = obs.person_id WHERE concept_id = (SELECT concept_id FROM concept_name WHERE name = "HTS Entry Code" LIMIT 1) AND obs.encounter_id IN (SELECT encounter_id FROM hts.obs where concept_id = (SELECT concept_id FROM concept_name WHERE name = "Referral for Re-Testing") AND value_coded = (SELECT concept_id FROM concept_name WHERE name = "Confirmatory Test at HIV Clinic")) AND obs.voided = 0 AND obs_datetime >= ? AND obs_datetime <= ? LIMIT ?, ?';
+      const statement = 'SELECT COALESCE(given_name, "-") AS given_name, COALESCE(family_name, "-") AS family_name, o.value_text AS ec_code, o.obs_datetime, o.encounter_id, (SELECT value_text FROM obs WHERE encounter_id = o.encounter_id AND concept_id IN (SELECT concept_id FROM concept_name WHERE name = "ART Registration Number") AND voided = 0 LIMIT 1) AS art_reg_no, (SELECT value_text FROM obs WHERE encounter_id = o.encounter_id AND concept_id IN (SELECT concept_id FROM concept_name WHERE name = "Actual ART Site") AND voided = 0 LIMIT 1) AS art_site, (SELECT name FROM concept_name WHERE concept_name_id = (SELECT value_coded_name_id FROM obs WHERE encounter_id = o.encounter_id AND concept_id IN (SELECT concept_id FROM concept_name WHERE name = "Referral Outcome") AND voided = 0 LIMIT 1)) AS outcome, (SELECT value_datetime FROM obs WHERE encounter_id = o.encounter_id AND concept_id IN (SELECT concept_id FROM concept_name WHERE name = "Outcome Date") AND voided = 0 LIMIT 1) AS outcome_date FROM obs o LEFT OUTER JOIN person_name ON person_name.person_id = o.person_id WHERE concept_id = (SELECT concept_id FROM concept_name WHERE name = "HTS Entry Code" LIMIT 1) AND o.encounter_id IN (SELECT encounter_id FROM obs where concept_id = (SELECT concept_id FROM concept_name WHERE name = "Referral for Re-Testing") AND value_coded = (SELECT concept_id FROM concept_name WHERE name = "Confirmatory Test at HIV Clinic")) AND o.voided = 0 AND obs_datetime >= ? AND obs_datetime <= ? LIMIT ?, ?';
 
       const params = [
         (query.month1 && query.year1 && query.date1 ?

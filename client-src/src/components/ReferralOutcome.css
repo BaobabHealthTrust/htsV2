@@ -7,6 +7,7 @@
     transform: rotate(-90deg);
     text-align: left !important;
     height: 100px;
+    padding-left: 25px;
 }
 
 .refValue {
@@ -15,8 +16,11 @@
 }
 
 .refText {
-    padding: 5px;
-    font-size: 16px;
-    border: 1px solid #999;
+    padding: 8px;
+    font-size: 20px;
+    border: 2px inset #888;
     border-radius: 5px;
+    margin: 5px;
+    min-width: 100px;
+    background-color: white;
 }

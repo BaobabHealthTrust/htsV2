@@ -220,6 +220,14 @@
         "HIV Unknown",
         "Partner Negative",
         "Partner Positive",
-        "Last HIV Test"
+        "Last HIV Test",
+        "Outcome Date",
+        "Actual ART Site",
+        "ART Registration Number",
+        "Referral Outcome",
+        "Started ART",
+        "Refused / not ready",
+        "Died",
+        "Unknown"
     ]
 }

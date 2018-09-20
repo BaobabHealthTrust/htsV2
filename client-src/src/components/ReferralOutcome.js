@@ -35,7 +35,7 @@ class ReferralOutcome extends Component {
 
         await this
             .props
-            .fetchARTReferral(month1, year1, date1, month2, year2, date2);
+            .fetchARTReferral(month1, year1, date1, month2, year2, date2, 6);
 
         if (this.$("btnClear")) {
 
@@ -187,15 +187,28 @@ class ReferralOutcome extends Component {
 
     }
 
+    handleUpdateField(id, field, encounterId) {
+
+        console.log("%s, %s", id, field);
+
+    }
+
+    handleSaveRow(id) {
+
+        console.log(id);
+
+    }
+
     loadClients() {
 
         let i = 0;
+        const id = uuid.v1();
 
         return ((this.props.app.referrals && this.props.app.referrals.data ? this.props.app.referrals.data : []) || []).map(row => {
 
             i++;
 
-            return <tr style={{ fontSize: '14px', backgroundColor: (i % 2 > 0 ? '#ccc' : '') }}>
+            return <tr key={uuid.v1()} style={{ fontSize: '14px', backgroundColor: (i % 2 > 0 ? '#ccc' : '') }}>
                 <td style={{ borderRight: '1px solid #333' }}>
                     {row.given_name} {row.family_name}
                 </td>
@@ -214,14 +227,17 @@ class ReferralOutcome extends Component {
                 <td align='center' className='refValue' style={{ borderRight: '1px solid #333' }}>
                     UNK
                 </td>
-                <td style={{ borderRight: '1px solid #333' }} align='center'>
-                    <input type='text' key={uuid.v1()} className='refText' style={{ width: '150px' }} />
+                <td style={{ borderRight: '1px solid #333', padding: '0px' }} align='center'>
+                    <div id={id + '-outcome-date'} key={uuid.v1()} className='refText' onMouseDown={this.handleUpdateField.bind(this, id, 'Outcome Date', row.encounter_id)} >{this.state.edited && this.state.edited[id] && this.state.edited[id].outcome_date ? this.state.edited[id].outcome_date : row.outcome_date ? (new Date(row.outcome_date).format("d mmm YYYY")) : <span>&nbsp;</span>}</div>
                 </td>
                 <td style={{ borderRight: '1px solid #333' }} align='center'>
-                    <input type='text' key={uuid.v1()} className='refText' />
+                    <div id={id + '-actual-art-site'} key={uuid.v1()} className='refText' onMouseDown={this.handleUpdateField.bind(this, id, 'Actual ART Site', row.encounter_id)} >{this.state.edited && this.state.edited[id] && this.state.edited[id].art_site ? this.state.edited[id].art_site : row.art_site ? row.art_site : <span>&nbsp;</span>}</div>
                 </td>
-                <td align='center'>
-                    <input type='text' key={uuid.v1()} className='refText' />
+                <td align='center' style={{ borderRight: '1px solid #333' }}>
+                    <div id={id + '-art-registration-number'} key={uuid.v1()} className='refText' onMouseDown={this.handleUpdateField.bind(this, id, 'ART Registration Number', row.encounter_id)} >{this.state.edited && this.state.edited[id] && this.state.edited[id].art_reg_no ? this.state.edited[id].art_reg_no : row.art_reg_no ? row.art_reg_no : <span>&nbsp;</span>}</div>
+                </td>
+                <td style={{ padding: '0px' }} align='center'>
+                    <Button id={id} buttonClass={this.state.edited && this.state.edited[id] ? 'blue' : 'gray'} label='Save' handleMouseDown={this.handleSaveRow.bind(this, id)} />
                 </td>
             </tr>
 
@@ -239,7 +255,7 @@ class ReferralOutcome extends Component {
                             <th colSpan='2' style={{ borderRight: '1px solid #333' }}>
                                 Patient
                         </th>
-                            <th colSpan='7'>
+                            <th colSpan='7' style={{ borderRight: '1px solid #333' }}>
                                 Referral Outcome
                         </th>
                         </tr>
@@ -268,8 +284,11 @@ class ReferralOutcome extends Component {
                             <td align='center' style={{ borderRight: '1px solid #333', verticalAlign: 'bottom' }}>
                                 Actual ART Site
                             </td>
-                            <td align='center' style={{ verticalAlign: 'bottom' }}>
+                            <td align='center' style={{ borderRight: '1px solid #333', verticalAlign: 'bottom' }}>
                                 ART Reg No
+                            </td>
+                            <td>
+                                &nbsp;
                             </td>
                         </tr>
                     </tbody>
@@ -285,11 +304,11 @@ class ReferralOutcome extends Component {
                     </tbody>
                 </table>
                 <div style={{ position: 'absolute', bottom: '90px', width: '100%', textAlign: 'center' }}>
-                    <Button id='btnNavFirst' className='blue' label='|<' handleMouseDown={this.navFirst.bind(this)} extraStyles={{ display: 'inline' }} />
-                    <Button id='btnNavPrev' className='blue' label={<span>&lt;</span>} handleMouseDown={this.navBack.bind(this)} extraStyles={{ display: 'inline' }} />
+                    <Button id='btnNavFirst' buttonClass='blue' label='|<' handleMouseDown={this.navFirst.bind(this)} extraStyles={{ display: 'inline' }} />
+                    <Button id='btnNavPrev' buttonClass='blue' label={<span>&lt;</span>} handleMouseDown={this.navBack.bind(this)} extraStyles={{ display: 'inline' }} />
                     <div style={{ border: '1px inset #999', borderRadius: '5px', textAlign: 'center', width: '380px', display: 'inline', padding: '15px', fontSize: '20px', marginLeft: '10px', marginRight: '10px' }}>{(this.props.app.referrals && this.props.app.referrals.page && this.props.app.referrals.totalPages ? this.props.app.referrals.page + ' of ' + this.props.app.referrals.totalPages : '- of -')}</div>
-                    <Button id='btnNavNext' className='blue' label={<span>&gt;</span>} handleMouseDown={this.navNext.bind(this)} extraStyles={{ display: 'inline' }} />
-                    <Button id='btnNavLast' className='blue' label='>|' handleMouseDown={this.navLast.bind(this)} extraStyles={{ display: 'inline' }} />
+                    <Button id='btnNavNext' buttonClass='blue' label={<span>&gt;</span>} handleMouseDown={this.navNext.bind(this)} extraStyles={{ display: 'inline' }} />
+                    <Button id='btnNavLast' buttonClass='blue' label='>|' handleMouseDown={this.navLast.bind(this)} extraStyles={{ display: 'inline' }} />
                 </div>
             </div>
 
