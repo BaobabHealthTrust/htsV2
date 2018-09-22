@@ -188,7 +188,7 @@ class App extends Component {
   componentWillMount() {
 
     this.props.checkRedirectToPortal();
-    
+
     this.props.getVersion();
 
   }
@@ -3932,7 +3932,7 @@ class App extends Component {
           marginTop: "15px"
         },
         disabled: !this.props.app.patientActivated || (this.props.app.patientActivated && this.props.app.formActive)
-          ? true
+          ? (this.props.app.patientActivated && this.props.app.selectedTask === "Transcribe" ? false : true)
           : false
       }
     ];
