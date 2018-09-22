@@ -1690,7 +1690,11 @@ module.exports = function (app) {
       ? (new Date(person.birthdate)).format("YYYY-mm-dd")
       : null;
 
-    let encounterName = "HTS Visit";
+    let encounterName = (Object.keys(json['HTS Visit']).indexOf("Result Given to Client") >= 0 && ["Confirmatory Positive", "Confirmatory (Antibody) Positive"].indexOf(json['HTS Visit']["Result Given to Client"]) >= 0 ? "Confirmatory HIV Testing" : "HTS Visit");
+
+    debug(encounterName);
+
+    json[encounterName] = json["HTS Visit"];
 
     let result = { dateOfBirth };
 
@@ -2137,7 +2141,7 @@ module.exports = function (app) {
 
     debug("*****************");
 
-    debug(json);
+    debug(JSON.stringify(json));
 
     debug("*****************");
 
@@ -2335,8 +2339,12 @@ module.exports = function (app) {
 
     let patientProgramId = patientProgram.patientProgramId;
 
+    let encounterName = (Object.keys(json).indexOf("Result Given to Client") >= 0 && ["Confirmatory Positive", "Confirmatory (Antibody) Positive"].indexOf(json["Result Given to Client"]) >= 0 ? "Confirmatory HIV Testing" : "HTS Visit");
+
+    debug(encounterName);
+
     let groups = {
-      "HTS Visit": [
+      [encounterName]: [
         "Age Group",
         "HTS Access Type",
         "Last HIV Test",
@@ -2359,13 +2367,13 @@ module.exports = function (app) {
       ]
     };
 
-    let encounterName = "HTS Visit";
-
     let encType = await EncounterType.findOne({
       where: {
         name: encounterName
       }
     });
+
+    debug(encType);
 
     let encounterType = encType
       ? encType.encounterTypeId
