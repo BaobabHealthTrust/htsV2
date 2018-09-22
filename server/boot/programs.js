@@ -3738,211 +3738,6 @@ module.exports = function (app) {
 
   })
 
-  router.get("/programs/fetch_edit_records/:id", function (req, res, next) {
-
-    let args = {
-      data: {
-        query: {
-          match_all: {}
-        },
-        size: 10000,
-        sort: [
-          {
-            "registerNumber.keyword": {
-              order: "desc"
-            }
-          },
-          {
-            "identifier.keyword": {
-              order: "desc"
-            }
-          }
-        ],
-        aggs: {
-          registerNumber: {
-            terms: {
-              field: "registerNumber.keyword",
-              size: 10000
-            },
-            aggs: {
-              entryCode: {
-                terms: {
-                  field: "identifier.keyword",
-                  size: 1000,
-                  order: {
-                    _term: "desc"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      headers: {
-        "Content-Type": "application/json"
-      }
-    };
-
-    new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
-
-      let output = [];
-
-      let done = false;
-
-      if (result && result.aggregations && result.aggregations.registerNumber) {
-
-        for (let row of result.aggregations.registerNumber.buckets) {
-
-          let i = 0;
-
-          for (let entryCode of row.entryCode.buckets) {
-
-            if (entryCode.key === req.params.id) {
-
-              let searchIds = [entryCode.key];
-
-              if (row.entryCode.buckets[i + 1]) {
-
-                searchIds.push(row.entryCode.buckets[i + 1].key);
-
-              }
-
-              if (result.hits && result.hits.hits && result.hits.hits.length > 0) {
-
-                for (let searchId of searchIds) {
-
-                  let json = {};
-
-                  result
-                    .hits
-                    .hits
-                    .filter(e => {
-                      return e._source.identifier === searchId;
-                    })
-                    .forEach(data => {
-
-                      const row = data._source;
-
-                      if (!json["HTS Provider ID"]) {
-                        json["HTS Provider ID"] = row.user;
-                      } else if (!json["id"]) {
-                        json.id = searchId;
-                      }
-
-                      json.dateOfBirth = row.dateOfBirth;
-
-                      fetchAge(json);
-
-                      if (json.age) {
-
-                        json.Age = String(json.age);
-
-                        delete json.age;
-                        delete json.dateOfBirth;
-
-                      }
-
-                      if (row.observation.match(/first\spass/i)) {
-
-                        if (!json["HIV Rapid Test Outcomes"]) {
-                          json["HIV Rapid Test Outcomes"] = {};
-                        }
-
-                        if (!json["HIV Rapid Test Outcomes"]["First Pass"]) {
-                          json["HIV Rapid Test Outcomes"]["First Pass"] = {};
-                        }
-
-                        if (row.observation.match(/test\s1/i)) {
-                          json["HIV Rapid Test Outcomes"]["First Pass"]["Test 1"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
-                        } else if (row.observation.match(/test\s2/i)) {
-                          json["HIV Rapid Test Outcomes"]["First Pass"]["Test 2"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
-                        }
-                      } else if (row.observation.match(/immediate\srepeat/i)) {
-                        if (!json["HIV Rapid Test Outcomes"]) {
-                          json["HIV Rapid Test Outcomes"] = {};
-                        }
-
-                        if (!json["HIV Rapid Test Outcomes"]["Immediate Repeat"]) {
-                          json["HIV Rapid Test Outcomes"]["Immediate Repeat"] = {};
-                        }
-
-                        if (row.observation.match(/test\s1/i)) {
-                          json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 1"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
-                        } else if (row.observation.match(/test\s2/i)) {
-                          json["HIV Rapid Test Outcomes"]["Immediate Repeat"]["Test 2"] = (["Non-Reactive", "Non-reactive"].indexOf(row.observationValue) >= 0 ? "Non-Reactive" : row.observationValue);
-                        }
-
-                      } else if (row.observation === "Last HIV Test Result" || row.observation === "Last HIV test") {
-
-                        json["Last HIV Test"] = row.observationValue;
-
-                      } else if (row.observation === "Comments") {
-
-                        json["Comments:Comments"] = row.observationValue;
-
-                      } else if (row.observation === "HTS Family Referral Slips") {
-
-                        json["Number of Items Given:HTS Family Referral Slips"] = String(row.observationValue);
-
-                      } else if (row.observation === "Number of female condoms given") {
-
-                        json["Number of Items Given:Condoms:Female"] = String(row.observationValue);
-
-                      } else if (row.observation === "Number of male condoms given") {
-
-                        json["Number of Items Given:Condoms:Male"] = String(row.observationValue);
-
-                      } else if (row.observation === "Time since last HIV Test") {
-
-                        json["Time Since Last Test"] = row.observationValue;
-
-                      } else if (row.observation === "Partner HIV Status" && String(row.observationValue).toLowerCase().trim() === "no partner") {
-
-                        json["Partner HIV Status"] = "No Partner";
-
-                      } else if (String(row.observation).toLowerCase().trim() === "referral for re-testing") {
-
-                        json["Referral for Re-Testing"] = (["No Re-Test needed", "No Re-test needed"].indexOf(row.observationValue) >= 0 ? "No Re-Test needed" : (["Re-Test", "Re-test"].indexOf(row.observationValue) ? "Re-Test" : row.observationValue));
-
-                      } else {
-
-                        json[row.observation] = row.observationValue;
-
-                      }
-
-                    });
-
-                  output.push(json);
-
-                }
-
-              }
-
-              done = true;
-
-              break;
-
-            }
-
-            i++;
-
-          }
-
-          if (done)
-            break;
-
-        }
-
-      }
-
-      res
-        .status(200)
-        .json(output);
-
-    });
-
-  });
-
   const loadJSON = (result) => {
 
     let json = {};
@@ -4179,7 +3974,7 @@ module.exports = function (app) {
 
     debug("#######################");
 
-    debug(req.body);
+    debug(JSON.stringify(req.body));
 
     debug("#######################");
 
@@ -4641,7 +4436,7 @@ module.exports = function (app) {
                   }));
 
                   bulk.push(JSON.stringify({
-                    visitDate: new Date(today),
+                    visitDate: new Date(today).format('YYYY-mm-dd'),
                     encounterType,
                     identifier: clinicId,
                     observation: (otherMapping[key]
@@ -4734,7 +4529,7 @@ module.exports = function (app) {
                   }));
 
                   bulk.push(JSON.stringify({
-                    visitDate: new Date(today),
+                    visitDate: new Date(today).format('YYYY-mm-dd'),
                     encounterType,
                     identifier: clinicId,
                     observation: (otherMapping[key]
@@ -4796,7 +4591,7 @@ module.exports = function (app) {
             month: monthNames[(new Date(today)).getMonth()],
             year: (new Date(today)).getFullYear(),
             age,
-            visitDate: (new Date(today)),
+            visitDate: (new Date(today)).format('YYYY-mm-dd'),
             entryCode: clinicId
           }));
 
@@ -4812,6 +4607,8 @@ module.exports = function (app) {
       };
 
       new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/_bulk", bulkArgs, async function (result) {
+
+        debug(JSON.stringify(result, null, 2));
 
         res
           .status(200)

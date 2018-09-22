@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import './findEnteredRecord.css';
 import Keyboard from './keyboard';
-import icoSave from '../images/save.js';
-import icoClose from '../images/close.js';
-// import algorithm from '../lib/dhaAlgorithm.js';
 import Button from './button';
 const alertsMapping = require('../config/alertsMapping.json');
 const checkData = require('../constraints').validate;
@@ -787,7 +784,8 @@ class FindEnteredRecord extends Component {
       47: "ND",
       48: "NoT",
       49: "ReT",
-      50: "CT"
+      50: "CT",
+      56: "Yes"
     };
 
     const fieldTypes = {
@@ -795,6 +793,10 @@ class FindEnteredRecord extends Component {
         type: "dha",
         hiddens: [],
         textCase: "UPPER"
+      },
+      56: {
+        type: "click",
+        hiddens: []
       },
       2: {
         type: "click",
@@ -1021,6 +1023,11 @@ class FindEnteredRecord extends Component {
         category: "HTS Provider ID",
         field: "",
         group: 1
+      },
+      56: {
+        category: "Started ART",
+        field: "Yes",
+        group: 16
       },
       2: {
         category: "Sex/Pregnancy",
@@ -1504,6 +1511,16 @@ class FindEnteredRecord extends Component {
                             fontSize: "14px"
                           }}
                           className="boldRight">Comments</th>
+                        <th
+                          rowSpan="4"
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            borderColor: "rgb(51, 51, 51)",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
+                          className="boldRight">Started ART</th>
                         <td
                           rowSpan="4"
                           colSpan="2"
@@ -2671,7 +2688,7 @@ class FindEnteredRecord extends Component {
                                 cursor: "pointer"
                               }}>
 
-                              {Array(56)
+                              {Array(57)
                                 .fill()
                                 .map((_, i) => {
 
@@ -2702,7 +2719,8 @@ class FindEnteredRecord extends Component {
                                         51,
                                         52,
                                         54,
-                                        55
+                                        55,
+                                        56
                                       ].indexOf(i) >= 0
                                         ? " boldRight"
                                         : "")}
@@ -2771,62 +2789,54 @@ class FindEnteredRecord extends Component {
                                                         : "")]
                                                   : ""))}</div >
                                           : (j === 1
-                                            ? (i === 56
-                                              ? <img src={icoSave} height="45" alt="" onMouseDown={() => this.handleSave()} />
-                                              : (i === 57
-                                                ? < img src={
-                                                  icoClose
-                                                }
-                                                  height="45" alt="" onMouseDown={
-                                                    () => this.handleClear()
-                                                  } /> : <div
-                                                    id={"circle" + j + "_" + i}
-                                                    className=
-                                                    {(fields[i] ? "normal" : (fieldNames[i] && this.state.label === (fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "") ? "active" : "inactive"))}
-                                                    style=
-                                                    {{ color: ([0, 1, 5, 18, 51, 52, 53, 54, 55].indexOf(i) >= 0 ? (fieldNames[i] && this.state.data && this.state.data[(fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "")] ? "#c50000" : "#008500") : "#c50000"), fontSize: "16px", width: ([0, 51].indexOf(i) >= 0 ? "150px" : (i === 55 ? "150px" : (i === 1 ? "70px" : "60px"))), marginLeft: ([0].indexOf(i) >= 0 ? "10px !important" : (i === 55 ? "3px" : "")) }}>
-                                                  {fields[i]
-                                                    ? fields[i]
-                                                    : (fieldNames[i] && this.state.label === (fieldNames[i].category
+                                            ? <div
+                                              id={"circle" + j + "_" + i}
+                                              className=
+                                              {(fields[i] ? "normal" : (fieldNames[i] && this.state.label === (fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "") ? "active" : "inactive"))}
+                                              style=
+                                              {{ color: ([0, 1, 5, 18, 51, 52, 53, 54, 55].indexOf(i) >= 0 ? (fieldNames[i] && this.state.data && this.state.data[(fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "")] ? "#c50000" : "#008500") : "#c50000"), fontSize: "16px", width: ([0, 51].indexOf(i) >= 0 ? "150px" : (i === 55 ? "150px" : (i === 1 ? "70px" : "60px"))), marginLeft: ([0].indexOf(i) >= 0 ? "10px !important" : (i === 55 ? "3px" : "")) }}>
+                                              {fields[i]
+                                                ? fields[i]
+                                                : (fieldNames[i] && this.state.label === (fieldNames[i].category
+                                                  ? fieldNames[i].category
+                                                  : "") + (fieldNames[i].field
+                                                    ? ":" + fieldNames[i].field
+                                                    : "") + (fieldNames[i].subField
+                                                      ? ":" + fieldNames[i].subField
+                                                      : "")
+                                                  ? this.state.currentString
+                                                  : (fieldNames[i] && this.state.data && this.state.data[(fieldNames[i].category
+                                                    ? fieldNames[i].category
+                                                    : "") + (fieldNames[i].field
+                                                      ? ":" + fieldNames[i].field
+                                                      : "") + (fieldNames[i].subField
+                                                        ? ":" + fieldNames[i].subField
+                                                        : "")]
+                                                    ? this.state.data[(fieldNames[i].category
                                                       ? fieldNames[i].category
                                                       : "") + (fieldNames[i].field
                                                         ? ":" + fieldNames[i].field
                                                         : "") + (fieldNames[i].subField
                                                           ? ":" + fieldNames[i].subField
-                                                          : "")
-                                                      ? this.state.currentString
-                                                      : (fieldNames[i] && this.state.data && this.state.data[(fieldNames[i].category
+                                                          : "")]
+                                                    : (i === 0 && this.props.current && this.props.current.id
+                                                      ? this.props.current.id
+                                                      : (fieldNames[i] && this.props.current && this.props.current[(fieldNames[i].category
                                                         ? fieldNames[i].category
                                                         : "") + (fieldNames[i].field
                                                           ? ":" + fieldNames[i].field
                                                           : "") + (fieldNames[i].subField
                                                             ? ":" + fieldNames[i].subField
                                                             : "")]
-                                                        ? this.state.data[(fieldNames[i].category
+                                                        ? this.props.current[(fieldNames[i].category
                                                           ? fieldNames[i].category
                                                           : "") + (fieldNames[i].field
                                                             ? ":" + fieldNames[i].field
                                                             : "") + (fieldNames[i].subField
                                                               ? ":" + fieldNames[i].subField
                                                               : "")]
-                                                        : (i === 0 && this.props.current && this.props.current.id
-                                                          ? this.props.current.id
-                                                          : (fieldNames[i] && this.props.current && this.props.current[(fieldNames[i].category
-                                                            ? fieldNames[i].category
-                                                            : "") + (fieldNames[i].field
-                                                              ? ":" + fieldNames[i].field
-                                                              : "") + (fieldNames[i].subField
-                                                                ? ":" + fieldNames[i].subField
-                                                                : "")]
-                                                            ? this.props.current[(fieldNames[i].category
-                                                              ? fieldNames[i].category
-                                                              : "") + (fieldNames[i].field
-                                                                ? ":" + fieldNames[i].field
-                                                                : "") + (fieldNames[i].subField
-                                                                  ? ":" + fieldNames[i].subField
-                                                                  : "")]
-                                                            : ""))))}
-                                                </div>))
+                                                        : ""))))}
+                                            </div>
                                             : ""))}</td>
                                   )
                                 })}
