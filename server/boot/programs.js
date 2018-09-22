@@ -1738,6 +1738,12 @@ module.exports = function (app) {
       .keys(json[encounterName])
       .forEach(async name => {
 
+        if (name === 'Last HIV Test Result') {
+
+          name = 'Last HIV Test';
+
+        }
+
         let concept = await ConceptName.findOne({
           where: {
             name
@@ -1748,7 +1754,7 @@ module.exports = function (app) {
           ? concept.conceptId
           : null;
 
-        let value = json[encounterName][name];
+        let value = json[encounterName][name === 'Last HIV Test' ? 'Last HIV Test Result' : name];
 
         let valueCoded = await ConceptName.findOne({
           where: {
@@ -2517,6 +2523,12 @@ module.exports = function (app) {
         if (conceptname === "Number of Items Given:Condoms:Female") {
 
           conceptname = "Number of female condoms given";
+
+        }
+
+        if (conceptname === "Last HIV Test Result") {
+
+          conceptname = "Last HIV test";
 
         }
 
