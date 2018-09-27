@@ -608,6 +608,10 @@ module.exports = function (app) {
 
               debug(clinicId);
 
+              const patientIdentifierType = await PatientIdentifierType.findOne({ where: { name: 'National id' } }).catch(e => { return null });
+
+              const npidIdentifierTypeId = (patientIdentifierType !== null ? patientIdentifierType.patientIdentifierTypeId : null);
+
               json.push({
                 "names": {
                   "family_name": (data.personName && data.personName[0] && data.personName[0].familyName ? data.personName[0].familyName : '-'),
@@ -626,7 +630,7 @@ module.exports = function (app) {
                   "home_ta": (data.personAddress && data.personAddress[0] ? data.personAddress[0].countyDistrict : null),
                   "home_district": (data.personAddress && data.personAddress[0] ? data.personAddress[0].address2 : null),
                 },
-                "npid": clinicId,
+                "npid": (npidIdentifierTypeId !== null && clinicId !== null && identifier.identifierType === npidIdentifierTypeId ? clinicId : ''),
                 "_id": clinicId,
                 "age": (data.birthdate ? (new Date()).getFullYear() - (new Date(data.birthdate)).getFullYear() : 0)
               });

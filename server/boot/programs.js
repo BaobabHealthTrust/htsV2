@@ -1146,6 +1146,10 @@ module.exports = function (app) {
       })
       : null;
 
+    const patientIdentifierType = await PatientIdentifierType.findOne({ where: { name: 'National id' } }).catch(e => { return null });
+
+    const npidIdentifierTypeId = (patientIdentifierType !== null ? patientIdentifierType.patientIdentifierTypeId : null);
+
     const currentUser = "admin";
     const currentLocationName = "Unknown";
 
@@ -1162,7 +1166,7 @@ module.exports = function (app) {
     const json = {
       otherId: clinicId,
       otherIdType: "HTS Number",
-      npid: raw.npid
+      npid: raw.npid && patient !== null && npidIdentifierTypeId === patient.identifierType
         ? raw.npid
         : "",
       age: raw.birthdate
