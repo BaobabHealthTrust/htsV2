@@ -48,7 +48,7 @@ import {
 } from "./actions/ddeActions";
 import Alert from "./components/alert";
 import Dialog from "./components/dialog";
-import { showInfoMsg, showErrorMsg, showConfirmMsg, closeMsg } from "./actions/alertActions";
+import { showInfoMsg, showErrorMsg, showConfirmMsg, closeMsg, updateAlertKey } from "./actions/alertActions";
 import ReportsViewer from "./components/reportsViewer";
 import {
   showDialog,
@@ -1696,7 +1696,19 @@ class App extends Component {
             group: this.state.currentWorkflow,
             location: this.props.app.currentLocation,
             user: this.props.app.activeUser
-          }))
+          })).then(() => {
+
+            if (this.props.app.sectionHeader === "Close Register") {
+
+              this.props.showInfoMsg("Confirmation", "Register closed");
+
+            } else if (this.props.app.sectionHeader === "Change Password") {
+
+              this.props.showInfoMsg("Confirmation", "Password changed");
+
+            }
+
+          })
         .catch((e) => {
           this
             .props
@@ -2714,7 +2726,6 @@ class App extends Component {
           "Register Number": {
             fieldType: "number",
             hiddenButtons: [
-              "del",
               "/",
               "qwe",
               "abc",
@@ -4082,7 +4093,7 @@ class App extends Component {
           marginTop: "15px"
         },
         disabled: !this.props.app.patientActivated || (this.props.app.patientActivated && this.props.app.formActive)
-          ? true
+          ? (this.props.app.patientActivated && this.props.app.selectedTask === "Transcribe" ? false : true)
           : false
       }
     ];
@@ -4119,7 +4130,8 @@ class App extends Component {
           close={this
             .props
             .closeMsg
-            .bind(this)} />
+            .bind(this)}
+          updateAlertKey={this.props.updateAlertKey.bind(this)} />
         <Dialog
           dialog={this.props.dialog}
           close={this
@@ -4784,9 +4796,9 @@ const mapDispatchToProps = dispatch => {
         resolve();
       });
     },
-    showConfirmMsg: (title, msg, label, action) => {
+    showConfirmMsg: (title, msg, label, action, cancelAction) => {
       return new Promise(resolve => {
-        dispatch(showConfirmMsg(title, msg, label, action));
+        dispatch(showConfirmMsg(title, msg, label, action, cancelAction));
         resolve();
       });
     },
@@ -5008,6 +5020,9 @@ const mapDispatchToProps = dispatch => {
     },
     saveReferralOutcome: async (paylod) => {
       return await dispatch(saveReferralOutcome(paylod));
+    },
+    updateAlertKey: async (key, value) => {
+      return await dispatch(updateAlertKey(key, value));
     }
   };
 };

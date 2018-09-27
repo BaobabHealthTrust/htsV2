@@ -1690,7 +1690,19 @@ module.exports = function (app) {
       ? (new Date(person.birthdate)).format("YYYY-mm-dd")
       : null;
 
-    let encounterName = "HTS Visit";
+    let encounterName = (Object.keys(json['HTS Visit']).indexOf("Result Given to Client") >= 0 && ["Confirmatory Positive", "Confirmatory (Antibody) Positive"].indexOf(json['HTS Visit']["Result Given to Client"]) >= 0 ? "Confirmatory HIV Testing" : "HTS Visit");
+
+    debug(encounterName);
+
+    json[encounterName] = json["HTS Visit"];
+
+    let result = { dateOfBirth };
+
+    fetchAge(result);
+
+    debug(result);
+
+    json[encounterName].Age = result.age;
 
     encType = await EncounterType.findOne({
       where: {
@@ -1730,6 +1742,12 @@ module.exports = function (app) {
       .keys(json[encounterName])
       .forEach(async name => {
 
+        if (name === 'Last HIV Test Result') {
+
+          name = 'Last HIV Test';
+
+        }
+
         let concept = await ConceptName.findOne({
           where: {
             name
@@ -1740,7 +1758,7 @@ module.exports = function (app) {
           ? concept.conceptId
           : null;
 
-        let value = json[encounterName][name];
+        let value = json[encounterName][name === 'Last HIV Test' ? 'Last HIV Test Result' : name];
 
         let valueCoded = await ConceptName.findOne({
           where: {
@@ -2123,7 +2141,7 @@ module.exports = function (app) {
 
     debug("*****************");
 
-    debug(json);
+    debug(JSON.stringify(json));
 
     debug("*****************");
 
@@ -2251,19 +2269,46 @@ module.exports = function (app) {
         .toUpperCase()
       : null;
 
-    let person = await Person.create({
-      gender,
-      birthdate,
-      birthdateEstimated: 1,
-      creator: userId,
-      dateCreated: new Date(),
-      uuid: uuid.v4()
-    });
+    let person, patient;
 
-    let personId = person.personId;
+    console.log(Object.keys(json).indexOf('personId'));
+
+    if (Object.keys(json).indexOf('personId') >= 0) {
+
+      person = await Person.findOne({
+        where: {
+          personId: json.personId
+        }
+      });
+
+    }
+
+    let personId;
+
+    debug(person);
+
+    if (!person) {
+
+      person = await Person.create({
+        gender,
+        birthdate,
+        birthdateEstimated: 1,
+        creator: userId,
+        dateCreated: new Date(),
+        uuid: uuid.v4()
+      });
+
+      personId = person.personId;
+
+      patient = await Patient.create({ patientId: personId, creator: userId, dateCreated: new Date() });
+
+    }
+
+    debug(person);
+
+    personId = person.personId;
+
     let patientId = personId;
-
-    let patient = await Patient.create({ patientId: personId, creator: userId, dateCreated: new Date() });
 
     let programName = "HTS";
 
@@ -2321,8 +2366,12 @@ module.exports = function (app) {
 
     let patientProgramId = patientProgram.patientProgramId;
 
+    let encounterName = (Object.keys(json).indexOf("Result Given to Client") >= 0 && ["Confirmatory Positive", "Confirmatory (Antibody) Positive"].indexOf(json["Result Given to Client"]) >= 0 ? "Confirmatory HIV Testing" : "HTS Visit");
+
+    debug(encounterName);
+
     let groups = {
-      "HTS Visit": [
+      [encounterName]: [
         "Age Group",
         "HTS Access Type",
         "Last HIV Test",
@@ -2345,13 +2394,13 @@ module.exports = function (app) {
       ]
     };
 
-    let encounterName = "HTS Visit";
-
     let encType = await EncounterType.findOne({
       where: {
         name: encounterName
       }
     });
+
+    debug(encType);
 
     let encounterType = encType
       ? encType.encounterTypeId
@@ -2509,6 +2558,12 @@ module.exports = function (app) {
         if (conceptname === "Number of Items Given:Condoms:Female") {
 
           conceptname = "Number of female condoms given";
+
+        }
+
+        if (conceptname === "Last HIV Test Result") {
+
+          conceptname = "Last HIV test";
 
         }
 
@@ -2733,6 +2788,7 @@ module.exports = function (app) {
     }
 
     json.id = clinicId;
+    json.personId = personId;
 
     debug("#########################");
 
@@ -3284,7 +3340,9 @@ module.exports = function (app) {
 
       let partnerHIVStatus = json.client[entryCode]["HTS Visit"]["Partner HIV Status"];
 
-      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age);
+      let referrer = json.client[entryCode]["HTS Visit"]['Who referred slip'];
+
+      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age, referrer);
 
       htsSetting = result.htsSetting;
       htsModality = result.htsModality;
@@ -3515,15 +3573,22 @@ module.exports = function (app) {
 
     const locationId = (htsLocation ? htsLocation.locationId : null);
 
-    let existingRegister = (locationTypeId !== null && serviceDeliveryPointId !== null ? await HtsRegister.findOne({
+    debug(json['Register Number']);
+
+    let existingRegister = await HtsRegister.findOne({
       where: {
-        registerNumber: (json['Register Number'] + "-" + json['Service Delivery Point'] + "-" + json['HTS Location']),
-        serviceDeliveryPointId,
-        locationTypeId,
-        locationId,
-        closed: 0
+        and: [
+          {
+            registerNumber: {
+              like: String(json['Register Number']).trim() + '-%'
+            }
+          },
+          {
+            closed: 0
+          }
+        ]
       }
-    }) : null);
+    });
 
     debug("$$$$$$$$$$$$$$$$");
 

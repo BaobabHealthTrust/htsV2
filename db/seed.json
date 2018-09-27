@@ -228,6 +228,10 @@
         "Started ART",
         "Refused / not ready",
         "Died",
-        "Unknown"
+        "Unknown",
+        "Who referred slip",
+        "Spouse/Sexual Partner",
+        "Parent",
+        "Other"
     ]
 }

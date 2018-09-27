@@ -214,7 +214,7 @@ class Login extends Component {
                   align="right"
                   style={{
                     fontSize: "1.8em"
-                  }}>Username</td>
+                  }}>HTS Provider ID</td>
                 <td><Input
                   className={"touchscreenTextInput" + (this.state.label === "username"
                     ? " activeField"

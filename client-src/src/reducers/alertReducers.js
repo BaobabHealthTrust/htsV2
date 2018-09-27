@@ -28,6 +28,12 @@ export default function alertReducers(state = {}, action) {
 
             return newState;
 
+        case "UPDATE_ALERT_KEY":
+
+            newState = Object.assign({}, state, action.payload);
+
+            return newState;
+
         default:
 
             return state;
