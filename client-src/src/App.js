@@ -1700,6 +1700,10 @@ class App extends Component {
 
               this.props.showInfoMsg("Confirmation", "Register closed");
 
+            } else if (this.props.app.sectionHeader === "Change Password") {
+
+              this.props.showInfoMsg("Confirmation", "Password changed");
+
             }
 
           })
