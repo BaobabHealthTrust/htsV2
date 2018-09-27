@@ -3216,7 +3216,8 @@ class App extends Component {
               "abc",
               "qwe",
               "Unknown"
-            ]
+            ],
+            validationMessage: `Expecting years between\n${((new Date()).getFullYear() - 10)} and ${(new Date()).getFullYear()}`
           },
           "Ask End Month?": {
             visible: false,
