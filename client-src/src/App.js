@@ -3333,6 +3333,8 @@ class App extends Component {
         fieldPos: 0
       });
 
+    this.queryOptions("");
+
   }
 
   printBarcode(data = {
