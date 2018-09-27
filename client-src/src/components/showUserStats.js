@@ -14,6 +14,8 @@ class ShowUserStats extends Component {
             return (row.User && row.Total
                 ? <tr key={uuid.v4()} id={uuid.v4()}>
                     <td align="center" width="200px">{row.Date}</td>
+                    <td align="left" width="200px">{row['First Name']}</td>
+                    <td align="left" width="200px">{row['Last Name']}</td>
                     <td align="center" width="200px">{row.User}</td>
                     <td align="center" width="200px">{row.Total}</td>
                     <td>{row.Location}</td>
@@ -101,6 +103,8 @@ class ShowUserStats extends Component {
                                 border: "1px solid #eeeeee"
                             }}>
                             <th width="200px">Date</th>
+                            <th width="200px">First Name</th>
+                            <th width="200px">Last Name</th>
                             <th width="200px">User</th>
                             <th width="200px">Total</th>
                             <th align="left">Location</th>
