@@ -4891,9 +4891,43 @@ module.exports = function (app) {
 
           debug(err);
 
-          res
-            .status(400)
-            .json({ message: "Location not found!" });
+          debug(result);
+
+          if (result === null) {
+
+            Location.findOne({
+              where: {
+                locationId: decodeURIComponent(req.params.location)
+              }
+            }, (err, result) => {
+
+              if (err || !result) {
+
+                res
+                  .status(400)
+                  .json({ message: "Location not found!" });
+
+              } else {
+
+                debug(result);
+
+                res.cookie('location', decodeURIComponent(result.name));
+
+                res
+                  .status(200)
+                  .json({ location: result.name });
+
+              }
+
+            });
+
+          } else {
+
+            res
+              .status(400)
+              .json({ message: "Location not found!" });
+
+          }
 
         } else {
 
@@ -5585,6 +5619,20 @@ module.exports = function (app) {
     const site = (fs.existsSync(filename) ? JSON.parse(fs.readFileSync(filename, "utf-8")) : {});
 
     res.status(200).json({ redirect_to_portal: site.redirect_to_portal, portal_url: site.portal_url });
+
+  })
+
+  router.get('/programs/fetch_label_id/:label', async function (req, res, next) {
+
+    debug(req.params.label);
+
+    const location = await Location.findOne({ where: { name: req.params.label } });
+
+    debug(location);
+
+    res.status(200).json({ id: location.locationId });
+
+    res.end();
 
   })
 

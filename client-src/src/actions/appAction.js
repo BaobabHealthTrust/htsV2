@@ -267,3 +267,11 @@ export function checkRedirectToPortal() {
   return { type: 'REDIRECT_TO_PORTAL', payload: request };
 
 }
+
+export function fetchLabelId(label) {
+
+  const request = axios.get(`/programs/fetch_label_id/${encodeURIComponent(label)}`);
+
+  return { type: 'FETCH_LABEL_ID', payload: request };
+
+}

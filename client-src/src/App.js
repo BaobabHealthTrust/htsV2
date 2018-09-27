@@ -26,7 +26,8 @@ import {
   getVersion,
   usernameValid,
   updatePassword,
-  checkRedirectToPortal
+  checkRedirectToPortal,
+  fetchLabelId
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -2101,7 +2102,12 @@ class App extends Component {
 
       }
 
-      const label = this.props.wf.responses[this.state.currentWorkflow]["Label Text"];
+      await this.props.fetchLabelId(this.props.wf.responses[this.state.currentWorkflow]["Label Text"]);
+
+      const label = this.props.app.printId;
+
+      if (label === null || !label)
+        return this.props.showErrorMsg('Error', 'Label printing failed');
 
       const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB10,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
 
@@ -4865,6 +4871,9 @@ const mapDispatchToProps = dispatch => {
     },
     updateAlertKey: async (key, value) => {
       return await dispatch(updateAlertKey(key, value));
+    },
+    fetchLabelId: async (label) => {
+      return await dispatch(fetchLabelId(label));
     }
   };
 };
