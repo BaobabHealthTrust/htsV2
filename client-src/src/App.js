@@ -1694,7 +1694,19 @@ class App extends Component {
             group: this.state.currentWorkflow,
             location: this.props.app.currentLocation,
             user: this.props.app.activeUser
-          }))
+          })).then(() => {
+
+            if (this.props.app.sectionHeader === "Close Register") {
+
+              this.props.showInfoMsg("Confirmation", "Register closed");
+
+            } else if (this.props.app.sectionHeader === "Change Password") {
+
+              this.props.showInfoMsg("Confirmation", "Password changed");
+
+            }
+
+          })
         .catch((e) => {
           this
             .props
