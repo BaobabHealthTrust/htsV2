@@ -2774,6 +2774,8 @@ class App extends Component {
       .props
       .fetchRegisterStats();
 
+    this.queryOptions("");
+
   }
 
   async closeRegister() {
@@ -2830,6 +2832,8 @@ class App extends Component {
     this
       .props
       .fetchRegisterStats();
+
+    this.queryOptions("");
 
   }
 
