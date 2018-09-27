@@ -18,7 +18,7 @@
 .refText {
     padding: 8px;
     font-size: 20px;
-    border: 2px inset #888;
+    /*border: 2px inset #888;*/
     border-radius: 5px;
     margin: 5px;
     min-width: 100px;

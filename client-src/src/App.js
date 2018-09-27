@@ -27,7 +27,8 @@ import {
   usernameValid,
   updatePassword,
   checkRedirectToPortal,
-  fetchARTReferral
+  fetchARTReferral,
+  saveReferralOutcome
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -4421,6 +4422,7 @@ class App extends Component {
                         : {}}
                       wf={this.props.wf} />
                     <Container
+                      saveReferralOutcome={this.props.saveReferralOutcome}
                       fetchARTReferral={this.props.fetchARTReferral}
                       activeSection={this.props.app.currentSection}
                       handleSwitchProgram={this
@@ -5003,6 +5005,9 @@ const mapDispatchToProps = dispatch => {
     },
     fetchARTReferral: async (month1, year1, date1, month2, year2, date2, page) => {
       return await dispatch(fetchARTReferral(month1, year1, date1, month2, year2, date2, page));
+    },
+    saveReferralOutcome: async (paylod) => {
+      return await dispatch(saveReferralOutcome(paylod));
     }
   };
 };

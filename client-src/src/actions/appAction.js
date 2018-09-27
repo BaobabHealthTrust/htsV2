@@ -275,3 +275,11 @@ export function fetchARTReferral(month1, year1, date1, month2, year2, date2, pag
   return { type: 'FETCH_ART_REFERRALS', payload: request };
 
 }
+
+export function saveReferralOutcome(payload) {
+
+  const request = axios.post('/programs/save_referral_outcome', payload);
+
+  return { type: 'SAVE_REFERRAL_OUTCOME', payload: request };
+
+}

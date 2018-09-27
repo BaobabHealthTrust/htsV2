@@ -5607,6 +5607,131 @@ module.exports = function (app) {
 
   })
 
+  router.post('/programs/save_referral_outcome', async function (req, res, next) {
+
+    debug(req.body);
+
+    const pos = req.body.pos;
+    const encounterId = req.body.encounter_id;
+    const art_reg_no = req.body['ART Registration Number'];
+    const art_site = req.body['Actual ART Site'];
+    const outcome = req.body['Referral Outcome'];
+    const outcome_date = req.body['Outcome Date'];
+    const username = req.body['activeUser'];
+
+    const encounter = await Encounter.findById(encounterId);
+
+    debug(encounter);
+
+    const user = await Users.find({ where: { username } });
+
+    const userId = (user && Array.isArray(user) && user.length > 0 ? user[0].userId : null);
+
+    debug(userId);
+
+    ['ART Registration Number', 'Actual ART Site', 'Referral Outcome', 'Outcome Date'].forEach(async name => {
+
+      if (req.body[name] && encounterId !== null && userId !== null) {
+
+        const concept = await ConceptName.find({ where: { name } });
+
+        debug(concept);
+
+        const conceptId = (concept && Array.isArray(concept) && concept.length > 0 ? concept[0].conceptId : null);
+
+        if (conceptId !== null) {
+
+          const existingObs = await Obs.find({
+            where: {
+              conceptId,
+              encounterId
+            }
+          });
+
+          if (existingObs && Array.isArray(existingObs) && existingObs.length > 0) {
+
+            const obsId = existingObs[0].obsId;
+
+            await Obs.updateAll({
+              obsId
+            }, {
+                voided: 1,
+                voidedBy: userId,
+                dateVoided: new Date(),
+                voidReason: "Voided by user data overwrite"
+              });
+
+          }
+
+          let valueText = null;
+          let valueDatetime = null;
+          let valueCoded = null;
+          let valueCodedNameId = null;
+
+          switch (name) {
+
+            case 'Outcome Date':
+
+              valueDatetime = new Date(req.body[name]);
+
+              break;
+
+            case 'Referral Outcome':
+
+              const conceptName = await ConceptName.find({ where: { name: req.body[name] } });
+
+              if (conceptName && Array.isArray(conceptName) && conceptName.length > 0) {
+
+                valueCoded = conceptName[0].conceptId;
+
+                valueCodedNameId = conceptName[0].conceptNameId;
+
+              }
+
+              break;
+
+            default:
+
+              valueText = req.body[name];
+
+              break;
+
+          }
+
+          if (valueText !== null || valueDatetime !== null || valueCoded !== null) {
+
+            await Obs.create({
+              personId: encounter.patientId,
+              conceptId,
+              encounterId,
+              obsDatetime: new Date(),
+              locationId: encounter.locationId,
+              valueCoded,
+              valueCodedNameId,
+              valueDatetime,
+              valueText,
+              creator: userId,
+              dateCreated: new Date(),
+              uuid: uuid.v4()
+            });
+
+          }
+
+        }
+
+      }
+
+    })
+
+    let json = { pos, encounterId, art_reg_no, art_site, outcome, outcome_date };
+
+    if (!encounterId)
+      json = {};
+
+    res.status(200).json(json);
+
+  })
+
   app.use(router);
 
 };

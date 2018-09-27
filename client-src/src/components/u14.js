@@ -263,7 +263,8 @@ class U14 extends Component {
                   clearField={this.props.clearField}
                   reports={this.props.reports}
                   fetchFilteredVisitSummaries={this.props.fetchFilteredVisitSummaries}
-                  fetchARTReferral={this.props.fetchARTReferral} />
+                  fetchARTReferral={this.props.fetchARTReferral}
+                  saveReferralOutcome={this.props.saveReferralOutcome} />
                 : <div>
                   <table
                     width="100%"

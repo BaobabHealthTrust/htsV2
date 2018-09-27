@@ -1355,6 +1355,22 @@ export default function appReducer(state = {
 
       return newState;
 
+    case 'SAVE_REFERRAL_OUTCOME_FULFILLED':
+
+      newState = Object.assign({}, state);
+
+      const index = action.payload.data.pos;
+      const fields = ['art_reg_no', 'art_site', 'outcome', 'outcome_date'];
+
+      fields.forEach(field => {
+
+        if (action.payload.data[field] && newState.referrals.data[index])
+          newState.referrals.data[index][field] = action.payload.data[field];
+
+      })
+
+      return newState;
+
     default:
 
       return state;
