@@ -66,8 +66,15 @@ class Alert extends Component {
                           width: "100px"
                         }}
                         buttonClass="red"
-                        handleMouseDown={() => {
-                          this.closePopup()
+                        handleMouseDown={async () => {
+                          
+                          this.props.updateAlertKey('label', null);
+
+                          this.props.alerts.cancelAction ? (await this
+                            .props
+                            .alerts
+                            .cancelAction()) : this.closePopup();
+                      
                         }}
                         id="btnAlertCancel" />
                       <Button
@@ -77,12 +84,17 @@ class Alert extends Component {
                         extraStyles={{
                           width: "100px"
                         }}
-                        handleMouseDown={() => {
-                          this
+                        handleMouseDown={async () => {
+
+                          await this
                             .props
                             .alerts
                             .action();
-                          this.closePopup()
+
+                          this.props.updateAlertKey('label', null);
+
+                          // this.closePopup();
+
                         }}
                         id="btnAlertOK" />
                     </div>
