@@ -2101,7 +2101,7 @@ class App extends Component {
 
       }
 
-      const label = this.props.wf.responses[this.state.currentWorkflow]["Label Text"];
+      const label = this.props.wf.responses[this.state.currentWorkflow]["Select Workstation"];
 
       const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB10,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
 
@@ -3321,7 +3321,7 @@ class App extends Component {
         formActive: true,
         currentSection: "user management",
         configs: {
-          "Label Text": {
+          "Select Workstation": {
             fieldType: "text",
             ajaxURL: "/list_locations?name=",
             lockList: true
