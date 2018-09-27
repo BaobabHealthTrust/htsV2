@@ -2724,7 +2724,6 @@ class App extends Component {
           "Register Number": {
             fieldType: "number",
             hiddenButtons: [
-              "del",
               "/",
               "qwe",
               "abc",
