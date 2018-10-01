@@ -276,7 +276,7 @@ const loadPepfarData = async () => {
 
                 const result = pepfarSynthesis.ps.classifyLocation(
                     htsIndicatorsMapping, locationType, serviceDeliveryPoint,
-                    accessType, partnerHIVStatus, age, referrer
+                    accessType, partnerHIVStatus, age, referrer, gender
                 );
 
                 htsSetting = result.htsSetting;
