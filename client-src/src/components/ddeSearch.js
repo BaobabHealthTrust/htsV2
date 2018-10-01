@@ -108,7 +108,8 @@ class DDESearch extends Component {
         residence: (activeClient.addresses
           ? activeClient.addresses.current_village
           : ""),
-        selectedId: id
+        selectedId: id,
+        npid: activeClient.npid
       })
 
       this
@@ -420,7 +421,7 @@ class DDESearch extends Component {
                             Age:
                             </th>
                           <td align="left">
-                            {this.state.age}
+                            {!isNaN(this.state.age) ? this.state.age : '???'}
                           </td>
                         </tr>
                         <tr>
@@ -430,8 +431,8 @@ class DDESearch extends Component {
                               borderRight: "1px dotted #333333",
                               width: "250px"
                             }}>
-                            National Health ID:
-                            </th>
+                            {this.state.npid && String(this.state.npid).trim().length > 0 ? 'National Health ID' : 'Other ID'}
+                          </th>
                           <td align="left">
                             {this.state.nhid}
                           </td>
