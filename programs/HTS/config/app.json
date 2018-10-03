@@ -403,5 +403,23 @@
         "validationMessage": "Number of female condoms given \n must be between 0-500",
         "hiddenButtons": ["clear", "/", ".", "-", "abc", "qwe", "Unknown"]
     },
+    "Access Type FRS?": {
+        "visible": false,
+        "func": [
+            "HTS Access Type",
+            "equal",
+            "Comes with HTS Family Referral Slip",
+            "HTS Visit"
+        ]
+    },
+    "Who referred slip": {
+        "options": [
+            "Spouse/Sexual Partner",
+            "Parent",
+            "Other"
+        ],
+        "className": "longSelectList",
+        "autoNext": true
+    },
     "action": "/programs/save_encounters"
 }

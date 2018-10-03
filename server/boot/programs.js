@@ -1146,6 +1146,10 @@ module.exports = function (app) {
       })
       : null;
 
+    const patientIdentifierType = await PatientIdentifierType.findOne({ where: { name: 'National id' } }).catch(e => { return null });
+
+    const npidIdentifierTypeId = (patientIdentifierType !== null ? patientIdentifierType.patientIdentifierTypeId : null);
+
     const currentUser = "admin";
     const currentLocationName = "Unknown";
 
@@ -1162,7 +1166,7 @@ module.exports = function (app) {
     const json = {
       otherId: clinicId,
       otherIdType: "HTS Number",
-      npid: raw.npid
+      npid: raw.npid && patient !== null && npidIdentifierTypeId === patient.identifierType
         ? raw.npid
         : "",
       age: raw.birthdate
@@ -2740,7 +2744,7 @@ module.exports = function (app) {
 
       let partnerHIVStatus = json["Partner HIV Status"];
 
-      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age);
+      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age, null, gender);
 
       htsSetting = result.htsSetting;
       htsModality = result.htsModality;
@@ -3340,7 +3344,13 @@ module.exports = function (app) {
 
       let partnerHIVStatus = json.client[entryCode]["HTS Visit"]["Partner HIV Status"];
 
-      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age);
+      let referrer = json.client[entryCode]["HTS Visit"]['Who referred slip'];
+
+      let gender = (json.client[entryCode]["HTS Visit"]["Sex/Pregnancy"]
+        ? String(json.client[entryCode]["HTS Visit"]["Sex/Pregnancy"]).substring(0, 1).toUpperCase()
+        : null);
+
+      const result = pepfarSynthesis.ps.classifyLocation(htsIndicatorsMapping, locationType, serviceDeliveryPoint, accessType, partnerHIVStatus, age, referrer, gender);
 
       htsSetting = result.htsSetting;
       htsModality = result.htsModality;
@@ -3360,10 +3370,6 @@ module.exports = function (app) {
       debug(partnerHIVStatus);
 
       debug("$$$$$$$$$$$$$$$$$$$$$$$");
-
-      let gender = (json.client[entryCode]["HTS Visit"]["Sex/Pregnancy"]
-        ? String(json.client[entryCode]["HTS Visit"]["Sex/Pregnancy"]).substring(0, 1).toUpperCase()
-        : null);
 
       let clinicId = (entryCode
         ? entryCode
@@ -4889,9 +4895,43 @@ module.exports = function (app) {
 
           debug(err);
 
-          res
-            .status(400)
-            .json({ message: "Location not found!" });
+          debug(result);
+
+          if (result === null) {
+
+            Location.findOne({
+              where: {
+                locationId: decodeURIComponent(req.params.location)
+              }
+            }, (err, result) => {
+
+              if (err || !result) {
+
+                res
+                  .status(400)
+                  .json({ message: "Location not found!" });
+
+              } else {
+
+                debug(result);
+
+                res.cookie('location', decodeURIComponent(result.name));
+
+                res
+                  .status(200)
+                  .json({ location: result.name });
+
+              }
+
+            });
+
+          } else {
+
+            res
+              .status(400)
+              .json({ message: "Location not found!" });
+
+          }
 
         } else {
 
@@ -5583,6 +5623,20 @@ module.exports = function (app) {
     const site = (fs.existsSync(filename) ? JSON.parse(fs.readFileSync(filename, "utf-8")) : {});
 
     res.status(200).json({ redirect_to_portal: site.redirect_to_portal, portal_url: site.portal_url });
+
+  })
+
+  router.get('/programs/fetch_label_id/:label', async function (req, res, next) {
+
+    debug(req.params.label);
+
+    const location = await Location.findOne({ where: { name: req.params.label } });
+
+    debug(location);
+
+    res.status(200).json({ id: location.locationId });
+
+    res.end();
 
   })
 
