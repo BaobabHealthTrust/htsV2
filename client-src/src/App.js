@@ -3226,7 +3226,23 @@ class App extends Component {
               "abc",
               "qwe",
               "Unknown"
-            ]
+            ],
+            validationMessage: `Expecting years between\n${((new Date()).getFullYear() - 10)} and ${(new Date()).getFullYear()}`,
+            onUnLoad: () => {
+
+              if (this.props.app.configs && Object.keys(this.props.app.configs).indexOf("End Year") >= 0) {
+
+                const minYear = (this.props.wf && this.state.currentWorkflow && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Start Year"]
+                ? Number(this.props.wf.responses[this.state.currentWorkflow]["Start Year"])
+                : ((new Date()).getFullYear() - 10));
+
+                this.props.app.configs["End Year"].min = minYear;
+
+                this.props.app.configs["End Year"].validationMessage = `Expecting years between\n${minYear} and ${(new Date()).getFullYear()}`;
+
+              }
+
+            }
           },
           "Ask End Month?": {
             visible: false,
@@ -3278,7 +3294,8 @@ class App extends Component {
               "abc",
               "qwe",
               "Unknown"
-            ]
+            ],
+            validationMessage: `Expecting years between\n${((new Date()).getFullYear() - 10)} and ${(new Date()).getFullYear()}`
           },
           "Ask Location?": {
             visible: false,
