@@ -2404,11 +2404,13 @@ class App extends Component {
       .setPeriod({
         start: {
           reportMonth: this.props.app.report.start.reportMonth,
-          reportYear: this.props.app.report.start.reportYear
+          reportYear: this.props.app.report.start.reportYear,
+          reportDate: this.props.app.report.start.reportDate
         },
         end: {
           reportMonth: this.props.app.report.end.reportMonth,
-          reportYear: this.props.app.report.end.reportYear
+          reportYear: this.props.app.report.end.reportYear,
+          reportDate: this.props.app.report.end.reportDate
         },
         location: this.props.app.report.location,
         test: this.props.app.report.test,
@@ -2472,8 +2474,10 @@ class App extends Component {
 
     await this.props.updateReportField('numericalMonth', startNumericalMonth, 'start');
     await this.props.updateReportField('reportYear', startYear, 'start');
+    await this.props.updateReportField('reportDate', startYear, 'start');
     await this.props.updateReportField('numericalMonth', endNumericalMonth, 'end');
     await this.props.updateReportField('reportYear', endYear, 'end');
+    await this.props.updateReportField('reportDate', endYear, 'end');
 
     if (this.props.app.activeReport === "monthly report") {
 
@@ -2481,7 +2485,7 @@ class App extends Component {
 
         this
           .props
-          .fetchReport("/reports?f=" + encodeURIComponent(field) + "&sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&l=" + encodeURIComponent(this.props.reports.location));
+          .fetchReport("/reports?f=" + encodeURIComponent(field) + "&sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&sd=" + this.props.reports.start.reportDate + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&ed=" + this.props.reports.end.reportDate + "&l=" + encodeURIComponent(this.props.reports.location));
       });
 
     } else if (this.props.app.activeReport === "daily register") {
@@ -2502,7 +2506,7 @@ class App extends Component {
 
       this
         .props
-        .fetchRaw("/raw", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear);
+        .fetchRaw("/raw", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.start.reportDate, this.props.reports.end.reportDate);
 
     } else if (this.props.app.activeReport === "pepfar report") {
 
@@ -2512,7 +2516,7 @@ class App extends Component {
 
       this
         .props
-        .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality);
+        .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality, 0, 20, this.props.reports.start.reportDate, this.props.reports.end.reportDate);
 
     }
 
@@ -2525,7 +2529,7 @@ class App extends Component {
 
     this
       .props
-      .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality, startPos, endPos);
+      .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality, startPos, endPos, this.props.reports.start.reportDate, this.props.reports.end.reportDate);
 
   }
 
@@ -2550,7 +2554,7 @@ class App extends Component {
     if (this.props.app.activeReport === "pepfar report") {
 
       Axios
-        .get("/full_disaggregated?sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&d=1" + (this.props.reports.modality ? "&m=" + this.props.reports.modality : ""))
+        .get("/full_disaggregated?sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&d=1" + (this.props.reports.modality ? "&m=" + this.props.reports.modality : "") + "&sd=" + this.props.reports.start.reportDate + "&ed=" + this.props.reports.end.reportDate)
         .then(response => {
           FileDownload(response.data, 'report.csv');
         })
@@ -3300,6 +3304,19 @@ class App extends Component {
               })
               : []),
             className: "longSelectList"
+          },
+          "Start Date": {
+            fieldType: 'days',
+            yearField: 'Start Year',
+            monthField: 'Start Month',
+            hiddenButtons: ['Unknown'],
+            condition: "'{{activeReport}}' !== 'daily register'"
+          },
+          "End Date": {
+            fieldType: 'days',
+            yearField: 'End Year',
+            monthField: 'End Month',
+            hiddenButtons: ['Unknown']
           }
         },
         summaryIgnores: [],
@@ -4728,9 +4745,9 @@ const mapDispatchToProps = dispatch => {
         resolve();
       })
     },
-    fetchRaw: (baseUrl, sMonth, sYear, eMonth, eYear) => {
+    fetchRaw: (baseUrl, sMonth, sYear, eMonth, eYear, sDate, eDate) => {
       return new Promise(resolve => {
-        dispatch(fetchRaw(baseUrl, sMonth, sYear, eMonth, eYear));
+        dispatch(fetchRaw(baseUrl, sMonth, sYear, eMonth, eYear, sDate, eDate));
         resolve();
       })
     },
@@ -4833,8 +4850,8 @@ const mapDispatchToProps = dispatch => {
     activateUser: async (username) => {
       return await dispatch(activateUser(username));
     },
-    fetchPepfarData: async (baseUrl, sMonth, sYear, eMonth, eYear, startPos, endPos) => {
-      return await dispatch(fetchPepfarData(baseUrl, sMonth, sYear, eMonth, eYear, startPos, endPos));
+    fetchPepfarData: async (baseUrl, sMonth, sYear, eMonth, eYear, modality, startPos, endPos, sDate, eDate) => {
+      return await dispatch(fetchPepfarData(baseUrl, sMonth, sYear, eMonth, eYear, modality, startPos, endPos, sDate, eDate));
     },
     resetPepfarData: async () => {
       return await dispatch(resetPepfarData());

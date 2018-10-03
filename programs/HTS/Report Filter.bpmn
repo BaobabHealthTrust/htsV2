@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bonitaConnector="http://www.bonitasoft.org/studio/connector/definition/6.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di_1="http://www.omg.org/spec/DD/20100524/DI" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:model="http://www.omg.org/spec/BPMN/20100524/MODEL" xsi:schemaLocation="schemaLocation http://www.omg.org/spec/BPMN/20100524/MODEL schemas/BPMN20.xsd" exporter="BonitaSoft" exporterVersion="7.6.3" expressionLanguage="http://groovy.apache.org/" targetNamespace="http://bonitasoft.com/_cP-YIKBlEeioRskNQRDBQw">
   <model:collaboration id="_cP-YIKBlEeioRskNQRDBQw">
-    <model:participant id="_54j0UKBqEeioRskNQRDBQw" name="Report Filter" processRef="_ccUyEKBlEeioRskNQRDBQw"/>
+    <model:participant id="_5chW0MbxEeihz6GsxabjbQ" name="Report Filter" processRef="_ccUyEKBlEeioRskNQRDBQw"/>
   </model:collaboration>
   <model:process id="_ccUyEKBlEeioRskNQRDBQw" name="Report Filter">
-    <model:ioSpecification id="_54kbYKBqEeioRskNQRDBQw">
-      <model:inputSet id="_54lCcKBqEeioRskNQRDBQw"/>
-      <model:outputSet id="_54lCcaBqEeioRskNQRDBQw"/>
+    <model:ioSpecification id="_5corkMbxEeihz6GsxabjbQ">
+      <model:inputSet id="_5cp5sMbxEeihz6GsxabjbQ"/>
+      <model:outputSet id="_5cp5scbxEeihz6GsxabjbQ"/>
     </model:ioSpecification>
     <model:laneSet id="Report Filter_laneSet">
       <model:lane id="_chdwwKBlEeioRskNQRDBQw" name="Report Filter lane">
@@ -24,14 +24,16 @@
         <model:flowNodeRef>_5qO2sKBlEeioRskNQRDBQw</model:flowNodeRef>
         <model:flowNodeRef>_8d0_sKBlEeioRskNQRDBQw</model:flowNodeRef>
         <model:flowNodeRef>_bEK6EKBqEeioRskNQRDBQw</model:flowNodeRef>
+        <model:flowNodeRef>_RHelsMbxEeihz6GsxabjbQ</model:flowNodeRef>
+        <model:flowNodeRef>_jvwIYMbxEeihz6GsxabjbQ</model:flowNodeRef>
       </model:lane>
     </model:laneSet>
     <model:startEvent id="_ch6csKBlEeioRskNQRDBQw" name="Start"/>
     <model:task id="_ciqDkKBlEeioRskNQRDBQw" name="Start Month"/>
     <model:task id="_cjBP8KBlEeioRskNQRDBQw" name="Start Year"/>
     <model:exclusiveGateway id="_cjKZ4KBlEeioRskNQRDBQw" name="Ask End Month?"/>
-    <model:task id="_cjctwKBlEeioRskNQRDBQw" name="End Month"/>
-    <model:task id="_cjmewKBlEeioRskNQRDBQw" name="End Year"/>
+    <model:task id="_cjctwKBlEeioRskNQRDBQw" name="End Year"/>
+    <model:task id="_cjmewKBlEeioRskNQRDBQw" name="End Month"/>
     <model:exclusiveGateway id="_cjvosKBlEeioRskNQRDBQw" name="Ask Location?"/>
     <model:task id="_cj7O4KBlEeioRskNQRDBQw" name="Location"/>
     <model:exclusiveGateway id="_ckDxwKBlEeioRskNQRDBQw" name="Ask Test?"/>
@@ -40,14 +42,14 @@
     <model:task id="_5qO2sKBlEeioRskNQRDBQw" name="Modality"/>
     <model:endEvent id="_8d0_sKBlEeioRskNQRDBQw" name="End1"/>
     <model:exclusiveGateway id="_bEK6EKBqEeioRskNQRDBQw" name="Pepfar report?"/>
-    <model:sequenceFlow id="_ck7UcKBlEeioRskNQRDBQw" name="" sourceRef="_ch6csKBlEeioRskNQRDBQw" targetRef="_ciqDkKBlEeioRskNQRDBQw"/>
-    <model:sequenceFlow id="_cltXkKBlEeioRskNQRDBQw" name="" sourceRef="_ciqDkKBlEeioRskNQRDBQw" targetRef="_cjBP8KBlEeioRskNQRDBQw"/>
-    <model:sequenceFlow id="_coXC8KBlEeioRskNQRDBQw" name="" sourceRef="_cjBP8KBlEeioRskNQRDBQw" targetRef="_cjKZ4KBlEeioRskNQRDBQw"/>
+    <model:task id="_RHelsMbxEeihz6GsxabjbQ" name="Start Date"/>
+    <model:task id="_jvwIYMbxEeihz6GsxabjbQ" name="End Date"/>
+    <model:sequenceFlow id="_ck7UcKBlEeioRskNQRDBQw" name="" sourceRef="_ch6csKBlEeioRskNQRDBQw" targetRef="_cjBP8KBlEeioRskNQRDBQw"/>
+    <model:sequenceFlow id="_coXC8KBlEeioRskNQRDBQw" name="" sourceRef="_cjBP8KBlEeioRskNQRDBQw" targetRef="_ciqDkKBlEeioRskNQRDBQw"/>
     <model:sequenceFlow id="_cvtoIKBlEeioRskNQRDBQw" name="Yes" sourceRef="_cjKZ4KBlEeioRskNQRDBQw" targetRef="_cjctwKBlEeioRskNQRDBQw"/>
     <model:sequenceFlow id="_c5eBEKBlEeioRskNQRDBQw" name="" sourceRef="_cjctwKBlEeioRskNQRDBQw" targetRef="_cjmewKBlEeioRskNQRDBQw"/>
     <model:sequenceFlow id="_dDLWsKBlEeioRskNQRDBQw" name="No" sourceRef="_cjKZ4KBlEeioRskNQRDBQw" targetRef="_cjvosKBlEeioRskNQRDBQw"/>
     <model:sequenceFlow id="_dM7voKBlEeioRskNQRDBQw" name="Yes" sourceRef="_cjvosKBlEeioRskNQRDBQw" targetRef="_cj7O4KBlEeioRskNQRDBQw"/>
-    <model:sequenceFlow id="_dZBq4KBlEeioRskNQRDBQw" name="" sourceRef="_cjmewKBlEeioRskNQRDBQw" targetRef="_cjvosKBlEeioRskNQRDBQw"/>
     <model:sequenceFlow id="_dlHmIKBlEeioRskNQRDBQw" name="No" sourceRef="_cjvosKBlEeioRskNQRDBQw" targetRef="_ckDxwKBlEeioRskNQRDBQw"/>
     <model:sequenceFlow id="_dxOvgKBlEeioRskNQRDBQw" name="Yes" sourceRef="_ckDxwKBlEeioRskNQRDBQw" targetRef="_ckP_AKBlEeioRskNQRDBQw"/>
     <model:sequenceFlow id="_eL0ZwKBlEeioRskNQRDBQw" name="" sourceRef="_cj7O4KBlEeioRskNQRDBQw" targetRef="_ckDxwKBlEeioRskNQRDBQw"/>
@@ -58,31 +60,35 @@
     <model:sequenceFlow id="_aspK4KBqEeioRskNQRDBQw" name="No" sourceRef="_ckDxwKBlEeioRskNQRDBQw" targetRef="_bEK6EKBqEeioRskNQRDBQw"/>
     <model:sequenceFlow id="_lnMM4KBqEeioRskNQRDBQw" name="No" sourceRef="_bEK6EKBqEeioRskNQRDBQw" targetRef="_8d0_sKBlEeioRskNQRDBQw"/>
     <model:sequenceFlow id="_r3BMMKBqEeioRskNQRDBQw" name="Yes" sourceRef="_bEK6EKBqEeioRskNQRDBQw" targetRef="_mu7qUKBlEeioRskNQRDBQw"/>
+    <model:sequenceFlow id="_QX0qYMbxEeihz6GsxabjbQ" name="" sourceRef="_ciqDkKBlEeioRskNQRDBQw" targetRef="_RHelsMbxEeihz6GsxabjbQ"/>
+    <model:sequenceFlow id="_XE3xMMbxEeihz6GsxabjbQ" name="" sourceRef="_RHelsMbxEeihz6GsxabjbQ" targetRef="_cjKZ4KBlEeioRskNQRDBQw"/>
+    <model:sequenceFlow id="_jT1ocMbxEeihz6GsxabjbQ" name="" sourceRef="_cjmewKBlEeioRskNQRDBQw" targetRef="_jvwIYMbxEeihz6GsxabjbQ"/>
+    <model:sequenceFlow id="_lK5QsMbxEeihz6GsxabjbQ" name="" sourceRef="_jvwIYMbxEeihz6GsxabjbQ" targetRef="_cjvosKBlEeioRskNQRDBQw"/>
   </model:process>
   <di:BPMNDiagram name="Report Filter">
     <di:BPMNPlane id="plane__cP-YIKBlEeioRskNQRDBQw" bpmnElement="_cP-YIKBlEeioRskNQRDBQw">
-      <di:BPMNShape id="_cfFLIKBlEeioRskNQRDBQw" bpmnElement="_54j0UKBqEeioRskNQRDBQw" isHorizontal="true">
+      <di:BPMNShape id="_cfFLIKBlEeioRskNQRDBQw" bpmnElement="_5chW0MbxEeihz6GsxabjbQ" isHorizontal="true">
         <dc:Bounds height="850.0" width="1649.0" x="0.0" y="0.0"/>
       </di:BPMNShape>
       <di:BPMNShape id="_chfl8KBlEeioRskNQRDBQw" bpmnElement="_chdwwKBlEeioRskNQRDBQw" isHorizontal="true">
         <dc:Bounds height="850.0" width="1619.0" x="30.0" y="0.0"/>
       </di:BPMNShape>
       <di:BPMNShape id="_ciCYgKBlEeioRskNQRDBQw" bpmnElement="_ch6csKBlEeioRskNQRDBQw">
-        <dc:Bounds height="30.0" width="30.0" x="86.0" y="63.0"/>
-        <di:BPMNLabel id="_54lCc6BqEeioRskNQRDBQw" labelStyle="_54lCcqBqEeioRskNQRDBQw">
-          <dc:Bounds height="17.0" width="34.0" x="86.0" y="98.0"/>
+        <dc:Bounds height="30.0" width="30.0" x="90.0" y="71.0"/>
+        <di:BPMNLabel id="_5cwAUcbxEeihz6GsxabjbQ" labelStyle="_5cwAUMbxEeihz6GsxabjbQ">
+          <dc:Bounds height="17.0" width="34.0" x="90.0" y="106.0"/>
         </di:BPMNLabel>
       </di:BPMNShape>
       <di:BPMNShape id="_citt8KBlEeioRskNQRDBQw" bpmnElement="_ciqDkKBlEeioRskNQRDBQw">
-        <dc:Bounds height="50.0" width="100.0" x="186.0" y="55.0"/>
+        <dc:Bounds height="50.0" width="100.0" x="280.0" y="60.0"/>
       </di:BPMNShape>
       <di:BPMNShape id="_cjCeEKBlEeioRskNQRDBQw" bpmnElement="_cjBP8KBlEeioRskNQRDBQw">
-        <dc:Bounds height="50.0" width="100.0" x="377.0" y="55.0"/>
+        <dc:Bounds height="50.0" width="100.0" x="147.0" y="60.0"/>
       </di:BPMNShape>
       <di:BPMNShape id="_cjMPEKBlEeioRskNQRDBQw" bpmnElement="_cjKZ4KBlEeioRskNQRDBQw">
         <dc:Bounds height="43.0" width="43.0" x="584.0" y="63.0"/>
-        <di:BPMNLabel id="_54qiAKBqEeioRskNQRDBQw" labelStyle="_54lCcqBqEeioRskNQRDBQw">
-          <dc:Bounds height="13.0" width="87.0" x="537.0" y="43.0"/>
+        <di:BPMNLabel id="_5czDocbxEeihz6GsxabjbQ" labelStyle="_5cwAUMbxEeihz6GsxabjbQ">
+          <dc:Bounds height="17.0" width="110.0" x="525.0" y="43.0"/>
         </di:BPMNLabel>
       </di:BPMNShape>
       <di:BPMNShape id="_cjei8KBlEeioRskNQRDBQw" bpmnElement="_cjctwKBlEeioRskNQRDBQw">
@@ -93,7 +99,7 @@
       </di:BPMNShape>
       <di:BPMNShape id="_cjw20KBlEeioRskNQRDBQw" bpmnElement="_cjvosKBlEeioRskNQRDBQw">
         <dc:Bounds height="43.0" width="43.0" x="589.0" y="212.0"/>
-        <di:BPMNLabel id="_55SNEKBqEeioRskNQRDBQw" labelStyle="_54lCcqBqEeioRskNQRDBQw">
+        <di:BPMNLabel id="_5czqssbxEeihz6GsxabjbQ" labelStyle="_5cwAUMbxEeihz6GsxabjbQ">
           <dc:Bounds height="17.0" width="94.0" x="492.0" y="217.0"/>
         </di:BPMNLabel>
       </di:BPMNShape>
@@ -102,7 +108,7 @@
       </di:BPMNShape>
       <di:BPMNShape id="_ckE_4KBlEeioRskNQRDBQw" bpmnElement="_ckDxwKBlEeioRskNQRDBQw">
         <dc:Bounds height="43.0" width="43.0" x="592.0" y="337.0"/>
-        <di:BPMNLabel id="_55SNEqBqEeioRskNQRDBQw" labelStyle="_54lCcqBqEeioRskNQRDBQw">
+        <di:BPMNLabel id="_5czqtMbxEeihz6GsxabjbQ" labelStyle="_5cwAUMbxEeihz6GsxabjbQ">
           <dc:Bounds height="17.0" width="62.0" x="518.0" y="345.0"/>
         </di:BPMNLabel>
       </di:BPMNShape>
@@ -111,7 +117,7 @@
       </di:BPMNShape>
       <di:BPMNShape id="_mu8RZKBlEeioRskNQRDBQw" bpmnElement="_mu7qUKBlEeioRskNQRDBQw">
         <dc:Bounds height="43.0" width="43.0" x="770.0" y="479.0"/>
-        <di:BPMNLabel id="_55S0IaBqEeioRskNQRDBQw" labelStyle="_54lCcqBqEeioRskNQRDBQw">
+        <di:BPMNLabel id="_5c0RwcbxEeihz6GsxabjbQ" labelStyle="_5cwAUMbxEeihz6GsxabjbQ">
           <dc:Bounds height="17.0" width="124.0" x="723.0" y="470.0"/>
         </di:BPMNLabel>
       </di:BPMNShape>
@@ -120,29 +126,30 @@
       </di:BPMNShape>
       <di:BPMNShape id="_8d2N0KBlEeioRskNQRDBQw" bpmnElement="_8d0_sKBlEeioRskNQRDBQw">
         <dc:Bounds height="30.0" width="30.0" x="599.0" y="616.0"/>
-        <di:BPMNLabel id="_55TbMaBqEeioRskNQRDBQw" labelStyle="_54lCcqBqEeioRskNQRDBQw">
+        <di:BPMNLabel id="_5c040MbxEeihz6GsxabjbQ" labelStyle="_5cwAUMbxEeihz6GsxabjbQ">
           <dc:Bounds height="17.0" width="35.0" x="597.0" y="651.0"/>
         </di:BPMNLabel>
       </di:BPMNShape>
       <di:BPMNShape id="_bELhJKBqEeioRskNQRDBQw" bpmnElement="_bEK6EKBqEeioRskNQRDBQw">
         <dc:Bounds height="43.0" width="43.0" x="592.0" y="479.0"/>
-        <di:BPMNLabel id="_55TbMqBqEeioRskNQRDBQw" labelStyle="_54lCcqBqEeioRskNQRDBQw">
+        <di:BPMNLabel id="_5c1f4MbxEeihz6GsxabjbQ" labelStyle="_5cwAUMbxEeihz6GsxabjbQ">
           <dc:Bounds height="17.0" width="99.0" x="495.0" y="482.0"/>
         </di:BPMNLabel>
       </di:BPMNShape>
+      <di:BPMNShape id="_RHfz0sbxEeihz6GsxabjbQ" bpmnElement="_RHelsMbxEeihz6GsxabjbQ">
+        <dc:Bounds height="50.0" width="100.0" x="413.0" y="61.0"/>
+      </di:BPMNShape>
+      <di:BPMNShape id="_jvwvecbxEeihz6GsxabjbQ" bpmnElement="_jvwIYMbxEeihz6GsxabjbQ">
+        <dc:Bounds height="50.0" width="100.0" x="1097.0" y="63.0"/>
+      </di:BPMNShape>
       <di:BPMNEdge id="_clCCIKBlEeioRskNQRDBQw" bpmnElement="_ck7UcKBlEeioRskNQRDBQw">
-        <di_1:waypoint x="116.0" y="79.0"/>
-        <di_1:waypoint x="186.0" y="79.0"/>
-        <di:BPMNLabel/>
-      </di:BPMNEdge>
-      <di:BPMNEdge id="_clulsKBlEeioRskNQRDBQw" bpmnElement="_cltXkKBlEeioRskNQRDBQw">
-        <di_1:waypoint x="286.0" y="80.0"/>
-        <di_1:waypoint x="377.0" y="80.0"/>
+        <di_1:waypoint x="120.0" y="87.0"/>
+        <di_1:waypoint x="147.0" y="87.0"/>
         <di:BPMNLabel/>
       </di:BPMNEdge>
       <di:BPMNEdge id="_coYREKBlEeioRskNQRDBQw" bpmnElement="_coXC8KBlEeioRskNQRDBQw">
-        <di_1:waypoint x="477.0" y="82.0"/>
-        <di_1:waypoint x="584.0" y="82.0"/>
+        <di_1:waypoint x="247.0" y="80.0"/>
+        <di_1:waypoint x="280.0" y="80.0"/>
         <di:BPMNLabel/>
       </di:BPMNEdge>
       <di:BPMNEdge id="_cvuPMKBlEeioRskNQRDBQw" bpmnElement="_cvtoIKBlEeioRskNQRDBQw">
@@ -163,13 +170,6 @@
       <di:BPMNEdge id="_dM89wKBlEeioRskNQRDBQw" bpmnElement="_dM7voKBlEeioRskNQRDBQw">
         <di_1:waypoint x="632.0" y="231.0"/>
         <di_1:waypoint x="745.0" y="231.0"/>
-        <di:BPMNLabel/>
-      </di:BPMNEdge>
-      <di:BPMNEdge id="_dZC5AKBlEeioRskNQRDBQw" bpmnElement="_dZBq4KBlEeioRskNQRDBQw">
-        <di_1:waypoint x="984.0" y="111.0"/>
-        <di_1:waypoint x="984.0" y="177.0"/>
-        <di_1:waypoint x="609.0" y="177.0"/>
-        <di_1:waypoint x="609.0" y="212.0"/>
         <di:BPMNLabel/>
       </di:BPMNEdge>
       <di:BPMNEdge id="_dlI0QKBlEeioRskNQRDBQw" bpmnElement="_dlHmIKBlEeioRskNQRDBQw">
@@ -230,12 +230,31 @@
         <di_1:waypoint x="770.0" y="500.0"/>
         <di:BPMNLabel/>
       </di:BPMNEdge>
+      <di:BPMNEdge id="_QX14gMbxEeihz6GsxabjbQ" bpmnElement="_QX0qYMbxEeihz6GsxabjbQ">
+        <di_1:waypoint x="380.0" y="85.0"/>
+        <di_1:waypoint x="413.0" y="85.0"/>
+        <di:BPMNLabel/>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_XE4YQsbxEeihz6GsxabjbQ" bpmnElement="_XE3xMMbxEeihz6GsxabjbQ">
+        <di_1:waypoint x="513.0" y="85.0"/>
+        <di_1:waypoint x="584.0" y="85.0"/>
+        <di:BPMNLabel/>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_jT22kMbxEeihz6GsxabjbQ" bpmnElement="_jT1ocMbxEeihz6GsxabjbQ">
+        <di_1:waypoint x="1033.0" y="87.0"/>
+        <di_1:waypoint x="1097.0" y="87.0"/>
+        <di:BPMNLabel/>
+      </di:BPMNEdge>
+      <di:BPMNEdge id="_lK53wMbxEeihz6GsxabjbQ" bpmnElement="_lK5QsMbxEeihz6GsxabjbQ">
+        <di_1:waypoint x="1152.0" y="113.0"/>
+        <di_1:waypoint x="1152.0" y="190.0"/>
+        <di_1:waypoint x="621.0" y="190.0"/>
+        <di_1:waypoint x="621.0" y="212.0"/>
+        <di:BPMNLabel/>
+      </di:BPMNEdge>
     </di:BPMNPlane>
-    <di:BPMNLabelStyle id="_54lCcqBqEeioRskNQRDBQw">
+    <di:BPMNLabelStyle id="_5cwAUMbxEeihz6GsxabjbQ">
       <dc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Ubuntu" size="9.0"/>
-    </di:BPMNLabelStyle>
-    <di:BPMNLabelStyle id="_54p68KBqEeioRskNQRDBQw">
-      <dc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Ubuntu" size="11.0"/>
     </di:BPMNLabelStyle>
   </di:BPMNDiagram>
 </model:definitions>

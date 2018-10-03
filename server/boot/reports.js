@@ -85,13 +85,13 @@ module.exports = function (app) {
     });
   }
 
-  function fetchFNP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchFNP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     debug(sMonth);
     debug(eMonth);
     debug(eYear);
     debug(parseInt(eMonth, 10) + 1);
-    debug((new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd'));
+    debug((new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd'));
 
     let args = {
       data: {
@@ -105,8 +105,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -133,7 +133,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchFP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchFP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -147,8 +147,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -175,7 +175,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchML(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchML(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -189,8 +189,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -217,7 +217,7 @@ module.exports = function (app) {
 
   }
 
-  function fetch0to1(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetch0to1(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -231,8 +231,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -259,7 +259,7 @@ module.exports = function (app) {
 
   }
 
-  function fetch1to14(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetch1to14(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -273,8 +273,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -301,7 +301,7 @@ module.exports = function (app) {
 
   }
 
-  function fetch12to24(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetch12to24(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -315,8 +315,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -343,7 +343,7 @@ module.exports = function (app) {
 
   }
 
-  function fetch25plus(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetch25plus(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -357,8 +357,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -385,7 +385,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchNT(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchNT(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -399,8 +399,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -427,7 +427,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPN(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPN(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -441,8 +441,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -469,7 +469,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -483,8 +483,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -511,7 +511,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPEI(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPEI(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -525,8 +525,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -553,7 +553,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPI(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPI(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -567,8 +567,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -595,7 +595,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPPr(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPPr(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -609,8 +609,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -637,7 +637,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPNP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPNP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -652,8 +652,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -680,7 +680,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchSN(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchSN(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -694,8 +694,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -722,7 +722,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchSP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchSP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -736,8 +736,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -764,7 +764,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchT12N(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchT12N(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -778,8 +778,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -806,7 +806,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchT12P(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchT12P(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -820,8 +820,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -848,7 +848,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchT12D(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchT12D(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -862,8 +862,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -890,7 +890,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchNN(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchNN(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -904,8 +904,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -932,7 +932,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchNP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchNP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -946,8 +946,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -974,7 +974,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchNEI(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchNEI(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -988,8 +988,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1016,7 +1016,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchNI(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchNI(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1030,8 +1030,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1058,7 +1058,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchCP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchCP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1072,8 +1072,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1100,7 +1100,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchCI(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchCI(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1114,8 +1114,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1142,7 +1142,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPITC(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPITC(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1156,8 +1156,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1184,7 +1184,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchFRS(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchFRS(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1198,8 +1198,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1226,7 +1226,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchOV(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchOV(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1240,8 +1240,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1268,7 +1268,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchSS(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchSS(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1282,8 +1282,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1319,7 +1319,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchTest1UsedForClients(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchTest1UsedForClients(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1334,8 +1334,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1362,7 +1362,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchTest2UsedForClients(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchTest2UsedForClients(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1377,8 +1377,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1417,8 +1417,10 @@ module.exports = function (app) {
     const location = decodeURIComponent(query.l);
     const sMonth = decodeURIComponent(query.sm);
     const sYear = decodeURIComponent(query.sy);
+    const sDate = decodeURIComponent(query.sd);
     const eMonth = decodeURIComponent(query.em);
     const eYear = decodeURIComponent(query.ey);
+    const eDate = decodeURIComponent(query.ed);
 
     const concepts = {
       "Male": fetchML,
@@ -1456,7 +1458,7 @@ module.exports = function (app) {
 
     if (field && concepts[field]) {
 
-      concepts[field](field, sMonth, sYear, eMonth, eYear, location, res);
+      concepts[field](field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate);
 
     } else {
 
@@ -1476,8 +1478,10 @@ module.exports = function (app) {
 
     const sMonth = decodeURIComponent(query.sm);
     const sYear = decodeURIComponent(query.sy);
+    const sDate = decodeURIComponent(query.sd);
     const eMonth = decodeURIComponent(query.em);
     const eYear = decodeURIComponent(query.ey);
+    const eDate = decodeURIComponent(query.ed);
 
     res.set('Content-Type', 'application/json');
 
@@ -1497,8 +1501,8 @@ module.exports = function (app) {
               {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format("YYYY-mm-dd"),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format("YYYY-mm-dd")
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format("YYYY-mm-dd"),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format("YYYY-mm-dd")
                   }
                 }
               }
@@ -2282,8 +2286,10 @@ module.exports = function (app) {
 
     const sMonth = decodeURIComponent(query.sm);
     const sYear = decodeURIComponent(query.sy);
+    const sDate = decodeURIComponent(query.sd);
     const eMonth = decodeURIComponent(query.em);
     const eYear = decodeURIComponent(query.ey);
+    const eDate = decodeURIComponent(query.ed);
 
     const months = [
       "January",
@@ -2380,8 +2386,6 @@ module.exports = function (app) {
 
     debug((new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd'));
 
-    // args.data.query.bool.must
-
     let args = {
       data: {
         _source: "enteryCode",
@@ -2391,8 +2395,8 @@ module.exports = function (app) {
               {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, parseInt(sMonth, 10), 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, parseInt(sMonth, 10), (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -2519,6 +2523,8 @@ module.exports = function (app) {
       });
 
     }
+
+    debug(JSON.stringify(args.data));
 
     (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/_search", args, function (result) {
 
