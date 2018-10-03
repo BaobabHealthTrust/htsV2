@@ -2202,38 +2202,71 @@ module.exports = function (app) {
       if (!resp.aggregations)
         return res.end();
 
-      for (let visit of resp.aggregations.visit.buckets) {
+      const datasource = app.dataSources.hts;
 
-        const visitDate = (new Date(visit.key)).format("d mmm YYYY");
+      const sql = 'SELECT username, given_name, family_name FROM users LEFT OUTER JOIN person ON person.person_id = users.person_id LEFT OUTER JOIN person_name ON person_name.person_id = person.person_id WHERE person.voided = 0';
 
-        for (let row of visit.location.buckets) {
+      const sqlParams = [];
 
-          const location = row.key;
+      datasource.connector.execute(sql, sqlParams, (err, data) => {
 
-          for (let user of row.user.buckets) {
+        if (err) {
 
-            const username = user.key;
+          console.log(err);
 
-            let chunk = {
-              Location: location,
-              User: username,
-              Date: visitDate,
-              Total: user.clients.buckets.length
-            };
+          res.end();
 
-            res.write(JSON.stringify([
-              {
-                row: chunk
-              }
-            ]));
+        }
+
+        let usernames = {};
+
+        data.forEach(row => {
+
+          usernames[row.username] = {
+            firstName: row.given_name,
+            lastName: row.family_name
+          };
+
+        })
+
+        debug(usernames);
+
+        for (let visit of resp.aggregations.visit.buckets) {
+
+          const visitDate = (new Date(visit.key)).format("d mmm YYYY");
+
+          for (let row of visit.location.buckets) {
+
+            const location = row.key;
+
+            for (let user of row.user.buckets) {
+
+              const username = user.key;
+
+              let chunk = {
+                Location: location,
+                'First Name': usernames[username].firstName,
+                'Last Name': usernames[username].lastName,
+                User: username,
+                Date: visitDate,
+                Total: user.clients.buckets.length
+              };
+
+              res.write(JSON.stringify([
+                {
+                  row: chunk
+                }
+              ]));
+
+            }
 
           }
 
         }
 
-      }
+        res.end();
 
-      res.end();
+      });
 
     });
 
