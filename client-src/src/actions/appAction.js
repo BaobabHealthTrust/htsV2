@@ -283,3 +283,11 @@ export function saveReferralOutcome(payload) {
   return { type: 'SAVE_REFERRAL_OUTCOME', payload: request };
 
 }
+
+export function fetchLabelId(label) {
+
+  const request = axios.get(`/programs/fetch_label_id/${encodeURIComponent(label)}`);
+
+  return { type: 'FETCH_LABEL_ID', payload: request };
+
+}

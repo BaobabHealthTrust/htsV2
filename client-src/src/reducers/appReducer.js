@@ -1371,6 +1371,12 @@ export default function appReducer(state = {
 
       return newState;
 
+    case "FETCH_LABEL_ID_FULFILLED":
+
+      newState = Object.assign({}, state, { printId: action.payload.data.id });
+
+      return newState;
+
     default:
 
       return state;

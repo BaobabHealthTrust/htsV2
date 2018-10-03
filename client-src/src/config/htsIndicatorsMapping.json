@@ -3,75 +3,95 @@
     "Mobile": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Community",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Community",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
           "Any": {
-            "HTS Setting": "Community",
-            "HTS Modality": "Mobile"
+            "Any": {
+              "HTS Setting": "Community",
+              "HTS Modality": "Mobile"
+            }
           }
         },
         "Partner Positive": {
           "Any": {
-            "HTS Setting": "Community",
-            "HTS Modality": "Index"
+            "Any": {
+              "HTS Setting": "Community",
+              "HTS Modality": "Index"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
           "Any": {
-            "HTS Setting": "Community",
-            "HTS Modality": "Mobile"
+            "Any": {
+              "HTS Setting": "Community",
+              "HTS Modality": "Mobile"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
           "Any": {
-            "HTS Setting": "Community",
-            "HTS Modality": "VCT"
+            "Any": {
+              "HTS Setting": "Community",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
     },
-    "Other": {
+    "VCT/Other": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Community",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Community",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
           "Any": {
-            "HTS Setting": "Community",
-            "HTS Modality": "Other community platform"
+            "Any": {
+              "HTS Setting": "Community",
+              "HTS Modality": "Other community platform"
+            }
           }
         },
         "Partner Positive": {
           "Any": {
-            "HTS Setting": "Community",
-            "HTS Modality": "Index"
+            "Any": {
+              "HTS Setting": "Community",
+              "HTS Modality": "Index"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
           "Any": {
-            "HTS Setting": "Community",
-            "HTS Modality": "Other community platform"
+            "Any": {
+              "HTS Setting": "Community",
+              "HTS Modality": "Other community platform"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
           "Any": {
-            "HTS Setting": "Community",
-            "HTS Modality": "VCT"
+            "Any": {
+              "HTS Setting": "Community",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
@@ -81,37 +101,59 @@
     "ANC": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
-          "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "PMTCT (ANC)"
+          "F": {
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "PMTCT (ANC)"
+            }
+          },
+          "M": {
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         },
         "Partner Positive": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
-          "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "PMTCT (ANC)"
+          "F": {
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "PMTCT (ANC)"
+            }
+          },
+          "M": {
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
@@ -119,37 +161,47 @@
     "Inpatient": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Inpatient"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Inpatient"
+            }
           }
         },
         "Partner Positive": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Inpatient"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Inpatient"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
@@ -157,43 +209,51 @@
     "Malnutrition": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
-          "0-4Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Malnutrition"
-          },
-          "5Y+": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Other PITC"
+          "Any": {
+            "0-4Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Malnutrition"
+            },
+            "5Y+": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
-          "0-4Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Malnutrition"
-          },
-          "5Y+": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Other PITC"
+          "Any": {
+            "0-4Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Malnutrition"
+            },
+            "5Y+": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
-          "0-4Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
-          },
-          "5Y+": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
+          "Any": {
+            "0-4Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            },
+            "5Y+": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
@@ -201,37 +261,47 @@
     "Maternity": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Other PITC"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         },
         "Partner Positive": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Other PITC"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
@@ -239,75 +309,87 @@
     "OPD": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
-          }
-        },
-        "Any other": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Emergency"
+            "0-13Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Partner Positive": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Emergency"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
     },
-    "Other": {
+    "VCT/Other": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Other PITC"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         },
         "Partner Positive": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Other PITC"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
@@ -315,43 +397,51 @@
     "Pediatric": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
-          "0-4Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Pediatric"
-          },
-          "5Y+": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Other PITC"
+          "Any": {
+            "0-4Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Pediatric"
+            },
+            "5Y+": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
-          "0-4Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Pediatric"
-          },
-          "5Y+": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Other PITC"
+          "Any": {
+            "0-4Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Pediatric"
+            },
+            "5Y+": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
-          "0-4Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
-          },
-          "5Y+": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
+          "Any": {
+            "0-4Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            },
+            "5Y+": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
@@ -359,37 +449,47 @@
     "STI": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "STI"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "STI"
+            }
           }
         },
         "Partner Positive": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "STI"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "STI"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
@@ -397,37 +497,47 @@
     "TB": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "TB"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "TB"
+            }
           }
         },
         "Partner Positive": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "TB"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "TB"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
@@ -435,77 +545,109 @@
     "VMMC": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
-          "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VMMC"
+          "M": {
+            "5Y+": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VMMC"
+            }
+          },
+          "F": {
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         },
         "Partner Positive": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
-          "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VMMC"
+          "M": {
+            "5Y+": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VMMC"
+            }
+          },
+          "F": {
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
     }
   },
-  "Standalone": {
-    "Other": {
+  "Stand-alone HTS Facility": {
+    "VCT/Other": {
       "FRS/Index": {
         "Any": {
-          "0-13Y": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+          "Any": {
+            "0-13Y": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         },
         "Any other": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Other PITC"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         },
         "Partner Positive": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Index"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Index"
+            }
           }
         }
       },
       "PITC": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "Other PITC"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
           }
         }
       },
       "VCT/Other": {
         "Any": {
           "Any": {
-            "HTS Setting": "Facility",
-            "HTS Modality": "VCT"
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "VCT"
+            }
           }
         }
       }
