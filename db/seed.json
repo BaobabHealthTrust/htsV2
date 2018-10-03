@@ -220,6 +220,10 @@
         "HIV Unknown",
         "Partner Negative",
         "Partner Positive",
-        "Last HIV Test"
+        "Last HIV Test",
+        "Who referred slip",
+        "Spouse/Sexual Partner",
+        "Parent",
+        "Other"
     ]
 }

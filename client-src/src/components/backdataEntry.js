@@ -365,17 +365,58 @@ class BackdataEntry extends Component {
     this
       .props
       .saveBDRow("/programs/save_bd_data", newState)
-      .then(async () => {
+      .then(async (json) => {
+
+        console.log(json);
 
         let id = this.props.previous.id;
 
-        this
-          .props
-          .showInfoMsg("Write this  Entry Code in 'Comments'", id);
-
         const count = this.state.count + 1;
 
-        this.setState({ data: {}, count: count, label: null, currentString: "", fieldType: "" });
+        if (Object.keys(this.state.data).indexOf('Referral for Re-Testing') >= 0 && String(this.state.data['Referral for Re-Testing']).toLowerCase().trim().match(/confirmatory/)) {
+
+          this
+            .props
+            .showConfirmMsg("Confirm Action", "Do you want to enter\nthe confirmatory result right away?", "Yes", () => {
+
+              const data = {
+                "HTS Provider ID": this.state.data['HTS Provider ID'],
+                "Sex/Pregnancy": this.state.data['Sex/Pregnancy'],
+                "Age": this.state.data['Age'],
+                "Age Group": this.state.data['Age Group'],
+                "HTS Access Type": this.state.data['HTS Access Type'],
+                "Last HIV Test": 'Last Positive',
+                "Time Since Last Test": '0D',
+                "Partner Present": this.state.data["Partner Present"],
+                "Partner HIV Status": this.state.data["Partner HIV Status"],
+                personId: this.props.previous.personId
+              };
+
+              this.setState({ data, count: count, label: null, currentString: "", fieldType: "" });
+
+              this
+                .props
+                .showInfoMsg("Write this  Entry Code in 'Comments'", id);
+
+            }, () => {
+
+              this.setState({ data: {}, count: count, label: null, currentString: "", fieldType: "" });
+
+              this
+                .props
+                .showInfoMsg("Write this  Entry Code in 'Comments'", id);
+
+            });
+
+        } else {
+
+          this.setState({ data: {}, count: count, label: null, currentString: "", fieldType: "" });
+
+          this
+            .props
+            .showInfoMsg("Write this  Entry Code in 'Comments'", id);
+
+        }
 
         if (this.$("bdScroller")) {
 

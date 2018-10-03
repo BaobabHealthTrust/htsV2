@@ -24,7 +24,7 @@ export function showErrorMsg(title, msg) {
 
 }
 
-export function showConfirmMsg(title, msg, label, action) {
+export function showConfirmMsg(title, msg, label, action, cancelAction) {
 
     return {
         type: "SHOW_CONFIRM_MSG",
@@ -33,7 +33,8 @@ export function showConfirmMsg(title, msg, label, action) {
             msg,
             label,
             action,
-            info: true
+            info: true,
+            cancelAction
         }
     }
 
@@ -43,6 +44,17 @@ export function closeMsg() {
 
     return {
         type: "CLOSE_MSG"
+    }
+
+}
+
+export function updateAlertKey(key, value) {
+
+    return {
+        type: "UPDATE_ALERT_KEY",
+        payload: {
+            [key]: value
+        }
     }
 
 }
