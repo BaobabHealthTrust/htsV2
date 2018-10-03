@@ -3347,7 +3347,7 @@ class App extends Component {
         formActive: true,
         currentSection: "user management",
         configs: {
-          "Label Text": {
+          "Select Workstation": {
             fieldType: "text",
             ajaxURL: "/list_locations?name=",
             lockList: true
