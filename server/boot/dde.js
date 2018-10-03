@@ -1055,9 +1055,9 @@ module.exports = function (app) {
 
     if (ddeConfig.use_art) {
 
-      console.log(JSON.stringify(req.body));
+      debug(JSON.stringify(req.body));
 
-      console.log(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.createPath);
+      debug(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.createPath);
 
       const json = req.body;
 
@@ -1102,20 +1102,24 @@ module.exports = function (app) {
         }
       };
 
-      console.log(JSON.stringify(data));
+      debug(JSON.stringify(data));
 
-      console.log(JSON.stringify({ username: ddeConfig.art_settings.username, password: ddeConfig.art_settings.password }));
+      debug(JSON.stringify({ username: ddeConfig.art_settings.username, password: ddeConfig.art_settings.password }));
 
       (new client({ user: ddeConfig.art_settings.username, password: ddeConfig.art_settings.password }))
         .post(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.createPath, data, async function (result, props) {
 
-          console.log(result.toString("utf8"));
+          debug(result.toString("utf8"));
 
           const json = JSON.parse(result) || {};
 
           let npid = {
             npid: (Object.keys(json).indexOf("person") >= 0 && json.person && Object.keys(json.person).indexOf("patient") >= 0 && json.person.patient && Object.keys(json.person.patient).indexOf("identifiers") >= 0 && json.person.patient.identifiers && Object.keys(json.person.patient.identifiers).indexOf("National id") >= 0 ? json.person.patient.identifiers["National id"] : null)
           };
+
+          npid.canPrint = true;
+
+          debug(npid);
 
           return res
             .status(200)
