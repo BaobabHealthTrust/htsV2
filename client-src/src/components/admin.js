@@ -80,10 +80,11 @@ class Admin extends Component {
             height="80"
             alt=""
             style={{
-              margin: "8px"
+              margin: "8px",
+              marginTop: "2px"
             }} />
           <br />
-          Add Location
+          Add Workstation<br/>Location
         </div>
         <div
           className="sectionButton"
@@ -114,10 +115,11 @@ class Admin extends Component {
             height="80"
             alt=""
             style={{
-              margin: "8px"
+              margin: "8px",
+              marginTop: "2px"
             }} />
           <br />
-          Print Label
+          Print Workstation <br/>Location
         </div>
       </div>
 

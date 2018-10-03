@@ -2274,8 +2274,6 @@ module.exports = function (app) {
 
     });
 
-
-
   })
 
   router.get('/full_disaggregated', (req, res, next) => {
@@ -2307,6 +2305,8 @@ module.exports = function (app) {
     ];
 
     const htsAccessTypes = ["PITC", "FRS/Index", "VCT/Other"];
+
+    const htsSettings = ['Community', 'Facility'];
 
     const genders = ["M", "F"];
 
@@ -2422,77 +2422,85 @@ module.exports = function (app) {
                       size: 10000
                     },
                     aggs: {
-                      accessType: {
+                      setting: {
                         terms: {
-                          field: "htsAccessType.keyword",
+                          field: "htsSetting.keyword",
                           size: 10000
                         },
                         aggs: {
-                          gender: {
+                          accessType: {
                             terms: {
-                              field: "gender.keyword",
+                              field: "htsAccessType.keyword",
                               size: 10000
                             },
                             aggs: {
-                              result: {
+                              gender: {
                                 terms: {
-                                  field: "resultGiven.keyword",
+                                  field: "gender.keyword",
                                   size: 10000
                                 },
                                 aggs: {
-                                  age: {
-                                    range: {
-                                      field: "age",
-                                      ranges: [
-                                        {
-                                          from: 0,
-                                          to: 0.9999999
-                                        },
-                                        {
-                                          from: 1,
-                                          to: 4.9999999
-                                        },
-                                        {
-                                          from: 5,
-                                          to: 9.9999999
-                                        },
-                                        {
-                                          from: 10,
-                                          to: 14.9999999
-                                        },
-                                        {
-                                          from: 15,
-                                          to: 19.9999999
-                                        },
-                                        {
-                                          from: 20,
-                                          to: 24.9999999
-                                        },
-                                        {
-                                          from: 25,
-                                          to: 29.9999999
-                                        },
-                                        {
-                                          from: 30,
-                                          to: 34.9999999
-                                        },
-                                        {
-                                          from: 35,
-                                          to: 39.9999999
-                                        },
-                                        {
-                                          from: 40,
-                                          to: 44.9999999
-                                        },
-                                        {
-                                          from: 45,
-                                          to: 49.9999999
-                                        },
-                                        {
-                                          from: 50,
-                                          to: 120
+                                  result: {
+                                    terms: {
+                                      field: "resultGiven.keyword",
+                                      size: 10000
+                                    },
+                                    aggs: {
+                                      age: {
+                                        range: {
+                                          field: "age",
+                                          ranges: [
+                                            {
+                                              from: 0,
+                                              to: 0.9999999
+                                            },
+                                            {
+                                              from: 1,
+                                              to: 4.9999999
+                                            },
+                                            {
+                                              from: 5,
+                                              to: 9.9999999
+                                            },
+                                            {
+                                              from: 10,
+                                              to: 14.9999999
+                                            },
+                                            {
+                                              from: 15,
+                                              to: 19.9999999
+                                            },
+                                            {
+                                              from: 20,
+                                              to: 24.9999999
+                                            },
+                                            {
+                                              from: 25,
+                                              to: 29.9999999
+                                            },
+                                            {
+                                              from: 30,
+                                              to: 34.9999999
+                                            },
+                                            {
+                                              from: 35,
+                                              to: 39.9999999
+                                            },
+                                            {
+                                              from: 40,
+                                              to: 44.9999999
+                                            },
+                                            {
+                                              from: 45,
+                                              to: 49.9999999
+                                            },
+                                            {
+                                              from: 50,
+                                              to: 120
+                                            }
+                                          ]
                                         }
-                                      ]
+                                      }
                                     }
                                   }
                                 }
@@ -2534,6 +2542,7 @@ module.exports = function (app) {
         "Month",
         "Year",
         "HTS Modality",
+        "HTS Setting",
         "HTS Access Type",
         "Age Group",
         "Sex",
@@ -2561,29 +2570,37 @@ module.exports = function (app) {
 
             data[year][month][modality] = {};
 
-            rowD.accessType.buckets.map(rowA => {
+            rowD.setting.buckets.map(rowS => {
 
-              const accessType = rowA.key;
+              const setting = rowS.key;
 
-              data[year][month][modality][accessType] = {};
+              data[year][month][modality][setting] = {};
 
-              rowA.gender.buckets.map(rowG => {
+              rowS.accessType.buckets.map(rowA => {
 
-                const gender = rowG.key;
+                const accessType = rowA.key;
 
-                data[year][month][modality][accessType][gender] = {};
+                data[year][month][modality][setting][accessType] = {};
 
-                rowG.result.buckets.map(rowR => {
+                rowA.gender.buckets.map(rowG => {
 
-                  const result = rowR.key;
+                  const gender = rowG.key;
 
-                  data[year][month][modality][accessType][gender][result] = {};
+                  data[year][month][modality][setting][accessType][gender] = {};
 
-                  rowR.age.buckets.map(rowE => {
+                  rowG.result.buckets.map(rowR => {
 
-                    const age = ageGroups[rowE.key];
+                    const result = rowR.key;
 
-                    data[year][month][modality][accessType][gender][result][age] = rowE.doc_count;
+                    data[year][month][modality][setting][accessType][gender][result] = {};
+
+                    rowR.age.buckets.map(rowE => {
+
+                      const age = ageGroups[rowE.key];
+
+                      data[year][month][modality][setting][accessType][gender][result][age] = rowE.doc_count;
+
+                    })
 
                   })
 
@@ -2630,101 +2647,122 @@ module.exports = function (app) {
             if (!modality)
               return res.status(200).json(json);
 
-            async.mapSeries(htsAccessTypes, (accessType, hCb) => {
+            async.mapSeries(htsSettings, (setting, sCb) => {
 
-              if (!accessType)
+              if (!setting)
                 return res.status(200).json(json);
 
-              async.mapSeries(genders, (gender, gCb) => {
+              async.mapSeries(htsAccessTypes, (accessType, hCb) => {
 
-                if (!gender)
+                if (!accessType)
                   return res.status(200).json(json);
 
-                async.mapSeries(resultGivens, (result, rCb) => {
+                async.mapSeries(genders, (gender, gCb) => {
 
-                  if (!result)
+                  if (!gender)
                     return res.status(200).json(json);
 
-                  async.mapSeries(ageRanges, (ageGroup, aCb) => {
+                  async.mapSeries(resultGivens, (result, rCb) => {
 
-                    if (!ageGroup)
+                    if (!result)
                       return res.status(200).json(json);
 
-                    const group = ageGroup.split("-");
+                    async.mapSeries(ageRanges, (ageGroup, aCb) => {
 
-                    let count = 0;
+                      if (!ageGroup)
+                        return res.status(200).json(json);
 
-                    if (Object.keys(data).indexOf(year) >= 0 &&
-                      Object.keys(data[year]).indexOf(month) >= 0 &&
-                      Object.keys(data[year][month]).indexOf(modality) >= 0 &&
-                      Object.keys(data[year][month][modality]).indexOf(accessType) >= 0 &&
-                      Object.keys(data[year][month][modality][accessType]).indexOf(gender) >= 0 &&
-                      Object.keys(data[year][month][modality][accessType][gender]).indexOf(result) >= 0 &&
-                      Object.keys(data[year][month][modality][accessType][gender][result]).indexOf(ageGroup) >= 0) {
+                      const group = ageGroup.split("-");
 
-                      count = data[year][month][modality][accessType][gender][result][ageGroup];
+                      let count = 0;
 
-                      if (count > 0) {
+                      if (Object.keys(data).indexOf(year) >= 0 &&
+                        Object.keys(data[year]).indexOf(month) >= 0 &&
+                        Object.keys(data[year][month]).indexOf(modality) >= 0 &&
+                        Object.keys(data[year][month][modality]).indexOf(setting) >= 0 &&
+                        Object.keys(data[year][month][modality][setting]).indexOf(accessType) >= 0 &&
+                        Object.keys(data[year][month][modality][setting][accessType]).indexOf(gender) >= 0 &&
+                        Object.keys(data[year][month][modality][setting][accessType][gender]).indexOf(result) >= 0 &&
+                        Object.keys(data[year][month][modality][setting][accessType][gender][result]).indexOf(ageGroup) >= 0) {
 
-                        debug(modality + " : " + accessType + " : " + count);
+                        count = data[year][month][modality][setting][accessType][gender][result][ageGroup];
 
-                      }
+                        if (count > 0) {
 
-                    }
+                          debug(modality + " : " + accessType + " : " + count);
 
-                    if ((k >= startPos && k < endPos) && !download) {
-
-                      let row = {
-                        "Pos": k,
-                        "District": district,
-                        "Site": facility,
-                        "Age Group": ageGroup,
-                        "Month": month,
-                        "Year": year,
-                        "HTS Modality": modality,
-                        "HTS Access Type": accessType,
-                        "Sex": {
-                          "M": "Male",
-                          "F": "Female"
-                        }[gender],
-                        "Result Given": result,
-                        "Count": count
-                      }
-
-                      res.write(JSON.stringify([
-                        {
-                          row
                         }
-                      ]));
 
-                    } else if (download) {
+                      }
 
-                      const entry = [
-                        district,
-                        facility,
-                        month,
-                        year,
-                        modality,
-                        accessType,
-                        ageGroup,
-                        gender,
-                        result,
-                        count
-                      ];
+                      if ((k >= startPos && k < endPos) && !download) {
 
-                      json.push(entry.join('\t'));
+                        let row = {
+                          "Pos": k,
+                          "District": district,
+                          "Site": facility,
+                          "Age Group": ageGroup,
+                          "Month": month,
+                          "Year": year,
+                          "HTS Setting": setting,
+                          "HTS Modality": modality,
+                          "HTS Access Type": accessType,
+                          "Sex": {
+                            "M": "Male",
+                            "F": "Female"
+                          }[gender],
+                          "Result Given": result,
+                          "Count": count
+                        }
 
-                    } else if (k >= endPos) {
+                        res.write(JSON.stringify([
+                          {
+                            row
+                          }
+                        ]));
 
-                      return yCb();
+                      } else if (download) {
 
-                    }
+                        const entry = [
+                          district,
+                          facility,
+                          month,
+                          year,
+                          modality,
+                          setting,
+                          accessType,
+                          ageGroup,
+                          gender,
+                          result,
+                          count
+                        ];
 
-                    k++;
+                        json.push(entry.join('\t'));
 
-                    process.nextTick(() => {
+                      } else if (k >= endPos) {
 
-                      aCb();
+                        return yCb();
+
+                      }
+
+                      k++;
+
+                      process.nextTick(() => {
+
+                        aCb();
+
+                      });
+
+                    }, (err) => {
+
+                      if (err)
+                        console.log(err);
+
+                      process.nextTick(() => {
+
+                        rCb();
+
+                      });
 
                     });
 
@@ -2735,7 +2773,7 @@ module.exports = function (app) {
 
                     process.nextTick(() => {
 
-                      rCb();
+                      gCb();
 
                     });
 
@@ -2748,7 +2786,7 @@ module.exports = function (app) {
 
                   process.nextTick(() => {
 
-                    gCb();
+                    hCb();
 
                   });
 
@@ -2761,7 +2799,7 @@ module.exports = function (app) {
 
                 process.nextTick(() => {
 
-                  hCb();
+                  sCb();
 
                 });
 

@@ -1029,6 +1029,8 @@ module.exports = function (app) {
 
           raw.npid = ddeData.npid;
 
+          raw.canPrint = ddeData.canPrint;
+
         } else if (ddeData && ddeData.data && Array.isArray(ddeData.data)) {
           ddeData
             .data
@@ -1219,7 +1221,8 @@ module.exports = function (app) {
         : raw["Closest Landmark"],
       cellPhoneNumber: raw.attributes
         ? raw.attributes.cell_phone_number
-        : raw["Cell Phone Number"]
+        : raw["Cell Phone Number"],
+      canPrint: raw.canPrint
     };
 
     let idType,

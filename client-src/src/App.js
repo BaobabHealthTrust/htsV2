@@ -194,6 +194,8 @@ class App extends Component {
 
   }
 
+  tmrHandle = null;
+
   async componentDidUpdate() {
 
     updateClient(this.props, this.state, this);
@@ -250,6 +252,24 @@ class App extends Component {
       this.props.showErrorMsg("Invalid Entry", message);
 
       await this.setState({ busy: false });
+
+    }
+
+    if (this.tmrHandle === null && this.props.app.canPrint === true) {
+
+      this.tmrHandle = setTimeout(async () => {
+
+        if (!this.state.busy && this.props.app.canPrint === true && !this.state.printingLabel) {
+
+          await this.setState({ busy: true, printingLabel: true });
+
+          await this.props.updateApp({ canPrint: null });
+
+          await this.doPrint();
+
+        }
+
+      }, 1000);
 
     }
 
@@ -1608,6 +1628,28 @@ class App extends Component {
 
   }
 
+  async doPrint() {
+
+    const client = this.props.app.patientData[this.props.app.clientId];
+    const data = {
+      npid: this.props.app.clientId || "",
+      first_name: client.firstName || "-",
+      family_name: client.lastName || "-",
+      date_of_birth_estimated: "",
+      date_of_birth: client.dateOfBirth || "",
+      gender: client.gender || "",
+      residence: client.currentVillage || ""
+    };
+    this.printBarcode(data);
+
+    await this.setState({ busy: false, printingLabel: null });
+
+    this.tmrHandle = null;
+
+    return
+
+  }
+
   async submitForm() {
 
     await this.props.updateApp({ processing: true });
@@ -1657,6 +1699,26 @@ class App extends Component {
         this.cancelSession();
 
       }
+
+    } else if (this.props.app.currentSection === "registration") {
+
+      this
+        .props
+        .submitForm(this.props.app.configs.action, Object.assign({}, this.props.wf.responses[this.state.currentWorkflow], {
+          primaryId: this.props.app.currentId,
+          date: this.props.app.selectedVisit && new Date(this.props.app.selectedVisit)
+            ? new Date(this.props.app.selectedVisit).getTime()
+            : new Date().getTime(),
+          program: this.props.app.module,
+          group: this.state.currentWorkflow,
+          location: this.props.app.currentLocation,
+          user: this.props.app.activeUser
+        }))
+        .catch((e) => {
+          this
+            .props
+            .showErrorMsg('Error', this.props.app.errorMessage);
+        });
 
     } else if (this.props.app.configs.action) {
 
@@ -3230,7 +3292,23 @@ class App extends Component {
               "abc",
               "qwe",
               "Unknown"
-            ]
+            ],
+            validationMessage: `Expecting years between\n${((new Date()).getFullYear() - 10)} and ${(new Date()).getFullYear()}`,
+            onUnLoad: () => {
+
+              if (this.props.app.configs && Object.keys(this.props.app.configs).indexOf("End Year") >= 0) {
+
+                const minYear = (this.props.wf && this.state.currentWorkflow && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Start Year"]
+                ? Number(this.props.wf.responses[this.state.currentWorkflow]["Start Year"])
+                : ((new Date()).getFullYear() - 10));
+
+                this.props.app.configs["End Year"].min = minYear;
+
+                this.props.app.configs["End Year"].validationMessage = `Expecting years between\n${minYear} and ${(new Date()).getFullYear()}`;
+
+              }
+
+            }
           },
           "Ask End Month?": {
             visible: false,
@@ -3282,7 +3360,8 @@ class App extends Component {
               "abc",
               "qwe",
               "Unknown"
-            ]
+            ],
+            validationMessage: `Expecting years between\n${((new Date()).getFullYear() - 10)} and ${(new Date()).getFullYear()}`
           },
           "Ask Location?": {
             visible: false,
@@ -3347,7 +3426,7 @@ class App extends Component {
         formActive: true,
         currentSection: "user management",
         configs: {
-          "Label Text": {
+          "Select Workstation": {
             fieldType: "text",
             ajaxURL: "/list_locations?name=",
             lockList: true
