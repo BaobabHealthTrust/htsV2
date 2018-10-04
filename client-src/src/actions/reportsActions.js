@@ -17,13 +17,13 @@ export function setPeriod(payload) {
 
 }
 
-export function fetchRaw(baseUrl, sMonth, sYear, eMonth, eYear) {
+export function fetchRaw(baseUrl, sMonth, sYear, eMonth, eYear, sDate, eDate) {
 
   return (dispatch) => {
 
     dispatch({ type: "FETCH_RAW_DATA_PENDING" });
 
-    oboe(baseUrl + "?sm=" + sMonth + "&sy=" + sYear + "&em=" + eMonth + "&ey=" + eYear).on('node', 'row', function (row) {
+    oboe(baseUrl + "?sm=" + sMonth + "&sy=" + sYear + "&em=" + eMonth + "&ey=" + eYear + "&ed=" + eDate + "&sd=" + sDate).on('node', 'row', function (row) {
 
       dispatch({ type: "FETCH_RAW_DATA", payload: row })
 
@@ -91,13 +91,15 @@ export function fetchVisitSummaries(month, year) {
 
 }
 
-export function fetchPepfarData(baseUrl, sMonth, sYear, eMonth, eYear, modality, startPos = 0, endPos = 20) {
+export function fetchPepfarData(baseUrl, sMonth, sYear, eMonth, eYear, modality, startPos = 0, endPos = 20, sDate, eDate) {
+
+  console.log(eDate);
 
   return (dispatch) => {
 
     dispatch({ type: "FETCH_PEPFAR_DATA_PENDING" });
 
-    oboe(baseUrl + "?sm=" + sMonth + "&sy=" + sYear + "&em=" + eMonth + "&ey=" + eYear + "&s=" + startPos + "&e=" + endPos + (modality ? "&m=" + modality : "")).on('node', 'row', function (row) {
+    oboe(baseUrl + "?sm=" + sMonth + "&sy=" + sYear + "&em=" + eMonth + "&ey=" + eYear + "&s=" + startPos + "&e=" + endPos + (modality ? "&m=" + modality : "") + "&sd=" + sDate + "&ed=" + eDate).on('node', 'row', function (row) {
 
       dispatch({ type: "FETCH_PEPFAR_DATA", payload: row })
 
