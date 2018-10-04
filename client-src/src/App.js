@@ -2835,6 +2835,12 @@ class App extends Component {
             ajaxURL: "/list_locations?name=",
             lockList: true
           },
+          "Register Type": {
+            options: [
+              "Regular",
+              "Self-Test"
+            ]
+          },
           action: "/programs/add_register"
         },
         summaryIgnores: [],

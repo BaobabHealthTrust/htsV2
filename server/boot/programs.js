@@ -3544,6 +3544,8 @@ module.exports = function (app) {
 
   router.post('/programs/add_register', async function (req, res, next) {
 
+    debug(req.body);
+
     const json = (req.body['Add Register']
       ? req.body['Add Register']
       : {});
@@ -3566,7 +3568,7 @@ module.exports = function (app) {
       where: {
         name: json['Service Delivery Point']
       }
-    })
+    });
 
     const serviceDeliveryPointId = (serviceDeliveryPoint ? serviceDeliveryPoint.serviceDeliveryPointId : null);
 
@@ -3574,7 +3576,7 @@ module.exports = function (app) {
       where: {
         name: json['HTS Location']
       }
-    })
+    });
 
     const locationId = (htsLocation ? htsLocation.locationId : null);
 
@@ -3618,6 +3620,7 @@ module.exports = function (app) {
         locationTypeId,
         serviceDeliveryPointId,
         locationId,
+        registerType: json['Register Type'],
         closed: 0,
         dateCreated: (new Date()).format("YYYY-mm-dd"),
         createdBy: user.id,
@@ -3636,7 +3639,7 @@ module.exports = function (app) {
         }
       };
 
-      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + (json['Register Number'] + "-" + json['Service Delivery Point']).replace(/\//g,'_'), args, function (result) {
+      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + (json['Register Number'] + "-" + json['Service Delivery Point']).replace(/\//g, '_'), args, function (result) {
 
         debug(JSON.stringify(result, null, 2));
 
@@ -3697,7 +3700,7 @@ module.exports = function (app) {
           closedBy: user.id
         })
 
-      new client().delete(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + String(registerNumber).replace(/\//g,'_'), function (result) {
+      new client().delete(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + String(registerNumber).replace(/\//g, '_'), function (result) {
 
         debug(result, null, 2);
 

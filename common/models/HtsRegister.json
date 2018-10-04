@@ -167,6 +167,21 @@
         "dataScale": null,
         "nullable": "Y"
       }
+    },
+    "registerType": {
+      "type": "string",
+      "required": false,
+      "length": 45,
+      "precision": null,
+      "scale": 0,
+      "mysql": {
+        "columnName": "register_type",
+        "dataType": "char",
+        "dataLength": 45,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
     }
   },
   "settings": {
