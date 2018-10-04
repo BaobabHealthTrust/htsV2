@@ -2667,96 +2667,112 @@ module.exports = function (app) {
                     if (!result)
                       return res.status(200).json(json);
 
-                    async.mapSeries(ageRanges, (ageGroup, aCb) => {
+                    if (Object.keys(data).indexOf(year) >= 0 &&
+                      Object.keys(data[year]).indexOf(month) >= 0 &&
+                      Object.keys(data[year][month]).indexOf(modality) >= 0 &&
+                      Object.keys(data[year][month][modality]).indexOf(setting) >= 0 &&
+                      Object.keys(data[year][month][modality][setting]).indexOf(accessType) >= 0) {
 
-                      if (!ageGroup)
-                        return res.status(200).json(json);
+                      async.mapSeries(ageRanges, (ageGroup, aCb) => {
 
-                      const group = ageGroup.split("-");
+                        if (!ageGroup)
+                          return res.status(200).json(json);
 
-                      let count = 0;
+                        const group = ageGroup.split("-");
 
-                      if (Object.keys(data).indexOf(year) >= 0 &&
-                        Object.keys(data[year]).indexOf(month) >= 0 &&
-                        Object.keys(data[year][month]).indexOf(modality) >= 0 &&
-                        Object.keys(data[year][month][modality]).indexOf(setting) >= 0 &&
-                        Object.keys(data[year][month][modality][setting]).indexOf(accessType) >= 0 &&
-                        Object.keys(data[year][month][modality][setting][accessType]).indexOf(gender) >= 0 &&
-                        Object.keys(data[year][month][modality][setting][accessType][gender]).indexOf(result) >= 0 &&
-                        Object.keys(data[year][month][modality][setting][accessType][gender][result]).indexOf(ageGroup) >= 0) {
+                        let count = 0;
 
-                        count = data[year][month][modality][setting][accessType][gender][result][ageGroup];
+                        if (Object.keys(data).indexOf(year) >= 0 &&
+                          Object.keys(data[year]).indexOf(month) >= 0 &&
+                          Object.keys(data[year][month]).indexOf(modality) >= 0 &&
+                          Object.keys(data[year][month][modality]).indexOf(setting) >= 0 &&
+                          Object.keys(data[year][month][modality][setting]).indexOf(accessType) >= 0 &&
+                          Object.keys(data[year][month][modality][setting][accessType]).indexOf(gender) >= 0 &&
+                          Object.keys(data[year][month][modality][setting][accessType][gender]).indexOf(result) >= 0 &&
+                          Object.keys(data[year][month][modality][setting][accessType][gender][result]).indexOf(ageGroup) >= 0) {
 
-                        if (count > 0) {
+                          count = data[year][month][modality][setting][accessType][gender][result][ageGroup];
 
-                          debug(modality + " : " + accessType + " : " + count);
+                          if (count > 0) {
 
-                        }
+                            debug(modality + " : " + accessType + " : " + count);
 
-                      }
-
-                      if ((k >= startPos && k < endPos) && !download) {
-
-                        let row = {
-                          "Pos": k,
-                          "District": district,
-                          "Site": facility,
-                          "Age Group": ageGroup,
-                          "Month": month,
-                          "Year": year,
-                          "HTS Setting": setting,
-                          "HTS Modality": modality,
-                          "HTS Access Type": accessType,
-                          "Sex": {
-                            "M": "Male",
-                            "F": "Female"
-                          }[gender],
-                          "Result Given": result,
-                          "Count": count
-                        }
-
-                        res.write(JSON.stringify([
-                          {
-                            row
                           }
-                        ]));
 
-                      } else if (download) {
+                        }
 
-                        const entry = [
-                          district,
-                          facility,
-                          month,
-                          year,
-                          modality,
-                          setting,
-                          accessType,
-                          ageGroup,
-                          gender,
-                          result,
-                          count
-                        ];
+                        if ((k >= startPos && k < endPos) && !download) {
 
-                        json.push(entry.join('\t'));
+                          let row = {
+                            "Pos": k,
+                            "District": district,
+                            "Site": facility,
+                            "Age Group": ageGroup,
+                            "Month": month,
+                            "Year": year,
+                            "HTS Setting": setting,
+                            "HTS Modality": modality,
+                            "HTS Access Type": accessType,
+                            "Sex": {
+                              "M": "Male",
+                              "F": "Female"
+                            }[gender],
+                            "Result Given": result,
+                            "Count": count
+                          }
 
-                      } else if (k >= endPos) {
+                          res.write(JSON.stringify([
+                            {
+                              row
+                            }
+                          ]));
 
-                        return yCb();
+                        } else if (download) {
 
-                      }
+                          const entry = [
+                            district,
+                            facility,
+                            month,
+                            year,
+                            modality,
+                            setting,
+                            accessType,
+                            ageGroup,
+                            gender,
+                            result,
+                            count
+                          ];
 
-                      k++;
+                          json.push(entry.join('\t'));
 
-                      process.nextTick(() => {
+                        } else if (k >= endPos) {
 
-                        aCb();
+                          return yCb();
+
+                        }
+
+                        k++;
+
+                        process.nextTick(() => {
+
+                          aCb();
+
+                        });
+
+                      }, (err) => {
+
+                        if (err)
+                          console.log(err);
+
+                        process.nextTick(() => {
+
+                          rCb();
+
+                        });
 
                       });
 
-                    }, (err) => {
-
-                      if (err)
-                        console.log(err);
+                    } else {
 
                       process.nextTick(() => {
 
@@ -2764,7 +2780,7 @@ module.exports = function (app) {
 
                       });
 
-                    });
+                    }
 
                   }, (err) => {
 
