@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bonitaConnector="http://www.bonitasoft.org/studio/connector/definition/6.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di_1="http://www.omg.org/spec/DD/20100524/DI" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:model="http://www.omg.org/spec/BPMN/20100524/MODEL" xsi:schemaLocation="schemaLocation http://www.omg.org/spec/BPMN/20100524/MODEL schemas/BPMN20.xsd" exporter="BonitaSoft" exporterVersion="7.6.3" expressionLanguage="http://groovy.apache.org/" targetNamespace="http://bonitasoft.com/_-GeA4HqnEei3EbW1MxRTwg">
   <model:collaboration id="_-GeA4HqnEei3EbW1MxRTwg">
-    <model:participant id="_SYZpAHqoEei3EbW1MxRTwg" name="Pool16" processRef="_-HCooHqnEei3EbW1MxRTwg"/>
+    <model:participant id="_P5MRwLaXEeirY4S6G1gl1w" name="Pool16" processRef="_-HCooHqnEei3EbW1MxRTwg"/>
   </model:collaboration>
   <model:process id="_-HCooHqnEei3EbW1MxRTwg" name="Pool16">
-    <model:ioSpecification id="_SYtLAHqoEei3EbW1MxRTwg">
-      <model:inputSet id="_SYtyEHqoEei3EbW1MxRTwg"/>
-      <model:outputSet id="_SYtyEXqoEei3EbW1MxRTwg"/>
+    <model:ioSpecification id="_P5M40LaXEeirY4S6G1gl1w">
+      <model:inputSet id="_P5M40baXEeirY4S6G1gl1w"/>
+      <model:outputSet id="_P5M40raXEeirY4S6G1gl1w"/>
     </model:ioSpecification>
     <model:laneSet id="Pool16_laneSet">
       <model:lane id="_-HZN8HqnEei3EbW1MxRTwg" name="Employee lane">
@@ -16,7 +16,6 @@
         <model:flowNodeRef>_-IQwoHqnEei3EbW1MxRTwg</model:flowNodeRef>
         <model:flowNodeRef>_-IZTgHqnEei3EbW1MxRTwg</model:flowNodeRef>
         <model:flowNodeRef>_-IpyMHqnEei3EbW1MxRTwg</model:flowNodeRef>
-        <model:flowNodeRef>_He2skHqoEei3EbW1MxRTwg</model:flowNodeRef>
       </model:lane>
     </model:laneSet>
     <model:startEvent id="_-HoegHqnEei3EbW1MxRTwg" name="Start"/>
@@ -25,17 +24,15 @@
     <model:task id="_-IQwoHqnEei3EbW1MxRTwg" name="Service Delivery Point"/>
     <model:serviceTask id="_-IZTgHqnEei3EbW1MxRTwg" name="Save "/>
     <model:endEvent id="_-IpyMHqnEei3EbW1MxRTwg" name="End1"/>
-    <model:task id="_He2skHqoEei3EbW1MxRTwg" name="HTS Location"/>
     <model:sequenceFlow id="_-I_wcHqnEei3EbW1MxRTwg" name="" sourceRef="_-HoegHqnEei3EbW1MxRTwg" targetRef="_-H8nkHqnEei3EbW1MxRTwg"/>
     <model:sequenceFlow id="_-JRdQHqnEei3EbW1MxRTwg" name="" sourceRef="_-H8nkHqnEei3EbW1MxRTwg" targetRef="_-IKqAHqnEei3EbW1MxRTwg"/>
     <model:sequenceFlow id="_-L5TcHqnEei3EbW1MxRTwg" name="" sourceRef="_-IKqAHqnEei3EbW1MxRTwg" targetRef="_-IQwoHqnEei3EbW1MxRTwg"/>
     <model:sequenceFlow id="_-dCGwHqnEei3EbW1MxRTwg" name="" sourceRef="_-IZTgHqnEei3EbW1MxRTwg" targetRef="_-IpyMHqnEei3EbW1MxRTwg"/>
-    <model:sequenceFlow id="_HLMJsHqoEei3EbW1MxRTwg" name="" sourceRef="_-IQwoHqnEei3EbW1MxRTwg" targetRef="_He2skHqoEei3EbW1MxRTwg"/>
-    <model:sequenceFlow id="_L1LzoHqoEei3EbW1MxRTwg" name="" sourceRef="_He2skHqoEei3EbW1MxRTwg" targetRef="_-IZTgHqnEei3EbW1MxRTwg"/>
+    <model:sequenceFlow id="_IlAScLaXEeirY4S6G1gl1w" name="" sourceRef="_-IQwoHqnEei3EbW1MxRTwg" targetRef="_-IZTgHqnEei3EbW1MxRTwg"/>
   </model:process>
   <di:BPMNDiagram name="HTS Registers">
     <di:BPMNPlane id="plane__-GeA4HqnEei3EbW1MxRTwg" bpmnElement="_-GeA4HqnEei3EbW1MxRTwg">
-      <di:BPMNShape id="_-HG6EHqnEei3EbW1MxRTwg" bpmnElement="_SYZpAHqoEei3EbW1MxRTwg" isHorizontal="true">
+      <di:BPMNShape id="_-HG6EHqnEei3EbW1MxRTwg" bpmnElement="_P5MRwLaXEeirY4S6G1gl1w" isHorizontal="true">
         <dc:Bounds height="428.0" width="1330.0" x="0.0" y="0.0"/>
       </di:BPMNShape>
       <di:BPMNShape id="_-HacEHqnEei3EbW1MxRTwg" bpmnElement="_-HZN8HqnEei3EbW1MxRTwg" isHorizontal="true">
@@ -43,8 +40,8 @@
       </di:BPMNShape>
       <di:BPMNShape id="_-Hrh0HqnEei3EbW1MxRTwg" bpmnElement="_-HoegHqnEei3EbW1MxRTwg">
         <dc:Bounds height="30.0" width="30.0" x="90.0" y="63.0"/>
-        <di:BPMNLabel id="_SYyDgXqoEei3EbW1MxRTwg" labelStyle="_SYyDgHqoEei3EbW1MxRTwg">
-          <dc:Bounds height="17.0" width="34.0" x="90.0" y="98.0"/>
+        <di:BPMNLabel id="_P5Nf4baXEeirY4S6G1gl1w" labelStyle="_P5Nf4LaXEeirY4S6G1gl1w">
+          <dc:Bounds height="13.0" width="27.0" x="94.0" y="98.0"/>
         </di:BPMNLabel>
       </di:BPMNShape>
       <di:BPMNShape id="_-H-cwHqnEei3EbW1MxRTwg" bpmnElement="_-H8nkHqnEei3EbW1MxRTwg">
@@ -61,12 +58,9 @@
       </di:BPMNShape>
       <di:BPMNShape id="_-IrAUHqnEei3EbW1MxRTwg" bpmnElement="_-IpyMHqnEei3EbW1MxRTwg">
         <dc:Bounds height="30.0" width="30.0" x="1158.0" y="312.0"/>
-        <di:BPMNLabel id="_SY4KI3qoEei3EbW1MxRTwg" labelStyle="_SYyDgHqoEei3EbW1MxRTwg">
+        <di:BPMNLabel id="_P51yBLaXEeirY4S6G1gl1w" labelStyle="_P5Nf4LaXEeirY4S6G1gl1w">
           <dc:Bounds height="17.0" width="35.0" x="1157.0" y="347.0"/>
         </di:BPMNLabel>
-      </di:BPMNShape>
-      <di:BPMNShape id="_He3TqXqoEei3EbW1MxRTwg" bpmnElement="_He2skHqoEei3EbW1MxRTwg">
-        <dc:Bounds height="50.0" width="100.0" x="930.0" y="57.0"/>
       </di:BPMNShape>
       <di:BPMNEdge id="_-JA-kHqnEei3EbW1MxRTwg" bpmnElement="_-I_wcHqnEei3EbW1MxRTwg">
         <di_1:waypoint x="120.0" y="79.0"/>
@@ -88,18 +82,13 @@
         <di_1:waypoint x="1171.0" y="312.0"/>
         <di:BPMNLabel/>
       </di:BPMNEdge>
-      <di:BPMNEdge id="_HLMwwHqoEei3EbW1MxRTwg" bpmnElement="_HLMJsHqoEei3EbW1MxRTwg">
-        <di_1:waypoint x="850.0" y="80.0"/>
-        <di_1:waypoint x="930.0" y="80.0"/>
-        <di:BPMNLabel/>
-      </di:BPMNEdge>
-      <di:BPMNEdge id="_L1MasHqoEei3EbW1MxRTwg" bpmnElement="_L1LzoHqoEei3EbW1MxRTwg">
-        <di_1:waypoint x="1030.0" y="83.0"/>
-        <di_1:waypoint x="1120.0" y="83.0"/>
+      <di:BPMNEdge id="_IlCHoLaXEeirY4S6G1gl1w" bpmnElement="_IlAScLaXEeirY4S6G1gl1w">
+        <di_1:waypoint x="850.0" y="81.0"/>
+        <di_1:waypoint x="1120.0" y="81.0"/>
         <di:BPMNLabel/>
       </di:BPMNEdge>
     </di:BPMNPlane>
-    <di:BPMNLabelStyle id="_SYyDgHqoEei3EbW1MxRTwg">
+    <di:BPMNLabelStyle id="_P5Nf4LaXEeirY4S6G1gl1w">
       <dc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Ubuntu" size="9.0"/>
     </di:BPMNLabelStyle>
   </di:BPMNDiagram>
