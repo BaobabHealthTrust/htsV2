@@ -238,13 +238,13 @@ module.exports = function (app) {
 
       const args = {
         requestConfig: {
-          timeout: 1000, //request timeout in milliseconds
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000), //request timeout in milliseconds
           noDelay: true, //Enable/disable the Nagle algorithm
           keepAlive: true, //Enable/disable keep-alive functionalityidle socket.
-          keepAliveDelay: 1000 //and optionally set the initial delay before the first keepalive probe is sent
+          keepAliveDelay: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //and optionally set the initial delay before the first keepalive probe is sent
         },
         responseConfig: {
-          timeout: 1000 //response timeout
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //response timeout
         }
       };
 
@@ -783,13 +783,13 @@ module.exports = function (app) {
 
       const args = {
         requestConfig: {
-          timeout: 1000, //request timeout in milliseconds
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000), //request timeout in milliseconds
           noDelay: true, //Enable/disable the Nagle algorithm
           keepAlive: true, //Enable/disable keep-alive functionalityidle socket.
-          keepAliveDelay: 1000 //and optionally set the initial delay before the first keepalive probe is sent
+          keepAliveDelay: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //and optionally set the initial delay before the first keepalive probe is sent
         },
         responseConfig: {
-          timeout: 1000 //response timeout
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //response timeout
         }
       };
 
@@ -1267,13 +1267,13 @@ module.exports = function (app) {
           "Content-Type": "application/json"
         },
         requestConfig: {
-          timeout: 1000, //request timeout in milliseconds
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000), //request timeout in milliseconds
           noDelay: true, //Enable/disable the Nagle algorithm
           keepAlive: true, //Enable/disable keep-alive functionalityidle socket.
-          keepAliveDelay: 1000 //and optionally set the initial delay before the first keepalive probe is sent
+          keepAliveDelay: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //and optionally set the initial delay before the first keepalive probe is sent
         },
         responseConfig: {
-          timeout: 1000 //response timeout
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //response timeout
         }
       };
 
