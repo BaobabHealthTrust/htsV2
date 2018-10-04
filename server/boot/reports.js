@@ -85,13 +85,13 @@ module.exports = function (app) {
     });
   }
 
-  function fetchFNP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchFNP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     debug(sMonth);
     debug(eMonth);
     debug(eYear);
     debug(parseInt(eMonth, 10) + 1);
-    debug((new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd'));
+    debug((new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd'));
 
     let args = {
       data: {
@@ -105,8 +105,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -133,7 +133,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchFP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchFP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -147,8 +147,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -175,7 +175,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchML(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchML(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -189,8 +189,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -217,7 +217,7 @@ module.exports = function (app) {
 
   }
 
-  function fetch0to1(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetch0to1(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -231,8 +231,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -259,7 +259,7 @@ module.exports = function (app) {
 
   }
 
-  function fetch1to14(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetch1to14(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -273,8 +273,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -301,7 +301,7 @@ module.exports = function (app) {
 
   }
 
-  function fetch12to24(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetch12to24(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -315,8 +315,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -343,7 +343,7 @@ module.exports = function (app) {
 
   }
 
-  function fetch25plus(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetch25plus(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -357,8 +357,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -385,7 +385,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchNT(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchNT(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -399,8 +399,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -427,7 +427,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPN(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPN(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -441,8 +441,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -469,7 +469,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -483,8 +483,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -511,7 +511,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPEI(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPEI(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -525,8 +525,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -553,7 +553,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPI(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPI(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -567,8 +567,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -595,7 +595,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPPr(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPPr(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -609,8 +609,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -637,7 +637,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPNP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPNP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -652,8 +652,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -680,7 +680,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchSN(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchSN(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -694,8 +694,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -722,7 +722,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchSP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchSP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -736,8 +736,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -764,7 +764,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchT12N(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchT12N(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -778,8 +778,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -806,7 +806,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchT12P(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchT12P(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -820,8 +820,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -848,7 +848,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchT12D(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchT12D(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -862,8 +862,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -890,7 +890,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchNN(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchNN(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -904,8 +904,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -932,7 +932,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchNP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchNP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -946,8 +946,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -974,7 +974,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchNEI(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchNEI(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -988,8 +988,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1016,7 +1016,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchNI(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchNI(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1030,8 +1030,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1058,7 +1058,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchCP(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchCP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1072,8 +1072,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1100,7 +1100,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchCI(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchCI(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1114,8 +1114,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1142,7 +1142,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchPITC(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchPITC(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1156,8 +1156,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1184,7 +1184,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchFRS(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchFRS(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1198,8 +1198,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1226,7 +1226,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchOV(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchOV(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1240,8 +1240,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1268,7 +1268,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchSS(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchSS(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1282,8 +1282,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1319,7 +1319,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchTest1UsedForClients(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchTest1UsedForClients(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1334,8 +1334,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1362,7 +1362,7 @@ module.exports = function (app) {
 
   }
 
-  function fetchTest2UsedForClients(field, sMonth, sYear, eMonth, eYear, location, res) {
+  function fetchTest2UsedForClients(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
 
     let args = {
       data: {
@@ -1377,8 +1377,8 @@ module.exports = function (app) {
               }, {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -1417,8 +1417,10 @@ module.exports = function (app) {
     const location = decodeURIComponent(query.l);
     const sMonth = decodeURIComponent(query.sm);
     const sYear = decodeURIComponent(query.sy);
+    const sDate = decodeURIComponent(query.sd);
     const eMonth = decodeURIComponent(query.em);
     const eYear = decodeURIComponent(query.ey);
+    const eDate = decodeURIComponent(query.ed);
 
     const concepts = {
       "Male": fetchML,
@@ -1456,7 +1458,7 @@ module.exports = function (app) {
 
     if (field && concepts[field]) {
 
-      concepts[field](field, sMonth, sYear, eMonth, eYear, location, res);
+      concepts[field](field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate);
 
     } else {
 
@@ -1476,8 +1478,10 @@ module.exports = function (app) {
 
     const sMonth = decodeURIComponent(query.sm);
     const sYear = decodeURIComponent(query.sy);
+    const sDate = decodeURIComponent(query.sd);
     const eMonth = decodeURIComponent(query.em);
     const eYear = decodeURIComponent(query.ey);
+    const eDate = decodeURIComponent(query.ed);
 
     res.set('Content-Type', 'application/json');
 
@@ -1497,8 +1501,8 @@ module.exports = function (app) {
               {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, sMonth, 1)).format("YYYY-mm-dd"),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format("YYYY-mm-dd")
+                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format("YYYY-mm-dd"),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format("YYYY-mm-dd")
                   }
                 }
               }
@@ -2202,42 +2206,73 @@ module.exports = function (app) {
       if (!resp.aggregations)
         return res.end();
 
-      for (let visit of resp.aggregations.visit.buckets) {
+      const datasource = app.dataSources.hts;
 
-        const visitDate = (new Date(visit.key)).format("d mmm YYYY");
+      const sql = 'SELECT username, given_name, family_name FROM users LEFT OUTER JOIN person ON person.person_id = users.person_id LEFT OUTER JOIN person_name ON person_name.person_id = person.person_id WHERE person.voided = 0';
 
-        for (let row of visit.location.buckets) {
+      const sqlParams = [];
 
-          const location = row.key;
+      datasource.connector.execute(sql, sqlParams, (err, data) => {
 
-          for (let user of row.user.buckets) {
+        if (err) {
 
-            const username = user.key;
+          console.log(err);
 
-            let chunk = {
-              Location: location,
-              User: username,
-              Date: visitDate,
-              Total: user.clients.buckets.length
-            };
+          res.end();
 
-            res.write(JSON.stringify([
-              {
-                row: chunk
-              }
-            ]));
+        }
+
+        let usernames = {};
+
+        data.forEach(row => {
+
+          usernames[row.username] = {
+            firstName: row.given_name,
+            lastName: row.family_name
+          };
+
+        })
+
+        debug(usernames);
+
+        for (let visit of resp.aggregations.visit.buckets) {
+
+          const visitDate = (new Date(visit.key)).format("d mmm YYYY");
+
+          for (let row of visit.location.buckets) {
+
+            const location = row.key;
+
+            for (let user of row.user.buckets) {
+
+              const username = user.key;
+
+              let chunk = {
+                Location: location,
+                'First Name': usernames[username].firstName,
+                'Last Name': usernames[username].lastName,
+                User: username,
+                Date: visitDate,
+                Total: user.clients.buckets.length
+              };
+
+              res.write(JSON.stringify([
+                {
+                  row: chunk
+                }
+              ]));
+
+            }
 
           }
 
         }
 
-      }
+        res.end();
 
-      res.end();
+      });
 
     });
-
-
 
   })
 
@@ -2249,8 +2284,10 @@ module.exports = function (app) {
 
     const sMonth = decodeURIComponent(query.sm);
     const sYear = decodeURIComponent(query.sy);
+    const sDate = decodeURIComponent(query.sd);
     const eMonth = decodeURIComponent(query.em);
     const eYear = decodeURIComponent(query.ey);
+    const eDate = decodeURIComponent(query.ed);
 
     const months = [
       "January",
@@ -2268,6 +2305,8 @@ module.exports = function (app) {
     ];
 
     const htsAccessTypes = ["PITC", "FRS/Index", "VCT/Other"];
+
+    const htsSettings = ['Community', 'Facility'];
 
     const genders = ["M", "F"];
 
@@ -2347,8 +2386,6 @@ module.exports = function (app) {
 
     debug((new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd'));
 
-    // args.data.query.bool.must
-
     let args = {
       data: {
         _source: "enteryCode",
@@ -2358,8 +2395,8 @@ module.exports = function (app) {
               {
                 range: {
                   visitDate: {
-                    gte: (new Date(sYear, parseInt(sMonth, 10), 1)).format('YYYY-mm-dd'),
-                    lte: (new Date(eYear, parseInt(eMonth, 10) + 1, 0)).format('YYYY-mm-dd')
+                    gte: (new Date(sYear, parseInt(sMonth, 10), (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
                   }
                 }
               }
@@ -2385,77 +2422,85 @@ module.exports = function (app) {
                       size: 10000
                     },
                     aggs: {
-                      accessType: {
+                      setting: {
                         terms: {
-                          field: "htsAccessType.keyword",
+                          field: "htsSetting.keyword",
                           size: 10000
                         },
                         aggs: {
-                          gender: {
+                          accessType: {
                             terms: {
-                              field: "gender.keyword",
+                              field: "htsAccessType.keyword",
                               size: 10000
                             },
                             aggs: {
-                              result: {
+                              gender: {
                                 terms: {
-                                  field: "resultGiven.keyword",
+                                  field: "gender.keyword",
                                   size: 10000
                                 },
                                 aggs: {
-                                  age: {
-                                    range: {
-                                      field: "age",
-                                      ranges: [
-                                        {
-                                          from: 0,
-                                          to: 0.9999999
-                                        },
-                                        {
-                                          from: 1,
-                                          to: 4.9999999
-                                        },
-                                        {
-                                          from: 5,
-                                          to: 9.9999999
-                                        },
-                                        {
-                                          from: 10,
-                                          to: 14.9999999
-                                        },
-                                        {
-                                          from: 15,
-                                          to: 19.9999999
-                                        },
-                                        {
-                                          from: 20,
-                                          to: 24.9999999
-                                        },
-                                        {
-                                          from: 25,
-                                          to: 29.9999999
-                                        },
-                                        {
-                                          from: 30,
-                                          to: 34.9999999
-                                        },
-                                        {
-                                          from: 35,
-                                          to: 39.9999999
-                                        },
-                                        {
-                                          from: 40,
-                                          to: 44.9999999
-                                        },
-                                        {
-                                          from: 45,
-                                          to: 49.9999999
-                                        },
-                                        {
-                                          from: 50,
-                                          to: 120
+                                  result: {
+                                    terms: {
+                                      field: "resultGiven.keyword",
+                                      size: 10000
+                                    },
+                                    aggs: {
+                                      age: {
+                                        range: {
+                                          field: "age",
+                                          ranges: [
+                                            {
+                                              from: 0,
+                                              to: 0.9999999
+                                            },
+                                            {
+                                              from: 1,
+                                              to: 4.9999999
+                                            },
+                                            {
+                                              from: 5,
+                                              to: 9.9999999
+                                            },
+                                            {
+                                              from: 10,
+                                              to: 14.9999999
+                                            },
+                                            {
+                                              from: 15,
+                                              to: 19.9999999
+                                            },
+                                            {
+                                              from: 20,
+                                              to: 24.9999999
+                                            },
+                                            {
+                                              from: 25,
+                                              to: 29.9999999
+                                            },
+                                            {
+                                              from: 30,
+                                              to: 34.9999999
+                                            },
+                                            {
+                                              from: 35,
+                                              to: 39.9999999
+                                            },
+                                            {
+                                              from: 40,
+                                              to: 44.9999999
+                                            },
+                                            {
+                                              from: 45,
+                                              to: 49.9999999
+                                            },
+                                            {
+                                              from: 50,
+                                              to: 120
+                                            }
+                                          ]
                                         }
-                                      ]
+                                      }
                                     }
                                   }
                                 }
@@ -2487,6 +2532,8 @@ module.exports = function (app) {
 
     }
 
+    debug(JSON.stringify(args.data));
+
     (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/pepfar/_search", args, function (result) {
 
       const header = [
@@ -2495,6 +2542,7 @@ module.exports = function (app) {
         "Month",
         "Year",
         "HTS Modality",
+        "HTS Setting",
         "HTS Access Type",
         "Age Group",
         "Sex",
@@ -2522,29 +2570,37 @@ module.exports = function (app) {
 
             data[year][month][modality] = {};
 
-            rowD.accessType.buckets.map(rowA => {
+            rowD.setting.buckets.map(rowS => {
 
-              const accessType = rowA.key;
+              const setting = rowS.key;
 
-              data[year][month][modality][accessType] = {};
+              data[year][month][modality][setting] = {};
 
-              rowA.gender.buckets.map(rowG => {
+              rowS.accessType.buckets.map(rowA => {
 
-                const gender = rowG.key;
+                const accessType = rowA.key;
 
-                data[year][month][modality][accessType][gender] = {};
+                data[year][month][modality][setting][accessType] = {};
 
-                rowG.result.buckets.map(rowR => {
+                rowA.gender.buckets.map(rowG => {
 
-                  const result = rowR.key;
+                  const gender = rowG.key;
 
-                  data[year][month][modality][accessType][gender][result] = {};
+                  data[year][month][modality][setting][accessType][gender] = {};
 
-                  rowR.age.buckets.map(rowE => {
+                  rowG.result.buckets.map(rowR => {
 
-                    const age = ageGroups[rowE.key];
+                    const result = rowR.key;
 
-                    data[year][month][modality][accessType][gender][result][age] = rowE.doc_count;
+                    data[year][month][modality][setting][accessType][gender][result] = {};
+
+                    rowR.age.buckets.map(rowE => {
+
+                      const age = ageGroups[rowE.key];
+
+                      data[year][month][modality][setting][accessType][gender][result][age] = rowE.doc_count;
+
+                    })
 
                   })
 
@@ -2591,103 +2647,140 @@ module.exports = function (app) {
             if (!modality)
               return res.status(200).json(json);
 
-            async.mapSeries(htsAccessTypes, (accessType, hCb) => {
+            async.mapSeries(htsSettings, (setting, sCb) => {
 
-              if (!accessType)
+              if (!setting)
                 return res.status(200).json(json);
 
-              async.mapSeries(genders, (gender, gCb) => {
+              async.mapSeries(htsAccessTypes, (accessType, hCb) => {
 
-                if (!gender)
+                if (!accessType)
                   return res.status(200).json(json);
 
-                async.mapSeries(resultGivens, (result, rCb) => {
+                async.mapSeries(genders, (gender, gCb) => {
 
-                  if (!result)
+                  if (!gender)
                     return res.status(200).json(json);
 
-                  async.mapSeries(ageRanges, (ageGroup, aCb) => {
+                  async.mapSeries(resultGivens, (result, rCb) => {
 
-                    if (!ageGroup)
+                    if (!result)
                       return res.status(200).json(json);
-
-                    const group = ageGroup.split("-");
-
-                    let count = 0;
 
                     if (Object.keys(data).indexOf(year) >= 0 &&
                       Object.keys(data[year]).indexOf(month) >= 0 &&
                       Object.keys(data[year][month]).indexOf(modality) >= 0 &&
-                      Object.keys(data[year][month][modality]).indexOf(accessType) >= 0 &&
-                      Object.keys(data[year][month][modality][accessType]).indexOf(gender) >= 0 &&
-                      Object.keys(data[year][month][modality][accessType][gender]).indexOf(result) >= 0 &&
-                      Object.keys(data[year][month][modality][accessType][gender][result]).indexOf(ageGroup) >= 0) {
+                      Object.keys(data[year][month][modality]).indexOf(setting) >= 0 &&
+                      Object.keys(data[year][month][modality][setting]).indexOf(accessType) >= 0) {
 
-                      count = data[year][month][modality][accessType][gender][result][ageGroup];
+                      async.mapSeries(ageRanges, (ageGroup, aCb) => {
 
-                      if (count > 0) {
+                        if (!ageGroup)
+                          return res.status(200).json(json);
 
-                        debug(modality + " : " + accessType + " : " + count);
+                        const group = ageGroup.split("-");
 
-                      }
+                        let count = 0;
 
-                    }
+                        if (Object.keys(data).indexOf(year) >= 0 &&
+                          Object.keys(data[year]).indexOf(month) >= 0 &&
+                          Object.keys(data[year][month]).indexOf(modality) >= 0 &&
+                          Object.keys(data[year][month][modality]).indexOf(setting) >= 0 &&
+                          Object.keys(data[year][month][modality][setting]).indexOf(accessType) >= 0 &&
+                          Object.keys(data[year][month][modality][setting][accessType]).indexOf(gender) >= 0 &&
+                          Object.keys(data[year][month][modality][setting][accessType][gender]).indexOf(result) >= 0 &&
+                          Object.keys(data[year][month][modality][setting][accessType][gender][result]).indexOf(ageGroup) >= 0) {
 
-                    if ((k >= startPos && k < endPos) && !download) {
+                          count = data[year][month][modality][setting][accessType][gender][result][ageGroup];
 
-                      let row = {
-                        "Pos": k,
-                        "District": district,
-                        "Site": facility,
-                        "Age Group": ageGroup,
-                        "Month": month,
-                        "Year": year,
-                        "HTS Modality": modality,
-                        "HTS Access Type": accessType,
-                        "Sex": {
-                          "M": "Male",
-                          "F": "Female"
-                        }[gender],
-                        "Result Given": result,
-                        "Count": count
-                      }
+                          if (count > 0) {
 
-                      res.write(JSON.stringify([
-                        {
-                          row
+                            debug(modality + " : " + accessType + " : " + count);
+
+                          }
+
                         }
-                      ]));
 
-                    } else if (download) {
+                        if ((k >= startPos && k < endPos) && !download) {
 
-                      const entry = [
-                        district,
-                        facility,
-                        month,
-                        year,
-                        modality,
-                        accessType,
-                        ageGroup,
-                        gender,
-                        result,
-                        count
-                      ];
+                          let row = {
+                            "Pos": k,
+                            "District": district,
+                            "Site": facility,
+                            "Age Group": ageGroup,
+                            "Month": month,
+                            "Year": year,
+                            "HTS Setting": setting,
+                            "HTS Modality": modality,
+                            "HTS Access Type": accessType,
+                            "Sex": {
+                              "M": "Male",
+                              "F": "Female"
+                            }[gender],
+                            "Result Given": result,
+                            "Count": count
+                          }
 
-                      json.push(entry.join('\t'));
+                          res.write(JSON.stringify([
+                            {
+                              row
+                            }
+                          ]));
 
-                    } else if (k >= endPos) {
+                        } else if (download) {
 
-                      return yCb();
+                          const entry = [
+                            district,
+                            facility,
+                            month,
+                            year,
+                            modality,
+                            setting,
+                            accessType,
+                            ageGroup,
+                            gender,
+                            result,
+                            count
+                          ];
+
+                          json.push(entry.join('\t'));
+
+                        } else if (k >= endPos) {
+
+                          return yCb();
+
+                        }
+
+                        k++;
+
+                        process.nextTick(() => {
+
+                          aCb();
+
+                        });
+
+                      }, (err) => {
+
+                        if (err)
+                          console.log(err);
+
+                        process.nextTick(() => {
+
+                          rCb();
+
+                        });
+
+                      });
+
+                    } else {
+
+                      process.nextTick(() => {
+
+                        rCb();
+
+                      });
 
                     }
-
-                    k++;
-
-                    process.nextTick(() => {
-
-                      aCb();
-
-                    });
 
                   }, (err) => {
 
@@ -2696,7 +2789,7 @@ module.exports = function (app) {
 
                     process.nextTick(() => {
 
-                      rCb();
+                      gCb();
 
                     });
 
@@ -2709,7 +2802,7 @@ module.exports = function (app) {
 
                   process.nextTick(() => {
 
-                    gCb();
+                    hCb();
 
                   });
 
@@ -2722,7 +2815,7 @@ module.exports = function (app) {
 
                 process.nextTick(() => {
 
-                  hCb();
+                  sCb();
 
                 });
 

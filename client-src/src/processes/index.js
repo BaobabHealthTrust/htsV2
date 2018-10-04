@@ -86,11 +86,13 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
           report: {
             start: {
               reportMonth: props.wf.responses[state.currentWorkflow]["Start Month"],
-              reportYear: props.wf.responses[state.currentWorkflow]["Start Year"]
+              reportYear: props.wf.responses[state.currentWorkflow]["Start Year"],
+              reportDate: props.wf.responses[state.currentWorkflow]["Start Date"]
             },
             end: {
               reportMonth: props.wf.responses[state.currentWorkflow]["End Month"],
-              reportYear: props.wf.responses[state.currentWorkflow]["End Year"]
+              reportYear: props.wf.responses[state.currentWorkflow]["End Year"],
+              reportDate: props.wf.responses[state.currentWorkflow]["End Date"]
             },
             location: props.wf.responses[state.currentWorkflow]["Location"],
             test: props.wf.responses[state.currentWorkflow]["Test"],

@@ -196,6 +196,8 @@ class App extends Component {
 
   }
 
+  tmrHandle = null;
+
   async componentDidUpdate() {
 
     updateClient(this.props, this.state, this);
@@ -252,6 +254,24 @@ class App extends Component {
       this.props.showErrorMsg("Invalid Entry", message);
 
       await this.setState({ busy: false });
+
+    }
+
+    if (this.tmrHandle === null && this.props.app.canPrint === true) {
+
+      this.tmrHandle = setTimeout(async () => {
+
+        if (!this.state.busy && this.props.app.canPrint === true && !this.state.printingLabel) {
+
+          await this.setState({ busy: true, printingLabel: true });
+
+          await this.props.updateApp({ canPrint: null });
+
+          await this.doPrint();
+
+        }
+
+      }, 1000);
 
     }
 
@@ -1610,6 +1630,28 @@ class App extends Component {
 
   }
 
+  async doPrint() {
+
+    const client = this.props.app.patientData[this.props.app.clientId];
+    const data = {
+      npid: this.props.app.clientId || "",
+      first_name: client.firstName || "-",
+      family_name: client.lastName || "-",
+      date_of_birth_estimated: "",
+      date_of_birth: client.dateOfBirth || "",
+      gender: client.gender || "",
+      residence: client.currentVillage || ""
+    };
+    this.printBarcode(data);
+
+    await this.setState({ busy: false, printingLabel: null });
+
+    this.tmrHandle = null;
+
+    return
+
+  }
+
   async submitForm() {
 
     await this.props.updateApp({ processing: true });
@@ -1659,6 +1701,26 @@ class App extends Component {
         this.cancelSession();
 
       }
+
+    } else if (this.props.app.currentSection === "registration") {
+
+      this
+        .props
+        .submitForm(this.props.app.configs.action, Object.assign({}, this.props.wf.responses[this.state.currentWorkflow], {
+          primaryId: this.props.app.currentId,
+          date: this.props.app.selectedVisit && new Date(this.props.app.selectedVisit)
+            ? new Date(this.props.app.selectedVisit).getTime()
+            : new Date().getTime(),
+          program: this.props.app.module,
+          group: this.state.currentWorkflow,
+          location: this.props.app.currentLocation,
+          user: this.props.app.activeUser
+        }))
+        .catch((e) => {
+          this
+            .props
+            .showErrorMsg('Error', this.props.app.errorMessage);
+        });
 
     } else if (this.props.app.configs.action) {
 
@@ -2406,11 +2468,13 @@ class App extends Component {
       .setPeriod({
         start: {
           reportMonth: this.props.app.report.start.reportMonth,
-          reportYear: this.props.app.report.start.reportYear
+          reportYear: this.props.app.report.start.reportYear,
+          reportDate: this.props.app.report.start.reportDate
         },
         end: {
           reportMonth: this.props.app.report.end.reportMonth,
-          reportYear: this.props.app.report.end.reportYear
+          reportYear: this.props.app.report.end.reportYear,
+          reportDate: this.props.app.report.end.reportDate
         },
         location: this.props.app.report.location,
         test: this.props.app.report.test,
@@ -2474,8 +2538,10 @@ class App extends Component {
 
     await this.props.updateReportField('numericalMonth', startNumericalMonth, 'start');
     await this.props.updateReportField('reportYear', startYear, 'start');
+    await this.props.updateReportField('reportDate', startYear, 'start');
     await this.props.updateReportField('numericalMonth', endNumericalMonth, 'end');
     await this.props.updateReportField('reportYear', endYear, 'end');
+    await this.props.updateReportField('reportDate', endYear, 'end');
 
     if (this.props.app.activeReport === "monthly report") {
 
@@ -2483,7 +2549,7 @@ class App extends Component {
 
         this
           .props
-          .fetchReport("/reports?f=" + encodeURIComponent(field) + "&sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&l=" + encodeURIComponent(this.props.reports.location));
+          .fetchReport("/reports?f=" + encodeURIComponent(field) + "&sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&sd=" + this.props.reports.start.reportDate + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&ed=" + this.props.reports.end.reportDate + "&l=" + encodeURIComponent(this.props.reports.location));
       });
 
     } else if (this.props.app.activeReport === "daily register") {
@@ -2504,7 +2570,7 @@ class App extends Component {
 
       this
         .props
-        .fetchRaw("/raw", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear);
+        .fetchRaw("/raw", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.start.reportDate, this.props.reports.end.reportDate);
 
     } else if (this.props.app.activeReport === "pepfar report") {
 
@@ -2514,7 +2580,7 @@ class App extends Component {
 
       this
         .props
-        .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality);
+        .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality, 0, 20, this.props.reports.start.reportDate, this.props.reports.end.reportDate);
 
     }
 
@@ -2527,7 +2593,7 @@ class App extends Component {
 
     this
       .props
-      .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality, startPos, endPos);
+      .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality, startPos, endPos, this.props.reports.start.reportDate, this.props.reports.end.reportDate);
 
   }
 
@@ -2552,7 +2618,7 @@ class App extends Component {
     if (this.props.app.activeReport === "pepfar report") {
 
       Axios
-        .get("/full_disaggregated?sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&d=1" + (this.props.reports.modality ? "&m=" + this.props.reports.modality : ""))
+        .get("/full_disaggregated?sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&d=1" + (this.props.reports.modality ? "&m=" + this.props.reports.modality : "") + "&sd=" + this.props.reports.start.reportDate + "&ed=" + this.props.reports.end.reportDate)
         .then(response => {
           FileDownload(response.data, 'report.csv');
         })
@@ -3228,7 +3294,23 @@ class App extends Component {
               "abc",
               "qwe",
               "Unknown"
-            ]
+            ],
+            validationMessage: `Expecting years between\n${((new Date()).getFullYear() - 10)} and ${(new Date()).getFullYear()}`,
+            onUnLoad: () => {
+
+              if (this.props.app.configs && Object.keys(this.props.app.configs).indexOf("End Year") >= 0) {
+
+                const minYear = (this.props.wf && this.state.currentWorkflow && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Start Year"]
+                ? Number(this.props.wf.responses[this.state.currentWorkflow]["Start Year"])
+                : ((new Date()).getFullYear() - 10));
+
+                this.props.app.configs["End Year"].min = minYear;
+
+                this.props.app.configs["End Year"].validationMessage = `Expecting years between\n${minYear} and ${(new Date()).getFullYear()}`;
+
+              }
+
+            }
           },
           "Ask End Month?": {
             visible: false,
@@ -3280,7 +3362,8 @@ class App extends Component {
               "abc",
               "qwe",
               "Unknown"
-            ]
+            ],
+            validationMessage: `Expecting years between\n${((new Date()).getFullYear() - 10)} and ${(new Date()).getFullYear()}`
           },
           "Ask Location?": {
             visible: false,
@@ -3302,6 +3385,19 @@ class App extends Component {
               })
               : []),
             className: "longSelectList"
+          },
+          "Start Date": {
+            fieldType: 'days',
+            yearField: 'Start Year',
+            monthField: 'Start Month',
+            hiddenButtons: ['Unknown'],
+            condition: "'{{activeReport}}' !== 'daily register'"
+          },
+          "End Date": {
+            fieldType: 'days',
+            yearField: 'End Year',
+            monthField: 'End Month',
+            hiddenButtons: ['Unknown']
           }
         },
         summaryIgnores: [],
@@ -3332,7 +3428,7 @@ class App extends Component {
         formActive: true,
         currentSection: "user management",
         configs: {
-          "Label Text": {
+          "Select Workstation": {
             fieldType: "text",
             ajaxURL: "/list_locations?name=",
             lockList: true
@@ -4880,9 +4976,9 @@ const mapDispatchToProps = dispatch => {
         resolve();
       })
     },
-    fetchRaw: (baseUrl, sMonth, sYear, eMonth, eYear) => {
+    fetchRaw: (baseUrl, sMonth, sYear, eMonth, eYear, sDate, eDate) => {
       return new Promise(resolve => {
-        dispatch(fetchRaw(baseUrl, sMonth, sYear, eMonth, eYear));
+        dispatch(fetchRaw(baseUrl, sMonth, sYear, eMonth, eYear, sDate, eDate));
         resolve();
       })
     },
@@ -4985,8 +5081,8 @@ const mapDispatchToProps = dispatch => {
     activateUser: async (username) => {
       return await dispatch(activateUser(username));
     },
-    fetchPepfarData: async (baseUrl, sMonth, sYear, eMonth, eYear, startPos, endPos) => {
-      return await dispatch(fetchPepfarData(baseUrl, sMonth, sYear, eMonth, eYear, startPos, endPos));
+    fetchPepfarData: async (baseUrl, sMonth, sYear, eMonth, eYear, modality, startPos, endPos, sDate, eDate) => {
+      return await dispatch(fetchPepfarData(baseUrl, sMonth, sYear, eMonth, eYear, modality, startPos, endPos, sDate, eDate));
     },
     resetPepfarData: async () => {
       return await dispatch(resetPepfarData());
