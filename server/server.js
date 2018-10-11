@@ -15,13 +15,13 @@ var chokidar = require('chokidar');
 var app = module.exports = loopback();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-var watcher = chokidar.watch('./programs', {persistent: true});
+var watcher = chokidar.watch('./programs', { persistent: true });
 
 function generateTree(filename, cb) {
-  
+
   var root = '';
   var folder = '';
 
@@ -93,9 +93,9 @@ watcher.on('add', filename => {
 
   var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i);
 
-  if (!parts) 
+  if (!parts)
     return;
-  
+
   log(`File ${filename} has been added`);
 
   generateTree(filename, () => {
@@ -108,9 +108,9 @@ watcher.on('add', filename => {
 
   var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i);
 
-  if (!parts) 
+  if (!parts)
     return;
-  
+
   log(`File ${filename} has been changed`);
 
   generateTree(filename, () => {
@@ -123,9 +123,9 @@ watcher.on('add', filename => {
 
   var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i);
 
-  if (!parts) 
+  if (!parts)
     return;
-  
+
   log(`File ${filename} has been removed`);
 
 });
@@ -150,11 +150,11 @@ app.start = function () {
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function (err) {
-  if (err) 
+  if (err)
     throw err;
-  
+
   // start the server if `$ node server.js`
-  if (require.main === module) 
+  if (require.main === module)
     app.start();
-  }
+}
 );
