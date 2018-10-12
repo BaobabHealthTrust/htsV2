@@ -1357,6 +1357,28 @@ export default function appReducer(state = {
 
       return newState;
 
+    case 'FETCH_ART_REFERRALS_FULFILLED':
+
+      newState = Object.assign({}, state, { referrals: action.payload.data });
+
+      return newState;
+
+    case 'SAVE_REFERRAL_OUTCOME_FULFILLED':
+
+      newState = Object.assign({}, state);
+
+      const index = action.payload.data.pos;
+      const fields = ['art_reg_no', 'art_site', 'outcome', 'outcome_date'];
+
+      fields.forEach(field => {
+
+        if (action.payload.data[field] && newState.referrals.data[index])
+          newState.referrals.data[index][field] = action.payload.data[field];
+
+      })
+
+      return newState;
+
     case "FETCH_LABEL_ID_FULFILLED":
 
       newState = Object.assign({}, state, { printId: action.payload.data.id });

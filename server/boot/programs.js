@@ -5630,6 +5630,215 @@ module.exports = function (app) {
 
   })
 
+  router.get('/programs/fetch_art_referrals', async function (req, res, next) {
+
+    const query = req.query;
+
+    const pageSize = 3;
+
+    let totalPages = 0;
+
+    const datasource = app.dataSources.hts;
+
+    const months = [
+      "january",
+      "february",
+      "march",
+      "april",
+      "may",
+      "june",
+      "july",
+      "august",
+      "september",
+      "october",
+      "november",
+      "december"
+    ];
+
+    const sql = 'SELECT COUNT(*) AS total FROM obs LEFT OUTER JOIN person_name ON person_name.person_id = obs.person_id WHERE concept_id = (SELECT concept_id FROM concept_name WHERE name = "HTS Entry Code" LIMIT 1) AND obs.encounter_id IN (SELECT encounter_id FROM obs where concept_id = (SELECT concept_id FROM concept_name WHERE name = "Referral for Re-Testing") AND value_coded = (SELECT concept_id FROM concept_name WHERE name = "Confirmatory Test at HIV Clinic")) AND obs.voided = 0 AND obs_datetime >= ? AND obs_datetime <= ?';
+
+    const sqlParams = [
+      (query.month1 && query.year1 && query.date1 ?
+        (new Date(Number(query.year1), months.indexOf(String(query.month1).trim().toLowerCase()), Number(query.date1))).format('YYYY-mm-dd') : (new Date()).format('YYYY-mm-dd')),
+      (query.month2 && query.year2 && query.date2 ?
+        (new Date(Number(query.year2), months.indexOf(String(query.month2).trim().toLowerCase()), Number(query.date2))).format('YYYY-mm-dd') : (new Date()).format('YYYY-mm-dd'))];
+
+    datasource.connector.execute(sql, sqlParams, (err, data) => {
+
+      if (err) {
+
+        console.log(err);
+
+        query.page = 1;
+
+      } else {
+
+        debug(data);
+
+        let total = data[0].total;
+
+        totalPages = ((total - (total % pageSize)) / pageSize);
+
+        if (Number(query.page) === -1) {
+
+          query.page = totalPages;
+
+        }
+
+      }
+
+      let startPos = ((!isNaN(query.page) ? Number(query.page) : 1) - 1) * pageSize;
+
+      if (startPos < 0)
+        startPos = 0;
+
+      const statement = 'SELECT COALESCE(given_name, "-") AS given_name, COALESCE(family_name, "-") AS family_name, o.value_text AS ec_code, o.obs_datetime, o.encounter_id, (SELECT value_text FROM obs WHERE encounter_id = o.encounter_id AND concept_id IN (SELECT concept_id FROM concept_name WHERE name = "ART Registration Number") AND voided = 0 LIMIT 1) AS art_reg_no, (SELECT value_text FROM obs WHERE encounter_id = o.encounter_id AND concept_id IN (SELECT concept_id FROM concept_name WHERE name = "Actual ART Site") AND voided = 0 LIMIT 1) AS art_site, (SELECT name FROM concept_name WHERE concept_name_id = (SELECT value_coded_name_id FROM obs WHERE encounter_id = o.encounter_id AND concept_id IN (SELECT concept_id FROM concept_name WHERE name = "Referral Outcome") AND voided = 0 LIMIT 1)) AS outcome, (SELECT value_datetime FROM obs WHERE encounter_id = o.encounter_id AND concept_id IN (SELECT concept_id FROM concept_name WHERE name = "Outcome Date") AND voided = 0 LIMIT 1) AS outcome_date FROM obs o LEFT OUTER JOIN person_name ON person_name.person_id = o.person_id WHERE concept_id = (SELECT concept_id FROM concept_name WHERE name = "HTS Entry Code" LIMIT 1) AND o.encounter_id IN (SELECT encounter_id FROM obs where concept_id = (SELECT concept_id FROM concept_name WHERE name = "Referral for Re-Testing") AND value_coded = (SELECT concept_id FROM concept_name WHERE name = "Confirmatory Test at HIV Clinic")) AND o.voided = 0 AND obs_datetime >= ? AND obs_datetime <= ? LIMIT ?, ?';
+
+      const params = [
+        (query.month1 && query.year1 && query.date1 ?
+          (new Date(Number(query.year1), months.indexOf(String(query.month1).trim().toLowerCase()), Number(query.date1))).format('YYYY-mm-dd') : (new Date()).format('YYYY-mm-dd')),
+        (query.month2 && query.year2 && query.date2 ?
+          (new Date(Number(query.year2), months.indexOf(String(query.month2).trim().toLowerCase()), Number(query.date2))).format('YYYY-mm-dd') : (new Date()).format('YYYY-mm-dd')),
+        startPos, pageSize];
+
+      datasource.connector.execute(statement, params, (err, data) => {
+
+        if (err)
+          console.log(err);
+
+        res.status(200).json({ page: query.page, totalPages, data });
+
+      });
+
+    });
+
+  })
+
+  router.post('/programs/save_referral_outcome', async function (req, res, next) {
+
+    debug(req.body);
+
+    const pos = req.body.pos;
+    const encounterId = req.body.encounter_id;
+    const art_reg_no = req.body['ART Registration Number'];
+    const art_site = req.body['Actual ART Site'];
+    const outcome = req.body['Referral Outcome'];
+    const outcome_date = req.body['Outcome Date'];
+    const username = req.body['activeUser'];
+
+    const encounter = await Encounter.findById(encounterId);
+
+    debug(encounter);
+
+    const user = await Users.find({ where: { username } });
+
+    const userId = (user && Array.isArray(user) && user.length > 0 ? user[0].userId : null);
+
+    debug(userId);
+
+    ['ART Registration Number', 'Actual ART Site', 'Referral Outcome', 'Outcome Date'].forEach(async name => {
+
+      if (req.body[name] && encounterId !== null && userId !== null) {
+
+        const concept = await ConceptName.find({ where: { name } });
+
+        debug(concept);
+
+        const conceptId = (concept && Array.isArray(concept) && concept.length > 0 ? concept[0].conceptId : null);
+
+        if (conceptId !== null) {
+
+          const existingObs = await Obs.find({
+            where: {
+              conceptId,
+              encounterId
+            }
+          });
+
+          if (existingObs && Array.isArray(existingObs) && existingObs.length > 0) {
+
+            const obsId = existingObs[0].obsId;
+
+            await Obs.updateAll({
+              obsId
+            }, {
+                voided: 1,
+                voidedBy: userId,
+                dateVoided: new Date(),
+                voidReason: "Voided by user data overwrite"
+              });
+
+          }
+
+          let valueText = null;
+          let valueDatetime = null;
+          let valueCoded = null;
+          let valueCodedNameId = null;
+
+          switch (name) {
+
+            case 'Outcome Date':
+
+              valueDatetime = new Date(req.body[name]);
+
+              break;
+
+            case 'Referral Outcome':
+
+              const conceptName = await ConceptName.find({ where: { name: req.body[name] } });
+
+              if (conceptName && Array.isArray(conceptName) && conceptName.length > 0) {
+
+                valueCoded = conceptName[0].conceptId;
+
+                valueCodedNameId = conceptName[0].conceptNameId;
+
+              }
+
+              break;
+
+            default:
+
+              valueText = req.body[name];
+
+              break;
+
+          }
+
+          if (valueText !== null || valueDatetime !== null || valueCoded !== null) {
+
+            await Obs.create({
+              personId: encounter.patientId,
+              conceptId,
+              encounterId,
+              obsDatetime: new Date(),
+              locationId: encounter.locationId,
+              valueCoded,
+              valueCodedNameId,
+              valueDatetime,
+              valueText,
+              creator: userId,
+              dateCreated: new Date(),
+              uuid: uuid.v4()
+            });
+
+          }
+
+        }
+
+      }
+
+    })
+
+    let json = { pos, encounterId, art_reg_no, art_site, outcome, outcome_date };
+
+    if (!encounterId)
+      json = {};
+
+    res.status(200).json(json);
+
+  });
+
   router.get('/programs/fetch_label_id/:label', async function (req, res, next) {
 
     debug(req.params.label);

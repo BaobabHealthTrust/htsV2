@@ -11,6 +11,7 @@ import FamilyRefs from './familyRefs';
 import EntryCode from './entryCode';
 import FindEnteredRecord from './findEnteredRecord';
 import ShowUserStats from './showUserStats';
+import ReferralOutcome from './ReferralOutcome';
 
 class U14 extends Component {
 
@@ -181,6 +182,10 @@ class U14 extends Component {
 
       CustomComponent = ShowUserStats;
 
+    } else if (this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].customComponent && this.props.configs[this.props.label].customComponent === "ReferralOutcome") {
+
+      CustomComponent = ReferralOutcome;
+
     }
 
     if (this.props.configs && this.props.configs[this.props.label] && this.props.configs[this.props.label].properties) {
@@ -257,7 +262,9 @@ class U14 extends Component {
                   wf={this.props.wf}
                   clearField={this.props.clearField}
                   reports={this.props.reports}
-                  fetchFilteredVisitSummaries={this.props.fetchFilteredVisitSummaries} />
+                  fetchFilteredVisitSummaries={this.props.fetchFilteredVisitSummaries}
+                  fetchARTReferral={this.props.fetchARTReferral}
+                  saveReferralOutcome={this.props.saveReferralOutcome} />
                 : <div>
                   <table
                     width="100%"
