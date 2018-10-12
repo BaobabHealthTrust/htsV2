@@ -317,7 +317,8 @@ export default function appReducer(state = {
   secondSummary: false,
   reversing: false,
   version: "",
-  infoMessage: null
+  infoMessage: null,
+  canPrint: null
 }, action) {
 
   let newState,
@@ -397,7 +398,8 @@ export default function appReducer(state = {
         "firstSummary",
         "secondSummary",
         "reversing",
-        "infoMessage"
+        "infoMessage",
+        "canPrint"
       ].forEach((e) => {
 
         if (Object.keys(action.payload).indexOf(e) >= 0) {
@@ -841,7 +843,7 @@ export default function appReducer(state = {
 
       }
 
-      if (action.payload && action.payload.data && action.payload.data.canPrint) {
+      if (action.payload && action.payload.data && action.payload.data.canPrint === true) {
 
         newState.canPrint = action.payload.data.canPrint;
 

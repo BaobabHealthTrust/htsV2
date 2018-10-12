@@ -1644,7 +1644,17 @@ class App extends Component {
 
     await this.setState({ busy: false, printingLabel: null });
 
-    this.tmrHandle = null;
+    if (this.props.app.canPrint !== true) {
+
+      this.tmrHandle = null;
+
+    } else {
+
+      await this.props.updateApp({ canPrint: null });
+      
+      this.tmrHandle = null;
+
+    }
 
     return
 
