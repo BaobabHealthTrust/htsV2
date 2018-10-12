@@ -2268,16 +2268,16 @@ module.exports = function (app) {
 
     let parts = json[name]
       .trim()
-      .match(/^(([^-]+)-([^-]+)-([^\(]+))\(([^\)]+)\)/);
+      .match(/^(([^-]+)-([^\(]+))\(([^\)]+)\)/);
 
     if (!parts)
       return res.status(400).json({ error: true, message: "Error occured when picking locations" });
 
     let registerNumber = parts[1].trim();
-    let locationType = parts[5].trim();
+    let locationType = parts[4].trim();
     let serviceDeliveryPoint = parts[3].trim();
 
-    let currentLocationName = parts[4].trim();
+    let currentLocationName = json['Current Location'];
 
     let gender = json["Sex/Pregnancy"]
       ? String(json["Sex/Pregnancy"])
@@ -3176,16 +3176,14 @@ module.exports = function (app) {
 
     let parts = json[name]
       .trim()
-      .match(/^(([^-]+)-([^-]+)-([^\(]+))\(([^\)]+)\)/);
+      .match(/^(([^-]+)-([^\(]+))\(([^\)]+)\)/);
 
     if (!parts)
       return res.status(400).json({ error: true, message: "Error occured when picking locations" });
 
     let registerNumber = parts[1].trim();
-    let locationType = parts[5].trim();
+    let locationType = parts[4].trim();
     let serviceDeliveryPoint = parts[3].trim();
-
-    let currentLocationName = parts[4].trim();
 
     let concept = await ConceptName.findOne({
       where: {
@@ -3626,7 +3624,7 @@ module.exports = function (app) {
     if (!existingRegister || (existingRegister && Object.keys(existingRegister).length <= 0)) {
 
       let register = await HtsRegister.create({
-        registerNumber: (json['Register Number'] + "-" + json['Service Delivery Point'] + "-" + json['HTS Location']),
+        registerNumber: (json['Register Number'] + "-" + json['Service Delivery Point']),
         locationTypeId,
         serviceDeliveryPointId,
         locationId,
@@ -3638,10 +3636,9 @@ module.exports = function (app) {
 
       let args = {
         data: {
-          registerNumber: (json['Register Number'] + "-" + json['Service Delivery Point'] + "-" + json['HTS Location']),
+          registerNumber: (json['Register Number'] + "-" + json['Service Delivery Point']),
           locationType: json['Location Type'],
           serviceDeliveryPoint: json['Service Delivery Point'],
-          htsLocation: json['HTS Location'],
           dateCreated: (new Date(register.dateCreated)).format("YYYY-mm-dd")
         },
         headers: {
@@ -3649,7 +3646,9 @@ module.exports = function (app) {
         }
       };
 
-      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + (json['Register Number'] + "-" + json['Service Delivery Point'] + "-" + json['HTS Location']), args, function (result) {
+      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + (json['Register Number'] + "-" + json['Service Delivery Point']).replace(/\//g,'_'), args, function (result) {
+
+        debug(JSON.stringify(result, null, 2));
 
         res
           .status(200)
@@ -3708,7 +3707,9 @@ module.exports = function (app) {
           closedBy: user.id
         })
 
-      new client().delete(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + registerNumber, function (result) {
+      new client().delete(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + String(registerNumber).replace(/\//g,'_'), function (result) {
+
+        debug(result, null, 2);
 
         res
           .status(200)
@@ -3780,7 +3781,7 @@ module.exports = function (app) {
             return parseInt(a._id, 10) > parseInt(b._id, 10)
           })
           .map((e) => {
-            return `${e._id} (${e._source.locationType})`
+            return `${e._source.registerNumber} (${e._source.locationType})`
           });
 
       }
