@@ -841,11 +841,11 @@ export default function appReducer(state = {
 
       }
 
-      console.log(action);
-
       if (action.payload && action.payload.data && action.payload.data.canPrint) {
 
         newState.canPrint = action.payload.data.canPrint;
+
+        newState.npid = action.payload.data.npid;
 
       }
 

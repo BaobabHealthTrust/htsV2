@@ -1632,7 +1632,7 @@ class App extends Component {
 
     const client = this.props.app.patientData[this.props.app.clientId];
     const data = {
-      npid: this.props.app.clientId || "",
+      npid: this.props.app.npid || this.props.app.clientId || "",
       first_name: client.firstName || "-",
       family_name: client.lastName || "-",
       date_of_birth_estimated: "",
@@ -3295,8 +3295,8 @@ class App extends Component {
               if (this.props.app.configs && Object.keys(this.props.app.configs).indexOf("End Year") >= 0) {
 
                 const minYear = (this.props.wf && this.state.currentWorkflow && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Start Year"]
-                ? Number(this.props.wf.responses[this.state.currentWorkflow]["Start Year"])
-                : ((new Date()).getFullYear() - 10));
+                  ? Number(this.props.wf.responses[this.state.currentWorkflow]["Start Year"])
+                  : ((new Date()).getFullYear() - 10));
 
                 this.props.app.configs["End Year"].min = minYear;
 

@@ -1292,7 +1292,8 @@ module.exports = function (app) {
             npid: (Object.keys(json).indexOf("person") >= 0 && json.person && Object.keys(json.person).indexOf("patient") >= 0 && json.person.patient && Object.keys(json.person.patient).indexOf("identifiers") >= 0 && json.person.patient.identifiers && Object.keys(json.person.patient.identifiers).indexOf("National id") >= 0 ? json.person.patient.identifiers["National id"] : null)
           };
 
-          npid.canPrint = true;
+          if ([undefined, null].indexOf(npid) < 0)
+            npid.canPrint = true;
 
           debug(npid);
 
