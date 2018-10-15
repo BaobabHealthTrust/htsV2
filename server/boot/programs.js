@@ -559,11 +559,13 @@ module.exports = function (app) {
         .get(req.protocol + "://" + req.hostname + ":" + (process.env.PORT
           ? process.env.PORT
           : 3001) + "/dde/search_by_identifier/" + raw.npid, function (result, props) {
+
             ddeData = result.data && result.data.matches === 1
               ? result.data.hits[0]
               : result;
 
             resolve();
+
           });
     });
 
@@ -651,11 +653,15 @@ module.exports = function (app) {
       new client().post(req.protocol + "://" + req.hostname + ":" + (process.env.PORT
         ? process.env.PORT
         : 3001) + "/dde/add_patient", args, function (result, props) {
+
           ddeData = result.data
             ? result.data
             : result;
 
+          debug(ddeData);
+
           resolve();
+
         });
 
     });
@@ -1031,6 +1037,8 @@ module.exports = function (app) {
 
           raw.canPrint = ddeData.canPrint;
 
+          debug(raw);
+
         } else if (ddeData && ddeData.data && Array.isArray(ddeData.data)) {
           ddeData
             .data
@@ -1140,7 +1148,7 @@ module.exports = function (app) {
         ? raw.primaryId
         : raw.otherId;
 
-    let patient = primaryId
+    let patient = [undefined, null].indexOf(primaryId) < 0
       ? await PatientIdentifier.findOne({
         where: {
           identifier: primaryId
@@ -1317,6 +1325,8 @@ module.exports = function (app) {
           dateCreated: new Date(),
           uuid: uuid.v4()
         });
+
+        json.npid = raw.npid;
 
       } else if (raw["Create local with given ID?"] === "Yes") {
 

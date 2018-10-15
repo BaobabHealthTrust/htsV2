@@ -105,6 +105,50 @@ module.exports = function (app) {
     return padded;
   };
 
+  const runCmd = (cmd) => {
+
+    return new Promise((resolve, reject) => {
+
+      const exec = require('child_process').exec;
+
+      try {
+
+        exec(cmd, function (error, stdout, stderr) {
+
+          if (stderr) {
+
+            debug(stdout);
+
+            debug(stderr);
+
+            reject(stderr);
+
+          } else if (error) {
+
+            reject(error);
+
+          } else {
+
+            debug(stdout);
+
+            resolve(stdout);
+
+          }
+
+        })
+
+      } catch (e) {
+
+        currentError = e;
+
+        reject(e);
+
+      }
+
+    }).catch(e => { return e })
+
+  }
+
   router.get('/dde/fetch_token', function (req, res, next) {
     const ddePath = ddeConfig.protocol + '://' + ddeConfig.host + ':' + ddeConfig.port;
 
@@ -186,10 +230,26 @@ module.exports = function (app) {
 
   router.get('/dde/search_by_identifier/:identifier', async function (req, res, next) {
 
-    if (ddeConfig.use_art) {
+    const artOnline = await runCmd(`nc -vz ${ddeConfig.art_settings.host} ${ddeConfig.art_settings.port}`);
 
-      (new client())
-        .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + "/" + ddeConfig.art_settings.search_by_id + req.params.identifier, async function (data, props) {
+    debug(artOnline);
+
+    if (ddeConfig.use_art && !String(artOnline).match(/refused/i)) {
+
+      const args = {
+        requestConfig: {
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000), //request timeout in milliseconds
+          noDelay: true, //Enable/disable the Nagle algorithm
+          keepAlive: true, //Enable/disable keep-alive functionalityidle socket.
+          keepAliveDelay: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //and optionally set the initial delay before the first keepalive probe is sent
+        },
+        responseConfig: {
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //response timeout
+        }
+      };
+
+      const request = (new client())
+        .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + "/" + ddeConfig.art_settings.search_by_id + req.params.identifier, args, async function (data, props) {
 
           if (String(data).trim().length <= 0) {
 
@@ -252,7 +312,52 @@ module.exports = function (app) {
               }
             });
 
-        })
+        });
+
+      request.on('requestTimeout', (req) => {
+
+        console.log('Request has expired');
+
+        return res
+          .status(200)
+          .json({
+            data: {
+              hits: [],
+              matches: 0
+            }
+          });
+
+      });
+
+      request.on('responseTimeout', (req) => {
+
+        console.log('Response has expired');
+
+        return res
+          .status(200)
+          .json({
+            data: {
+              hits: [],
+              matches: 0
+            }
+          });
+
+      })
+
+      request.on('error', (error) => {
+
+        console.log('Request error', error);
+
+        return res
+          .status(200)
+          .json({
+            data: {
+              hits: [],
+              matches: 0
+            }
+          });
+
+      })
 
     } else if (ddeConfig.use_dde) {
 
@@ -664,16 +769,32 @@ module.exports = function (app) {
 
   })
 
-  router.post('/dde/search_by_name_and_gender', function (req, res, next) {
+  router.post('/dde/search_by_name_and_gender', async function (req, res, next) {
 
-    if (ddeConfig.use_art) {
+    const artOnline = await runCmd(`nc -vz ${ddeConfig.art_settings.host} ${ddeConfig.art_settings.port}`);
+
+    console.log(artOnline);
+
+    if (ddeConfig.use_art && !String(artOnline).match(/refused/i)) {
 
       debug(JSON.stringify(req.body));
 
       debug(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""));
 
-      (new client())
-        .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""), async function (data, props) {
+      const args = {
+        requestConfig: {
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000), //request timeout in milliseconds
+          noDelay: true, //Enable/disable the Nagle algorithm
+          keepAlive: true, //Enable/disable keep-alive functionalityidle socket.
+          keepAliveDelay: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //and optionally set the initial delay before the first keepalive probe is sent
+        },
+        responseConfig: {
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //response timeout
+        }
+      };
+
+      const request = (new client())
+        .get(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.searchPath + "?person[names][given_name]=" + req.body.given_name + "&person[names][family_name]=" + req.body.family_name + "&person[gender]=" + (req.body.gender ? String(req.body.gender).substring(0, 1) : ""), args, async function (data, props) {
 
           debug("^^^^^^^^^^^^^^^^^^^^^");
 
@@ -736,7 +857,52 @@ module.exports = function (app) {
               }
             });
 
-        })
+        });
+
+      request.on('requestTimeout', (req) => {
+
+        console.log('Request has expired');
+
+        return res
+          .status(200)
+          .json({
+            data: {
+              hits: [],
+              matches: 0
+            }
+          });
+
+      });
+
+      request.on('responseTimeout', (req) => {
+
+        console.log('Response has expired');
+
+        return res
+          .status(200)
+          .json({
+            data: {
+              hits: [],
+              matches: 0
+            }
+          });
+
+      })
+
+      request.on('error', (error) => {
+
+        console.log('Request error', error);
+
+        return res
+          .status(200)
+          .json({
+            data: {
+              hits: [],
+              matches: 0
+            }
+          });
+
+      })
 
     } else if (ddeConfig.use_dde) {
 
@@ -1099,6 +1265,15 @@ module.exports = function (app) {
         },
         headers: {
           "Content-Type": "application/json"
+        },
+        requestConfig: {
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000), //request timeout in milliseconds
+          noDelay: true, //Enable/disable the Nagle algorithm
+          keepAlive: true, //Enable/disable keep-alive functionalityidle socket.
+          keepAliveDelay: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //and optionally set the initial delay before the first keepalive probe is sent
+        },
+        responseConfig: {
+          timeout: (ddeConfig.art_settings.timeout ? Number(ddeConfig.art_settings.timeout) * 1000 : 1000) //response timeout
         }
       };
 
@@ -1106,7 +1281,7 @@ module.exports = function (app) {
 
       debug(JSON.stringify({ username: ddeConfig.art_settings.username, password: ddeConfig.art_settings.password }));
 
-      (new client({ user: ddeConfig.art_settings.username, password: ddeConfig.art_settings.password }))
+      const request = (new client({ user: ddeConfig.art_settings.username, password: ddeConfig.art_settings.password }))
         .post(ddeConfig.art_settings.protocol + "://" + ddeConfig.art_settings.host + ":" + ddeConfig.art_settings.port + ddeConfig.art_settings.createPath, data, async function (result, props) {
 
           debug(result.toString("utf8"));
@@ -1117,7 +1292,8 @@ module.exports = function (app) {
             npid: (Object.keys(json).indexOf("person") >= 0 && json.person && Object.keys(json.person).indexOf("patient") >= 0 && json.person.patient && Object.keys(json.person.patient).indexOf("identifiers") >= 0 && json.person.patient.identifiers && Object.keys(json.person.patient.identifiers).indexOf("National id") >= 0 ? json.person.patient.identifiers["National id"] : null)
           };
 
-          npid.canPrint = true;
+          if ([undefined, null].indexOf(npid) < 0)
+            npid.canPrint = true;
 
           debug(npid);
 
@@ -1126,6 +1302,36 @@ module.exports = function (app) {
             .json(npid);
 
         })
+
+      request.on('requestTimeout', (req) => {
+
+        console.log('Request has expired');
+
+        return res
+          .status(200)
+          .json({});
+
+      });
+
+      request.on('responseTimeout', (req) => {
+
+        console.log('Response has expired');
+
+        return res
+          .status(200)
+          .json({});
+
+      })
+
+      request.on('error', (error) => {
+
+        console.log('Request error', error);
+
+        return res
+          .status(200)
+          .json({});
+
+      })
 
     } else if (ddeConfig.use_dde) {
 
