@@ -226,6 +226,10 @@ const loadSeedData = async () => {
     }, {
       message: "Initializing Loopback tables ...",
       cmd: "cd ../ && node server/create-lb-tables"
+    },
+    {
+        message: "Updating retired concept names ...",
+        cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "DROP TABLE IF EXISTS t1; CREATE TABLE IF NOT EXISTS t1 (INDEX(concept_name_id)) ENGINE MyISAM AS (SELECT concept_name_id FROM hts.concept_name WHERE concept_id IN (SELECT concept_id FROM concept WHERE retired = 1)); UPDATE concept_name SET voided = 1 WHERE concept_name_id IN (SELECT concept_name_id FROM t1);"'
     }
   ];
 
