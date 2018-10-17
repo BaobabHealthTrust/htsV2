@@ -2473,7 +2473,8 @@ module.exports = function (app) {
 
                 let concept = await ConceptName.findOne({
                   where: {
-                    name: conceptName
+                    name: conceptName,
+                    voided: 0
                   }
                 });
 
@@ -3646,7 +3647,7 @@ module.exports = function (app) {
         }
       };
 
-      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + (json['Register Number'] + "-" + json['Service Delivery Point']).replace(/\//g,'_'), args, function (result) {
+      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + (json['Register Number'] + "-" + json['Service Delivery Point']).replace(/\//g, '_'), args, function (result) {
 
         debug(JSON.stringify(result, null, 2));
 
@@ -3707,7 +3708,7 @@ module.exports = function (app) {
           closedBy: user.id
         })
 
-      new client().delete(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + String(registerNumber).replace(/\//g,'_'), function (result) {
+      new client().delete(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/register/" + String(registerNumber).replace(/\//g, '_'), function (result) {
 
         debug(result, null, 2);
 
