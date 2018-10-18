@@ -275,7 +275,9 @@ class Container extends Component {
             wf={this.props.wf}
             clearField={this.props.clearField}
             reports={this.props.reports}
-            fetchFilteredVisitSummaries={this.props.fetchFilteredVisitSummaries} />)
+            fetchFilteredVisitSummaries={this.props.fetchFilteredVisitSummaries}
+            fetchARTReferral={this.props.fetchARTReferral}
+            saveReferralOutcome={this.props.saveReferralOutcome} />)
         : <Home
           programs={this.props.programs}
           handleSwitchProgram={this.props.handleSwitchProgram}

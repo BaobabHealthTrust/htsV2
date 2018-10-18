@@ -367,8 +367,6 @@ class BackdataEntry extends Component {
       .saveBDRow("/programs/save_bd_data", newState)
       .then(async (json) => {
 
-        console.log(json);
-
         let id = this.props.previous.id;
 
         const count = this.state.count + 1;

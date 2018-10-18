@@ -317,7 +317,8 @@ export default function appReducer(state = {
   secondSummary: false,
   reversing: false,
   version: "",
-  infoMessage: null
+  infoMessage: null,
+  canPrint: null
 }, action) {
 
   let newState,
@@ -397,7 +398,8 @@ export default function appReducer(state = {
         "firstSummary",
         "secondSummary",
         "reversing",
-        "infoMessage"
+        "infoMessage",
+        "canPrint"
       ].forEach((e) => {
 
         if (Object.keys(action.payload).indexOf(e) >= 0) {
@@ -841,11 +843,11 @@ export default function appReducer(state = {
 
       }
 
-      console.log(action);
-
-      if (action.payload && action.payload.data && action.payload.data.canPrint) {
+      if (action.payload && action.payload.data && action.payload.data.canPrint === true) {
 
         newState.canPrint = action.payload.data.canPrint;
+
+        newState.npid = action.payload.data.npid;
 
       }
 
@@ -1354,6 +1356,28 @@ export default function appReducer(state = {
     case "REDIRECT_TO_PORTAL_FULFILLED":
 
       newState = Object.assign({}, state, { redirect_to_portal: action.payload.data.redirect_to_portal, portal_url: action.payload.data.portal_url });
+
+      return newState;
+
+    case 'FETCH_ART_REFERRALS_FULFILLED':
+
+      newState = Object.assign({}, state, { referrals: action.payload.data });
+
+      return newState;
+
+    case 'SAVE_REFERRAL_OUTCOME_FULFILLED':
+
+      newState = Object.assign({}, state);
+
+      const index = action.payload.data.pos;
+      const fields = ['art_reg_no', 'art_site', 'outcome', 'outcome_date'];
+
+      fields.forEach(field => {
+
+        if (action.payload.data[field] && newState.referrals.data[index])
+          newState.referrals.data[index][field] = action.payload.data[field];
+
+      })
 
       return newState;
 

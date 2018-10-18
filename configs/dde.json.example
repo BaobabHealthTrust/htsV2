@@ -22,6 +22,7 @@
     "port": "",
     "createPath": "/patient/create_remote",
     "searchPath": "/people/search_remote_people",
-    "search_by_id": "/people/demographics_remote?person[patient][identifiers][national_id]="
+    "search_by_id": "/people/demographics_remote?person[patient][identifiers][national_id]=",
+    "timeout": 3
   }
 }
