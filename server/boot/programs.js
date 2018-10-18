@@ -517,7 +517,8 @@ module.exports = function (app) {
 
         let concept = await ConceptName.findOne({
           where: {
-            name: "HTS Entry Code"
+            name: "HTS Entry Code",
+            voided: 0
           }
         });
 
@@ -1755,6 +1756,30 @@ module.exports = function (app) {
       }, 1000);
     }
 
+    const ageInDays = ((new Date(today)) - (new Date(dateOfBirth))) / (24.0 * 60.0 * 60.0 * 1000.0);
+
+    let clientAge;
+
+    if (ageInDays < 7) {
+
+      clientAge = Number(ageInDays).toFixed(0) + 'D';
+
+    } else if (ageInDays < 28) {
+
+      clientAge = (Number(ageInDays) / 7).toFixed(0) + 'W';
+
+    } else if (ageInDays < 365) {
+
+      clientAge = (Number(ageInDays) / 30).toFixed(0) + 'M';
+
+    } else {
+
+      clientAge = (Number(ageInDays) / 365).toFixed(0) + 'Y';
+
+    }
+
+    json[encounterName]['Age'] = clientAge;
+
     Object
       .keys(json[encounterName])
       .forEach(async name => {
@@ -1767,7 +1792,8 @@ module.exports = function (app) {
 
         let concept = await ConceptName.findOne({
           where: {
-            name
+            name,
+            voided: 0
           }
         });
 
@@ -1779,7 +1805,8 @@ module.exports = function (app) {
 
         let valueCoded = await ConceptName.findOne({
           where: {
-            name: value
+            name: value,
+            voided: 0
           }
         });
 
@@ -2473,7 +2500,8 @@ module.exports = function (app) {
 
                 let concept = await ConceptName.findOne({
                   where: {
-                    name: conceptName
+                    name: conceptName,
+                    voided: 0
                   }
                 });
 
@@ -2483,7 +2511,8 @@ module.exports = function (app) {
 
                 let valueCoded = await ConceptName.findOne({
                   where: {
-                    name: value
+                    name: value,
+                    voided: 0
                   }
                 });
 
@@ -2592,7 +2621,8 @@ module.exports = function (app) {
 
         let concept = await ConceptName.findOne({
           where: {
-            name: conceptname
+            name: conceptname,
+            voided: 0
           }
         });
 
@@ -2604,7 +2634,8 @@ module.exports = function (app) {
 
         let valueCoded = await ConceptName.findOne({
           where: {
-            name: value
+            name: value,
+            voided: 0
           }
         });
 
@@ -3061,7 +3092,8 @@ module.exports = function (app) {
 
     let concept = await ConceptName.findOne({
       where: {
-        name: "HTS Entry Code"
+        name: "HTS Entry Code",
+        voided: 0
       }
     })
 
@@ -3187,7 +3219,8 @@ module.exports = function (app) {
 
     let concept = await ConceptName.findOne({
       where: {
-        name: name
+        name: name,
+        voided: 0
       }
     });
 
@@ -4473,7 +4506,8 @@ module.exports = function (app) {
 
                       let concept = await ConceptName.findOne({
                         where: {
-                          name: conceptName
+                          name: conceptName,
+                          voided: 0
                         }
                       });
 
@@ -4483,7 +4517,8 @@ module.exports = function (app) {
 
                       let valueCoded = await ConceptName.findOne({
                         where: {
-                          name: value
+                          name: value,
+                          voided: 0
                         }
                       });
 
@@ -4629,7 +4664,8 @@ module.exports = function (app) {
                   where: {
                     name: (otherMapping[key]
                       ? otherMapping[key]
-                      : key)
+                      : key),
+                    voided: 0
                   }
                 });
 
@@ -4639,7 +4675,8 @@ module.exports = function (app) {
 
                 let valueCoded = await ConceptName.findOne({
                   where: {
-                    name: json[key]
+                    name: json[key],
+                    voided: 0
                   }
                 });
 
@@ -4732,7 +4769,8 @@ module.exports = function (app) {
                   where: {
                     name: (otherMapping[key]
                       ? otherMapping[key]
-                      : key)
+                      : key),
+                    voided: 0
                   }
                 });
 
@@ -4742,7 +4780,8 @@ module.exports = function (app) {
 
                 let valueCoded = await ConceptName.findOne({
                   where: {
-                    name: json[key]
+                    name: json[key],
+                    voided: 0
                   }
                 });
 
@@ -4998,7 +5037,8 @@ module.exports = function (app) {
 
     const concept = await ConceptName.findOne({
       where: {
-        name: req.body.concept
+        name: req.body.concept,
+        voided: 0
       }
     });
 
@@ -5034,7 +5074,8 @@ module.exports = function (app) {
 
       const valueCoded = await ConceptName.findOne({
         where: {
-          name: req.body.value
+          name: req.body.value,
+          voided: 0
         }
       });
 
@@ -5089,7 +5130,8 @@ module.exports = function (app) {
 
       const entryCodeConcept = await ConceptName.findOne({
         where: {
-          name: "HTS Entry Code"
+          name: "HTS Entry Code",
+          voided: 0
         }
       });
 
@@ -5112,7 +5154,8 @@ module.exports = function (app) {
 
       const registerConcept = await ConceptName.findOne({
         where: {
-          name: "Register Number (from cover)"
+          name: "Register Number (from cover)",
+          voided: 0
         }
       });
 
