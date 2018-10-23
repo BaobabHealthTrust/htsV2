@@ -2816,8 +2816,8 @@ class App extends Component {
               "-"
             ],
             ajaxURL: '/programs/fetch_active_registers?q=',
-            validationRule: "^[1-9]$|^[1-9][0-9]$",
-            validationMessage: "Expecting a number between 1 and 99 only"
+            validationRule: "^[1-9]$|^[1-9][0-9]$|^[1-9][0-9][0-9]$",
+            validationMessage: "Expecting a number between 1 and 999 only"
           },
           "Location Type": {
             options: [
