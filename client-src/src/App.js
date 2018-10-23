@@ -117,6 +117,8 @@ class App extends Component {
 
   processedConfigs = {};
 
+  startTime = (new Date()).getTime();
+
   getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -140,7 +142,25 @@ class App extends Component {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
 
+  async resetTimer() {
+
+    this.startTime = (new Date()).getTime();
+
+  }
+
   async componentDidMount() {
+
+    setInterval(() => {
+
+      const timeDiff = ((new Date()).getTime() - this.startTime) / (60 * 1000);
+
+      if (timeDiff > 30) {
+
+        this.props.logout();
+
+      }
+
+    }, 5000);
 
     let accessToken = this.getCookie('accessToken');
 
@@ -199,6 +219,8 @@ class App extends Component {
   tmrHandle = null;
 
   async componentDidUpdate() {
+
+    this.resetTimer();
 
     updateClient(this.props, this.state, this);
 
@@ -1653,7 +1675,7 @@ class App extends Component {
     } else {
 
       await this.props.updateApp({ canPrint: null });
-      
+
       this.tmrHandle = null;
 
     }
@@ -3888,6 +3910,8 @@ class App extends Component {
       });
 
   }
+
+
 
   render() {
 
