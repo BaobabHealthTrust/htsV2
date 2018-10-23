@@ -156,7 +156,7 @@ class App extends Component {
 
       if (timeDiff > 30) {
 
-        this.props.logout();
+        this.logout();
 
       }
 
