@@ -1165,7 +1165,7 @@ class BackdataEntry extends Component {
       0: {
         type: "date",
         hiddens: [],
-        maxDate: maxDate.format("YYYY-mm-dd")
+        maxDate: (new Date()).format("YYYY-mm-dd")
       },
       1: {
         type: "dha",
