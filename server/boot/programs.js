@@ -2917,6 +2917,12 @@ module.exports = function (app) {
 
             json.dateOfBirth = row.dateOfBirth;
 
+            if (row.visitDate) {
+
+              json['Testing Date'] = (new Date(row.visitDate)).format('d mmm YYYY');
+
+            }
+
             fetchAge(json);
 
             if (json.age) {
