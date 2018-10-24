@@ -291,3 +291,11 @@ export function fetchLabelId(label) {
   return { type: 'FETCH_LABEL_ID', payload: request };
 
 }
+
+export function fetchScreenTimout() {
+
+  const request = axios.get('/screen_timeout_minutes');
+
+  return { type: 'SCREEN_TIMEOUT', payload: request };
+
+}

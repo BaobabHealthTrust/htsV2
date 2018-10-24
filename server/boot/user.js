@@ -855,6 +855,18 @@ module.exports = function (app) {
 
   })
 
+  router.get('/screen_timeout_minutes', function (req, res, next) {
+
+    const fs = require('fs');
+
+    const settings = JSON.parse(fs.readFileSync(__dirname + "/../../configs/site.json", 'utf-8'));
+
+    debug(settings);
+
+    res.status(200).json({ screen_timeout_minutes: (settings.screen_timeout_minutes || 0) });
+
+  })
+
   app.use(router);
 
 };

@@ -1387,6 +1387,12 @@ export default function appReducer(state = {
 
       return newState;
 
+    case "SCREEN_TIMEOUT_FULFILLED":
+
+      newState = Object.assign({}, state, { screen_timeout_minutes: action.payload.data.screen_timeout_minutes });
+
+      return newState;
+
     default:
 
       return state;

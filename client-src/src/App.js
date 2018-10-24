@@ -29,7 +29,8 @@ import {
   checkRedirectToPortal,
   fetchARTReferral,
   saveReferralOutcome,
-  fetchLabelId
+  fetchLabelId,
+  fetchScreenTimout
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -150,17 +151,21 @@ class App extends Component {
 
   async componentDidMount() {
 
+    await this.props.fetchScreenTimout();
+
+    const screenTimeoutMinutes = Number(!isNaN(this.props.app.screen_timeout_minutes) ? Number(this.props.app.screen_timeout_minutes) : 30);
+
     setInterval(() => {
 
       const timeDiff = ((new Date()).getTime() - this.startTime) / (60 * 1000);
 
-      if (timeDiff > 30) {
+      if (timeDiff > screenTimeoutMinutes) {
 
         this.logout();
 
       }
 
-    }, 5000);
+    }, 1000);
 
     let accessToken = this.getCookie('accessToken');
 
@@ -5174,6 +5179,9 @@ const mapDispatchToProps = dispatch => {
     },
     fetchLabelId: async (label) => {
       return await dispatch(fetchLabelId(label));
+    },
+    fetchScreenTimout: async () => {
+      return await dispatch(fetchScreenTimout());
     }
   };
 };
