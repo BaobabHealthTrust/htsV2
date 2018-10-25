@@ -29,7 +29,8 @@ import {
   checkRedirectToPortal,
   fetchARTReferral,
   saveReferralOutcome,
-  fetchLabelId
+  fetchLabelId,
+  fetchScreenTimout
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
@@ -117,6 +118,8 @@ class App extends Component {
 
   processedConfigs = {};
 
+  startTime = (new Date()).getTime();
+
   getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -140,7 +143,29 @@ class App extends Component {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
 
+  async resetTimer() {
+
+    this.startTime = (new Date()).getTime();
+
+  }
+
   async componentDidMount() {
+
+    await this.props.fetchScreenTimout();
+
+    const screenTimeoutMinutes = Number(!isNaN(this.props.app.screen_timeout_minutes) ? Number(this.props.app.screen_timeout_minutes) : 30);
+
+    setInterval(() => {
+
+      const timeDiff = ((new Date()).getTime() - this.startTime) / (60 * 1000);
+
+      if (timeDiff > screenTimeoutMinutes) {
+
+        this.logout();
+
+      }
+
+    }, 1000);
 
     let accessToken = this.getCookie('accessToken');
 
@@ -199,6 +224,8 @@ class App extends Component {
   tmrHandle = null;
 
   async componentDidUpdate() {
+
+    this.resetTimer();
 
     updateClient(this.props, this.state, this);
 
@@ -1653,7 +1680,7 @@ class App extends Component {
     } else {
 
       await this.props.updateApp({ canPrint: null });
-      
+
       this.tmrHandle = null;
 
     }
@@ -3889,6 +3916,8 @@ class App extends Component {
 
   }
 
+
+
   render() {
 
     const nextLabel = (this.props.app.currentSection === "home" || this.props.app.currentSection === "registration"
@@ -5150,6 +5179,9 @@ const mapDispatchToProps = dispatch => {
     },
     fetchLabelId: async (label) => {
       return await dispatch(fetchLabelId(label));
+    },
+    fetchScreenTimout: async () => {
+      return await dispatch(fetchScreenTimout());
     }
   };
 };
