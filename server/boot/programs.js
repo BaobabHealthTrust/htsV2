@@ -3632,10 +3632,10 @@ module.exports = function (app) {
             registerNumber: {
               like: String(json['Register Number']).trim() + '-%'
             }
-          },
+          }/*,
           {
             closed: 0
-          }
+          }*/
         ]
       }
     });
