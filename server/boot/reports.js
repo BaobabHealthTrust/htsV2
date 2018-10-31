@@ -8,9 +8,9 @@ module.exports = function (app) {
   const fs = require("fs");
   const client = require("node-rest-client").Client;
   const es = require(__dirname + "/../../configs/elasticsearch.json");
-  const site = require(__dirname + "/../../client-src/src/config/site.json");
-  const locations = require(__dirname + '/../../client-src/src/config/pepfarLocations');
-  const htsModalities = require(__dirname + '/../../client-src/src/config/htsModalities');
+  const site = require(__dirname + "/../../configs/site.json");
+  const locations = require(__dirname + '/../../configs/pepfarLocations');
+  const htsModalities = require(__dirname + '/../../configs/htsModalities');
 
   const esClient = new require('elasticsearch').Client();
 

@@ -37,7 +37,7 @@ module.exports = function (app) {
   const District = app.models.District;
   const TA = app.models.TraditionalAuthority;
   const Village = app.models.Village;
-  const site = require(__dirname + "/../../client-src/src/config/site.json");
+  const site = require(__dirname + "/../../configs/site.json");
   const es = require(__dirname + "/../../configs/elasticsearch.json");
   const htsIndicatorsMapping = require(__dirname + "/../../configs/htsIndicatorsMapping.json");
   const uuid = require("uuid");
@@ -2916,6 +2916,12 @@ module.exports = function (app) {
             }
 
             json.dateOfBirth = row.dateOfBirth;
+
+            if (row.visitDate) {
+
+              json['Testing Date'] = (new Date(row.visitDate)).format('d mmm YYYY');
+
+            }
 
             fetchAge(json);
 

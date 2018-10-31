@@ -5,6 +5,7 @@ import icoSave from '../images/save.js';
 import icoClose from '../images/close.js';
 // import algorithm from '../lib/dhaAlgorithm.js';
 import Button from './button';
+import uuid from 'uuid';
 const alertsMapping = require('../config/alertsMapping.json');
 const checkData = require('../constraints').validate;
 
@@ -433,6 +434,8 @@ class BackdataEntry extends Component {
         this
           .props
           .handleDirectInputChange("Total Captured Entries", count, this.props.group);
+
+        await this.setState({ data: { 'Testing Date': (this.props.wf && this.props.wf.responses && this.props.wf.responses.primary['Testing Date'] ? this.props.wf.responses.primary['Testing Date'] : "") } });
 
       })
       .catch(() => {
@@ -1078,7 +1081,7 @@ class BackdataEntry extends Component {
 
   }
 
-  componentDidMount() {
+  async componentDidMount() {
 
     let id = (this.props.wf && this.props.activeWorkflow && this.props.wf.responses && this.props.wf.responses[this.props.activeWorkflow]
       ? (this.props.wf.responses[this.props.activeWorkflow]['Register Number (from cover)']).replace(/[^\d]+$/i, "")
@@ -1097,6 +1100,8 @@ class BackdataEntry extends Component {
 
     }
       , this.scrollDelay)
+
+    await this.setState({ data: { 'Testing Date': (this.props.wf && this.props.wf.responses && this.props.wf.responses.primary['Testing Date'] ? this.props.wf.responses.primary['Testing Date'] : "") } });
 
   }
 
@@ -1157,6 +1162,11 @@ class BackdataEntry extends Component {
     };
 
     const fieldTypes = {
+      0: {
+        type: "date",
+        hiddens: [],
+        maxDate: (new Date()).format("YYYY-mm-dd")
+      },
       1: {
         type: "dha",
         hiddens: [],
@@ -1383,6 +1393,11 @@ class BackdataEntry extends Component {
     };
 
     const fieldNames = {
+      0: {
+        category: "Testing Date",
+        field: "",
+        group: 0
+      },
       1: {
         category: "HTS Provider ID",
         field: "",
@@ -1709,11 +1724,21 @@ class BackdataEntry extends Component {
                           style={{
                             borderRight: "1px solid rgb(51, 51, 51)",
                             borderBottom: "1px solid rgb(51, 51, 51)",
-                            width: "100px",
                             verticalAlign: "top",
                             height: "50px"
                           }}
                           className="boldRight">Entry Code</th>
+                        <th
+                          rowSpan="4"
+                          style={{
+                            borderRight: "1px solid rgb(51, 51, 51)",
+                            borderBottom: "1px solid rgb(51, 51, 51)",
+                            borderColor: "rgb(51, 51, 51)",
+                            width: "130px",
+                            verticalAlign: "top",
+                            fontSize: "14px"
+                          }}
+                          className="boldRight 0">Date</th>
                         <th
                           rowSpan="4"
                           style={{
@@ -3038,6 +3063,19 @@ class BackdataEntry extends Component {
                                 cursor: "pointer"
                               }}>
 
+                              <td key={uuid.v1()} className='bdcell boldRight' style={{
+                                width: '150px',
+                                color: "#c50000",
+                                fontSize: "16px",
+                                textAlign: "center"
+                              }}>
+                                {
+                                  this.props.previous && this.props.previous.id && j === 0
+                                    ? this.props.previous.id :
+                                    <span>&nbsp;</span>
+                                }
+                              </td>
+
                               {Array(56)
                                 .fill()
                                 .map((_, i) => {
@@ -3068,7 +3106,8 @@ class BackdataEntry extends Component {
                                         51,
                                         52,
                                         54,
-                                        55
+                                        55,
+                                        56
                                       ].indexOf(i) >= 0
                                         ? " boldRight"
                                         : "") + (" " + (fieldNames[i] && fieldNames[i].group ? fieldNames[i].group : ""))}
@@ -3109,30 +3148,26 @@ class BackdataEntry extends Component {
                                               color: "#c50000",
                                               fontSize: "16px",
                                               textAlign: "center",
-                                              width: (i === 0
-                                                ? "150px"
-                                                : (i === 51
-                                                  ? "120px"
-                                                  : ""))
+                                              width: ([0, 51].indexOf(i) >= 0
+                                                ? "120px"
+                                                : "")
                                             }}>{fields[i]
                                               ? fields[i]
-                                              : (i === 0 && this.props.previous && this.props.previous.id
-                                                ? this.props.previous.id
-                                                : (this.props.previous && fieldNames[i] && this.props.previous[(fieldNames[i].category
+                                              : (this.props.previous && fieldNames[i] && this.props.previous[(fieldNames[i].category
+                                                ? fieldNames[i].category
+                                                : "") + (fieldNames[i].field
+                                                  ? ":" + fieldNames[i].field
+                                                  : "") + (fieldNames[i].subField
+                                                    ? ":" + fieldNames[i].subField
+                                                    : "")]
+                                                ? this.props.previous[(fieldNames[i].category
                                                   ? fieldNames[i].category
                                                   : "") + (fieldNames[i].field
                                                     ? ":" + fieldNames[i].field
                                                     : "") + (fieldNames[i].subField
                                                       ? ":" + fieldNames[i].subField
                                                       : "")]
-                                                  ? this.props.previous[(fieldNames[i].category
-                                                    ? fieldNames[i].category
-                                                    : "") + (fieldNames[i].field
-                                                      ? ":" + fieldNames[i].field
-                                                      : "") + (fieldNames[i].subField
-                                                        ? ":" + fieldNames[i].subField
-                                                        : "")]
-                                                  : ""))}</div >
+                                                : "")}</div >
                                           : (j === 1
                                             ? (i === 56
                                               ? <img src={icoSave} height="45" alt="" onMouseDown={() => this.handleSave()} />
@@ -3147,7 +3182,7 @@ class BackdataEntry extends Component {
                                                     className=
                                                     {(fields[i] ? "normal" : (fieldNames[i] && this.state.label === (fieldNames[i].category ? fieldNames[i].category : "") + (fieldNames[i].field ? ":" + fieldNames[i].field : "") + (fieldNames[i].subField ? ":" + fieldNames[i].subField : "") ? "active" : "inactive"))}
                                                     style=
-                                                    {{ color: "#c50000", fontSize: "16px", textAlign: "center", width: (i === 51 ? "130px" : (i === 55 ? "150px" : (i === 1 ? "70px" : "60px"))) }}>
+                                                    {{ color: "#c50000", fontSize: "16px", textAlign: "center", width: ([0, 51].indexOf(i) >= 0 ? "130px" : (i === 55 ? "150px" : (i === 1 ? "70px" : "60px"))) }}>
                                                   {fields[i]
                                                     ? fields[i]
                                                     : (fieldNames[i] && this.state.label === (fieldNames[i].category
@@ -3172,7 +3207,7 @@ class BackdataEntry extends Component {
                                                             : "") + (fieldNames[i].subField
                                                               ? ":" + fieldNames[i].subField
                                                               : "")]
-                                                        : ""))}
+                                                        : (j === 1 && i === 0 ? (this.props.wf && this.props.wf.responses && this.props.wf.responses.primary['Testing Date'] ? this.props.wf.responses.primary['Testing Date'] : "") : "")))}
                                                 </div>))
                                             : ""))}</td>
                                   )
