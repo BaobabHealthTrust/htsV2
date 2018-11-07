@@ -635,6 +635,10 @@ const recalibrate = async () => {
         {
             message: "Fixing age concept_id in obs table ...",
             cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "DROP TABLE IF EXISTS t1; CREATE TEMPORARY TABLE IF NOT EXISTS t1 (INDEX(obs_id)) ENGINE MyISAM AS (SELECT obs_id FROM obs WHERE concept_id IN (SELECT concept.concept_id FROM concept_name LEFT OUTER JOIN concept ON concept.concept_id = concept_name.concept_id WHERE name = \'Age\' AND concept.retired = 1)); UPDATE obs SET concept_id = (SELECT concept.concept_id FROM concept_name LEFT OUTER JOIN concept ON concept.concept_id = concept_name.concept_id WHERE name = \'Age\' AND concept.retired = 0) WHERE obs_id IN (SELECT obs_id FROM t1);"'
+        },
+        {
+            message: "Fixing service delivery point names ...",
+            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "DROP TABLE IF EXISTS t1; CREATE TEMPORARY TABLE IF NOT EXISTS t1 (INDEX(service_delivery_point_id)) ENGINE MyISAM AS (SELECT service_delivery_point_id FROM hts_register_service_delivery_point WHERE name = \'Other\'); UPDATE hts_register_service_delivery_point SET name = \'VCT/Other\' WHERE service_delivery_point_id IN (SELECT service_delivery_point_id FROM t1);"'
         }
     ];
 
