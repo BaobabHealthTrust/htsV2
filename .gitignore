@@ -57,3 +57,4 @@ package-lock.json
 client-src/package-lock.json
 db/logs
 designs/.~*
+backups/
