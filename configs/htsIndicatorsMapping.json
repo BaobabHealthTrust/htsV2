@@ -323,6 +323,14 @@
               "HTS Modality": "Index"
             }
           }
+        },
+        "Any other": {
+          "Any": {
+            "Any": {
+              "HTS Setting": "Facility",
+              "HTS Modality": "Other PITC"
+            }
+          }
         }
       },
       "PITC": {
