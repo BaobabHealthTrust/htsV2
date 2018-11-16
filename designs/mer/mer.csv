@@ -61,10 +61,10 @@ Health Facility,TB,PITC,Any,Any,Any,Facility,TB
 Health Facility,TB,VCT/Other,Any,Any,Any,Facility,VCT
 Health Facility,VMMC,FRS/Index,Any,0-13Y,Any,Facility,Index
 Health Facility,VMMC,FRS/Index,Any other,5Y+,M,Facility,VMMC
-Health Facility,VMMC,FRS/Index,Any other,Any,F,Facility,Other PITC
+Health Facility,VMMC,FRS/Index,Any other,Any,Any,Facility,Other PITC
 Health Facility,VMMC,FRS/Index,Partner Positive,Any,Any,Facility,Index
 Health Facility,VMMC,PITC,Any,5Y+,M,Facility,VMMC
-Health Facility,VMMC,PITC,Any,Any,F,Facility,Other PITC
+Health Facility,VMMC,PITC,Any,Any,Any,Facility,Other PITC
 Health Facility,VMMC,VCT/Other,Any,Any,Any,Facility,VCT
 Stand-alone HTS Facility,VCT/Other,FRS/Index,Any,0-13Y,Any,Facility,Index
 Stand-alone HTS Facility,VCT/Other,FRS/Index,Any other,Any,Any,Facility,Other PITC
