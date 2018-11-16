@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
+const fs = require('fs');
 const connection = require("../configs/database.json");
 const villages = require(fs.existsSync("../configs/villages.json") ? "../configs/villages.json" : "../configs/database.json");
 const es = require("../configs/elasticsearch.json");
 const pepfarSynthesis = require(__dirname + "/../lib/pepfarSynthesis.js");
 const htsIndicatorsMapping = require(__dirname + "/../configs/htsIndicatorsMapping.json");
-const fs = require('fs');
 const glob = require('glob');
 const client = require("node-rest-client").Client;
 const async = require('async');
