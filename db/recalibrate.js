@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const connection = require("../configs/database.json");
+const villages = require("../configs/villages.json");
 const es = require("../configs/elasticsearch.json");
 const pepfarSynthesis = require(__dirname + "/../lib/pepfarSynthesis.js");
 const htsIndicatorsMapping = require(__dirname + "/../configs/htsIndicatorsMapping.json");
@@ -149,6 +150,12 @@ const host = connection[env].host;
 const user = connection[env].user;
 const password = connection[env].password;
 const database = connection[env].database;
+
+const villageHost = villages[env].host;
+const villageUser = villages[env].user;
+const villagePassword = villages[env].password;
+const villageDatabase = villages[env].database;
+const villagePort = villages[env].port;
 
 const loadPepfarData = async () => {
 
@@ -641,6 +648,10 @@ const recalibrate = async () => {
         {
             message: "Fixing service delivery point names ...",
             cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "DROP TABLE IF EXISTS t1; CREATE TEMPORARY TABLE IF NOT EXISTS t1 (INDEX(service_delivery_point_id)) ENGINE MyISAM AS (SELECT service_delivery_point_id FROM hts_register_service_delivery_point WHERE name = \'Other\'); UPDATE hts_register_service_delivery_point SET name = \'VCT/Other\' WHERE service_delivery_point_id IN (SELECT service_delivery_point_id FROM t1);"'
+        },
+        {
+            message: "Reloading villages from remote source ...",
+            cmd: `nc -w 3 -vz ${villageHost} ${villagePort}; if [ $? -eq 0 ]; then mysqldump -u ${villageUser} -p${villagePassword} ${villageDatabase} region district traditional_authority village | mysql -u ${user} -p${password} ${database}; else echo "Failed "; fi`
         }
     ];
 
