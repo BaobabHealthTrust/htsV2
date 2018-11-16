@@ -204,6 +204,22 @@ module.exports = function (app) {
 
     })
 
+    router.get('/fetch_settings', async (req, res, next) => {
+
+        const filename = path.resolve(__dirname, '..', '..', 'configs', 'site.json');
+
+        let json = {};
+
+        if (fs.existsSync(filename)) {
+
+            json = JSON.parse(fs.readFileSync(filename, 'utf-8'));
+
+        }
+
+        res.status(200).json(json);
+
+    })
+
     app.use(router);
 
 };  

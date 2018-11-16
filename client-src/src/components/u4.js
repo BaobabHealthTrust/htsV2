@@ -8,6 +8,7 @@ import Admin from './admin';
 import ManageRegisters from './manageRegisters';
 import ManageUsers from './manageUsers';
 import ManageKits from './manageKits';
+import ApplicationSettings from './applicationSettings';
 
 class U4 extends Component {
 
@@ -75,7 +76,9 @@ class U4 extends Component {
                               ? <ManageKits updateApp={this.props.updateApp} switchTab={this.props.switchTab} />
                               : this.props.currentTab === "manage users"
                                 ? <ManageUsers updateApp={this.props.updateApp} switchTab={this.props.switchTab} />
-                                : <ModuleLogo icon={this.props.icon} module={this.props.selectedModule} />}
+                                : this.props.currentTab === "application settings" ?
+                                  <ApplicationSettings updateApp={this.props.updateApp} switchTab={this.props.switchTab} /> :
+                                  <ModuleLogo icon={this.props.icon} module={this.props.selectedModule} />}
                 </div>
               </td>
             </tr>

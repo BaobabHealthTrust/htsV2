@@ -1393,6 +1393,12 @@ export default function appReducer(state = {
 
       return newState;
 
+    case "FETCH_SETTINGS_FULFILLED":
+
+      newState = Object.assign({}, state, { settings: action.payload.data });
+
+      return newState;
+
     default:
 
       return state;
