@@ -11,7 +11,8 @@ module.exports = function (app) {
   const glob = require('glob');
   const url = require('url');
   const client = require('node-rest-client').Client;
-  const ddeConfig = require('../../configs/dde.json');
+  const version = (JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', '..', 'configs', 'dde.json'), 'utf8')).use_dde ? '3.0' : '3.1');
+  let ddeConfig = require(path.resolve(__dirname, '..', '..', 'configs', (version === '3.0' ? 'dde.json' : 'site.json')), 'utf8');
   const dde = require('../../lib/dde').DDE;
   const PatientIdentifier = app.models.PatientIdentifier;
   const PatientIdentifierType = app.models.PatientIdentifierType;
@@ -22,9 +23,18 @@ module.exports = function (app) {
   const TA = app.models.TraditionalAuthority;
   const Village = app.models.Village;
 
-  const ddePath = ddeConfig.protocol + '://' + ddeConfig.host + ':' + ddeConfig.port;
+  const ddePath = (version === '3.0' ? `${ddeConfig.protocol}://${ddeConfig.host}:${ddeConfig.port}` : `${ddeConfig.dde_protocol}://${ddeConfig.dde_host}:${ddeConfig.dde_port}`);
 
-  dde.init(client, ddePath, ddeConfig);
+  if (version === '3.1') {
+
+    ddeConfig.app = {
+      username: ddeConfig.dde_username,
+      password: ddeConfig.dde_password
+    }
+
+  }
+
+  dde.init(client, ddePath, ddeConfig, version);
 
   const fetchAge = (json) => {
 
@@ -171,7 +181,7 @@ module.exports = function (app) {
       }
     };
 
-    (new client()).post(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/v1/authenticate", args, function (data) {
+    (new client()).post(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/v1/" + (version === '3.0' ? 'authenticate' : 'login'), args, function (data) {
 
       res
         .status(200)
@@ -182,6 +192,9 @@ module.exports = function (app) {
   });
 
   router.post('/dde/add_user', function (req, res, next) {
+
+    if (version !== '3.0')
+      return res.status(200).json({});
 
     dde.checkIfDDEAuthenticated(function (authenticated) {
 

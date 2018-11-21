@@ -7,5 +7,17 @@
     "entry_code_max_digits": 6,
     "redirect_to_portal": true,
     "portal_url": "",
-    "screen_timeout_minutes": 30
+    "screen_timeout_minutes": 30,
+    "use_art": false,
+    "art_protocol": "",
+    "art_username": "",
+    "art_password": "",
+    "art_host": "",
+    "art_port": "",
+    "use_dde": false,
+    "dde_username": "",
+    "dde_password": "",
+    "dde_protocol": "",
+    "dde_host": "",
+    "dde_port": ""
 }
