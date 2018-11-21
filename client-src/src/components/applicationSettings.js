@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './applicationSettings.css';
 import { connect } from "react-redux";
 import Button from "./button";
-import { fetchSettings } from '../actions/appAction';
+import { fetchSettings, saveSetting } from '../actions/appAction';
 import uuid from 'uuid';
 import { isArray } from 'util';
 
@@ -20,6 +20,12 @@ const mapDispatchToProps = dispatch => {
                 dispatch(fetchSettings());
                 resolve();
             });
+        },
+        saveSetting: json => {
+            return new Promise(resolve => {
+                dispatch(saveSetting(json));
+                resolve();
+            })
         }
     }
 }
@@ -30,9 +36,17 @@ class ApplicationSettings extends Component {
         data: {}
     }
 
-    buildExpression(index) {
+    saveRow(e) {
 
-        alert(index);
+        const index = e.target.getAttribute('tag');
+
+        const field = String(this.$(`field${index}`).innerHTML).trim();
+
+        const value = String(this.$(`value${index}`).value).trim();
+
+        const json = { [field]: value };
+
+        this.props.saveSetting(json);
 
     }
 
@@ -114,7 +128,7 @@ class ApplicationSettings extends Component {
                     }
                 </td>
                 <td>
-                    <Button label="Save" id={`btnSave${i}`} tag={i} handleMouseDown={(e) => { this.buildExpression(e.target.getAttribute('tag')) }} />
+                    <Button label="Save" id={`btnSave${i}`} tag={i} handleMouseDown={(e) => { this.saveRow(e) }} />
                 </td>
             </tr>
         })

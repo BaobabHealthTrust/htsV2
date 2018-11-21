@@ -56,7 +56,7 @@ module.exports = function (app) {
 
     }
 
-    router.post('/site_setting', (req, res, next) => {
+    router.post('/save_setting', (req, res, next) => {
 
         const filename = path.resolve(__dirname, '..', '..', 'configs', 'site.json');
 

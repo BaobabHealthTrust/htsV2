@@ -307,3 +307,11 @@ export function fetchSettings() {
   return { type: 'FETCH_SETTINGS', payload: request };
 
 }
+
+export function saveSetting(json) {
+
+  const request = axios.post('/save_setting', json);
+
+  return { type: 'SAVE_SETTING', payload: request };
+
+}
