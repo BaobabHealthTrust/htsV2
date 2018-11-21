@@ -408,7 +408,7 @@ class App extends Component {
 
     const self = this;
 
-    if (this.$("touchscreenTextInput") && ((this.props.app.dual && this.state.currentWorkflow === "secondary") || (!this.props.app.dual && this.state.currentWorkflow === "primary"))) {
+    if (this.$("touchscreenTextInput") && ((this.props.app.dual && this.state.currentWorkflow === "secondary") || (!this.props.app.dual && this.state.currentWorkflow === "primary")) && this.props.app.selectedTask !== 'Administration') {
 
       this
         .$("touchscreenTextInput")
@@ -418,7 +418,7 @@ class App extends Component {
         self.checkBarcode();
       }, 200));
 
-    } else if (this.$("touchscreenTextInputU16")) {
+    } else if (this.$("touchscreenTextInputU16" && this.props.app.selectedTask !== 'Administration')) {
 
       this
         .$("touchscreenTextInputU16")
@@ -430,7 +430,7 @@ class App extends Component {
 
     }
 
-    if (this.$("barcode") && this.props.app.module !== "") {
+    if (this.$("barcode") && this.props.app.module !== "" && this.props.app.selectedTask !== 'Administration') {
 
       if (this.$("barcode").value.trim().match(/\$$/)) {
 
@@ -506,7 +506,7 @@ class App extends Component {
           self.checkBarcode();
         }, 200);
       }
-    } else {
+    } else if (this.props.app.selectedTask !== 'Administration') {
       if (this.$("barcode")) {
         if (this.$("barcode").value.trim().match(/\$$/)) {
           this
@@ -4587,6 +4587,9 @@ class App extends Component {
                         : {}}
                       wf={this.props.wf} />
                     <Container
+                      handleCheckBarcode={this
+                        .checkBarcode
+                        .bind(this)}
                       saveReferralOutcome={this.props.saveReferralOutcome}
                       fetchARTReferral={this.props.fetchARTReferral}
                       activeSection={this.props.app.currentSection}

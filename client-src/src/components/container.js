@@ -56,6 +56,9 @@ class Container extends Component {
       .props
       .updateApp({ currentTab: tab, selectedTask: task })
 
+    if (this.props.handleCheckBarcode)
+      this.props.handleCheckBarcode();
+
   }
 
   loadComponents() {
