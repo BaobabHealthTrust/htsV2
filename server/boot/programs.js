@@ -895,7 +895,7 @@ module.exports = function (app) {
 
     debug("####################");
 
-    debug(raw);
+    console.log(raw);
 
     debug("####################");
 
