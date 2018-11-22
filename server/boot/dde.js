@@ -385,7 +385,7 @@ module.exports = function (app) {
           setTimeout(async function () {
 
             (new client())
-              .get(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/v1/search_by_identifier/" + req.params.identifier + "/" + token, async function (data, props) {
+              .get(ddePath + "/v1/search_by_identifier/" + req.params.identifier + "/" + token, async function (data, props) {
 
                 if (props.statusCode === 204) {
 
@@ -1352,53 +1352,136 @@ module.exports = function (app) {
 
         if ((typeof authenticated === "boolean" && authenticated === true) || (typeof authenticated === "object" && [200, 201].indexOf(authenticated.status) >= 0)) {
 
-          const json = Object.assign({}, req.body, {
-            token: (typeof authenticated === "boolean"
-              ? dde.globalToken
-              : authenticated.data.token)
-          });
+          if (version === '3.0') {
 
-          const args = {
-            data: json,
-            headers: {
-              "Content-Type": "application/json"
-            }
-          };
+            const json = Object.assign({}, req.body, {
+              token: (typeof authenticated === "boolean"
+                ? dde.globalToken
+                : authenticated.data.token)
+            });
 
-          setTimeout(function () {
+            const args = {
+              data: json,
+              headers: {
+                "Content-Type": "application/json"
+              }
+            };
 
-            (new client())
-              .put(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/v1/add_patient", args, function (data, props) {
+            setTimeout(function () {
 
-                if (props.statusCode === 204) {
+              (new client())
+                .put(ddeConfig.protocol + "://" + ddeConfig.host + ":" + ddeConfig.port + "/v1/add_patient", args, function (data, props) {
 
-                  return res
-                    .status(200)
-                    .json({
-                      "status": 204,
-                      "message": "No data",
-                      "error": false,
-                      "data": {
-                        "matches": 0,
-                        "hits": []
-                      }
-                    });
+                  if (props.statusCode === 204) {
 
-                } else {
+                    return res
+                      .status(200)
+                      .json({
+                        "status": 204,
+                        "message": "No data",
+                        "error": false,
+                        "data": {
+                          "matches": 0,
+                          "hits": []
+                        }
+                      });
 
-                  return res
-                    .status(200)
-                    .json(data);
+                  } else {
 
-                }
-              })
+                    return res
+                      .status(200)
+                      .json(data);
 
-          }, 1000)
+                  }
+                })
+
+            }, 1000)
+
+          } else {
+
+            let output = JSON.parse(JSON.stringify(req.body));
+            let json = JSON.parse(JSON.stringify(req.body));
+
+            const fieldsToChange = {
+              "current_village": "current_vilage",
+              "current_residence": null,
+              "current_ta": "current_traditional_authority",
+              "current_district": "current_district",
+              "home_village": "home_village",
+              "home_ta": "home_traditional_authority",
+              "home_district": "home_district"
+            };
+
+            Object.keys(fieldsToChange).forEach(key => {
+
+              if (json[key]) {
+
+                if (!json.attributes)
+                  json.attributes = {};
+
+                if (fieldsToChange[key])
+                  json.attributes[fieldsToChange[key]] = String(json[key]);
+
+                delete json[key];
+
+              }
+
+            })
+
+            json.birthdate_estimated = String(json.birthdate_estimated);
+
+            const args = {
+              data: json,
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": (typeof authenticated === "boolean"
+                  ? dde.globalToken
+                  : authenticated.data.token)
+              }
+            };
+
+            setTimeout(function () {
+
+              (new client())
+                .post(ddePath + "/v1/add_person", args, function (data, props) {
+
+                  debug(data);
+
+                  debug(props.statusCode);
+
+                  if ([200, 201].indexOf(props.statusCode) < 0) {
+
+                    return res
+                      .status(200)
+                      .json({
+                        "status": 204,
+                        "message": "No data",
+                        "error": false,
+                        "data": {
+                          "matches": 0,
+                          "hits": []
+                        }
+                      });
+
+                  } else {
+
+                    output.npid = data.npid;
+
+                    return res
+                      .status(200)
+                      .json({ data: output });
+
+                  }
+                })
+
+            }, 1000)
+
+          }
 
         } else {
 
           return res
-            .json(401)
+            .status(401)
             .json({ error: true, message: "DDE authentation failed" })
 
         }
