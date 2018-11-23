@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './applicationSettings.css';
 import { connect } from "react-redux";
 import Button from "./button";
-import { fetchSettings, saveSetting, uploadDocumentRequest, updateApp } from '../actions/appAction';
+import { fetchSettings, saveSetting, uploadDocumentRequest, updateApp, fetchVersions, activateVersion } from '../actions/appAction';
 import { showInfoMsg } from "../actions/alertActions";
 import uuid from 'uuid';
 import { isArray } from 'util';
@@ -44,6 +44,18 @@ const mapDispatchToProps = dispatch => {
         updateApp: payload => {
             return new Promise(resolve => {
                 dispatch(updateApp(payload));
+                resolve();
+            });
+        },
+        fetchVersions: () => {
+            return new Promise(resolve => {
+                dispatch(fetchVersions());
+                resolve();
+            });
+        },
+        activateVersion: tag => {
+            return new Promise(resolve => {
+                dispatch(activateVersion(tag));
                 resolve();
             });
         }
@@ -172,6 +184,8 @@ class ApplicationSettings extends Component {
 
         await this.props.fetchSettings();
 
+        await this.props.fetchVersions();
+
     }
 
     async componentDidUpdate() {
@@ -214,6 +228,20 @@ class ApplicationSettings extends Component {
 
     }
 
+    async activateVersion(e) {
+
+        const value = document.getElementById('appVersion').value;
+
+        console.log(value);
+
+        if (String(value).trim().length > 0) {
+
+            await this.props.activateVersion(String(value).trim());
+
+        }
+
+    }
+
     render() {
 
         return (
@@ -243,6 +271,24 @@ class ApplicationSettings extends Component {
                                                 <th>&nbsp;</th>
                                             </tr>
                                             {this.loadSettings()}
+                                            <tr>
+                                                <td style={{ paddingLeft: '2%' }}>
+                                                    Application Version
+                                                </td>
+                                                <td>
+                                                    <select id='appVersion' className='appSelect'>
+                                                        <option key={uuid.v1()}></option>
+                                                        {(this.props.app.versions || []).sort().map(option => {
+                                                            return String(option).trim().length > 0 ?
+                                                                <option key={uuid.v1()}>{option}</option>
+                                                                : null;
+                                                        })}
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <Button label="Set" id='btnVersion' handleMouseDown={(e) => { this.activateVersion(e) }} />
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

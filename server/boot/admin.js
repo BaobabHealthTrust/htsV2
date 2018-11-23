@@ -106,7 +106,7 @@ module.exports = function (app) {
 
     router.post('/activate_version', async (req, res, next) => {
 
-        debug(req.body);
+        console.log(req.body);
 
         const tag = req.body.tag;
 
@@ -116,7 +116,11 @@ module.exports = function (app) {
             console.log(e);
         });
 
-        res.status(200).json({});
+        let version = await runCmd('git describe').catch(e => { console.log(e); })
+
+        version = String(version).replace(/^v/i, '');
+
+        res.status(200).json({ version });
 
     });
 
@@ -248,6 +252,16 @@ module.exports = function (app) {
             json = JSON.parse(fs.readFileSync(filename, 'utf-8'));
 
         }
+
+        res.status(200).json(json);
+
+    })
+
+    router.get('/versions', async (req, res) => {
+
+        const versions = await runCmd('git tag').catch(e => { console.log(e); return ''; });
+
+        const json = String(versions).split('\n');
 
         res.status(200).json(json);
 

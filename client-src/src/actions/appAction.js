@@ -327,3 +327,19 @@ export function uploadDocumentRequest({ file, name }) {
   return { type: 'UPLOAD_DOCUMENT', payload: request };
 
 }
+
+export function fetchVersions() {
+
+  const request = axios.get('/versions');
+
+  return { type: 'FETCH_VERSIONS', payload: request };
+
+}
+
+export function activateVersion(tag) {
+
+  const request = axios.post('/activate_version', { tag });
+
+  return { type: 'ACTIVATE_VERSION', payload: request };
+
+}

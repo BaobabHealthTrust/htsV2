@@ -1411,6 +1411,36 @@ export default function appReducer(state = {
 
       return newState;
 
+    case "UPLOAD_DOCUMENT_REJECTED":
+
+      newState = Object.assign({}, state, { processing: false });
+
+      return newState;
+
+    case "FETCH_VERSIONS_FULFILLED":
+
+      newState = Object.assign({}, state, { versions: action.payload.data });
+
+      return newState;
+
+    case "ACTIVATE_VERSION_PENDING":
+
+      newState = Object.assign({}, state, { processing: true });
+
+      return newState;
+
+    case "ACTIVATE_VERSION_FULFILLED":
+
+      newState = Object.assign({}, state, { processing: false, version: action.payload.data.version });
+
+      return newState;
+
+    case "ACTIVATE_VERSION_REJECTED":
+
+      newState = Object.assign({}, state, { processing: false });
+
+      return newState;
+
     default:
 
       return state;
