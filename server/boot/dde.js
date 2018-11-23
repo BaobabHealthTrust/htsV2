@@ -273,7 +273,7 @@ module.exports = function (app) {
 
     const artOnline = await runCmd(`nc -vz ${version === '3.0' ? ddeConfig.art_settings.host : ddeConfig.art_host} ${version === '3.0' ? ddeConfig.art_settings.port : ddeConfig.art_port}`);
 
-    console.log(artOnline);
+    debug(artOnline);
 
     if (ddeConfig.use_art && !String(artOnline).match(/refused/i)) {
 
@@ -1458,6 +1458,8 @@ module.exports = function (app) {
 
   router.post('/dde/add_patient', function (req, res, next) {
 
+    debug(JSON.stringify(req.body, null, 2));
+
     if (ddeConfig.use_art) {
 
       debug(JSON.stringify(req.body));
@@ -1656,6 +1658,12 @@ module.exports = function (app) {
 
             json.birthdate_estimated = String(json.birthdate_estimated);
 
+            if (!json.attributes.home_traditional_authority)
+              json.attributes.home_traditional_authority = "Unknown";
+
+            if (!json.attributes.home_village)
+              json.attributes.home_village = "Unknown";
+
             const args = {
               data: json,
               headers: {
@@ -1692,6 +1700,8 @@ module.exports = function (app) {
                   } else {
 
                     output.npid = data.npid;
+
+                    output.canPrint = true;
 
                     return res
                       .status(200)
