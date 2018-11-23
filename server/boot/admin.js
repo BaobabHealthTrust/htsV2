@@ -156,7 +156,7 @@ module.exports = function (app) {
 
         debug(connection);
 
-        const cmd = `cd ${backupPath}; export MYSQL_PWD=${connection.password}; mysqldump -h ${connection.host} -u ${connection.user} ${connection.database} > backup-latest.sql`;
+        const cmd = `cd ${backupPath}; export MYSQL_PWD=${connection.password}; mysqldump -h ${connection.host} -u ${connection.user} ${connection.database} > backup-latest.sql; tar -cf backup-latest.sql.tar backup-latest.sql;`;
 
         let noError = true;
 
@@ -170,7 +170,15 @@ module.exports = function (app) {
 
         if (noError) {
 
-            res.status(200).json({ message: 'Data  backup done' });
+            if (fs.existsSync(path.resolve(__dirname, '..', '..', 'backups', 'backup-latest.sql'))) {
+
+                res.download(path.resolve(__dirname, '..', '..', 'backups', 'backup-latest.sql'));
+
+            } else {
+
+                res.status(200).json({ message: 'Oops! There was an error with the backup' });
+
+            }
 
         } else {
 
@@ -187,7 +195,7 @@ module.exports = function (app) {
 
         debug(file.path);
 
-        const backupFile = path.resolve(file.path);
+        let backupFile = path.resolve(file.path);
 
         const connection = require(path.resolve(__dirname, '..', '..', 'configs', "database.json"))[(process.env.NODE_ENV
             ? process.env.NODE_ENV
@@ -242,17 +250,6 @@ module.exports = function (app) {
         }
 
         res.status(200).json(json);
-
-    })
-
-    router.post('/files', upload.single('file'), (req, res) => {
-
-        const file = req.file;
-        const meta = req.body;
-
-        console.log(file.path);
-
-        res.status(200).json({});
 
     })
 

@@ -6,6 +6,8 @@ import { fetchSettings, saveSetting, uploadDocumentRequest, updateApp } from '..
 import { showInfoMsg } from "../actions/alertActions";
 import uuid from 'uuid';
 import { isArray } from 'util';
+import Axios from 'axios';
+import FileDownload from 'react-file-download';
 
 const mapStateToProps = state => {
     return {
@@ -140,7 +142,7 @@ class ApplicationSettings extends Component {
                             isArray(types[key]) ?
                                 <select id={`value${i}`} type="text" name={`value${i}`} value={Object.keys(this.state.data).indexOf(key) >= 0 ? this.state.data[key] : data[key]} className='appSelect' onChange={(e) => { this.updateField(e) }} tag={i}>
                                     {(types[key] || []).map(option => {
-                                        return <option>{option}</option>
+                                        return <option key={uuid.v1()}>{option}</option>
                                     })}
                                 </select>
                                 : <input id={`value${i}`} type="text" name={`value${i}`} className="appText" value={Object.keys(this.state.data).indexOf(key) >= 0 ? this.state.data[key] : data[key]} onChange={(e) => { this.updateField(e) }} tag={i} />
@@ -198,7 +200,18 @@ class ApplicationSettings extends Component {
         const fileInput = document.createElement('input');
         fileInput.addEventListener("change", (e) => { this.handleFileUpload(e) }, false);
         fileInput.type = 'file';
+        fileInput.accept = '.sql';
         fileInput.click();
+
+    }
+
+    backupDatabase(e) {
+
+        Axios
+            .get("/backup")
+            .then(response => {
+                FileDownload(response.data, 'backup-latest.sql');
+            });
 
     }
 
@@ -238,7 +251,7 @@ class ApplicationSettings extends Component {
                         </tr>
                         <tr>
                             <td align="right">
-                                <Button label="Backup Database" handleMouseDown={this.props.backupDatabase} id="btnBackup" />
+                                <Button label="Backup Database" handleMouseDown={(e) => { this.backupDatabase(e) }} id="btnBackup" />
                                 <Button label="Restore Database" handleMouseDown={(e) => { this.restoreDatabase(e) }} id="btnRestore" />
                             </td>
                         </tr>
