@@ -29,6 +29,22 @@ To run the application,
         pm2 startup
     ```
 
+##DDE 3.1 Configuration
+1. Make sure the parameters for use_dde and use_art in dde.json are set to false, leave the default values as they are for the other attributes as they are.
+
+2. The primary configuratiom for DDE 3.1 is in site.json
+    i.  First set configuration section for DDE to appear like the following
+            "use_dde": true,
+            "dde_username": "dde_user",
+            "dde_password": "dd_password",
+            "dde_protocol": "http",
+            "dde_host": "dde_ip",
+            "dde_port": "dde_port"
+
+    ii.     "use_dde": true or "use_dde": false turns on and off dde 3.1
+    iii.    "dde_protocol": "http" defines protocol DDE is running usually http / https
+    iv.     "dde_host": "dde_ip" defines IPV4 where DDE is running
+    v.      "dde_port": "dde_port" defines port 
 
 ## License
 
