@@ -7,6 +7,16 @@ module.exports = function (app) {
         .Router();
     const fs = require('fs');
     const path = require('path');
+    const multer = require('multer');
+
+    const storage = multer.diskStorage({
+        destination: './backups',
+        filename(req, file, cb) {
+            cb(null, `${file.originalname}`);
+        },
+    });
+
+    const upload = multer({ storage });
 
     const debug = (msg) => {
 
@@ -118,7 +128,7 @@ module.exports = function (app) {
 
         const cmd = `cd ${dbpath}; NODE_ENV=${(process.env.NODE_ENV
             ? process.env.NODE_ENV
-            : "production")} ./recalibrate.js`;
+            : "development")} ./recalibrate.js`;
 
         debug(cmd);
 
@@ -142,7 +152,7 @@ module.exports = function (app) {
 
         const connection = require(path.resolve(__dirname, '..', '..', 'configs', "database.json"))[(process.env.NODE_ENV
             ? process.env.NODE_ENV
-            : "production")];
+            : "development")];
 
         debug(connection);
 
@@ -170,27 +180,42 @@ module.exports = function (app) {
 
     })
 
-    router.get('/restore', async (req, res, next) => {
+    router.post('/restore', upload.single('file'), async (req, res, next) => {
 
-        const backupPath = path.resolve(__dirname, '..', '..', 'backups');
+        const file = req.file;
+        const meta = req.body;
 
-        if (!fs.existsSync(backupPath)) {
+        debug(file.path);
 
-            fs.mkdirSync(backupPath);
-
-        }
+        const backupFile = path.resolve(file.path);
 
         const connection = require(path.resolve(__dirname, '..', '..', 'configs', "database.json"))[(process.env.NODE_ENV
             ? process.env.NODE_ENV
-            : "production")];
+            : "development")];
 
         debug(connection);
 
-        if (fs.existsSync(path.resolve(__dirname, '..', '..', 'backups', 'backup-latest.sql'))) {
+        debug(backupFile);
 
-            const cmd = `cd ${backupPath}; export MYSQL_PWD=${connection.password}; mysql -h ${connection.host} -u ${connection.user} ${connection.database} < backup-latest.sql`;
+        if (fs.existsSync(backupFile)) {
+
+            const cmd = `export MYSQL_PWD=${connection.password}; mysql -h ${connection.host} -u ${connection.user} ${connection.database} < ${backupFile}`;
+
+            debug(cmd);
 
             await runCmd(cmd).catch(e => {
+                console.log(e);
+            });
+
+            const dbpath = path.resolve(__dirname, '..', '..', 'db');
+
+            const cmd2 = `cd ${dbpath}; NODE_ENV=${(process.env.NODE_ENV
+                ? process.env.NODE_ENV
+                : "development")} ./recalibrate.js`;
+
+            debug(cmd2);
+
+            await runCmd(cmd2).catch(e => {
                 console.log(e);
             });
 
@@ -217,6 +242,17 @@ module.exports = function (app) {
         }
 
         res.status(200).json(json);
+
+    })
+
+    router.post('/files', upload.single('file'), (req, res) => {
+
+        const file = req.file;
+        const meta = req.body;
+
+        console.log(file.path);
+
+        res.status(200).json({});
 
     })
 

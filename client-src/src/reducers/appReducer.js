@@ -1399,6 +1399,18 @@ export default function appReducer(state = {
 
       return newState;
 
+    case "UPLOAD_DOCUMENT_PENDING":
+
+      newState = Object.assign({}, state, { processing: true });
+
+      return newState;
+
+    case "UPLOAD_DOCUMENT_FULFILLED":
+
+      newState = Object.assign({}, state, { processing: false, infoMessage: 'Backup restored!' });
+
+      return newState;
+
     default:
 
       return state;

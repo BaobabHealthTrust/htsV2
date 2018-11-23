@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import './applicationSettings.css';
 import { connect } from "react-redux";
 import Button from "./button";
-import { fetchSettings, saveSetting } from '../actions/appAction';
+import { fetchSettings, saveSetting, uploadDocumentRequest, updateApp } from '../actions/appAction';
+import { showInfoMsg } from "../actions/alertActions";
 import uuid from 'uuid';
 import { isArray } from 'util';
 
@@ -26,6 +27,24 @@ const mapDispatchToProps = dispatch => {
                 dispatch(saveSetting(json));
                 resolve();
             })
+        },
+        showInfoMsg: (msg, topic, deletePrompt, deleteLabel, deleteAction) => {
+            return new Promise(resolve => {
+                dispatch(showInfoMsg(msg, topic, deletePrompt, deleteLabel, deleteAction));
+                resolve();
+            });
+        },
+        uploadDocumentRequest: (json) => {
+            return new Promise(resolve => {
+                dispatch(uploadDocumentRequest(json));
+                resolve();
+            });
+        },
+        updateApp: payload => {
+            return new Promise(resolve => {
+                dispatch(updateApp(payload));
+                resolve();
+            });
         }
     }
 }
@@ -36,7 +55,7 @@ class ApplicationSettings extends Component {
         data: {}
     }
 
-    saveRow(e) {
+    async  saveRow(e) {
 
         const index = e.target.getAttribute('tag');
 
@@ -46,7 +65,9 @@ class ApplicationSettings extends Component {
 
         const json = { [field]: value };
 
-        this.props.saveSetting(json);
+        await this.props.saveSetting(json);
+
+        await this.props.showInfoMsg('Info', 'Attribute saved');
 
     }
 
@@ -135,9 +156,49 @@ class ApplicationSettings extends Component {
 
     }
 
+    handleFileUpload(e) {
+
+        const file = e.target.files[0];
+
+        this.props.uploadDocumentRequest({
+            file,
+            name: 'file'
+        });
+
+    }
+
     async componentDidMount() {
 
         await this.props.fetchSettings();
+
+    }
+
+    async componentDidUpdate() {
+
+        if (!this.state.busy && [null, undefined, ""].indexOf(this.props.app.infoMessage) < 0) {
+
+            await this.setState({ busy: true });
+
+            let msg = String(this.props.app.infoMessage);
+
+            await this.props.showInfoMsg('Info', msg);
+
+            await this.props.updateApp({ infoMessage: null });
+
+            await this.setState({ busy: false });
+
+        }
+
+    }
+
+    restoreDatabase(e) {
+
+        e.preventDefault();
+
+        const fileInput = document.createElement('input');
+        fileInput.addEventListener("change", (e) => { this.handleFileUpload(e) }, false);
+        fileInput.type = 'file';
+        fileInput.click();
 
     }
 
@@ -178,7 +239,7 @@ class ApplicationSettings extends Component {
                         <tr>
                             <td align="right">
                                 <Button label="Backup Database" handleMouseDown={this.props.backupDatabase} id="btnBackup" />
-                                <Button label="Restore Database" handleMouseDown={this.props.restoreDatabase} id="btnRestore" />
+                                <Button label="Restore Database" handleMouseDown={(e) => { this.restoreDatabase(e) }} id="btnRestore" />
                             </td>
                         </tr>
                     </tbody>
