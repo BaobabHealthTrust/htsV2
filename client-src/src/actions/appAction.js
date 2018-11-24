@@ -299,3 +299,19 @@ export function fetchScreenTimout() {
   return { type: 'SCREEN_TIMEOUT', payload: request };
 
 }
+
+export function fetchSettings() {
+
+  const request = axios.get('/fetch_settings');
+
+  return { type: 'FETCH_SETTINGS', payload: request };
+
+}
+
+export function saveSetting(json) {
+
+  const request = axios.post('/save_setting', json);
+
+  return { type: 'SAVE_SETTING', payload: request };
+
+}

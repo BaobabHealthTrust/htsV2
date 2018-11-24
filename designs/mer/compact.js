@@ -30,16 +30,16 @@ if (process.argv.indexOf('-f') > 0) {
 
       if (String(row).trim().length > 0) {
 
-        const cells = row.split('\t');
+        const cells = row.split(/\t|,/);
 
-        const locationType = cells[0];
-        const serviceDeliveryPoint = cells[1];
-        const htsAccessType = cells[2];
-        const partnerHIVStatus = cells[3];
-        const clientAge = cells[4];
-        const gender = cells[5];
-        const htsSetting = cells[6];
-        const htsModality = cells[7];
+        const locationType = String(cells[0]).trim();
+        const serviceDeliveryPoint = String(cells[1]).trim();
+        const htsAccessType = String(cells[2]).trim();
+        const partnerHIVStatus = String(cells[3]).trim();
+        const clientAge = String(cells[4]).trim();
+        const gender = String(cells[5]).trim();
+        const htsSetting = String(cells[6]).trim();
+        const htsModality = String(cells[7]).trim();
 
         if (mappings.serviceDeliveryPoints.indexOf(serviceDeliveryPoint) < 0)
           mappings.serviceDeliveryPoints.push(serviceDeliveryPoint);

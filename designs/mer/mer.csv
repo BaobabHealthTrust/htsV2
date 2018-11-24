@@ -1,0 +1,73 @@
+Community,Mobile,FRS/Index,Any,0-13Y,Any,Community,Index
+Community,Mobile,FRS/Index,Any other,Any,Any,Community,Mobile
+Community,Mobile,FRS/Index,Partner Positive,Any,Any,Community,Index
+Community,Mobile,PITC,Any,Any,Any,Community,Mobile
+Community,Mobile,VCT/Other,Any,Any,Any,Community,VCT
+Community,VCT/Other,FRS/Index,Any,0-13Y,Any,Community,Index
+Community,VCT/Other,FRS/Index,Any other,Any,Any,Community,Other community platform
+Community,VCT/Other,FRS/Index,Partner Positive,Any,Any,Community,Index
+Community,VCT/Other,PITC,Any,Any,Any,Community,Other community platform
+Community,VCT/Other,VCT/Other,Any,Any,Any,Community,VCT
+Health Facility,ANC,FRS/Index,Any,0-13Y,Any,Facility,Index
+Health Facility,ANC,FRS/Index,Any other,Any,F,Facility,PMTCT (ANC)
+Health Facility,ANC,FRS/Index,Any other,Any,M,Facility,Other PITC
+Health Facility,ANC,FRS/Index,Partner Positive,Any,Any,Facility,Index
+Health Facility,ANC,PITC,Any,Any,F,Facility,PMTCT (ANC)
+Health Facility,ANC,PITC,Any,Any,M,Facility,Other PITC
+Health Facility,ANC,VCT/Other,Any,Any,Any,Facility,VCT
+Health Facility,Inpatient,FRS/Index,Any,0-13Y,Any,Facility,Index
+Health Facility,Inpatient,FRS/Index,Any other,Any,Any,Facility,Inpatient
+Health Facility,Inpatient,FRS/Index,Partner Positive,Any,Any,Facility,Index
+Health Facility,Inpatient,PITC,Any,Any,Any,Facility,Inpatient
+Health Facility,Inpatient,VCT/Other,Any,Any,Any,Facility,VCT
+Health Facility,Malnutrition,FRS/Index,Any,0-13Y,Any,Facility,Index
+Health Facility,Malnutrition,FRS/Index,Any other,0-4Y,Any,Facility,Malnutrition
+Health Facility,Malnutrition,FRS/Index,Any other,5Y+,Any,Facility,Other PITC
+Health Facility,Malnutrition,PITC,Any,0-4Y,Any,Facility,Malnutrition
+Health Facility,Malnutrition,PITC,Any,5Y+,Any,Facility,Other PITC
+Health Facility,Malnutrition,VCT/Other,Any,0-4Y,Any,Facility,VCT
+Health Facility,Malnutrition,VCT/Other,Any,5Y+,Any,Facility,VCT
+Health Facility,Maternity,FRS/Index,Any,0-13Y,Any,Facility,Index
+Health Facility,Maternity,FRS/Index,Any other,Any,Any,Facility,Other PITC
+Health Facility,Maternity,FRS/Index,Partner Positive,Any,Any,Facility,Index
+Health Facility,Maternity,PITC,Any,Any,Any,Facility,Other PITC
+Health Facility,Maternity,VCT/Other,Any,Any,Any,Facility,VCT
+Health Facility,OPD,FRS/Index,Any,0-13Y,Any,Facility,Index
+Health Facility,OPD,FRS/Index,Partner Positive,Any,Any,Facility,Index
+Health Facility,OPD,PITC,Any,Any,Any,Facility,Other PITC
+Health Facility,OPD,VCT/Other,Any,Any,Any,Facility,VCT
+Health Facility,OPD,FRS/Index,Any other,Any,Any,Facility,Other PITC
+Health Facility,VCT/Other,FRS/Index,Any,0-13Y,Any,Facility,Index
+Health Facility,VCT/Other,FRS/Index,Any other,Any,Any,Facility,Other PITC
+Health Facility,VCT/Other,FRS/Index,Partner Positive,Any,Any,Facility,Index
+Health Facility,VCT/Other,PITC,Any,Any,Any,Facility,Other PITC
+Health Facility,VCT/Other,VCT/Other,Any,Any,Any,Facility,VCT
+Health Facility,Pediatric,FRS/Index,Any,0-13Y,Any,Facility,Index
+Health Facility,Pediatric,FRS/Index,Any other,0-4Y,Any,Facility,Pediatric
+Health Facility,Pediatric,FRS/Index,Any other,5Y+,Any,Facility,Other PITC
+Health Facility,Pediatric,PITC,Any,0-4Y,Any,Facility,Pediatric
+Health Facility,Pediatric,PITC,Any,5Y+,Any,Facility,Other PITC
+Health Facility,Pediatric,VCT/Other,Any,0-4Y,Any,Facility,VCT
+Health Facility,Pediatric,VCT/Other,Any,5Y+,Any,Facility,VCT
+Health Facility,STI,FRS/Index,Any,0-13Y,Any,Facility,Index
+Health Facility,STI,FRS/Index,Any other,Any,Any,Facility,STI
+Health Facility,STI,FRS/Index,Partner Positive,Any,Any,Facility,Index
+Health Facility,STI,PITC,Any,Any,Any,Facility,STI
+Health Facility,STI,VCT/Other,Any,Any,Any,Facility,VCT
+Health Facility,TB,FRS/Index,Any,0-13Y,Any,Facility,Index
+Health Facility,TB,FRS/Index,Any other,Any,Any,Facility,TB
+Health Facility,TB,FRS/Index,Partner Positive,Any,Any,Facility,Index
+Health Facility,TB,PITC,Any,Any,Any,Facility,TB
+Health Facility,TB,VCT/Other,Any,Any,Any,Facility,VCT
+Health Facility,VMMC,FRS/Index,Any,0-13Y,Any,Facility,Index
+Health Facility,VMMC,FRS/Index,Any other,5Y+,M,Facility,VMMC
+Health Facility,VMMC,FRS/Index,Any other,Any,Any,Facility,Other PITC
+Health Facility,VMMC,FRS/Index,Partner Positive,Any,Any,Facility,Index
+Health Facility,VMMC,PITC,Any,5Y+,M,Facility,VMMC
+Health Facility,VMMC,PITC,Any,Any,Any,Facility,Other PITC
+Health Facility,VMMC,VCT/Other,Any,Any,Any,Facility,VCT
+Stand-alone HTS Facility,VCT/Other,FRS/Index,Any,0-13Y,Any,Facility,Index
+Stand-alone HTS Facility,VCT/Other,FRS/Index,Any other,Any,Any,Facility,Other PITC
+Stand-alone HTS Facility,VCT/Other,FRS/Index,Partner Positive,Any,Any,Facility,Index
+Stand-alone HTS Facility,VCT/Other,PITC,Any,Any,Any,Facility,Other PITC
+Stand-alone HTS Facility,VCT/Other,VCT/Other,Any,Any,Any,Facility,VCT

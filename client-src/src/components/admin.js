@@ -6,6 +6,7 @@ import icoPrint from '../images/print';
 import icoLocations from '../images/locations';
 import icoTAs from '../images/sites';
 import icoStats from '../images/stats';
+import icoApps from '../images/apps';
 
 class Admin extends Component {
 
@@ -17,6 +18,23 @@ class Admin extends Component {
         textAlign: "center",
         padding: "10px"
       }}>
+        <div
+          className="sectionButton"
+          onMouseDown={() => {
+            this
+              .props
+              .switchTab("application settings", "Administration")
+          }} id="btnApplicationSettings">
+          <img
+            src={icoApps}
+            height="80"
+            alt=""
+            style={{
+              margin: "8px"
+            }} />
+          <br />
+          Application Settings
+      </div>
         <div
           className="sectionButton"
           onMouseDown={() => {
@@ -80,10 +98,11 @@ class Admin extends Component {
             height="80"
             alt=""
             style={{
-              margin: "8px"
+              margin: "8px",
+              marginTop: "2px"
             }} />
           <br />
-          Add Location
+          Add Workstation<br />Location
         </div>
         <div
           className="sectionButton"
@@ -114,10 +133,11 @@ class Admin extends Component {
             height="80"
             alt=""
             style={{
-              margin: "8px"
+              margin: "8px",
+              marginTop: "2px"
             }} />
           <br />
-          Print Label
+          Print Workstation <br />Location
         </div>
       </div>
 

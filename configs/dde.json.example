@@ -1,17 +1,17 @@
 {
   "default": {
-    "username": "",
-    "password": ""
+    "username": "htsuser",
+    "password": "password"
   },
   "app": {
-    "username": "",
-    "password": "",
-    "application": "",
-    "site_code": ""
+    "username": "htsuser",
+    "password": "password",
+    "application": "HTC",
+    "site_code": "MCH"
   },
-  "host": "",
-  "protocol": "",
-  "port": "",
+  "host": "localhost",
+  "protocol": "http",
+  "port": "3009",
   "use_art": false,
   "use_dde": false,
   "art_settings": {

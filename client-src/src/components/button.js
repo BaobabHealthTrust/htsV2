@@ -9,7 +9,7 @@ class Button extends Component {
 
             <button id={this.props.id}
                 className={this.props.buttonClass} style={this.props.extraStyles}
-                onMouseDown={this.props.buttonClass !== "gray" ? this.props.handleMouseDown : () => {}}>
+                onMouseDown={this.props.buttonClass !== "gray" ? this.props.handleMouseDown : () => { }} tag={this.props.tag}>
                 {this.props.label}
             </button>
 

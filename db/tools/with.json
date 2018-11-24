@@ -1,0 +1,9 @@
+{
+  "_source": "enteryCode",
+  "query": {
+    "query_string": {
+      "query": "_type:pepfar AND htsModality:>0"
+    }
+  },
+  "size": 10000
+}

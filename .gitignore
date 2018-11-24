@@ -22,6 +22,7 @@ configs/database.json
 configs/elasticsearch.json
 configs/dde.json
 configs/site.json
+configs/villages.json
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
@@ -57,3 +58,4 @@ package-lock.json
 client-src/package-lock.json
 db/logs
 designs/.~*
+backups/

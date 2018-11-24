@@ -1174,7 +1174,7 @@ module.exports = function (app) {
       ? user.id
       : 1;
 
-    const json = {
+    let json = {
       otherId: clinicId,
       otherIdType: "HTS Number",
       npid: raw.npid && patient !== null && npidIdentifierTypeId === patient.identifierType
@@ -1233,6 +1233,8 @@ module.exports = function (app) {
         : raw["Cell Phone Number"],
       canPrint: raw.canPrint
     };
+
+    debug(json);
 
     let idType,
       identifierType;
