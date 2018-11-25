@@ -1679,7 +1679,7 @@ module.exports = function (app) {
               (new client())
                 .post(ddePath + "/v1/add_person", args, function (data, props) {
 
-                  debug(data);
+                  console.log(data);
 
                   debug(props.statusCode);
 
@@ -1700,6 +1700,8 @@ module.exports = function (app) {
                   } else {
 
                     output.npid = data.npid;
+
+                    output.docId = data.doc_id
 
                     output.canPrint = true;
 

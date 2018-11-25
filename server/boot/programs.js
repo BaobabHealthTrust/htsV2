@@ -1038,7 +1038,7 @@ module.exports = function (app) {
 
           raw.canPrint = ddeData.canPrint;
 
-          debug(raw);
+          raw.docId = ddeData.docId
 
         } else if (ddeData && ddeData.data && Array.isArray(ddeData.data)) {
           ddeData
@@ -1330,6 +1330,32 @@ module.exports = function (app) {
         });
 
         json.npid = raw.npid;
+
+        if(raw.docId){
+
+          idType = await PatientIdentifierType.find({
+            where: {
+              name: "DDE person document ID"
+            },
+            limit: 1
+          });
+
+          identifierType = idType.length > 0
+            ? idType[0].patientIdentifierTypeId
+            : 28;
+
+          result = await PatientIdentifier.create({
+            patientId: personId,
+            identifier: raw.docId,
+            identifierType,
+            locationId,
+            creator: userId,
+            dateCreated: new Date(),
+            uuid: uuid.v4()
+          });
+
+          json.docId = raw.docId;
+        }
 
       } else if (raw["Create local with given ID?"] === "Yes") {
 
