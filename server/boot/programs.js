@@ -644,7 +644,8 @@ module.exports = function (app) {
             ? raw.addresses.home_district
             : raw["District of Origin"]
               ? raw["District of Origin"]
-              : raw["Current District"]
+              : raw["Current District"],
+          doc_id: raw.doc_id? raw.doc_id : null
         },
         headers: {
           "Content-Type": "application/json"

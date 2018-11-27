@@ -84,7 +84,7 @@ class DDESearch extends Component {
   loadPatientData(id) {
 
     const activeClient = (this.props.ddeResults || []).filter((e) => {
-      return e._id === id || e.otherId === id
+      return e.doc_id ===id  || e._id === id || e.otherId === id
     })[0];
 
     const genders = {
@@ -130,11 +130,11 @@ class DDESearch extends Component {
 
   loadDDEResults() {
 
-    return ((this.props.ddeResults || []).map((row) => {
 
+    return ((this.props.ddeResults || []).map((row) => {
       return <li
-        id={row._id || row.otherId}
-        key={row._id || row.otherId}
+        id={row.doc_id  || row._id || row.otherId}
+        key={row.doc_id || row._id || row.otherId}
         className={this.state.selectedId === (row._id || row.otherId)
           ? "selectedListLi"
           : "selectListLi"}
@@ -142,7 +142,7 @@ class DDESearch extends Component {
           borderRadius: "10px"
         }}
         onMouseDown={() => {
-          this.loadPatientData((row._id || row.otherId))
+          this.loadPatientData((row.doc_id  || row._id || row.otherId))
         }}>
         <table width="100%">
           <tbody>
