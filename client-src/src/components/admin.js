@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './admin.css';
+import { connect } from "react-redux";
 import icoRegisters from '../images/registers';
 import icoUsers from '../images/users';
 import icoPrint from '../images/print';
@@ -7,6 +8,12 @@ import icoLocations from '../images/locations';
 import icoTAs from '../images/sites';
 import icoStats from '../images/stats';
 import icoApps from '../images/apps';
+
+const mapStateToProps = state => {
+  return {
+      app: state.app
+  };
+};
 
 class Admin extends Component {
 
@@ -18,23 +25,27 @@ class Admin extends Component {
         textAlign: "center",
         padding: "10px"
       }}>
-        <div
-          className="sectionButton"
-          onMouseDown={() => {
-            this
-              .props
-              .switchTab("application settings", "Administration")
-          }} id="btnApplicationSettings">
-          <img
-            src={icoApps}
-            height="80"
-            alt=""
-            style={{
-              margin: "8px"
-            }} />
-          <br />
-          Application Settings
+        {
+          String(this.props.app.role).match(/admin/i) ?
+            <div
+              className="sectionButton"
+              onMouseDown={() => {
+                this
+                  .props
+                  .switchTab("application settings", "Administration")
+              }} id="btnApplicationSettings">
+              <img
+                src={icoApps}
+                height="80"
+                alt=""
+                style={{
+                  margin: "8px"
+                }} />
+              <br />
+              Application Settings
       </div>
+            : null
+        }
         <div
           className="sectionButton"
           onMouseDown={() => {
@@ -147,4 +158,6 @@ class Admin extends Component {
 
 }
 
-export default Admin;
+// export default Admin;
+
+export default connect(mapStateToProps)(Admin);

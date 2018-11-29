@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import './applicationSettings.css';
 import { connect } from "react-redux";
 import Button from "./button";
-import { fetchSettings, saveSetting } from '../actions/appAction';
+import { fetchSettings, saveSetting, uploadDocumentRequest, updateApp, fetchVersions, activateVersion } from '../actions/appAction';
+import { showInfoMsg } from "../actions/alertActions";
 import uuid from 'uuid';
 import { isArray } from 'util';
+import Axios from 'axios';
+import FileDownload from 'react-file-download';
 
 const mapStateToProps = state => {
     return {
         app: state.app
     };
 };
-
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -26,6 +28,36 @@ const mapDispatchToProps = dispatch => {
                 dispatch(saveSetting(json));
                 resolve();
             })
+        },
+        showInfoMsg: (msg, topic, deletePrompt, deleteLabel, deleteAction) => {
+            return new Promise(resolve => {
+                dispatch(showInfoMsg(msg, topic, deletePrompt, deleteLabel, deleteAction));
+                resolve();
+            });
+        },
+        uploadDocumentRequest: (json) => {
+            return new Promise(resolve => {
+                dispatch(uploadDocumentRequest(json));
+                resolve();
+            });
+        },
+        updateApp: payload => {
+            return new Promise(resolve => {
+                dispatch(updateApp(payload));
+                resolve();
+            });
+        },
+        fetchVersions: () => {
+            return new Promise(resolve => {
+                dispatch(fetchVersions());
+                resolve();
+            });
+        },
+        activateVersion: tag => {
+            return new Promise(resolve => {
+                dispatch(activateVersion(tag));
+                resolve();
+            });
         }
     }
 }
@@ -36,7 +68,7 @@ class ApplicationSettings extends Component {
         data: {}
     }
 
-    saveRow(e) {
+    async  saveRow(e) {
 
         const index = e.target.getAttribute('tag');
 
@@ -46,7 +78,9 @@ class ApplicationSettings extends Component {
 
         const json = { [field]: value };
 
-        this.props.saveSetting(json);
+        await this.props.saveSetting(json);
+
+        await this.props.showInfoMsg('Info', 'Attribute saved');
 
     }
 
@@ -119,7 +153,7 @@ class ApplicationSettings extends Component {
                             isArray(types[key]) ?
                                 <select id={`value${i}`} type="text" name={`value${i}`} value={Object.keys(this.state.data).indexOf(key) >= 0 ? this.state.data[key] : data[key]} className='appSelect' onChange={(e) => { this.updateField(e) }} tag={i}>
                                     {(types[key] || []).map(option => {
-                                        return <option>{option}</option>
+                                        return <option key={uuid.v1()}>{option}</option>
                                     })}
                                 </select>
                                 : <input id={`value${i}`} type="text" name={`value${i}`} className="appText" value={Object.keys(this.state.data).indexOf(key) >= 0 ? this.state.data[key] : data[key]} onChange={(e) => { this.updateField(e) }} tag={i} />
@@ -135,9 +169,76 @@ class ApplicationSettings extends Component {
 
     }
 
+    handleFileUpload(e) {
+
+        const file = e.target.files[0];
+
+        this.props.uploadDocumentRequest({
+            file,
+            name: 'file'
+        });
+
+    }
+
     async componentDidMount() {
 
         await this.props.fetchSettings();
+
+        await this.props.fetchVersions();
+
+    }
+
+    async componentDidUpdate() {
+
+        if (!this.state.busy && [null, undefined, ""].indexOf(this.props.app.infoMessage) < 0) {
+
+            await this.setState({ busy: true });
+
+            let msg = String(this.props.app.infoMessage);
+
+            await this.props.showInfoMsg('Info', msg);
+
+            await this.props.updateApp({ infoMessage: null });
+
+            await this.setState({ busy: false });
+
+        }
+
+    }
+
+    restoreDatabase(e) {
+
+        e.preventDefault();
+
+        const fileInput = document.createElement('input');
+        fileInput.addEventListener("change", (e) => { this.handleFileUpload(e) }, false);
+        fileInput.type = 'file';
+        fileInput.accept = '.sql';
+        fileInput.click();
+
+    }
+
+    backupDatabase(e) {
+
+        Axios
+            .get("/backup")
+            .then(response => {
+                FileDownload(response.data, 'backup-latest.sql');
+            });
+
+    }
+
+    async activateVersion(e) {
+
+        const value = document.getElementById('appVersion').value;
+
+        console.log(value);
+
+        if (String(value).trim().length > 0) {
+
+            await this.props.activateVersion(String(value).trim());
+
+        }
 
     }
 
@@ -170,6 +271,24 @@ class ApplicationSettings extends Component {
                                                 <th>&nbsp;</th>
                                             </tr>
                                             {this.loadSettings()}
+                                            <tr>
+                                                <td style={{ paddingLeft: '2%' }}>
+                                                    Application Version
+                                                </td>
+                                                <td>
+                                                    <select id='appVersion' className='appSelect'>
+                                                        <option key={uuid.v1()}></option>
+                                                        {(this.props.app.versions || []).sort().map(option => {
+                                                            return String(option).trim().length > 0 ?
+                                                                <option key={uuid.v1()}>{option}</option>
+                                                                : null;
+                                                        })}
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <Button label="Set" id='btnVersion' handleMouseDown={(e) => { this.activateVersion(e) }} />
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -177,8 +296,8 @@ class ApplicationSettings extends Component {
                         </tr>
                         <tr>
                             <td align="right">
-                                <Button label="Backup Database" handleMouseDown={this.props.backupDatabase} id="btnBackup" />
-                                <Button label="Restore Database" handleMouseDown={this.props.restoreDatabase} id="btnRestore" />
+                                <Button label="Backup Database" handleMouseDown={(e) => { this.backupDatabase(e) }} id="btnBackup" />
+                                <Button label="Restore Database" handleMouseDown={(e) => { this.restoreDatabase(e) }} id="btnRestore" />
                             </td>
                         </tr>
                     </tbody>

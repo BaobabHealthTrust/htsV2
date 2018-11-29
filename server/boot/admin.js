@@ -7,6 +7,16 @@ module.exports = function (app) {
         .Router();
     const fs = require('fs');
     const path = require('path');
+    const multer = require('multer');
+
+    const storage = multer.diskStorage({
+        destination: './backups',
+        filename(req, file, cb) {
+            cb(null, `${file.originalname}`);
+        },
+    });
+
+    const upload = multer({ storage });
 
     const debug = (msg) => {
 
@@ -96,7 +106,7 @@ module.exports = function (app) {
 
     router.post('/activate_version', async (req, res, next) => {
 
-        debug(req.body);
+        console.log(req.body);
 
         const tag = req.body.tag;
 
@@ -106,7 +116,11 @@ module.exports = function (app) {
             console.log(e);
         });
 
-        res.status(200).json({});
+        let version = await runCmd('git describe').catch(e => { console.log(e); })
+
+        version = String(version).replace(/^v/i, '');
+
+        res.status(200).json({ version });
 
     });
 
@@ -118,7 +132,7 @@ module.exports = function (app) {
 
         const cmd = `cd ${dbpath}; NODE_ENV=${(process.env.NODE_ENV
             ? process.env.NODE_ENV
-            : "production")} ./recalibrate.js`;
+            : "development")} ./recalibrate.js`;
 
         debug(cmd);
 
@@ -142,11 +156,11 @@ module.exports = function (app) {
 
         const connection = require(path.resolve(__dirname, '..', '..', 'configs', "database.json"))[(process.env.NODE_ENV
             ? process.env.NODE_ENV
-            : "production")];
+            : "development")];
 
         debug(connection);
 
-        const cmd = `cd ${backupPath}; export MYSQL_PWD=${connection.password}; mysqldump -h ${connection.host} -u ${connection.user} ${connection.database} > backup-latest.sql`;
+        const cmd = `cd ${backupPath}; export MYSQL_PWD=${connection.password}; mysqldump -h ${connection.host} -u ${connection.user} ${connection.database} > backup-latest.sql; tar -cf backup-latest.sql.tar backup-latest.sql;`;
 
         let noError = true;
 
@@ -160,7 +174,15 @@ module.exports = function (app) {
 
         if (noError) {
 
-            res.status(200).json({ message: 'Data  backup done' });
+            if (fs.existsSync(path.resolve(__dirname, '..', '..', 'backups', 'backup-latest.sql'))) {
+
+                res.download(path.resolve(__dirname, '..', '..', 'backups', 'backup-latest.sql'));
+
+            } else {
+
+                res.status(200).json({ message: 'Oops! There was an error with the backup' });
+
+            }
 
         } else {
 
@@ -170,27 +192,42 @@ module.exports = function (app) {
 
     })
 
-    router.get('/restore', async (req, res, next) => {
+    router.post('/restore', upload.single('file'), async (req, res, next) => {
 
-        const backupPath = path.resolve(__dirname, '..', '..', 'backups');
+        const file = req.file;
+        const meta = req.body;
 
-        if (!fs.existsSync(backupPath)) {
+        debug(file.path);
 
-            fs.mkdirSync(backupPath);
-
-        }
+        let backupFile = path.resolve(file.path);
 
         const connection = require(path.resolve(__dirname, '..', '..', 'configs', "database.json"))[(process.env.NODE_ENV
             ? process.env.NODE_ENV
-            : "production")];
+            : "development")];
 
         debug(connection);
 
-        if (fs.existsSync(path.resolve(__dirname, '..', '..', 'backups', 'backup-latest.sql'))) {
+        debug(backupFile);
 
-            const cmd = `cd ${backupPath}; export MYSQL_PWD=${connection.password}; mysql -h ${connection.host} -u ${connection.user} ${connection.database} < backup-latest.sql`;
+        if (fs.existsSync(backupFile)) {
+
+            const cmd = `export MYSQL_PWD=${connection.password}; mysql -h ${connection.host} -u ${connection.user} ${connection.database} < ${backupFile}`;
+
+            debug(cmd);
 
             await runCmd(cmd).catch(e => {
+                console.log(e);
+            });
+
+            const dbpath = path.resolve(__dirname, '..', '..', 'db');
+
+            const cmd2 = `cd ${dbpath}; NODE_ENV=${(process.env.NODE_ENV
+                ? process.env.NODE_ENV
+                : "development")} ./recalibrate.js`;
+
+            debug(cmd2);
+
+            await runCmd(cmd2).catch(e => {
                 console.log(e);
             });
 
@@ -215,6 +252,16 @@ module.exports = function (app) {
             json = JSON.parse(fs.readFileSync(filename, 'utf-8'));
 
         }
+
+        res.status(200).json(json);
+
+    })
+
+    router.get('/versions', async (req, res) => {
+
+        const versions = await runCmd('git tag').catch(e => { console.log(e); return ''; });
+
+        const json = String(versions).split('\n');
 
         res.status(200).json(json);
 

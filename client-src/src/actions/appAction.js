@@ -315,3 +315,31 @@ export function saveSetting(json) {
   return { type: 'SAVE_SETTING', payload: request };
 
 }
+
+export function uploadDocumentRequest({ file, name }) {
+
+  let data = new FormData();
+  data.append('file', file);
+  data.append('name', name);
+
+  const request = axios.post('/restore', data);
+
+  return { type: 'UPLOAD_DOCUMENT', payload: request };
+
+}
+
+export function fetchVersions() {
+
+  const request = axios.get('/versions');
+
+  return { type: 'FETCH_VERSIONS', payload: request };
+
+}
+
+export function activateVersion(tag) {
+
+  const request = axios.post('/activate_version', { tag });
+
+  return { type: 'ACTIVATE_VERSION', payload: request };
+
+}
