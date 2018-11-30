@@ -652,6 +652,10 @@ const recalibrate = async () => {
         {
             message: "Reloading villages from remote source ...",
             cmd: `nc -w 3 -vz ${villageHost} ${villagePort}; if [ $? -eq 0 ]; then mysqldump -u ${villageUser} -p${villagePassword} ${villageDatabase} region district traditional_authority village | mysql -u ${user} -p${password} ${database}; else echo "Failed "; fi`
+        },
+        {
+            message: "Adding DDE Doc ID as person Identifier Type",
+            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "INSERT INTO patient_identifier_type(name,description,date_created,uuid,creator) SELECT \'DDE person document ID\', \'DDE couchDB document ID for a person\',\'2018-11-25\',\'057be8f6-f0bf-11e8-a147-f8344162329d\',1 from  dual WHERE NOT EXISTS (SELECT 1 FROM patient_identifier_type WHERE name = \'DDE person document ID\' AND description = \'DDE couchDB document ID for a person\' AND date_created=\'2018-11-25\' AND uuid=\'057be8f6-f0bf-11e8-a147-f8344162329d\' AND creator=1);"'
         }
     ];
 

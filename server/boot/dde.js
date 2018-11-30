@@ -1079,6 +1079,7 @@ module.exports = function (app) {
               : authenticated.data.token)
           });
 
+          json.gender = json.gender.substr(0,1)
           let args = {
             data: json,
             headers: {
@@ -1630,6 +1631,8 @@ module.exports = function (app) {
             let output = JSON.parse(JSON.stringify(req.body));
             let json = JSON.parse(JSON.stringify(req.body));
 
+            json.gender = json.gender.substr(0,1)
+
             const fieldsToChange = {
               "current_village": "current_vilage",
               "current_residence": null,
@@ -1663,6 +1666,7 @@ module.exports = function (app) {
 
             if (!json.attributes.home_village)
               json.attributes.home_village = "Unknown";
+            json["doc_id"] = (req.body.doc_id ? req.body.doc_id : null)
 
             const args = {
               data: json,
@@ -1674,41 +1678,78 @@ module.exports = function (app) {
               }
             };
 
+
             setTimeout(function () {
 
-              (new client())
-                .post(ddePath + "/v1/add_person", args, function (data, props) {
+              if (req.body.doc_id) {
+                (new client()).post(ddePath + "/v1/reassign_npid",
+                        args,(data,props)=>{
+                            if ([200, 201].indexOf(props.statusCode) < 0) {
 
-                  debug(data);
+                                return res
+                                  .status(200)
+                                  .json({
+                                    "status": 204,
+                                    "message": "No data",
+                                    "error": false,
+                                    "data": {
+                                      "matches": 0,
+                                      "hits": []
+                                    }
+                                  });
 
-                  debug(props.statusCode);
+                              } else {
 
-                  if ([200, 201].indexOf(props.statusCode) < 0) {
+                                output.npid = data.npid;
 
-                    return res
-                      .status(200)
-                      .json({
-                        "status": 204,
-                        "message": "No data",
-                        "error": false,
-                        "data": {
-                          "matches": 0,
-                          "hits": []
+                                output.docId = data.doc_id
+
+                                output.canPrint = true;
+
+                                return res
+                                  .status(200)
+                                  .json({ data: output });
+
+                              }
                         }
-                      });
+                  );
 
-                  } else {
+              }else{
 
-                    output.npid = data.npid;
+                (new client())
+                  .post(ddePath + "/v1/add_person", args, function (data, props) {
 
-                    output.canPrint = true;
+                    debug(props.statusCode);
 
-                    return res
-                      .status(200)
-                      .json({ data: output });
+                    if ([200, 201].indexOf(props.statusCode) < 0) {
 
-                  }
-                })
+                      return res
+                        .status(200)
+                        .json({
+                          "status": 204,
+                          "message": "No data",
+                          "error": false,
+                          "data": {
+                            "matches": 0,
+                            "hits": []
+                          }
+                        });
+
+                    } else {
+
+                      output.npid = data.npid;
+
+                      output.docId = data.doc_id
+
+                      output.canPrint = true;
+
+                      return res
+                        .status(200)
+                        .json({ data: output });
+
+                    }
+                  })
+                }
 
             }, 1000)
 
