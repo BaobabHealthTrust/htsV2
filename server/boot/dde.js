@@ -1079,6 +1079,7 @@ module.exports = function (app) {
               : authenticated.data.token)
           });
 
+          json.gender = json.gender.substr(0,1)
           let args = {
             data: json,
             headers: {
@@ -1629,6 +1630,8 @@ module.exports = function (app) {
 
             let output = JSON.parse(JSON.stringify(req.body));
             let json = JSON.parse(JSON.stringify(req.body));
+
+            json.gender = json.gender.substr(0,1)
 
             const fieldsToChange = {
               "current_village": "current_vilage",
