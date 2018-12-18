@@ -102,6 +102,12 @@ export default function ddeReducers(state = {
         {
           processing: false,
           silentProcessing: false,
+          token: null,
+          ddeSearchActive: true,
+          error: action.payload,
+          errorMessage: action.payload.message,
+          status: 500,
+          matches: []
         }
       );
 

@@ -1189,7 +1189,9 @@ module.exports = function (app) {
 
               }
 
-            })
+            }).on('error', (error) => {
+              res.status(500).json({ error: error })
+          })
 
           }, 1000)
 
