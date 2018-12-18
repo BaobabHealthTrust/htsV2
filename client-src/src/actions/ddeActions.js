@@ -13,13 +13,18 @@ export function searchByIdentifier(identifier) {
 }
 
 export function searchByNameAndGender(payload) {
-
-  const API_KEY = "";
-  const END_POINT = "/dde/search_by_name_and_gender";
-  const request = axios.post(END_POINT + API_KEY, payload);
-
-  return {type: 'SEARCH_BY_NAME_AND_GENDER', payload: request}
-
+  const API_KEY = ""
+  const END_POINT = "/dde/search_by_name_and_gender"
+  return dispatch => {
+    dispatch({ type: 'SEARCH_BY_NAME_AND_GENDER_PENDING' })
+    axios.post(END_POINT + API_KEY, payload)
+    .then((response) => {
+      dispatch({ type: 'SEARCH_BY_NAME_AND_GENDER_FULFILLED', payload: response})
+    })
+    .catch((error) => {
+      dispatch({ type: 'SEARCH_BY_NAME_AND_GENDER_REJECTED', payload: error})
+    })
+  }
 }
 
 export function advancedPatientSearch(payload) {
