@@ -1189,14 +1189,16 @@ module.exports = function (app) {
 
               }
 
-            })
+            }).on('error', (error) => {
+              res.status(500).json({ error: error })
+          })
 
           }, 1000)
 
         } else {
 
           return res
-            .json(401)
+            .status(401)
             .json({ error: true, message: "DDE authentation failed" })
 
         }

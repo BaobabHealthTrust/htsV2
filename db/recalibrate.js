@@ -651,7 +651,7 @@ const recalibrate = async () => {
         },
         {
             message: "Reloading villages from remote source ...",
-            cmd: `nc -w 3 -vz ${villageHost} ${villagePort}; if [ $? -eq 0 ]; then mysqldump -u ${villageUser} -p${villagePassword} ${villageDatabase} region district traditional_authority village | mysql -u ${user} -p${password} ${database}; else echo "Failed "; fi`
+            cmd: `nc -w 3 -vz ${villageHost} ${villagePort}; if [ $? -eq 0 ]; then mysqldump -h ${villageHost} -u ${villageUser} -p${villagePassword} ${villageDatabase} region district traditional_authority village | mysql -u ${user} -p${password} ${database}; else echo "Failed "; fi`
         },
         {
             message: "Adding DDE Doc ID as person Identifier Type",

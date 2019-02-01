@@ -1384,7 +1384,7 @@ export async function processes(props, state, parent, regConfigs, regSummaryIgno
 
             props.handleInputChange("Partner HIV Status", "No Partner", state.currentWorkflow);
 
-          } else if (age <= (25 * 365)) {
+          } else if (age <= (24 * 365)) {
 
             ageGroup = "15-24 years";
 

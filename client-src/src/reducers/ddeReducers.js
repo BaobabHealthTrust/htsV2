@@ -95,6 +95,24 @@ export default function ddeReducers(state = {
 
       return newState;
 
+    case "SEARCH_BY_NAME_AND_GENDER_REJECTED":
+      newState = Object.assign(
+        {},
+        state,
+        {
+          processing: false,
+          silentProcessing: false,
+          token: null,
+          ddeSearchActive: true,
+          error: action.payload,
+          errorMessage: action.payload.message,
+          status: 500,
+          matches: []
+        }
+      );
+
+      return newState;
+
     case "ADVANCED_PATIENT_SEARCH_PENDING":
 
       newState = Object.assign({}, state);
