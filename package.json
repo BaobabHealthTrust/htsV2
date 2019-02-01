@@ -37,6 +37,7 @@
     "loopback-component-explorer": "^5.0.0",
     "loopback-connector-mysql": "^2.4.1",
     "loopback-discovery": "^1.0.6",
+    "moment": "^2.24.0",
     "morgan": "^1.9.0",
     "multer": "^1.4.1",
     "node-mutex": "^0.2.2",
