@@ -156,7 +156,7 @@ rl.on('close', async () => {
     }
 
     //if there are no more entries but the payload did not reach 2000 visits
-    if (!entry && payload.length > 0) {
+    if (payload.length > 0) {
         await axios.post(
             `${es.protocol}://${es.host}:${es.port}/${es.index}/_bulk`,
             payload.join('\n') + '\n',
