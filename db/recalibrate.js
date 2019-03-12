@@ -10,6 +10,7 @@ const glob = require('glob');
 const client = require("node-rest-client").Client;
 const async = require('async');
 const seed = require("./seed.json");
+const os = require('os')
 
 String.prototype.toUnderScore = function () {
     return this.replace(/^[A-Z]/, ($1) => {
@@ -143,9 +144,9 @@ const runCmd = (cmd) => {
 }
 
 function runCommandAsync (cmd) {
-    const A_REALLY_LARGE_BUFFER = 1024 * 900000000
+    const A_TENTH_OF_SYSTEM_MEMORY = os.totalmem() / 10
     const exec = require('util').promisify(require('child_process').exec)
-    return exec(cmd, { maxBuffer: A_REALLY_LARGE_BUFFER })
+    return exec(cmd, { maxBuffer: A_TENTH_OF_SYSTEM_MEMORY })
 }
 
 const env = (process.env.NODE_ENV
