@@ -669,7 +669,7 @@ const recalibrate = async () => {
 
         console.log(cmd.message);
         try {
-            const { stderr, _ } = await runCommandAsync(cmd.cmd)
+            const { stdout, stderr } = await runCommandAsync(cmd.cmd)
 
             if (stderr) {
                 console.error(stderr)
