@@ -12,19 +12,25 @@ To run the application,
         cd /var/www
         git clone https://github.com/BaobabHealthTrust/htsV2
     ```
-4. Install [Elasticsearch](https://www.elastic.co/products/elasticsearch) 
+4. Install [Elasticsearch](https://www.elastic.co/products/elasticsearch) 5.3.0
 5. Create configuration files in the *configs/* folder. That is, for each *.example* file, copy file and create a *.json* file then fill in the required data based on the fields
-6. Install application dependencies by running the command
+6. Install application dependencies by running the command in (client-src,db,node_modules and application root folder)
     ``` 
-        npm install --save --verbose && npm install pm2 -g --verbose
+        npm install --save --verbose 
     ```
-7. Install [Redis](https://redis.io/download)
-8. Setup the database by following instructions in the db/ folder
-9. To run the application, execute
+
+7. Run on root folder to install pm2
+
+    ```
+    npm install pm2 -g --verbose
+    ```
+8. Install [Redis](https://redis.io/download) v3.0.6
+9. Setup the database by following instructions in the db/ folder
+10. To run the application, execute
     ```
         ./start.sh
     ```
-10. To automatically start the application on reboot, run the following command and follow the instructions:
+11. To automatically start the application on reboot, run the following command and follow the instructions:
     ```
         pm2 startup
     ```

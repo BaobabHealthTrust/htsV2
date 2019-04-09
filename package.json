@@ -39,6 +39,7 @@
     "loopback-discovery": "^1.0.6",
     "morgan": "^1.9.0",
     "multer": "^1.4.1",
+    "node": "^11.9.0",
     "node-mutex": "^0.2.2",
     "node-rest-client": "^3.1.0",
     "oboe": "^2.1.4",
