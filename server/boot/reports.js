@@ -1471,43 +1471,17 @@ module.exports = function (app) {
   });
 
   router.get('/raw', function (req, res, next) {
-
-    const url_parts = url.parse(req.url, true);
-
-    const query = url_parts.query;
-
-    const sMonth = decodeURIComponent(query.sm);
-    const sYear = decodeURIComponent(query.sy);
-    const sDate = decodeURIComponent(query.sd);
-    const eMonth = decodeURIComponent(query.em);
-    const eYear = decodeURIComponent(query.ey);
-    const eDate = decodeURIComponent(query.ed);
+    const startDate = req.query.startDate
+    const endDate = req.query.endDate
 
     res.set('Content-Type', 'application/json');
 
     esClient.search({
       index: es.index,
-      from: (query.f
-        ? query.f
-        : 0),
-      size: (query.s
-        ? query.s
-        : 10000),
       body: {
         _source: "",
         query: {
-          bool: {
-            must: [
-              {
-                range: {
-                  visitDate: {
-                    gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format("YYYY-mm-dd"),
-                    lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format("YYYY-mm-dd")
-                  }
-                }
-              }
-            ]
-          }
+          bool: { must: [{ range: { visitDate: { gte: startDate, lte: endDate } } }] }
         },
         aggs: {
           raw: {
@@ -1565,6 +1539,9 @@ module.exports = function (app) {
         }
       }
     }, (e, resp) => {
+      if (e) {
+        res.status(e.statusCode).send()
+      }
 
       if (!resp.aggregations)
         return res.end();

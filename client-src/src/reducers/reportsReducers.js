@@ -31,30 +31,10 @@ export default function reportsReducers(state = {
 
       return newState;
 
-    case "FETCH_RAW_DATA_PENDING":
-
-      newState = Object.assign({}, state, {
-        rawData: [],
-        processing: true
-      });
-
-      return newState;
-
-    case "FETCH_RAW_DATA":
-
-      newState = Object.assign({}, state);
-
-      newState
-        .rawData
-        .push(action.payload);
-
-      return newState;
-
-    case "FETCH_RAW_DATA_FULFILLED":
-
-      newState = Object.assign({}, state, { processing: false });
-
-      return newState;
+    case "SET_RAW_DATA":
+      newState = Object.assign({}, state)
+      newState.rawData = action.payload
+      return newState
 
     case "RESET_RAW_DATA":
 
