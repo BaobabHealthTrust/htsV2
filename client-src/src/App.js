@@ -2636,8 +2636,8 @@ class App extends Component {
         const startDate = moment(`${this.props.reports.start.reportYear}-${this.props.dialog.start.numericalMonth + 1}-${this.props.reports.start.reportDate}`, 'YYYY-M-D').format('YYYY-MM-DD')
         const endDate = moment(`${this.props.reports.end.reportYear}-${this.props.dialog.end.numericalMonth + 1}-${this.props.reports.end.reportDate}`, 'YYYY-M-D').format('YYYY-MM-DD')  
 
-        this.worker.postMessage({ url: 'http://localhost:3001/raw', startDate: startDate, endDate: endDate })
-        this.dailyWorker.postMessage({ url: 'http://localhost:3001/raw', date: this.state.currentDayInRawDataReport })
+        this.worker.postMessage({ url: '/raw', startDate: startDate, endDate: endDate })
+        this.dailyWorker.postMessage({ url: '/raw', date: this.state.currentDayInRawDataReport })
       })
 
     } else if (this.props.app.activeReport === "pepfar report") {
@@ -2669,7 +2669,7 @@ class App extends Component {
     if (!this.props.reports || (this.props.reports && !this.props.reports.start) || (this.props.reports && !this.props.reports.end)) return;
 
     this.setState({ currentDayInRawDataReport: moment(this.state.currentDayInRawDataReport).add(1, 'days').format('YYYY-MM-DD') }, () => {
-      this.dailyWorker.postMessage({ url: 'http://localhost:3001/raw', date: this.state.currentDayInRawDataReport })
+      this.dailyWorker.postMessage({ url: '/raw', date: this.state.currentDayInRawDataReport })
     })
   }
 
@@ -2677,7 +2677,7 @@ class App extends Component {
     if (!this.props.reports || (this.props.reports && !this.props.reports.start) || (this.props.reports && !this.props.reports.end)) return;
 
     this.setState({ currentDayInRawDataReport: moment(this.state.currentDayInRawDataReport).subtract(1, 'days').format('YYYY-MM-DD') }, () => {
-      this.dailyWorker.postMessage({ url: 'http://localhost:3001/raw', date: this.state.currentDayInRawDataReport })
+      this.dailyWorker.postMessage({ url: '/raw', date: this.state.currentDayInRawDataReport })
     })
   }
 
