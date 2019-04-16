@@ -5656,7 +5656,8 @@ module.exports = function (app) {
     const existingVillage = await Village.findOne(
       {
         where: {
-          name: village
+          name: village,
+          traditionalAuthorityId: traditionalAuthorityId
         }
       }
     ).catch(e => { return null });
@@ -5701,7 +5702,7 @@ module.exports = function (app) {
 
     } else {
 
-      res.status(200).json({ message: "No new changes found!" });
+      res.status(200).json({ message: "The entered village already exists!" });
 
     }
 
