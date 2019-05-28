@@ -831,6 +831,38 @@ class MonthlyReport extends Component {
                       id="RGTCNP">
                       {this.props.reports["New positive"]}&nbsp;
                     </td>
+                    <td
+                      style={{
+                      borderLeft: "1px solid #333",
+                      width: "80px"
+                    }}>
+                      New positive (Male)
+                    </td>
+                    <td
+                      style={{
+                      width: "80px",
+                      border: "1px solid #333",
+                      textAlign: "right"
+                    }}
+                      id="RGTCNT">
+                      {this.props.reports["New positive (Male)"]}&nbsp;
+                    </td>
+                    <td
+                      style={{
+                      borderLeft: "1px solid #333",
+                      width: "80px"
+                    }}>
+                      New positive (Female)
+                    </td>
+                    <td
+                      style={{
+                      width: "80px",
+                      border: "1px solid #333",
+                      textAlign: "right"
+                    }}
+                      id="RGTCNV">
+                      {this.props.reports["New positive (Female)"]}&nbsp;
+                    </td>
                   </tr>
                   <tr>
                     <td
@@ -1015,6 +1047,36 @@ class MonthlyReport extends Component {
                     }}
                       id="RGTCCP">
                       {this.props.reports["Confirmatory positive"]}&nbsp;
+                    </td>
+                    <td
+                      style={{
+                      borderLeft: "1px solid #333"
+                    }}>
+                      Confirmatory positive (Male)
+                    </td>
+                    <td
+                      style={{
+                      border: "1px solid #333",
+                      width: "80px",
+                      textAlign: "right"
+                    }}
+                      id="RGTCCX">
+                      {this.props.reports["Confirmatory positive (Male)"]}&nbsp;
+                    </td>
+                    <td
+                      style={{
+                      borderLeft: "1px solid #333"
+                    }}>
+                      Confirmatory positive (Female)
+                    </td>
+                    <td
+                      style={{
+                      border: "1px solid #333",
+                      width: "80px",
+                      textAlign: "right"
+                    }}
+                      id="RGTCCY">
+                      {this.props.reports["Confirmatory positive (Female)"]}&nbsp;
                     </td>
                   </tr>
                   <tr>
