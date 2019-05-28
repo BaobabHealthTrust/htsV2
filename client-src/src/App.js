@@ -2729,21 +2729,17 @@ class App extends Component {
 
         }
 
-        let hiddenElement = document.createElement('a');
-        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-        hiddenElement.target = '_blank';
-        hiddenElement.download = filename + '.csv';
+        window.URL = window.URL || window.webkitURL
+        let link = document.createElement('a')
+        let blob = new Blob([csv])
 
-        document.body.appendChild(hiddenElement);
-
-        hiddenElement.click();
-
-        document.body.removeChild(hiddenElement);
-
+        link.href = window.URL.createObjectURL(blob)
+        link.download = `${filename}.csv`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
       } catch (e) {
-
-        this.showErrorMsg("CSV Download Error", e);
-
+        this.props.showErrorMsg("CSV Download Error", e);
       }
 
     }
