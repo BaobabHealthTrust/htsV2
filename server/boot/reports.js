@@ -1147,13 +1147,8 @@ module.exports = function (app) {
                       }	
                     },
                     {
-                      match: {
-                        observation: "Sex/Pregnancy"
-                      }
-                    },
-                    {
-                      match: {
-                        observationValue: "Male"
+                      query_string: {
+                        query: `observation: "Sex/Pregnancy" AND observationValue: "Male"`
                       }
                     },
                     {
@@ -1234,18 +1229,8 @@ module.exports = function (app) {
                       }	
                     },
                     {
-                      match: {
-                        observation: "Sex/Pregnancy"
-                      }
-                    },
-                    {
-                      match: {
-                        observationValue: "Female Pregnant"
-                      }
-                    },
-                    {
-                      match: {
-                        observationValue: "Female Non-Pregnant"
+                      query_string: {
+                        query: `observation: "Sex/Pregnancy" AND (observationValue: "Female Pregnant" OR observationValue: "Female Non-Pregnant")`
                       }
                     },
                     {
@@ -1326,13 +1311,8 @@ module.exports = function (app) {
                       }	
                     },
                     {
-                      match: {
-                        observation: "Sex/Pregnancy"
-                      }
-                    },
-                    {
-                      match: {
-                        observationValue: "Male"
+                      query_string: {
+                        query: `observation: "Sex/Pregnancy" AND observationValue: "Male"`
                       }
                     },
                     {
@@ -1376,23 +1356,8 @@ module.exports = function (app) {
             bool: {
               must: [
                 {
-                  match: {
-                    encounterType: "Confirmatory HIV Testing"
-                  }	
-                },
-                {
-                  match: {
-                    observation: "Result Given to Client"
-                  }
-                },
-                {
-                  match: {
-                    observationValue: "Confirmatory Positive"
-                  }
-                },
-                {
-                  match: {
-                    locationType: location
+                  query_string: {
+                    query: `observation: "Result Given to Client" AND observationValue: "Confirmatory Positive" AND locationType: ${location}`
                   }
                 },
                 {
@@ -1422,34 +1387,16 @@ module.exports = function (app) {
               query: {
                 bool: {
                   must: [
+                    { terms: { encounterId: encounterIds } },
                     {
-                      terms: {
-                        encounterId: encounterIds
-                      }	
-                    },
-                    {
-                      match: {
-                        observation: "Sex/Pregnancy"
+                      query_string: {
+                        query: `observation: "Sex/Pregnancy" AND (observationValue: "Female Pregnant" OR observationValue: "Female Non-Pregnant")`
                       }
                     },
-                    {
-                      match: {
-                        observationValue: "Female Pregnant"
-                      }
-                    },
-                    {
-                      match: {
-                        observationValue: "Female Non-Pregnant"
-                      }
-                    },
-                    {
-                      range: {
-                        visitDate: {
-                          gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
-                          lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
-                        }
-                      }
-                    }
+                    { range: { visitDate: {
+                      gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                      lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
+                    } } }
                   ]
                 }
               }
