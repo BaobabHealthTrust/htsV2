@@ -114,7 +114,8 @@ class App extends Component {
       loaded: {},
       busy: false,
       scanID: null,
-      currentDayInRawDataReport: null
+      currentDayInRawDataReport: null,
+      rawDataPayload: []
     };
 
     this.login = this
@@ -230,10 +231,7 @@ class App extends Component {
       if (e.data.error) {
         this.props.showErrorMsg('Error', e.data.error)
       } else if (e.data.length > 0) {
-        await this.downloadCSV(
-          this.props.reports.dataHeaders,
-          e.data,
-          (this.props.app.activeReport ? String(this.props.app.activeReport).trim().replace(/\s/g, "_") : null))
+        this.setState({ rawDataPayload: e.data })
       }
     }
 
@@ -4207,6 +4205,21 @@ class App extends Component {
         inactive: this.props.app.module === "" && !this.props.app.formActive
           ? true
           : false
+      }, {
+        id: 'fileDownloadCSV',
+        buttonClass: 'blue nav-buttons',
+        onMouseDown: async () => {
+          await this.downloadCSV(this.props.reports.dataHeaders,
+                                 this.state.rawDataPayload,
+                                 (this.props.app.activeReport ? String(this.props.app.activeReport).trim().replace(/\s/g, "_") : null))
+        },
+        label: 'Download Report',
+        extraStyles: {
+          cssFloat: "right",
+          marginTop: "15px",
+          marginRight: "15px"
+        },
+        disabled: this.props.app.currentSection !== "reports" || this.props.app.activeReport!== "raw data report" || this.state.rawDataPayload.length === 0
       }, {
         id: "btnTranscribe",
         buttonClass: "blue nav-buttons",
