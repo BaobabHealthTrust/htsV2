@@ -29,6 +29,20 @@ To run the application,
         pm2 startup
     ```
 
+## HTTPS Setup
+1. Navigate to the htsV2/certs directory and run the following commands
+```bash
+openssl genrsa -out privatekey.pem 1024
+openssl req -new -key privatekey.pem -out certrequest.csr
+openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
+```
+
+- When the application loads in the browser it'll complain about an insecure URL. Proceed regardless.
+- Click the not-secure badge and select the certificate
+- Download it and save it as a .crt file
+- Add the certificate to the list of trusted authorities in your browser's security settings
+- Close the tab and navigate to the application again 
+
 ##DDE 3.1 Configuration
 1. Make sure the parameters for use_dde and use_art in dde.json are set to false, leave the default values as they are for the other attributes as they are.
 

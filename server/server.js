@@ -1,160 +1,172 @@
-'use strict';
+'use strict'
 
-var loopback = require('loopback');
-var boot = require('loopback-boot');
+var loopback = require('loopback')
+var boot = require('loopback-boot')
 
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var path = require('path');
-var fs = require('fs');
+var cookieParser = require('cookie-parser')
+var bodyParser = require('body-parser')
+var path = require('path')
+var fs = require('fs')
 
-var bfj = require("bfj");
-var bpmn = require(path.resolve('lib', 'process_bpmn.js')).ProcessBPMN;
-var chokidar = require('chokidar');
+var bfj = require("bfj")
+var bpmn = require(path.resolve('lib', 'process_bpmn.js')).ProcessBPMN
+var chokidar = require('chokidar')
 
-var app = module.exports = loopback();
+const https = require('https')
+const sslConfig = require('../ssl-config')
+const morgan = require('morgan')
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+var app = module.exports = loopback()
 
-var watcher = chokidar.watch('./programs', { persistent: true });
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(morgan('combined'))
+
+var watcher = chokidar.watch('./programs', { persistent: true })
 
 function generateTree(filename, cb) {
 
-  var root = '';
-  var folder = '';
+  var root = ''
+  var folder = ''
 
-  var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i);
+  var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i)
 
   if (parts) {
 
-    folder = String(parts[1]).trim();
+    folder = String(parts[1]).trim()
 
-    root = String(parts[2]).trim();
+    root = String(parts[2]).trim()
 
   } else {
 
-    root = 'unknown';
-    return;
+    root = 'unknown'
+    return
 
   }
 
   var raw,
-    json;
+    json
 
-  bpmn.init(filename);
+  bpmn.init(filename)
 
-  raw = bpmn.raw;
+  raw = bpmn.raw
 
   bpmn.loadDataTypes(function () {
 
     bpmn
       .createTree(function () {
 
-        fs.writeFileSync(folder + '/.' + root + '-raw.json', JSON.stringify(bpmn.raw, undefined, 2));
+        fs.writeFileSync(folder + '/.' + root + '-raw.json', JSON.stringify(bpmn.raw, undefined, 2))
 
-        fs.writeFileSync(folder + '/.' + root + '-intermediate.json', JSON.stringify(bpmn.json, undefined, 2));
+        fs.writeFileSync(folder + '/.' + root + '-intermediate.json', JSON.stringify(bpmn.json, undefined, 2))
 
         bfj
           .stringify(bpmn.tree)
           .then(json => {
 
-            fs.writeFileSync(folder + "/" + root + ".json", json);
+            fs.writeFileSync(folder + "/" + root + ".json", json)
 
-            var dictionary = {};
+            var dictionary = {}
 
             bpmn
               .json
               .payload
               .forEach(function (row) {
 
-                dictionary[row.id] = row.label;
+                dictionary[row.id] = row.label
 
               })
 
-            fs.writeFileSync(folder + "/." + root + "-dictionary.json", JSON.stringify(dictionary, undefined, 2));
+            fs.writeFileSync(folder + "/." + root + "-dictionary.json", JSON.stringify(dictionary, undefined, 2))
 
-            cb && cb();
+            cb && cb()
 
           })
 
-      });
+      })
 
-  });
+  })
 
 }
 
 var log = console
   .log
-  .bind(console);
+  .bind(console)
 // Add event listeners.
 watcher.on('add', filename => {
 
-  var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i);
+  var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i)
 
   if (!parts)
-    return;
+    return
 
-  log(`File ${filename} has been added`);
+  log(`File ${filename} has been added`)
 
   generateTree(filename, () => {
 
-    console.log('Done!');
+    console.log('Done!')
 
   })
 
 }).on('change', filename => {
 
-  var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i);
+  var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i)
 
   if (!parts)
-    return;
+    return
 
-  log(`File ${filename} has been changed`);
+  log(`File ${filename} has been changed`)
 
   generateTree(filename, () => {
 
-    console.log('Done!');
+    console.log('Done!')
 
   })
 
 }).on('unlink', filename => {
 
-  var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i);
+  var parts = filename.match(/(^.+)\/([^\/]+)\.bpmn$/i)
 
   if (!parts)
-    return;
+    return
 
-  log(`File ${filename} has been removed`);
+  log(`File ${filename} has been removed`)
 
-});
+})
 
 app.start = function () {
+  const options = {
+    key: sslConfig.privateKey,
+    cert: sslConfig.certificate
+  }
+
+  const server = https.createServer(options, app)
   // start the web server
-  return app.listen(function () {
-    app.emit('started');
-    var baseUrl = app
-      .get('url')
-      .replace(/\/$/, '');
-    console.log('Web server listening at: %s', baseUrl);
+  server.listen(app.get('port'), function () {
+    app.emit('started')
+  
+    var baseUrl = app.get('url').replace(/\/$/, '')
+
+    console.log('Web server listening at: %s', baseUrl)
+  
     if (app.get('loopback-component-explorer')) {
-      var explorerPath = app
-        .get('loopback-component-explorer')
-        .mountPath;
-      console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
+      var explorerPath = app.get('loopback-component-explorer').mountPath
+      console.log('Browse your REST API at %s%s', baseUrl, explorerPath)
     }
-  });
-};
+  })
+
+  return server
+}
 
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function (err) {
   if (err)
-    throw err;
+    throw err
 
   // start the server if `$ node server.js`
   if (require.main === module)
-    app.start();
+    app.start()
 }
-);
+)
