@@ -14,14 +14,12 @@ var chokidar = require('chokidar')
 
 const https = require('https')
 const sslConfig = require('../ssl-config')
-const morgan = require('morgan')
 
 var app = module.exports = loopback()
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(morgan('combined'))
 
 var watcher = chokidar.watch('./programs', { persistent: true })
 
