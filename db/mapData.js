@@ -4,6 +4,7 @@ const readline = require('readline');
 const fs = require('fs');
 const glob = require('glob');
 const async = require('async');
+const axios = require('axios')
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -23,7 +24,7 @@ let pending = {};
 let dumps = [];
 let encounters = {};
 
-rl.on('line', (line) => {
+rl.on('line', async (line) => {
 
     const row = line.split("\t");
 
@@ -113,21 +114,59 @@ rl.on('line', (line) => {
 
             }
 
-        } else {
-
-            data.push(JSON.stringify(header));
-
-            data.push(JSON.stringify(entry));
-
         }
 
+        if (type !== 'visit') {
+            await axios.post(
+                `${es.protocol}://${es.host}:${es.port}/${es.index}/${type}`,
+                entry,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+        }
     }
-
 })
 
-rl.on('close', () => {
+rl.on('close', async () => {
+    let payload = []
+    let entry = null
 
-    process.stdout.write(data.join("\n") + "\n");
+    //while there is still data to send
+    while (entry = data.shift()) {
+        payload.push(entry)
+
+        //if the payload contains two thousand visits
+        //send the visits, reset payload and entry to buffer again
+        if (payload.length === 4000) {
+            await axios.post(
+                `${es.protocol}://${es.host}:${es.port}/${es.index}/_bulk`,
+                payload.join('\n') + '\n',
+                {
+                    headers: {
+                        'Content-Type': 'application/x-ndjson'
+                    }
+                }
+            )
+            payload = []
+            entry = null
+        }
+    }
+
+    //if there are no more entries but the payload did not reach 2000 visits
+    if (payload.length > 0) {
+        await axios.post(
+            `${es.protocol}://${es.host}:${es.port}/${es.index}/_bulk`,
+            payload.join('\n') + '\n',
+            {
+                headers: {
+                    'Content-Type': 'application/x-ndjson'
+                }
+            }
+        )
+    }
 
     for (let i = 0; i < dumps.length; i++) {
 

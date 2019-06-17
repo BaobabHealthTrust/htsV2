@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (app) {
-
+  
   var router = app
     .loopback
     .Router();
@@ -271,11 +271,7 @@ module.exports = function (app) {
 
   router.get('/dde/search_by_identifier/:identifier', async function (req, res, next) {
 
-    const artOnline = await runCmd(`nc -vz ${version === '3.0' ? ddeConfig.art_settings.host : ddeConfig.art_host} ${version === '3.0' ? ddeConfig.art_settings.port : ddeConfig.art_port}`);
-
-    debug(artOnline);
-
-    if (ddeConfig.use_art && !String(artOnline).match(/refused/i)) {
+    if (ddeConfig.use_art) {
 
       const args = {
         requestConfig: {
@@ -934,11 +930,7 @@ module.exports = function (app) {
 
   router.post('/dde/search_by_name_and_gender', async function (req, res, next) {
 
-    const artOnline = await runCmd(`nc -vz ${version === '3.0' ? ddeConfig.art_settings.host : ddeConfig.art_host} ${version === '3.0' ? ddeConfig.art_settings.port : ddeConfig.art_port}`);
-
-    console.log(artOnline);
-
-    if (ddeConfig.use_art && !String(artOnline).match(/refused/i)) {
+    if (ddeConfig.use_art) {
 
       debug(JSON.stringify(req.body));
 
@@ -1341,7 +1333,6 @@ module.exports = function (app) {
       })
 
     }
-
   })
 
   router.post('/dde/advanced_patient_search', function (req, res, next) {

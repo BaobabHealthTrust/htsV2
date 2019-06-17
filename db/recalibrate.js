@@ -10,6 +10,7 @@ const glob = require('glob');
 const client = require("node-rest-client").Client;
 const async = require('async');
 const seed = require("./seed.json");
+const os = require('os')
 
 String.prototype.toUnderScore = function () {
     return this.replace(/^[A-Z]/, ($1) => {
@@ -104,7 +105,6 @@ const debug = (msg) => {
 }
 
 const runCmd = (cmd) => {
-
     return new Promise((resolve, reject) => {
 
         const exec = require('child_process').exec;
@@ -141,6 +141,12 @@ const runCmd = (cmd) => {
 
     })
 
+}
+
+function runCommandAsync (cmd) {
+    const A_TENTH_OF_SYSTEM_MEMORY = os.totalmem() / 10
+    const exec = require('util').promisify(require('child_process').exec)
+    return exec(cmd, { maxBuffer: A_TENTH_OF_SYSTEM_MEMORY })
 }
 
 const env = (process.env.NODE_ENV
@@ -627,7 +633,7 @@ const recalibrate = async () => {
         },
         {
             message: "Loading registers ...",
-            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "DROP TABLE IF EXISTS t1; CREATE TEMPORARY TABLE IF NOT EXISTS t1 (INDEX(register_id), INDEX(registerNumber)) ENGINE MyISAM AS (SELECT register_id, CASE WHEN register_number REGEXP \'^[[:digit:]]+$\' THEN CONCAT(register_number, \'-\', (SELECT name FROM hts_register_service_delivery_point WHERE hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id LIMIT 1)) WHEN register_number REGEXP \'[[:digit:]]-[^-]+-[^-]+\' THEN CONCAT((SELECT SUBSTRING(register_number, 1, LOCATE(\'-\', register_number))), (SELECT name FROM hts_register_service_delivery_point WHERE hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id LIMIT 1)) ELSE register_number END AS registerNumber FROM hts_register LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id); UPDATE hts_register SET register_number = (SELECT registerNumber FROM t1 WHERE register_id = hts_register.register_id LIMIT 1); SELECT register_number AS _id, register_number AS registerNumber, hts_register_location_type.name AS locationType, hts_register_service_delivery_point.name AS serviceDeliveryPoint, DATE_FORMAT(date_created, \'%Y-%m-%d\') AS dateCreated FROM hts_register LEFT OUTER JOIN hts_register_location_type ON hts_register_location_type.location_type_id = hts_register.location_type_id LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id WHERE closed = 0" | ./mapData.js --type register | curl -H "Content-Type: application/x-ndjson" -X POST --data-binary @- "' + es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + '/_bulk" -s'
+            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "DROP TABLE IF EXISTS t1; CREATE TEMPORARY TABLE IF NOT EXISTS t1 (INDEX(register_id), INDEX(registerNumber)) ENGINE MyISAM AS (SELECT register_id, CASE WHEN register_number REGEXP \'^[[:digit:]]+$\' THEN CONCAT(register_number, \'-\', (SELECT name FROM hts_register_service_delivery_point WHERE hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id LIMIT 1)) WHEN register_number REGEXP \'[[:digit:]]-[^-]+-[^-]+\' THEN CONCAT((SELECT SUBSTRING(register_number, 1, LOCATE(\'-\', register_number))), (SELECT name FROM hts_register_service_delivery_point WHERE hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id LIMIT 1)) ELSE register_number END AS registerNumber FROM hts_register LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id); UPDATE hts_register SET register_number = (SELECT registerNumber FROM t1 WHERE register_id = hts_register.register_id LIMIT 1); SELECT register_number AS _id, register_number AS registerNumber, hts_register_location_type.name AS locationType, hts_register_service_delivery_point.name AS serviceDeliveryPoint, DATE_FORMAT(date_created, \'%Y-%m-%d\') AS dateCreated FROM hts_register LEFT OUTER JOIN hts_register_location_type ON hts_register_location_type.location_type_id = hts_register.location_type_id LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id WHERE closed = 0" | ./mapData.js --type register'
         },
         {
             message: "Adding missing age data to obs table ...",
@@ -647,7 +653,7 @@ const recalibrate = async () => {
         },
         {
             message: "Loading obs data ...",
-            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "SELECT DISTINCT DATE_FORMAT(encounter_datetime, \'%Y-%m-%d\') AS visitDate, encounter_type.name AS encounterType, concept_name.name AS observation, CASE WHEN COALESCE(obs.value_coded_name_id, \'\') != \'\' THEN (SELECT name FROM concept_name WHERE concept_name_id = obs.value_coded_name_id LIMIT 1) WHEN COALESCE(obs.value_datetime, \'\') != \'\' THEN DATE_FORMAT(obs.value_datetime, \'%Y-%m-%d\') WHEN COALESCE(obs.value_numeric, \'\') != \'\' THEN CONCAT(obs.value_numeric, CASE WHEN COALESCE(obs.value_modifier, \'\') != \'\' THEN obs.value_modifier ELSE \'\' END)  ELSE obs.value_text END AS observationValue, \'HTS PROGRAM\' AS program, location.name AS location, u.username AS provider, users.username AS user, encounter.encounter_id AS encounterId, person.birthdate AS dateOfBirth, hts_register.register_number AS registerNumber, hts_register_location_type.name AS locationType, hts_register_service_delivery_point.name AS serviceDeliveryPoint, DATEDIFF(CURRENT_DATE, person.birthdate) / 365.0 AS age, obs.obs_id AS obsId, obs.obs_id AS _id FROM encounter LEFT OUTER JOIN patient_program ON patient_program.patient_program_id = encounter.patient_program_id LEFT OUTER JOIN program ON program.program_id = patient_program.program_id LEFT OUTER JOIN encounter_type ON encounter_type.encounter_type_id = encounter.encounter_type LEFT OUTER JOIN obs ON obs.encounter_id = encounter.encounter_id LEFT OUTER JOIN concept ON concept.concept_id = obs.concept_id LEFT OUTER JOIN concept_name ON concept_name.concept_id = concept.concept_id LEFT OUTER JOIN location ON location.location_id = encounter.location_id LEFT OUTER JOIN users ON users.user_id = encounter.creator LEFT OUTER JOIN users u ON u.person_id = encounter.provider_id LEFT OUTER JOIN person ON person.person_id = obs.person_id LEFT OUTER JOIN hts_register_encounter_mapping ON hts_register_encounter_mapping.encounter_id = encounter.encounter_id LEFT OUTER JOIN hts_register ON hts_register.register_id = hts_register_encounter_mapping.register_id LEFT OUTER JOIN hts_register_location_type ON hts_register_location_type.location_type_id = hts_register.location_type_id LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id WHERE program.name = \'HTS PROGRAM\' AND concept_name.concept_name_id IN (SELECT concept_name_id FROM concept_name_tag_map WHERE concept_name_tag_id = (SELECT concept_name_tag_id FROM concept_name_tag WHERE tag = \'preferred_hts\' AND encounter.encounter_id IN (SELECT encounter_id FROM hts_register_encounter_mapping) LIMIT 1)) AND obs.voided = 0 AND encounter.voided = 0;" | ./mapData.js --type visit | curl -H "Content-Type: application/x-ndjson" -X POST --data-binary @- "' + es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + '/_bulk" -s'
+            cmd: 'MYSQL_PWD=' + password + ' mysql -u ' + user + ' ' + database + ' -e "SELECT DISTINCT DATE_FORMAT(encounter_datetime, \'%Y-%m-%d\') AS visitDate, encounter_type.name AS encounterType, concept_name.name AS observation, CASE WHEN COALESCE(obs.value_coded_name_id, \'\') != \'\' THEN (SELECT name FROM concept_name WHERE concept_name_id = obs.value_coded_name_id LIMIT 1) WHEN COALESCE(obs.value_datetime, \'\') != \'\' THEN DATE_FORMAT(obs.value_datetime, \'%Y-%m-%d\') WHEN COALESCE(obs.value_numeric, \'\') != \'\' THEN CONCAT(obs.value_numeric, CASE WHEN COALESCE(obs.value_modifier, \'\') != \'\' THEN obs.value_modifier ELSE \'\' END)  ELSE obs.value_text END AS observationValue, \'HTS PROGRAM\' AS program, location.name AS location, u.username AS provider, users.username AS user, encounter.encounter_id AS encounterId, person.birthdate AS dateOfBirth, hts_register.register_number AS registerNumber, hts_register_location_type.name AS locationType, hts_register_service_delivery_point.name AS serviceDeliveryPoint, DATEDIFF(CURRENT_DATE, person.birthdate) / 365.0 AS age, obs.obs_id AS obsId, obs.obs_id AS _id FROM encounter LEFT OUTER JOIN patient_program ON patient_program.patient_program_id = encounter.patient_program_id LEFT OUTER JOIN program ON program.program_id = patient_program.program_id LEFT OUTER JOIN encounter_type ON encounter_type.encounter_type_id = encounter.encounter_type LEFT OUTER JOIN obs ON obs.encounter_id = encounter.encounter_id LEFT OUTER JOIN concept ON concept.concept_id = obs.concept_id LEFT OUTER JOIN concept_name ON concept_name.concept_id = concept.concept_id LEFT OUTER JOIN location ON location.location_id = encounter.location_id LEFT OUTER JOIN users ON users.user_id = encounter.creator LEFT OUTER JOIN users u ON u.person_id = encounter.provider_id LEFT OUTER JOIN person ON person.person_id = obs.person_id LEFT OUTER JOIN hts_register_encounter_mapping ON hts_register_encounter_mapping.encounter_id = encounter.encounter_id LEFT OUTER JOIN hts_register ON hts_register.register_id = hts_register_encounter_mapping.register_id LEFT OUTER JOIN hts_register_location_type ON hts_register_location_type.location_type_id = hts_register.location_type_id LEFT OUTER JOIN hts_register_service_delivery_point ON hts_register_service_delivery_point.service_delivery_point_id = hts_register.service_delivery_point_id WHERE program.name = \'HTS PROGRAM\' AND concept_name.concept_name_id IN (SELECT concept_name_id FROM concept_name_tag_map WHERE concept_name_tag_id = (SELECT concept_name_tag_id FROM concept_name_tag WHERE tag = \'preferred_hts\' AND encounter.encounter_id IN (SELECT encounter_id FROM hts_register_encounter_mapping) LIMIT 1)) AND obs.voided = 0 AND encounter.voided = 0;" | ./mapData.js --type visit'
         },
         {
             message: "Reloading villages from remote source ...",
@@ -662,9 +668,15 @@ const recalibrate = async () => {
     for (let cmd of commands) {
 
         console.log(cmd.message);
+        try {
+            const { stdout, stderr } = await runCommandAsync(cmd.cmd)
 
-        await runCmd(cmd.cmd).catch(e => { console.log(e) });
-
+            if (stderr) {
+                console.error(stderr)
+            }
+        } catch (e) {
+            console.error(e)
+        }
     }
 
     loadPepfarData();
