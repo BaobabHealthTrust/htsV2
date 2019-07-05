@@ -32,6 +32,7 @@ class U5 extends Component {
                 .props
                 .switchTab("overview", "Overview")
             }
+            : task.label === 'Issues' ? () => this.props.switchTab('issues', 'Issues')
             : task.label === "My Account"
               ? () => {
                 this

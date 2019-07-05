@@ -4,6 +4,7 @@ import ModuleLogo from './moduleLogo';
 import Overview from './overview';
 import MyAccount from './myAccount';
 import Reports from './reports';
+import Issues from './issues';
 import Admin from './admin';
 import ManageRegisters from './manageRegisters';
 import ManageUsers from './manageUsers';
@@ -52,6 +53,7 @@ class U4 extends Component {
                     ? <Overview
                       fetchVisitSummaries={this.props.fetchVisitSummaries}
                       reports={this.props.reports} />
+                    : this.props.currentTab === 'issues' ? <Issues />
                     : this.props.currentTab === "my account"
                       ? <MyAccount app={this.props.app} changePassword={this.props.changePassword} />
                       : this.props.currentTab === "reports"
