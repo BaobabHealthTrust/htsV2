@@ -44,6 +44,13 @@ module.exports = function (app) {
   const ReadableSearch = require("elasticsearch-streams").ReadableSearch;
   const esClient = new require("elasticsearch").Client();
   const pepfarSynthesis = require(__dirname + "/../../lib/pepfarSynthesis.js");
+  const Axios = require("axios");
+  const moment = require("moment");
+
+  const EncounterService = require("../../lib/services/EncounterService")(app);
+  const ObservationService = require("../../lib/services/ObservationService")(app.models);
+  const Utils = require("../../lib/utils")(app)
+  const ESService = require("../../lib/services/ElasticsearchService")()
 
   const monthNames = [
     "January",
@@ -4302,658 +4309,107 @@ module.exports = function (app) {
 
   });
 
-  router.post('/programs/save_edit_data', async function (req, res, next) {
-
-    debug("#######################");
-
-    debug(req.body);
-
-    debug("#######################");
-
-    let json = req.body.full;
-
-    let changes = req.body.changes;
-
-    const entryCode = json.id;
-
-    const activeUser = req.body.activeUser;
-
-    if (!entryCode)
-      return res.status(400).json({ error: true, message: "Saving changes failed" });
-
-    if (!activeUser)
-      return res.status(400).json({ error: true, message: "Missing username" });
-
-    let user = await Users.findOne({
-      where: {
-        username: activeUser
-      }
+  router.post("/programs/save_edit_data", async (request, response) => {
+    const ES_URL = `${es.protocol}://${es.host}:${es.port}/${es.index}`;
+    const PAYLOAD = request.body.changes;
+    const ENTRY_CODE = request.body.full.id;
+    const USER = await Users.findOne({
+      where: { username: request.body.activeUser }
     });
 
-    let userId = (user
-      ? user.id
-      : null);
-
-    if (!userId)
-      return res.status(400).json({ error: true, message: "Invalid user credentials parsed" });
-
-    let serviceDeliveryPoint,
-      clinicId,
-      age,
-      gender,
-      registerNumber,
-      encounterType,
-      program,
-      location,
-      dateOfBirth,
-      encounterId,
-      locationType,
-      today,
-      patientId,
-      locationId;
-
-    if (json["Sex/Pregnancy"]) {
-
-      gender = String(json["Sex/Pregnancy"])
-        .substring(0, 1)
-        .toUpperCase();
-
-    }
-
-    if (json.Age) {
-
-      decodeAge(json);
-
-      age = ((new Date()) - (new Date(json.birthdate
-        ? json.birthdate
-        : json["Date of Birth"]
-          ? json["Date of Birth"]
-          : (new Date())))) / (365.0 * 24.0 * 60.0 * 60.0 * 1000.0);
-
-      dateOfBirth = json.dateOfBirth;
-
-      let patientIdentifier = await Obs.findOne({
-        where: {
-          valueText: entryCode
-        }
-      });
-
-      if (patientIdentifier) {
-
-        let person = await Person.findOne({
-          where: {
-            personId: patientIdentifier.personId
-          }
+    if (Object.keys(PAYLOAD).length && USER) {
+      try {
+        const entryCode = await ObservationService.find({
+          valueText: ENTRY_CODE
         });
 
-        if (person) {
+        // find and void existing observations in MySQL then create new observations
+        // if not found create new observations
+        for (let concept of Object.keys(PAYLOAD)) {
+          const openMrsConcept = await ConceptName.findOne({
+            where: { name: concept }
+          });
+          const newConcept = await ConceptName.findOne({
+            where: { name: PAYLOAD[concept] }
+          });
 
-          patientId = person.personId;
+          const observation = await ObservationService.find({
+            personId: entryCode.personId,
+            conceptId: openMrsConcept.conceptId,
+            encounterId: entryCode.encounterId,
+            voided: 0
+          });
 
-          let result = await Person.upsertWithWhere({
-            personId: person.personId
-          }, {
-              birthdate: json.dateOfBirth,
-              birthdate_estimated: (json["Birthdate Estimated?"] === "Yes"
-                ? 1
-                : 0),
-              gender
-            })
+          if (observation) {
+            let newObservation = observation;
+            await ObservationService.destroy({
+              id: observation.obsId,
+              reason: "Voided by user through update",
+              voider: USER.userId
+            });
 
-        }
+            newObservation.valueCoded = newConcept.conceptId;
+            newObservation.valueCodedNameId = newConcept.conceptNameId;
+            newObservation.dateCreated = moment().format("YYYY-MM-DD");
+            newObservation.obsDatetime = moment().format("YYYY-MM-DD H:m:s");
+            newObservation.obsId = null;
+            newObservation.uuid = uuid();
+            newObservation.creator = USER.userId;
+            newObservation = await Obs.create(newObservation);
 
-      }
-
-    } else {
-
-      let patientIdentifier = await Obs.findOne({
-        where: {
-          valueText: entryCode
-        }
-      });
-
-      if (patientIdentifier) {
-
-        let person = await Person.findOne({
-          where: {
-            personId: patientIdentifier.patientId
-          }
-        });
-
-        if (person) {
-
-          patientId = person.personId;
-
-        }
-
-      }
-
-    }
-
-    let otherMapping = {
-      "Number of Items Given:HTS Family Referral Slips": "HTS Family Referral Slips",
-      "Last HIV Test": "Last HIV Test Result"
-    }
-
-    let args = {
-      data: {
-        query: {
-          query_string: {
-            query: `identifier:"${entryCode}"`
-          }
-        },
-        size: 10000
-      },
-      headers: {
-        "Content-Type": "application/json"
-      }
-    };
-
-    new client().get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, async function (result) {
-
-      let bulk = [];
-
-      for (let key of Object.keys(json)) {
-
-        if (result && result.hits && result.hits.hits) {
-
-          if (key === "HIV Rapid Test Outcomes") {
-
-            Object
-              .keys(json[key])
-              .forEach(e => {
-
-                Object
-                  .keys(json[key][e])
-                  .forEach(async f => {
-
-                    const conceptName = e + " " + f + " Result";
-                    const value = json[key][e][f];
-
-                    let matches = result
-                      .hits
-                      .hits
-                      .filter((e) => {
-                        return e._source.observation === conceptName
-                      });
-
-                    for (let match of matches) {
-
-                      if (!serviceDeliveryPoint)
-                        serviceDeliveryPoint = match._source.serviceDeliveryPoint;
-
-                      let locationName = await Location.findOne({
-                        where: {
-                          name: match._source.location
-                        }
-                      });
-
-                      if (!locationId && locationName)
-                        locationId = locationName.locationId;
-
-                      if (!clinicId)
-                        clinicId = match._source.identifier;
-
-                      if (!age && !json.Age) {
-
-                        age = match._source.age;
-
+            // find and update existing observations in Elasticsearch
+            const lookups = await Promise.all(
+              Object.keys(PAYLOAD).map(key =>
+                Axios.get(`${ES_URL}/visit/_search`, {
+                  data: {
+                    query: {
+                      query_string: {
+                        query: `identifier: "${ENTRY_CODE}" AND observation: "${key}"`
                       }
-
-                      if (!gender && !json["Sex/Pregnancy"]) {
-
-                        gender = match._source.gender;
-
-                      }
-
-                      if (!registerNumber)
-                        registerNumber = match._source.registerNumber;
-
-                      if (!encounterType)
-                        encounterType = match._source.encounterType;
-
-                      if (!program)
-                        program = match._source.program;
-
-                      if (!location)
-                        location = match._source.location;
-
-                      if (!dateOfBirth)
-                        dateOfBirth = match._source.dateOfBirth;
-
-                      if (!encounterId)
-                        encounterId = match._source.encounterId;
-
-                      if (!locationType)
-                        locationType = match._source.locationType;
-
-                      if (!today)
-                        today = match._source.visitDate;
-
-                      let oldObs = await Obs.upsertWithWhere({
-                        obsId: match._source.obsId
-                      }, {
-                          voided: 1,
-                          voidedBy: userId,
-                          dateVoided: new Date(),
-                          voidReason: "Voided by user through update"
-                        })
-
-                      let concept = await ConceptName.findOne({
-                        where: {
-                          name: conceptName,
-                          voided: 0
-                        }
-                      });
-
-                      let conceptId = concept
-                        ? concept.conceptId
-                        : null;
-
-                      let valueCoded = await ConceptName.findOne({
-                        where: {
-                          name: value,
-                          voided: 0
-                        }
-                      });
-
-                      let valueCodedId = valueCoded
-                        ? valueCoded.conceptId
-                        : null;
-
-                      let valueCodedNameId = valueCoded
-                        ? valueCoded.conceptNameId
-                        : null;
-
-                      if (conceptId && value && String(value).length > 0) {
-
-                        let obs;
-
-                        obs = await Obs.create({
-                          personId: patientId,
-                          conceptId,
-                          encounterId: match._source.encounterId,
-                          obsDatetime: new Date(today
-                            ? today
-                            : (new Date())),
-                          locationId,
-                          valueCoded: valueCodedId
-                            ? valueCodedId
-                            : null,
-                          valueCodedNameId,
-                          valueNumeric: !valueCodedId && String(value)
-                            .trim()
-                            .match(/^\d+$/)
-                            ? value
-                            : null,
-                          valueText: !valueCodedId && !String(value)
-                            .trim()
-                            .match(/^\d+$/)
-                            ? value
-                            : null,
-                          creator: userId,
-                          dateCreated: new Date(),
-                          uuid: uuid.v4()
-                        });
-
-                        bulk.push(JSON.stringify({
-                          index: {
-                            _index: es.index,
-                            _type: "visit",
-                            _id: match._id
-                          }
-                        }));
-
-                        bulk.push(JSON.stringify({
-                          visitDate: new Date(today),
-                          encounterType,
-                          identifier: clinicId,
-                          observation: conceptName,
-                          observationValue: value,
-                          program,
-                          location,
-                          user: activeUser,
-                          provider: activeUser,
-                          encounterId,
-                          dateOfBirth,
-                          registerNumber,
-                          locationType,
-                          serviceDeliveryPoint,
-                          age,
-                          obsId: obs.obsId
-                        }));
-
-                      }
-
                     }
+                  }
+                })
+              )
+            );
 
-                  });
+            const observations = lookups.reduce(function(acc, val) {
+              val.data.hits.total && acc.push(val.data.hits.hits[0]);
+              return acc;
+            }, []);
 
-              });
+            const updates = observations.map(observation =>
+              Axios.post(`${ES_URL}/visit/${observation._id}/_update`, {
+                doc: {
+                  observationValue: PAYLOAD[observation._source.observation]
+                }
+              })
+            );
 
+            await Promise.all(updates);
           } else {
+            const created = await Obs.create({
+              conceptId: openMrsConcept.conceptId,
+              valueCoded: newConcept.conceptId,
+              valueCodedNameId: newConcept.conceptNameId,
+              obsDatetime: moment().format("YYYY-MM-DD H:m:s"),
+              dateCreated: moment().format("YYYY-MM-DD"),
+              uuid: uuid(),
+              encounterId: entryCode.encounterId,
+              personId: entryCode.personId,
+              creator: USER.userId
+            });
 
-            let matches = result
-              .hits
-              .hits
-              .filter((e) => {
-                return e._source.observation === key || e._source.observation === otherMapping[key]
-              });
-
-            if (matches.length > 0) {
-
-              for (let match of matches) {
-
-                if (!serviceDeliveryPoint)
-                  serviceDeliveryPoint = match._source.serviceDeliveryPoint;
-
-                if (!clinicId)
-                  clinicId = match._source.identifier;
-
-                if (!age && !json.Age) {
-
-                  age = match._source.age;
-
-                }
-
-                if (!gender && !json["Sex/Pregnancy"]) {
-
-                  gender = match._source.gender;
-
-                }
-
-                let locationName = await Location.findOne({
-                  where: {
-                    name: match._source.location
-                  }
-                });
-
-                if (!locationId && locationName)
-                  locationId = locationName.locationId;
-
-                if (!registerNumber)
-                  registerNumber = match._source.registerNumber;
-
-                if (!encounterType)
-                  encounterType = match._source.encounterType;
-
-                if (!program)
-                  program = match._source.program;
-
-                if (!location)
-                  location = match._source.location;
-
-                if (!dateOfBirth)
-                  dateOfBirth = match._source.dateOfBirth;
-
-                if (!encounterId)
-                  encounterId = match._source.encounterId;
-
-                if (!locationType)
-                  locationType = match._source.locationType;
-
-                if (!today)
-                  today = match._source.visitDate;
-
-                let concept = await ConceptName.findOne({
-                  where: {
-                    name: (otherMapping[key]
-                      ? otherMapping[key]
-                      : key),
-                    voided: 0
-                  }
-                });
-
-                let conceptId = concept
-                  ? concept.conceptId
-                  : null;
-
-                let valueCoded = await ConceptName.findOne({
-                  where: {
-                    name: json[key],
-                    voided: 0
-                  }
-                });
-
-                let valueCodedId = valueCoded
-                  ? valueCoded.conceptId
-                  : null;
-
-                let valueCodedNameId = valueCoded
-                  ? valueCoded.conceptNameId
-                  : null;
-
-                if (conceptId && json[key] && String(json[key]).length > 0) {
-
-                  let obs;
-
-                  obs = await Obs.create({
-                    personId: patientId,
-                    conceptId,
-                    encounterId: match._source.encounterId,
-                    obsDatetime: new Date(today
-                      ? today
-                      : (new Date())),
-                    locationId,
-                    valueCoded: valueCodedId
-                      ? valueCodedId
-                      : null,
-                    valueCodedNameId,
-                    valueNumeric: !valueCodedId && String(json[key])
-                      .trim()
-                      .match(/^\d+$/)
-                      ? json[key]
-                      : null,
-                    valueText: !valueCodedId && !String(json[key])
-                      .trim()
-                      .match(/^\d+$/)
-                      ? json[key]
-                      : null,
-                    creator: userId,
-                    dateCreated: new Date(),
-                    uuid: uuid.v4()
-                  });
-
-                  let oldObs = await Obs.upsertWithWhere({
-                    obsId: match._source.obsId
-                  }, {
-                      voided: 1,
-                      voidedBy: userId,
-                      dateVoided: new Date(),
-                      voidReason: "Voided by user through update"
-                    })
-
-                  bulk.push(JSON.stringify({
-                    index: {
-                      _index: es.index,
-                      _type: "visit",
-                      _id: match._id
-                    }
-                  }));
-
-                  bulk.push(JSON.stringify({
-                    visitDate: new Date(today),
-                    encounterType,
-                    identifier: clinicId,
-                    observation: (otherMapping[key]
-                      ? otherMapping[key]
-                      : key),
-                    observationValue: json[key],
-                    program,
-                    location,
-                    user: activeUser,
-                    provider: activeUser,
-                    encounterId,
-                    dateOfBirth,
-                    registerNumber,
-                    locationType,
-                    serviceDeliveryPoint,
-                    age,
-                    obsId: obs.obsId
-                  }));
-
-                }
-
-              }
-
-            } else if (["Age"].indexOf(key) < 0) {
-
-              try {
-
-                let concept = await ConceptName.findOne({
-                  where: {
-                    name: (otherMapping[key]
-                      ? otherMapping[key]
-                      : key),
-                    voided: 0
-                  }
-                });
-
-                let conceptId = concept
-                  ? concept.conceptId
-                  : null;
-
-                let valueCoded = await ConceptName.findOne({
-                  where: {
-                    name: json[key],
-                    voided: 0
-                  }
-                });
-
-                let valueCodedId = valueCoded
-                  ? valueCoded.conceptId
-                  : null;
-
-                let valueCodedNameId = valueCoded
-                  ? valueCoded.conceptNameId
-                  : null;
-
-                if (conceptId && json[key] && String(json[key]).length > 0) {
-
-                  let obs;
-
-                  obs = await Obs.create({
-                    personId: patientId,
-                    conceptId,
-                    encounterId,
-                    obsDatetime: new Date(today
-                      ? today
-                      : (new Date())),
-                    locationId,
-                    valueCoded: valueCodedId
-                      ? valueCodedId
-                      : null,
-                    valueCodedNameId,
-                    valueNumeric: !valueCodedId && String(json[key])
-                      .trim()
-                      .match(/^\d+$/)
-                      ? json[key]
-                      : null,
-                    valueText: !valueCodedId && !String(json[key])
-                      .trim()
-                      .match(/^\d+$/)
-                      ? json[key]
-                      : null,
-                    creator: userId,
-                    dateCreated: new Date(),
-                    uuid: uuid.v4()
-                  });
-
-                  bulk.push(JSON.stringify({
-                    index: {
-                      _index: es.index,
-                      _type: "visit"
-                    }
-                  }));
-
-                  bulk.push(JSON.stringify({
-                    visitDate: new Date(today),
-                    encounterType,
-                    identifier: clinicId,
-                    observation: (otherMapping[key]
-                      ? otherMapping[key]
-                      : key),
-                    observationValue: json[key],
-                    program,
-                    location,
-                    user: activeUser,
-                    provider: activeUser,
-                    encounterId,
-                    dateOfBirth,
-                    registerNumber,
-                    locationType,
-                    serviceDeliveryPoint,
-                    age,
-                    obsId: obs.obsId
-                  }));
-
-                }
-
-              } catch (e) {
-
-                console.log(e);
-
-              }
-
-            }
-
+            const entry = await Utils.mapObservationToElasticEntry(created.obsId)
+            await ESService.createDocument('visit', entry, created.obsId)
           }
-
         }
 
-        bulk.push(JSON.stringify({
-          delete: {
-            _index: es.index,
-            _type: "pepfar",
-            _id: entryCode
-          }
-        }));
-
-        if (["New Negative", "New Positive"].indexOf(json["Result Given to Client"]) >= 0) {
-
-          bulk.push(JSON.stringify({
-            index: {
-              _index: es.index,
-              _type: "pepfar",
-              _id: entryCode
-            }
-          }));
-
-          bulk.push(JSON.stringify({
-            htsAccessType: json["HTS Access Type"],
-            resultGiven: String(json["Result Given to Client"])
-              .replace(/new/i, "")
-              .trim(),
-            gender,
-            serviceDeliveryPoint,
-            month: monthNames[(new Date(today)).getMonth()],
-            year: (new Date(today)).getFullYear(),
-            age,
-            visitDate: (new Date(today)),
-            entryCode: clinicId
-          }));
-
-        }
-
+        response.status(204).send();
+      } catch (e) {
+        console.log(e);
+        response.status(500).send({ message: e.message });
       }
-
-      var bulkArgs = {
-        data: bulk.join("\n") + "\n",
-        headers: {
-          "Content-Type": "application/x-ndjson"
-        }
-      };
-
-      new client().post(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/_bulk", bulkArgs, async function (result) {
-
-        res
-          .status(200)
-          .json(json);
-
-      })
-
-    });
-
+    } else response.status(400).send({});
   });
 
   router.get('/test_gen', function (req, res, next) {
@@ -5944,6 +5400,15 @@ module.exports = function (app) {
     res.end();
 
   })
+
+  router.get("/programs/invalid_encounters", async (request, response) => {
+    try {
+      const encounters = await EncounterService.invalidEncounters();
+      response.status(200).send(encounters);
+    } catch (e) {
+      response.status(500).send({ message: e.message });
+    }
+  });
 
   app.use(router);
 
