@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import moment from 'moment'
 import Topbar from "./components/topbar";
 import U13 from "./components/u13";
 import Container from "./components/container";
@@ -68,8 +69,10 @@ import {
 import {
   fetchReport,
   setPeriod,
-  fetchRaw,
+  setRawData,
   resetRawData,
+  setDailyRawData,
+  resetDailyRawData,
   setDataHeaders,
   fetchDailyRegister,
   fetchVisitSummaries,
@@ -96,6 +99,11 @@ import uuid from 'uuid';
 // eslint-disable-next-line
 import password from "./images/password";
 
+// eslint-disable-next-line import/no-webpack-loader-syntax
+let worker = require("worker-loader!./reportWorker.js")
+// eslint-disable-next-line import/no-webpack-loader-syntax
+let dailyWorker = require("worker-loader!./dailyReportWorker.js")
+
 class App extends Component {
 
   constructor(props) {
@@ -107,7 +115,9 @@ class App extends Component {
       suspendedWorkflow: "",
       loaded: {},
       busy: false,
-      scanID: null
+      scanID: null,
+      currentDayInRawDataReport: null,
+      rawDataPayload: []
     };
 
     this.login = this
@@ -210,7 +220,6 @@ class App extends Component {
         this.setCookie('accessToken', '', 1);
 
       });
-
   }
 
   componentWillMount() {
@@ -219,6 +228,25 @@ class App extends Component {
 
     this.props.getVersion();
 
+    this.worker = new worker()
+    this.worker.onmessage = async (e) => {
+      if (e.data.error) {
+        this.props.showErrorMsg('Error', e.data.error)
+      } else if (e.data.length > 0) {
+        this.props.setRawData(e.data)
+      }
+    }
+
+    this.dailyWorker = new dailyWorker()
+    this.dailyWorker.onmessage = (e) => {
+      if (e.data.error) {
+        this.props.showErrorMsg('Error', e.data.error)
+      } else if (e.data.message) {
+        this.props.showInfoMsg('Information', e.data.message)
+      } else {
+        this.props.setDailyRawData(e.data)
+      }
+    }
   }
 
   tmrHandle = null;
@@ -2604,14 +2632,15 @@ class App extends Component {
         .fetchDailyRegister(this.props.dialog.start.numericalMonth, this.props.dialog.start.reportYear, this.props.reports.location, this.props.reports.testType, this.props.reports.test);
 
     } else if (this.props.app.activeReport === "raw data report") {
+      this.setState({
+        currentDayInRawDataReport: moment(`${this.props.reports.start.reportYear}-${this.props.dialog.start.numericalMonth + 1}-${this.props.reports.start.reportDate}`, 'YYYY-M-D').format('YYYY-MM-DD')
+      }, async () => {
+        const startDate = moment(`${this.props.reports.start.reportYear}-${this.props.dialog.start.numericalMonth + 1}-${this.props.reports.start.reportDate}`, 'YYYY-M-D').format('YYYY-MM-DD')
+        const endDate = moment(`${this.props.reports.end.reportYear}-${this.props.dialog.end.numericalMonth + 1}-${this.props.reports.end.reportDate}`, 'YYYY-M-D').format('YYYY-MM-DD')  
 
-      await this
-        .props
-        .resetRawData();
-
-      this
-        .props
-        .fetchRaw("/raw", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.start.reportDate, this.props.reports.end.reportDate);
+        this.worker.postMessage({ url: '/raw', startDate: startDate, endDate: endDate })
+        this.dailyWorker.postMessage({ url: '/raw', date: this.state.currentDayInRawDataReport })
+      })
 
     } else if (this.props.app.activeReport === "pepfar report") {
 
@@ -2638,6 +2667,22 @@ class App extends Component {
 
   }
 
+  async nextPageOfRawDataReport () {
+    if (!this.props.reports || (this.props.reports && !this.props.reports.start) || (this.props.reports && !this.props.reports.end)) return;
+
+    this.setState({ currentDayInRawDataReport: moment(this.state.currentDayInRawDataReport).add(1, 'days').format('YYYY-MM-DD') }, () => {
+      this.dailyWorker.postMessage({ url: '/raw', date: this.state.currentDayInRawDataReport })
+    })
+  }
+
+  async previousPageOfRawDataReport () {
+    if (!this.props.reports || (this.props.reports && !this.props.reports.start) || (this.props.reports && !this.props.reports.end)) return;
+
+    this.setState({ currentDayInRawDataReport: moment(this.state.currentDayInRawDataReport).subtract(1, 'days').format('YYYY-MM-DD') }, () => {
+      this.dailyWorker.postMessage({ url: '/raw', date: this.state.currentDayInRawDataReport })
+    })
+  }
+
   async selectPatient(activePatient) {
 
     await this
@@ -2654,7 +2699,7 @@ class App extends Component {
 
   }
 
-  downloadCSV(headers = [], data = [], filename = "download", delimiter = '\t') {
+  async downloadCSV (headers = [], data = [], filename = "download", delimiter = '\t') {
 
     if (this.props.app.activeReport === "pepfar report") {
 
@@ -2686,21 +2731,17 @@ class App extends Component {
 
         }
 
-        let hiddenElement = document.createElement('a');
-        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-        hiddenElement.target = '_blank';
-        hiddenElement.download = filename + '.csv';
+        window.URL = window.URL || window.webkitURL
+        let link = document.createElement('a')
+        let blob = new Blob([csv])
 
-        document.body.appendChild(hiddenElement);
-
-        hiddenElement.click();
-
-        document.body.removeChild(hiddenElement);
-
+        link.href = window.URL.createObjectURL(blob)
+        link.download = `${filename}.csv`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
       } catch (e) {
-
-        this.showErrorMsg("CSV Download Error", e);
-
+        this.props.showErrorMsg("CSV Download Error", e);
       }
 
     }
@@ -4130,25 +4171,59 @@ class App extends Component {
         inactive: this.props.app.module === "" && !this.props.app.formActive
           ? true
           : false
-      }, {
-        id: "btnDownloadCSV",
+      },
+      {
+        id: "btnNextPageInReport",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
-          this.downloadCSV(this.props.reports.dataHeaders, this.props.reports.rawData, (this.props.app.activeReport
-            ? String(this.props.app.activeReport).trim().replace(/\s/g, "_")
-            : null));
+          this.nextPageOfRawDataReport();
         },
-        label: "Download CSV",
+        label: 'Next >>>>',
         extraStyles: {
           cssFloat: "right",
-          marginTop: "15px"
+          marginTop: "15px",
+          marginRight: "15px"
         },
-        disabled: this.props.app.currentSection !== "reports" || this.props.app.activeReport === "monthly report" || this.props.app.selectedTask === "Report Filter"
+        disabled: this.props.app.currentSection !== "reports" || this.props.app.activeReport!== "raw data report" || this.state.currentDayInRawDataReport === null || this.props.app.formActive
           ? true
           : false,
         inactive: this.props.app.module === "" && !this.props.app.formActive
           ? true
           : false
+      },
+      {
+        id: "btnPreviousPageInReport",
+        buttonClass: "blue nav-buttons",
+        onMouseDown: () => {
+          this.previousPageOfRawDataReport();
+        },
+        label: '<<<< Prev',
+        extraStyles: {
+          cssFloat: "right",
+          marginTop: "15px",
+          marginRight: "15px"
+        },
+        disabled: this.props.app.currentSection !== "reports" || this.props.app.activeReport!== "raw data report" || this.state.currentDayInRawDataReport === null || this.props.app.formActive
+          ? true
+          : false,
+        inactive: this.props.app.module === "" && !this.props.app.formActive
+          ? true
+          : false
+      }, {
+        id: 'fileDownloadCSV',
+        buttonClass: 'blue nav-buttons',
+        onMouseDown: async () => {
+          await this.downloadCSV(this.props.reports.dataHeaders,
+                                 this.props.reports.rawData,
+                                 (this.props.app.activeReport ? String(this.props.app.activeReport).trim().replace(/\s/g, "_") : null))
+        },
+        label: 'Download Report',
+        extraStyles: {
+          cssFloat: "right",
+          marginTop: "15px",
+          marginRight: "15px"
+        },
+        disabled: this.props.app.currentSection !== "reports" || this.props.app.activeReport!== "raw data report" || this.props.reports.rawData.length === 0
       }, {
         id: "btnTranscribe",
         buttonClass: "blue nav-buttons",
@@ -4355,7 +4430,9 @@ class App extends Component {
                   : null}
                 scrollPepfarData={this
                   .scrollPepfarData
-                  .bind(this)} />)
+                  .bind(this)}
+                nextPageOfRawDataReport={ this.nextPageOfRawDataReport.bind(this) }
+                previousPageOfRawDataReport={this.previousPageOfRawDataReport.bind(this)}   />)
               : this.props.app.userManagementActive === true
                 ? <UsersViewer
                   editUser={this
@@ -5028,15 +5105,21 @@ const mapDispatchToProps = dispatch => {
         resolve();
       })
     },
-    fetchRaw: (baseUrl, sMonth, sYear, eMonth, eYear, sDate, eDate) => {
-      return new Promise(resolve => {
-        dispatch(fetchRaw(baseUrl, sMonth, sYear, eMonth, eYear, sDate, eDate));
-        resolve();
-      })
+    setRawData: async (data) => {
+      return await dispatch(setRawData(data))
     },
     resetRawData: () => {
       return new Promise(resolve => {
         dispatch(resetRawData());
+        resolve();
+      })
+    },
+    setDailyRawData: async (data) => {
+      return await dispatch(setDailyRawData(data))
+    },
+    resetDailyRawData: () => {
+      return new Promise(resolve => {
+        dispatch(resetDailyRawData());
         resolve();
       })
     },

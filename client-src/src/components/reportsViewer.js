@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+
 import './reportsViewer.css';
 import DailyActivityRegister from './dailyActivityRegister';
 import MonthlyReport from './monthlyReport';
@@ -153,7 +154,6 @@ class ReportsViewer extends Component {
     }
 
     return (
-
       <div
         style={{
         overflow: "auto",
@@ -161,6 +161,7 @@ class ReportsViewer extends Component {
         height: "calc(100vh - 122px)"
       }}
         id="reportScroller"
+
         onScroll={() => {
         if (this.props.app.processing) 
           return;
@@ -172,11 +173,10 @@ class ReportsViewer extends Component {
             .scrollTop;
           this.startPos += 20;
           this.endPos += 20;
-          this
-            .props
-            .scrollPepfarData(this.startPos, this.endPos);
+          this.props.scrollPepfarData(this.startPos, this.endPos)
         }
-      }}>
+        }}
+        >
         <CustomComponent
           reports={this.props.reports}
           setDataHeaders={this.props.setDataHeaders}

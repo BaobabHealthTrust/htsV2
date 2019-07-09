@@ -1,8 +1,14 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import './rawData.css';
 import uuid from 'uuid';
 
 class RawData extends Component {
+
+  componentWillUnmount () {
+    this.props.resetRawData()
+    this.props.resetDailyData()
+  }
 
   fields = [
     "Visit Date",
@@ -32,7 +38,7 @@ class RawData extends Component {
 
     let k = 1;
 
-    return (this.props.reports.rawData || []).map((row) => {
+    return (this.props.reports.dailyRawData || []).map((row) => {
 
       return <tr key={uuid.v4()}>
         {Array(
@@ -101,4 +107,11 @@ class RawData extends Component {
 
 }
 
-export default RawData;
+const mapDispatchToProps = dispatch => {
+  return {
+    resetRawData: () => dispatch({ type: 'RESET_RAW_DATA' }),
+    resetDailyData: () => dispatch({ type: 'RESET_DAILY_RAW_DATA' })
+  }
+}
+
+export default connect(null, mapDispatchToProps)(RawData);
