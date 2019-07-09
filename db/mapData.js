@@ -2,8 +2,8 @@
 
 const readline = require('readline');
 const fs = require('fs');
-const glob = require('glob');
-const async = require('async');
+const chunk = require('chunk')
+const axios = require('axios')
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -23,7 +23,7 @@ let pending = {};
 let dumps = [];
 let encounters = {};
 
-rl.on('line', (line) => {
+rl.on('line', async (line) => {
 
     const row = line.split("\t");
 
@@ -113,21 +113,35 @@ rl.on('line', (line) => {
 
             }
 
-        } else {
-
-            data.push(JSON.stringify(header));
-
-            data.push(JSON.stringify(entry));
-
         }
 
+        if (type !== 'visit') {
+            await axios.post(
+                `${es.protocol}://${es.host}:${es.port}/${es.index}/${type}`,
+                entry,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+        }
     }
-
 })
 
-rl.on('close', () => {
+rl.on('close', async () => {
+    const ES_URL = `${es.protocol}://${es.host}:${es.port}/${es.index}/_bulk`
+    const TWO_THOUSAND_VISITS = 4000 // the data is recorded as a header and a visit thus 4000 elements = 2000 visits
+    const PAYLOAD = chunk(data, TWO_THOUSAND_VISITS)
 
-    process.stdout.write(data.join("\n") + "\n");
+    for (let package of PAYLOAD) {
+        const delivery = package.join('\n') + '\n'
+        try {
+            await axios.post(ES_URL, delivery, { headers: { 'Content-Type': 'application/x-ndjson' } })
+        } catch (e) {
+            console.log(`Error during the chunkening: ${e.message}`)
+        }
+    }
 
     for (let i = 0; i < dumps.length; i++) {
 

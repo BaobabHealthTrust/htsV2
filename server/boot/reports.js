@@ -1067,7 +1067,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: 'observation:"Result Given to Client" AND observationValue:"' + field + '" AND locationType:"' + location + '"'
+                  query: `observation: "Result Given to Client" AND (observationValue: "Confirmatory Positive" OR observationValue: "Confirmatory (Antibody) Positive") AND locationType: ${location}`
                 }
               }, {
                 range: {
@@ -1096,6 +1096,326 @@ module.exports = function (app) {
             : 0)
         });
 
+    });
+
+  }
+
+  function fetchNewPositiveMale(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
+
+    let args = {
+      data: {
+          _source: ["encounterId", "encounterType"],
+          size: 10000,
+          query: {
+            bool: {
+              must: [
+                {
+                  query_string: {
+                    query: `observation: "Result Given to Client" AND observationValue: "New Positive" AND locationType: ${location}`
+                  }
+                },
+                {
+                  range: {
+                    visitDate: {
+                      gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                      lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
+                    }
+                  }
+                }
+              ]
+            }
+          }
+      },
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+      if (result.hits.hits.length > 0) {
+        const encounterIds = result.hits.hits.map(hit => hit._source.encounterId)
+
+        let xargs = {
+          data: {
+              size: 10000,
+              query: {
+                bool: {
+                  must: [
+                    {
+                      terms: {
+                        encounterId: encounterIds
+                      }	
+                    },
+                    {
+                      query_string: {
+                        query: `observation: "Sex/Pregnancy" AND observationValue: "Male"`
+                      }
+                    },
+                    {
+                      range: {
+                        visitDate: {
+                          gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                          lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+          },
+          headers: {
+            "Content-Type": "application/json"
+          }
+        };
+
+        (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", xargs, function (result) {
+          res
+            .status(200)
+            .json({ [field]: result.hits.total});
+        })
+      } else {
+        res
+          .status(200)
+          .json({ [field]: result.hits.total});
+      }
+    });
+
+  }
+
+  function fetchNewPositiveFemale(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
+
+    let args = {
+      data: {
+          _source: ["encounterId", "encounterType"],
+          size: 10000,
+          query: {
+            bool: {
+              must: [
+                {
+                  query_string: {
+                    query: `observation: "Result Given to Client" AND observationValue: "New Positive" AND locationType: ${location}`
+                  }
+                },
+                {
+                  range: {
+                    visitDate: {
+                      gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                      lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
+                    }
+                  }
+                }
+              ]
+            }
+          }
+      },
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+      if (result.hits.hits.length > 0) {
+        const encounterIds = result.hits.hits.map(hit => hit._source.encounterId)
+
+        let xargs = {
+          data: {
+              size: 10000,
+              query: {
+                bool: {
+                  must: [
+                    {
+                      terms: {
+                        encounterId: encounterIds
+                      }	
+                    },
+                    {
+                      query_string: {
+                        query: `observation: "Sex/Pregnancy" AND (observationValue: "Female Pregnant" OR observationValue: "Female Non-Pregnant")`
+                      }
+                    },
+                    {
+                      range: {
+                        visitDate: {
+                          gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                          lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+          },
+          headers: {
+            "Content-Type": "application/json"
+          }
+        };
+
+        (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", xargs, function (result) {
+          res
+            .status(200)
+            .json({ [field]: result.hits.total});
+        })
+      } else {
+        res
+          .status(200)
+          .json({ [field]: result.hits.total});
+      }
+    });
+
+  }
+
+  function fetchMaleCP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
+
+    let args = {
+      data: {
+          _source: ["encounterId", "encounterType"],
+          size: 10000,
+          query: {
+            bool: {
+              must: [
+                {
+                  query_string: {
+                    query: `observation: "Result Given to Client" AND (observationValue: "Confirmatory Positive" OR observationValue: "Confirmatory (Antibody) Positive") AND locationType: ${location}`
+                  }
+                },
+                {
+                  range: {
+                    visitDate: {
+                      gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                      lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
+                    }
+                  }
+                }
+              ]
+            }
+          }
+      },
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+      if (result.hits.hits.length > 0) {
+        const encounterIds = result.hits.hits.map(hit => hit._source.encounterId)
+
+        let xargs = {
+          data: {
+              size: 10000,
+              query: {
+                bool: {
+                  must: [
+                    {
+                      terms: {
+                        encounterId: encounterIds
+                      }	
+                    },
+                    {
+                      query_string: {
+                        query: `observation: "Sex/Pregnancy" AND observationValue: "Male"`
+                      }
+                    },
+                    {
+                      range: {
+                        visitDate: {
+                          gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                          lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+          },
+          headers: {
+            "Content-Type": "application/json"
+          }
+        };
+
+        (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", xargs, function (result) {
+          res
+            .status(200)
+            .json({ [field]: result.hits.total});
+        })
+      } else {
+        res
+          .status(200)
+          .json({ [field]: result.hits.total});
+      }
+    });
+
+  }
+
+  function fetchFemaleCP(field, sMonth, sYear, eMonth, eYear, location, res, sDate, eDate) {
+
+    let args = {
+      data: {
+          _source: ["encounterId", "encounterType"],
+          size: 10000,
+          query: {
+            bool: {
+              must: [
+                {
+                  query_string: {
+                    query: `observation: "Result Given to Client" AND (observationValue: "Confirmatory Positive" OR observationValue: "Confirmatory (Antibody) Positive") AND locationType: ${location}`
+                  }
+                },
+                {
+                  range: {
+                    visitDate: {
+                      gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                      lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
+                    }
+                  }
+                }
+              ]
+            }
+          }
+      },
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", args, function (result) {
+      if (result.hits.hits.length > 0) {
+        const encounterIds = result.hits.hits.map(hit => hit._source.encounterId)
+
+        let xargs = {
+          data: {
+              size: 10000,
+              query: {
+                bool: {
+                  must: [
+                    { terms: { encounterId: encounterIds } },
+                    {
+                      query_string: {
+                        query: `observation: "Sex/Pregnancy" AND (observationValue: "Female Pregnant" OR observationValue: "Female Non-Pregnant")`
+                      }
+                    },
+                    { range: { visitDate: {
+                      gte: (new Date(sYear, sMonth, (!isNaN(sDate) ? Number(sDate) : 1))).format('YYYY-mm-dd'),
+                      lte: (new Date(eYear, (!isNaN(eDate) ? Number(eMonth) : (parseInt(eMonth, 10) + 1)), (!isNaN(eDate) ? eDate : 0))).format('YYYY-mm-dd')
+                    } } }
+                  ]
+                }
+              }
+          },
+          headers: {
+            "Content-Type": "application/json"
+          }
+        };
+
+        (new client()).get(es.protocol + "://" + es.host + ":" + es.port + "/" + es.index + "/visit/_search", xargs, function (result) {
+          res
+            .status(200)
+            .json({ [field]: result.hits.total});
+        })
+      } else {
+        res
+          .status(200)
+          .json({ [field]: result.hits.total});
+      }
     });
 
   }
@@ -1444,9 +1764,13 @@ module.exports = function (app) {
       "Test 1 & 2 Discordant": fetchT12D,
       "New negative": fetchNN,
       "New positive": fetchNP,
+      "New positive (Male)": fetchNewPositiveMale,
+      "New positive (Female)": fetchNewPositiveFemale,
       "New exposed infant": fetchNEI,
       "New inconclusive": fetchNI,
       "Confirmatory positive": fetchCP,
+      "Confirmatory positive (Male)": fetchMaleCP,
+      "Confirmatory positive (Female)": fetchFemaleCP,
       "Confirmatory Inconclusive": fetchCI,
       "Routine HTS (PITC) within Health Service": fetchPITC,
       "Comes with HTS Family Referral Slip": fetchFRS,
