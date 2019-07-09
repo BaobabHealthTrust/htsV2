@@ -11,7 +11,7 @@ onmessage = (e) => {
     })
     .on('end', () => {
       if (cache.length === 0) {
-        postMessage({ message: `There were no visits on ${e.data.date}. Please press (Next >>>>) for the next day or (<<<< Prev) for the previous day.`})
+        postMessage({ message: `There were no visits on ${e.data.date}.`})
       } else {
         postMessage(cache)
       }
