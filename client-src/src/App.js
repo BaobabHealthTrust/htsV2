@@ -71,6 +71,8 @@ import {
   setPeriod,
   setRawData,
   resetRawData,
+  setDailyRawData,
+  resetDailyRawData,
   setDataHeaders,
   fetchDailyRegister,
   fetchVisitSummaries,
@@ -231,7 +233,7 @@ class App extends Component {
       if (e.data.error) {
         this.props.showErrorMsg('Error', e.data.error)
       } else if (e.data.length > 0) {
-        this.setState({ rawDataPayload: e.data })
+        this.props.setRawData(e.data)
       }
     }
 
@@ -242,7 +244,7 @@ class App extends Component {
       } else if (e.data.message) {
         this.props.showInfoMsg('Information', e.data.message)
       } else {
-        this.props.setRawData(e.data)
+        this.props.setDailyRawData(e.data)
       }
     }
   }
@@ -2629,8 +2631,6 @@ class App extends Component {
       this.setState({
         currentDayInRawDataReport: moment(`${this.props.reports.start.reportYear}-${this.props.dialog.start.numericalMonth + 1}-${this.props.reports.start.reportDate}`, 'YYYY-M-D').format('YYYY-MM-DD')
       }, async () => {
-        await this.props.resetRawData()
-
         const startDate = moment(`${this.props.reports.start.reportYear}-${this.props.dialog.start.numericalMonth + 1}-${this.props.reports.start.reportDate}`, 'YYYY-M-D').format('YYYY-MM-DD')
         const endDate = moment(`${this.props.reports.end.reportYear}-${this.props.dialog.end.numericalMonth + 1}-${this.props.reports.end.reportDate}`, 'YYYY-M-D').format('YYYY-MM-DD')  
 
@@ -4210,7 +4210,7 @@ class App extends Component {
         buttonClass: 'blue nav-buttons',
         onMouseDown: async () => {
           await this.downloadCSV(this.props.reports.dataHeaders,
-                                 this.state.rawDataPayload,
+                                 this.props.reports.rawData,
                                  (this.props.app.activeReport ? String(this.props.app.activeReport).trim().replace(/\s/g, "_") : null))
         },
         label: 'Download Report',
@@ -4219,7 +4219,7 @@ class App extends Component {
           marginTop: "15px",
           marginRight: "15px"
         },
-        disabled: this.props.app.currentSection !== "reports" || this.props.app.activeReport!== "raw data report" || this.state.rawDataPayload.length === 0
+        disabled: this.props.app.currentSection !== "reports" || this.props.app.activeReport!== "raw data report" || this.props.reports.rawData.length === 0
       }, {
         id: "btnTranscribe",
         buttonClass: "blue nav-buttons",
@@ -5107,6 +5107,15 @@ const mapDispatchToProps = dispatch => {
     resetRawData: () => {
       return new Promise(resolve => {
         dispatch(resetRawData());
+        resolve();
+      })
+    },
+    setDailyRawData: async (data) => {
+      return await dispatch(setDailyRawData(data))
+    },
+    resetDailyRawData: () => {
+      return new Promise(resolve => {
+        dispatch(resetDailyRawData());
         resolve();
       })
     },

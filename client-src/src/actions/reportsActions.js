@@ -27,6 +27,16 @@ export function resetRawData() {
 
 }
 
+export function setDailyRawData(data) {
+  return { type: "SET_DAILY_RAW_DATA", payload: data }
+}
+
+export function resetDailyRawData() {
+
+  return { type: "RESET_DAILY_RAW_DATA" };
+
+}
+
 export function setDataHeaders(payload) {
 
   return { type: "SET_DATA_HEADERS", payload };
