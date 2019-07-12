@@ -1067,7 +1067,7 @@ module.exports = function (app) {
             must: [
               {
                 query_string: {
-                  query: `observation: "Result Given to Client" AND observationValue: "Confirmatory Positive" AND locationType: ${location}`
+                  query: `observation: "Result Given to Client" AND (observationValue: "Confirmatory Positive" OR observationValue: "Confirmatory (Antibody) Positive") AND locationType: ${location}`
                 }
               }, {
                 range: {
@@ -1275,7 +1275,7 @@ module.exports = function (app) {
               must: [
                 {
                   query_string: {
-                    query: `observation: "Result Given to Client" AND observationValue: "Confirmatory Positive" AND locationType: ${location}`
+                    query: `observation: "Result Given to Client" AND (observationValue: "Confirmatory Positive" OR observationValue: "Confirmatory (Antibody) Positive") AND locationType: ${location}`
                   }
                 },
                 {
@@ -1357,7 +1357,7 @@ module.exports = function (app) {
               must: [
                 {
                   query_string: {
-                    query: `observation: "Result Given to Client" AND observationValue: "Confirmatory Positive" AND locationType: ${location}`
+                    query: `observation: "Result Given to Client" AND (observationValue: "Confirmatory Positive" OR observationValue: "Confirmatory (Antibody) Positive") AND locationType: ${location}`
                   }
                 },
                 {
