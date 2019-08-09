@@ -34,8 +34,21 @@ import {
 } from "./actions/appAction";
 import { fetchData, clearCache, setData } from "./actions/fetchDataAction";
 import { ClipLoader } from "react-spinners";
-import { loadWorkflow, goForward, clearWorkflow, goBackward, handleInputChange, clearField } from "./actions/wfActions";
-import { fetchLastBDRow, saveBDRow, fetchEditRow, saveEditRow, resetErrorMessage } from "./actions/bdAction";
+import {
+  loadWorkflow,
+  goForward,
+  clearWorkflow,
+  goBackward,
+  handleInputChange,
+  clearField
+} from "./actions/wfActions";
+import {
+  fetchLastBDRow,
+  saveBDRow,
+  fetchEditRow,
+  saveEditRow,
+  resetErrorMessage
+} from "./actions/bdAction";
 import {
   searchByIdentifier,
   searchByNameAndGender,
@@ -50,7 +63,13 @@ import {
 } from "./actions/ddeActions";
 import Alert from "./components/alert";
 import Dialog from "./components/dialog";
-import { showInfoMsg, showErrorMsg, showConfirmMsg, closeMsg, updateAlertKey } from "./actions/alertActions";
+import {
+  showInfoMsg,
+  showErrorMsg,
+  showConfirmMsg,
+  closeMsg,
+  updateAlertKey
+} from "./actions/alertActions";
 import ReportsViewer from "./components/reportsViewer";
 import {
   showDialog,
@@ -77,27 +96,28 @@ import {
   resetPepfarData,
   fetchFilteredVisitSummaries
 } from "./actions/reportsActions";
-import { processes } from './processes';
-import { barcode } from './validations/barcodeEvents';
-import { updateClient } from './validations/updateClient';
+import { processes } from "./processes";
+import { barcode } from "./validations/barcodeEvents";
+import { updateClient } from "./validations/updateClient";
 import { switches } from "./validations/switches";
-import { validated } from './validations/validated';
-import UsersViewer from './components/usersViewer';
+import { validated } from "./validations/validated";
+import UsersViewer from "./components/usersViewer";
 // eslint-disable-next-line
-import algorithm from './lib/dhaAlgorithm.js';
-import Login from './components/login';
-import tests from './config/tests';
-import locations from './config/pepfarLocations';
-import modalities from './config/htsModalities';
-import Axios from 'axios';
-import FileDownload from 'react-file-download';
+import algorithm from "./lib/dhaAlgorithm.js";
+import Login from "./components/login";
+import tests from "./config/tests";
+import locations from "./config/pepfarLocations";
+import modalities from "./config/htsModalities";
+import Axios from "axios";
+import FileDownload from "react-file-download";
 // eslint-disable-next-line
-import uuid from 'uuid';
+import uuid from "uuid";
 // eslint-disable-next-line
 import password from "./images/password";
 
-class App extends Component {
+import Html2PngService from "./services/Html2PngService";
 
+class App extends Component {
   constructor(props) {
     super(props);
 
@@ -110,23 +130,20 @@ class App extends Component {
       scanID: null
     };
 
-    this.login = this
-      .login
-      .bind(this)
-
+    this.login = this.login.bind(this);
   }
 
   processedConfigs = {};
 
-  startTime = (new Date()).getTime();
+  startTime = new Date().getTime();
 
   getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
+    var ca = decodedCookie.split(";");
     for (var i = 0; i < ca.length; i++) {
       var c = ca[i];
-      while (c.charAt(0) === ' ') {
+      while (c.charAt(0) === " ") {
         c = c.substring(1);
       }
       if (c.indexOf(name) === 0) {
@@ -138,140 +155,138 @@ class App extends Component {
 
   setCookie(cname, cvalue, exdays) {
     var d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
     var expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
 
   async resetTimer() {
-
-    this.startTime = (new Date()).getTime();
-
+    this.startTime = new Date().getTime();
   }
 
   async componentDidMount() {
-
     await this.props.fetchScreenTimout();
 
-    const screenTimeoutMinutes = Number(!isNaN(this.props.app.screen_timeout_minutes) ? Number(this.props.app.screen_timeout_minutes) : 30);
+    const screenTimeoutMinutes = Number(
+      !isNaN(this.props.app.screen_timeout_minutes)
+        ? Number(this.props.app.screen_timeout_minutes)
+        : 30
+    );
 
     setInterval(() => {
-
-      const timeDiff = ((new Date()).getTime() - this.startTime) / (60 * 1000);
+      const timeDiff = (new Date().getTime() - this.startTime) / (60 * 1000);
 
       if (timeDiff > screenTimeoutMinutes) {
-
         this.logout();
-
       }
-
     }, 1000);
 
-    let accessToken = this.getCookie('accessToken');
+    let accessToken = this.getCookie("accessToken");
 
-    if (accessToken.trim().length <= 0)
-      return;
+    if (accessToken.trim().length <= 0) return;
 
-    this
-      .props
+    this.props
       .sessionValid(accessToken)
       .then(async () => {
+        accessToken = this.getCookie("accessToken");
+        const username = this.getCookie("username");
+        const role = this.getCookie("role");
+        const location = this.getCookie("location");
 
-        accessToken = this.getCookie('accessToken');
-        const username = this.getCookie('username');
-        const role = this.getCookie('role');
-        const location = this.getCookie('location');
+        if (
+          username.trim().length > 0 &&
+          role.length > 0 &&
+          accessToken.trim().length > 0 &&
+          location.trim().length > 0
+        ) {
+          await this.props.updateApp({
+            currentLocation: location,
+            activeLocation: location,
+            location,
+            activeUser: username,
+            accessToken,
+            role
+          });
 
-        if (username.trim().length > 0 && role.length > 0 && accessToken.trim().length > 0 && location.trim().length > 0) {
-
-          await this
-            .props
-            .updateApp({
-              currentLocation: location,
-              activeLocation: location,
-              location,
-              activeUser: username,
-              accessToken,
-              role
-            });
-
-          this
-            .props
-            .initApp("/programs?role=" + role);
-
+          this.props.initApp("/programs?role=" + role);
         }
-
       })
       .catch(() => {
-
-        this.setCookie('username', '', 1);
-        this.setCookie('role', '', 1);
-        this.setCookie('location', '', 1);
-        this.setCookie('accessToken', '', 1);
-
+        this.setCookie("username", "", 1);
+        this.setCookie("role", "", 1);
+        this.setCookie("location", "", 1);
+        this.setCookie("accessToken", "", 1);
       });
-
   }
 
   componentWillMount() {
-
     this.props.checkRedirectToPortal();
 
     this.props.getVersion();
-
   }
 
   tmrHandle = null;
 
   async componentDidUpdate() {
-
     this.resetTimer();
 
     updateClient(this.props, this.state, this);
 
     barcode(this.props, this.state);
 
-    processes(this.props, this.state, this, (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].configs
-      ? this.props.app.data[this.props.app.module]["PatientRegistration"].configs
-      : {}), (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-        ? this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-        : {}), tests, (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module].referrals
-          ? this.props.app.data[this.props.app.module].referrals
-          : {}));
+    processes(
+      this.props,
+      this.state,
+      this,
+      this.props.app.data &&
+        this.props.app.module &&
+        this.props.app.data[this.props.app.module] &&
+        this.props.app.data[this.props.app.module]["PatientRegistration"] &&
+        this.props.app.data[this.props.app.module]["PatientRegistration"]
+          .configs
+        ? this.props.app.data[this.props.app.module]["PatientRegistration"]
+            .configs
+        : {},
+      this.props.app.data &&
+        this.props.app.module &&
+        this.props.app.data[this.props.app.module] &&
+        this.props.app.data[this.props.app.module]["PatientRegistration"] &&
+        this.props.app.data[this.props.app.module]["PatientRegistration"]
+          .ignores
+        ? this.props.app.data[this.props.app.module]["PatientRegistration"]
+            .ignores
+        : {},
+      tests,
+      this.props.app.data &&
+        this.props.app.module &&
+        this.props.app.data[this.props.app.module] &&
+        this.props.app.data[this.props.app.module].referrals
+        ? this.props.app.data[this.props.app.module].referrals
+        : {}
+    );
 
     switches(this.props, this.state);
 
-    this
-      .props
-      .app
-      .tasks
-      .forEach(task => {
+    this.props.app.tasks.forEach(task => {
+      if (this.processedConfigs[task.label]) return;
 
-        if (this.processedConfigs[task.label])
-          return;
+      this.processedConfigs[task.label] = true;
 
-        this.processedConfigs[task.label] = true;
-
-        this
-          .props
-          .fetchJSON("/programs/fetch_json", task.path, this.props.app.module, task.label);
-
-      });
+      this.props.fetchJSON(
+        "/programs/fetch_json",
+        task.path,
+        this.props.app.module,
+        task.label
+      );
+    });
 
     if (this.props.app.refresh && this.props.app.currentId) {
-
       setTimeout(() => {
-
-        this
-          .props
-          .fetchVisits(this.props.app.currentId);
-
+        this.props.fetchVisits(this.props.app.currentId);
       }, 1000);
-
     }
 
     if (!this.state.busy && this.props.bd.errorMessage !== null) {
-
       await this.setState({ busy: true });
 
       const message = this.props.bd.errorMessage;
@@ -281,27 +296,23 @@ class App extends Component {
       this.props.showErrorMsg("Invalid Entry", message);
 
       await this.setState({ busy: false });
-
     }
 
     if (this.tmrHandle === null && this.props.app.canPrint === true) {
-
       this.tmrHandle = setTimeout(async () => {
-
-        if (!this.state.busy && this.props.app.canPrint === true && !this.state.printingLabel) {
-
+        if (
+          !this.state.busy &&
+          this.props.app.canPrint === true &&
+          !this.state.printingLabel
+        ) {
           await this.setState({ busy: true, printingLabel: true });
 
           await this.props.updateApp({ canPrint: null });
 
           await this.doPrint();
-
         }
-
       }, 1000);
-
     }
-
   }
 
   $(id) {
@@ -311,7 +322,6 @@ class App extends Component {
   intBarcode = null;
 
   async searchById(id) {
-
     await this.setState({ currentWorkflow: "primary", scanID: id });
 
     await this.setState({
@@ -320,70 +330,68 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["PatientRegistration"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["PatientRegistration"].data
+    );
 
-    await this
-      .props
-      .goForward(this.state.currentWorkflow, "Yes");
+    await this.props.goForward(this.state.currentWorkflow, "Yes");
 
-    await this
-      .props
-      .goForward(this.state.currentWorkflow, "No");
+    await this.props.goForward(this.state.currentWorkflow, "No");
 
-    await this
-      .props
-      .goForward(this.state.currentWorkflow, id);
+    await this.props.goForward(this.state.currentWorkflow, id);
 
-    await this
-      .props
-      .handleInputChange("Client consents to be contacted", "Yes", this.state.currentWorkflow);
+    await this.props.handleInputChange(
+      "Client consents to be contacted",
+      "Yes",
+      this.state.currentWorkflow
+    );
 
-    await this
-      .props
-      .updateApp({ ignore: true, scanID: id });
+    await this.props.updateApp({ ignore: true, scanID: id });
 
-    await this
-      .props
-      .searchByIdentifier(id)
-      .then(async () => {
+    await this.props.searchByIdentifier(id).then(async () => {
+      await this.props.updateApp({
+        selectedTask: "Search By ID",
+        formActive: true,
+        currentSection: "registration",
+        configs: Object.assign(
+          {},
+          this.props.app.data &&
+            this.props.app.module &&
+            this.props.app.data[this.props.app.module] &&
+            this.props.app.data[this.props.app.module]["PatientRegistration"] &&
+            this.props.app.data[this.props.app.module]["PatientRegistration"]
+              .configs
+            ? this.props.app.data[this.props.app.module]["PatientRegistration"]
+                .configs
+            : {}
+        ),
+        summaryIgnores: Object.assign(
+          [],
+          this.props.app.data &&
+            this.props.app.module &&
+            this.props.app.data[this.props.app.module] &&
+            this.props.app.data[this.props.app.module]["PatientRegistration"] &&
+            this.props.app.data[this.props.app.module]["PatientRegistration"]
+              .ignores
+            ? this.props.app.data[this.props.app.module]["PatientRegistration"]
+                .ignores
+            : {}
+        ),
+        sectionHeader: "Search By ID",
+        fieldPos: 0,
+        notSaved: true
+      });
 
-        await this
-          .props
-          .updateApp({
-            selectedTask: "Search By ID",
-            formActive: true,
-            currentSection: "registration",
-            configs: Object.assign({}, (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].configs
-              ? this.props.app.data[this.props.app.module]["PatientRegistration"].configs
-              : {})),
-            summaryIgnores: Object.assign([], (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-              ? this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-              : {})),
-            sectionHeader: "Search By ID",
-            fieldPos: 0,
-            notSaved: true
-          });
+      await this.props.setConfig({ ignore: false });
 
-        await this
-          .props
-          .setConfig({ ignore: false });
-
-        setTimeout(() => {
-
-          this
-            .props
-            .updateApp({ ignore: false, silentProcessing: false });
-
-        }, 3000)
-
-      })
-
+      setTimeout(() => {
+        this.props.updateApp({ ignore: false, silentProcessing: false });
+      }, 3000);
+    });
   }
 
   checkDigit = (id, check = null) => {
-
     const parts = String(id).split("");
 
     const sum = parts.reduce((a, e, i) => {
@@ -393,61 +401,57 @@ class App extends Component {
     const digit = sum % 10;
 
     if (check !== null) {
-
       return digit === parseInt(check, 10);
-
     } else {
-
       return digit;
-
     }
-
-  }
+  };
 
   checkBarcode() {
-
     const self = this;
 
-    if (this.$("touchscreenTextInput") && ((this.props.app.dual && this.state.currentWorkflow === "secondary") || (!this.props.app.dual && this.state.currentWorkflow === "primary")) && this.props.app.selectedTask !== 'Administration') {
-
-      this
-        .$("touchscreenTextInput")
-        .focus();
-
-      return (this.intBarcode = setTimeout(() => {
-        self.checkBarcode();
-      }, 200));
-
-    } else if (this.$("touchscreenTextInputU16" && this.props.app.selectedTask !== 'Administration')) {
-
-      this
-        .$("touchscreenTextInputU16")
-        .focus();
+    if (
+      this.$("touchscreenTextInput") &&
+      ((this.props.app.dual && this.state.currentWorkflow === "secondary") ||
+        (!this.props.app.dual && this.state.currentWorkflow === "primary")) &&
+      this.props.app.selectedTask !== "Administration"
+    ) {
+      this.$("touchscreenTextInput").focus();
 
       return (this.intBarcode = setTimeout(() => {
         self.checkBarcode();
       }, 200));
+    } else if (
+      this.$(
+        "touchscreenTextInputU16" &&
+          this.props.app.selectedTask !== "Administration"
+      )
+    ) {
+      this.$("touchscreenTextInputU16").focus();
 
+      return (this.intBarcode = setTimeout(() => {
+        self.checkBarcode();
+      }, 200));
     }
 
-    if (this.$("barcode") && this.props.app.module !== "" && this.props.app.selectedTask !== 'Administration') {
-
-      if (this.$("barcode").value.trim().match(/\$$/)) {
-
-        const text = this
-          .$("barcode")
-          .value
-          .trim()
+    if (
+      this.$("barcode") &&
+      this.props.app.module !== "" &&
+      this.props.app.selectedTask !== "Administration"
+    ) {
+      if (
+        this.$("barcode")
+          .value.trim()
+          .match(/\$$/)
+      ) {
+        const text = this.$("barcode")
+          .value.trim()
           .replace(/\$/g, "");
 
         if (text.trim().length > 0) {
-
-          this
-            .$("barcode")
-            .value = "";
+          this.$("barcode").value = "";
 
           if (String(text).match(/^ec/i)) {
-
             let number = String(text)
               .trim()
               .replace(/^ec/i, "");
@@ -457,66 +461,46 @@ class App extends Component {
             number = number.substring(0, number.length - 2);
 
             if (!this.checkDigit(number, check)) {
+              this.props.showErrorMsg("Error!", "Invalid Entry Code Scanned!");
 
-              this
-                .props
-                .showErrorMsg("Error!", "Invalid Entry Code Scanned!");
-
-              this
-                .$("barcode")
-                .focus();
+              this.$("barcode").focus();
 
               this.intBarcode = setTimeout(() => {
                 self.checkBarcode();
               }, 200);
-
             } else {
-
               this.searchById(text);
-
             }
-
           } else {
-
             this.searchById(text);
-
           }
-
         } else {
+          this.$("barcode").value = "";
 
-          this
-            .$("barcode")
-            .value = "";
-
-          this
-            .$("barcode")
-            .focus();
+          this.$("barcode").focus();
 
           this.intBarcode = setTimeout(() => {
             self.checkBarcode();
           }, 200);
-
         }
       } else {
-        this
-          .$("barcode")
-          .focus();
+        this.$("barcode").focus();
 
         this.intBarcode = setTimeout(() => {
           self.checkBarcode();
         }, 200);
       }
-    } else if (this.props.app.selectedTask !== 'Administration') {
+    } else if (this.props.app.selectedTask !== "Administration") {
       if (this.$("barcode")) {
-        if (this.$("barcode").value.trim().match(/\$$/)) {
-          this
-            .$("barcode")
-            .value = "";
+        if (
+          this.$("barcode")
+            .value.trim()
+            .match(/\$$/)
+        ) {
+          this.$("barcode").value = "";
         }
 
-        this
-          .$("barcode")
-          .focus();
+        this.$("barcode").focus();
       }
 
       this.intBarcode = setTimeout(() => {
@@ -526,18 +510,11 @@ class App extends Component {
   }
 
   switchProgram(programName) {
+    this.props.fetchRegisterStats();
 
-    this
-      .props
-      .fetchRegisterStats();
-
-    const program = this
-      .props
-      .app
-      .programs
-      .filter(p => {
-        return p.name === programName;
-      })[0];
+    const program = this.props.app.programs.filter(p => {
+      return p.name === programName;
+    })[0];
 
     const payload = {
       module: programName,
@@ -546,27 +523,21 @@ class App extends Component {
       selectedTask: "",
       selectedVisit: new Date().format("d mmm YYYY"),
       userDashTasks: program.userDashTasks,
-      order: this.props.app.data && this.props.app.data[programName]
-        ? this.props.app.data[programName].order
-        : [],
+      order:
+        this.props.app.data && this.props.app.data[programName]
+          ? this.props.app.data[programName].order
+          : [],
       currentTab: null
     };
 
-    this
-      .props
-      .updateApp(payload);
-
+    this.props.updateApp(payload);
   }
 
   async navigateToRoute(task, url, group) {
-
-    if (!this.props.app.data[this.props.app.module][task])
-      return;
+    if (!this.props.app.data[this.props.app.module][task]) return;
 
     await this.setState({
-      currentWorkflow: group
-        ? group
-        : task.toLowerCase()
+      currentWorkflow: group ? group : task.toLowerCase()
     });
 
     await this.setState({
@@ -575,37 +546,40 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module][task].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module][task].data
+    );
 
     let payload = {
-      configs: Object.assign({}, this.props.app.data[this.props.app.module][task].configs),
-      summaryIgnores: Object.assign([], this.props.app.data[this.props.app.module][task].ignores)
+      configs: Object.assign(
+        {},
+        this.props.app.data[this.props.app.module][task].configs
+      ),
+      summaryIgnores: Object.assign(
+        [],
+        this.props.app.data[this.props.app.module][task].ignores
+      )
     };
 
     if (task === "HTS Visit") {
-
-      await this
-        .props
-        .handleInputChange("Partner Present", (this.props.app.dual
-          ? "Yes"
-          : "No"), this.state.currentWorkflow);
+      await this.props.handleInputChange(
+        "Partner Present",
+        this.props.app.dual ? "Yes" : "No",
+        this.state.currentWorkflow
+      );
 
       if (this.state.currentWorkflow === "secondary") {
-
-        await this
-          .props
-          .handleInputChange("Partner HIV Status", "HIV Unknown", this.state.currentWorkflow);
-
+        await this.props.handleInputChange(
+          "Partner HIV Status",
+          "HIV Unknown",
+          this.state.currentWorkflow
+        );
       }
-
     }
 
     switch (group) {
-
       case "primary":
-
         payload.primary = {
           selectedTask: task,
           formActive: true,
@@ -619,7 +593,6 @@ class App extends Component {
         break;
 
       case "secondary":
-
         payload.secondary = {
           selectedTask: task,
           formActive: true,
@@ -633,189 +606,208 @@ class App extends Component {
         break;
 
       default:
-
         payload.selectedTask = task;
         payload.formActive = true;
         payload.sectionHeader = task;
 
         break;
-
     }
 
-    await this
-      .props
-      .updateApp(payload);
-
+    await this.props.updateApp(payload);
   }
 
   navigateToVisit(visit) {
-    this
-      .props
-      .updateApp({ selectedVisit: visit });
+    this.props.updateApp({ selectedVisit: visit });
   }
 
   async switchPage(target) {
-
     if (this.props.app.dual) {
-
       if (this.props.app.partnerId) {
-
-        if (!this.props.app.formActive && this.props.app.patientActivated && this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.partnerId][this.props.app.module] && this.props.app.patientData[this.props.app.partnerId][this.props.app.module].visits && this.props.app.patientData[this.props.app.partnerId][this.props.app.module].visits.filter((e) => {
-          return Object
-            .keys(e)
-            .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
-        })) {
-
-          let rows = this
-            .props
-            .app
-            .patientData[this.props.app.partnerId][this.props.app.module]
-            .visits
-            .filter((e) => {
-              return Object
-                .keys(e)
-                .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
-            });
+        if (
+          !this.props.app.formActive &&
+          this.props.app.patientActivated &&
+          this.props.app.partnerId &&
+          this.props.app.patientData &&
+          this.props.app.patientData[this.props.app.partnerId] &&
+          this.props.app.selectedVisit &&
+          this.props.app.module &&
+          this.props.app.patientData[this.props.app.partnerId][
+            this.props.app.module
+          ] &&
+          this.props.app.patientData[this.props.app.partnerId][
+            this.props.app.module
+          ].visits &&
+          this.props.app.patientData[this.props.app.partnerId][
+            this.props.app.module
+          ].visits.filter(e => {
+            return (
+              Object.keys(e).length > 0 &&
+              Object.keys(e)[0] === this.props.app.selectedVisit
+            );
+          })
+        ) {
+          let rows = this.props.app.patientData[this.props.app.partnerId][
+            this.props.app.module
+          ].visits.filter(e => {
+            return (
+              Object.keys(e).length > 0 &&
+              Object.keys(e)[0] === this.props.app.selectedVisit
+            );
+          });
 
           if (rows.length > 0) {
-
-            for (let entryCode of Object.keys(rows[0][this.props.app.selectedVisit])) {
-
-              if (Object.keys(rows[0][this.props.app.selectedVisit][entryCode]["HTS Visit"]).indexOf("registerNumber") <= 0) {
-
-                return this
-                  .props
-                  .showInfoMsg("Transcribe in Register", "The current partner visit does not have a register number associated. Please enter in re" +
-                    "gister first to proceed!");
-
+            for (let entryCode of Object.keys(
+              rows[0][this.props.app.selectedVisit]
+            )) {
+              if (
+                Object.keys(
+                  rows[0][this.props.app.selectedVisit][entryCode]["HTS Visit"]
+                ).indexOf("registerNumber") <= 0
+              ) {
+                return this.props.showInfoMsg(
+                  "Transcribe in Register",
+                  "The current partner visit does not have a register number associated. Please enter in re" +
+                    "gister first to proceed!"
+                );
               }
-
             }
-
           }
-
         }
-
       } else {
-
-        return this.props.showInfoMsg("Incomplete Data", "The current visit is missing partner data. Please capture partner data first before closing session.")
-
+        return this.props.showInfoMsg(
+          "Incomplete Data",
+          "The current visit is missing partner data. Please capture partner data first before closing session."
+        );
       }
 
       if (this.props.app.clientId) {
-
-        if (!this.props.app.formActive && this.props.app.patientActivated && this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.clientId][this.props.app.module] && this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits && this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits.filter((e) => {
-          return Object
-            .keys(e)
-            .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
-        })) {
-
-          let rows = this
-            .props
-            .app
-            .patientData[this.props.app.clientId][this.props.app.module]
-            .visits
-            .filter((e) => {
-              return Object
-                .keys(e)
-                .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
-            });
-
-          if (rows.length > 0) {
-
-            for (let entryCode of Object.keys(rows[0][this.props.app.selectedVisit])) {
-
-              if (Object.keys(rows[0][this.props.app.selectedVisit][entryCode]["HTS Visit"]).indexOf("registerNumber") <= 0) {
-
-                return this
-                  .props
-                  .showInfoMsg("Transcribe in Register", "The current partner visit does not have a register number associated. Please enter in re" +
-                    "gister first to proceed!");
-
-              }
-
-            }
-
-          }
-
-        }
-
-      } else {
-
-        return this.props.showInfoMsg("Incomplete Data", "The current visit is missing partner data. Please capture partner data first before closing session.")
-
-      }
-
-    } else {
-
-      if (!this.props.app.formActive && this.props.app.patientActivated && this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.currentId][this.props.app.module] && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits.filter((e) => {
-        return Object
-          .keys(e)
-          .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
-      })) {
-
-        let rows = this
-          .props
-          .app
-          .patientData[this.props.app.currentId][this.props.app.module]
-          .visits
-          .filter((e) => {
-            return Object
-              .keys(e)
-              .length > 0 && Object.keys(e)[0] === this.props.app.selectedVisit
+        if (
+          !this.props.app.formActive &&
+          this.props.app.patientActivated &&
+          this.props.app.clientId &&
+          this.props.app.patientData &&
+          this.props.app.patientData[this.props.app.clientId] &&
+          this.props.app.selectedVisit &&
+          this.props.app.module &&
+          this.props.app.patientData[this.props.app.clientId][
+            this.props.app.module
+          ] &&
+          this.props.app.patientData[this.props.app.clientId][
+            this.props.app.module
+          ].visits &&
+          this.props.app.patientData[this.props.app.clientId][
+            this.props.app.module
+          ].visits.filter(e => {
+            return (
+              Object.keys(e).length > 0 &&
+              Object.keys(e)[0] === this.props.app.selectedVisit
+            );
+          })
+        ) {
+          let rows = this.props.app.patientData[this.props.app.clientId][
+            this.props.app.module
+          ].visits.filter(e => {
+            return (
+              Object.keys(e).length > 0 &&
+              Object.keys(e)[0] === this.props.app.selectedVisit
+            );
           });
 
-        if (rows.length > 0) {
-
-          for (let entryCode of Object.keys(rows[0][this.props.app.selectedVisit])) {
-
-            if (Object.keys(rows[0][this.props.app.selectedVisit][entryCode]["HTS Visit"]).indexOf("registerNumber") <= 0) {
-
-              return this
-                .props
-                .showInfoMsg("Transcribe in Register", "The current visit does not have a register number associated. Please enter in re" +
-                  "gister first to proceed!");
-
+          if (rows.length > 0) {
+            for (let entryCode of Object.keys(
+              rows[0][this.props.app.selectedVisit]
+            )) {
+              if (
+                Object.keys(
+                  rows[0][this.props.app.selectedVisit][entryCode]["HTS Visit"]
+                ).indexOf("registerNumber") <= 0
+              ) {
+                return this.props.showInfoMsg(
+                  "Transcribe in Register",
+                  "The current partner visit does not have a register number associated. Please enter in re" +
+                    "gister first to proceed!"
+                );
+              }
             }
-
           }
-
         }
-
+      } else {
+        return this.props.showInfoMsg(
+          "Incomplete Data",
+          "The current visit is missing partner data. Please capture partner data first before closing session."
+        );
       }
+    } else {
+      if (
+        !this.props.app.formActive &&
+        this.props.app.patientActivated &&
+        this.props.app.currentId &&
+        this.props.app.patientData &&
+        this.props.app.patientData[this.props.app.currentId] &&
+        this.props.app.selectedVisit &&
+        this.props.app.module &&
+        this.props.app.patientData[this.props.app.currentId][
+          this.props.app.module
+        ] &&
+        this.props.app.patientData[this.props.app.currentId][
+          this.props.app.module
+        ].visits &&
+        this.props.app.patientData[this.props.app.currentId][
+          this.props.app.module
+        ].visits.filter(e => {
+          return (
+            Object.keys(e).length > 0 &&
+            Object.keys(e)[0] === this.props.app.selectedVisit
+          );
+        })
+      ) {
+        let rows = this.props.app.patientData[this.props.app.currentId][
+          this.props.app.module
+        ].visits.filter(e => {
+          return (
+            Object.keys(e).length > 0 &&
+            Object.keys(e)[0] === this.props.app.selectedVisit
+          );
+        });
 
+        if (rows.length > 0) {
+          for (let entryCode of Object.keys(
+            rows[0][this.props.app.selectedVisit]
+          )) {
+            if (
+              Object.keys(
+                rows[0][this.props.app.selectedVisit][entryCode]["HTS Visit"]
+              ).indexOf("registerNumber") <= 0
+            ) {
+              return this.props.showInfoMsg(
+                "Transcribe in Register",
+                "The current visit does not have a register number associated. Please enter in re" +
+                  "gister first to proceed!"
+              );
+            }
+          }
+        }
+      }
     }
 
     let nextPage = target;
 
     let payload = {
-      patientActivated: nextPage === "home"
-        ? false
-        : true,
-      dual: nextPage === "home"
-        ? false
-        : true,
+      patientActivated: nextPage === "home" ? false : true,
+      dual: nextPage === "home" ? false : true,
       silentProcessing: false,
       ignore: false
     };
 
-    if (nextPage)
-      payload.currentSection = nextPage;
+    if (nextPage) payload.currentSection = nextPage;
 
     if (nextPage === "home") {
+      await this.props.clearCache();
 
-      await this
-        .props
-        .clearCache();
-
-      await this
-        .props
-        .clearDataStructs();
+      await this.props.clearDataStructs();
 
       ["primary", "secondary"].forEach(workflow => {
-        this
-          .props
-          .clearWorkflow(workflow);
+        this.props.clearWorkflow(workflow);
       });
 
       payload = {
@@ -845,215 +837,270 @@ class App extends Component {
       this.checkBarcode();
 
       if (this.props.app.currentId && this.props.app.flagged) {
-
         delete this.props.app.flagged[this.props.app.currentId];
-
       }
 
       if (this.props.app.partnerId && this.props.app.flagged) {
-
         delete this.props.app.flagged[this.props.app.partnerId];
-
       }
-
     }
 
-    await this
-      .props
-      .updateApp(payload);
-
+    await this.props.updateApp(payload);
   }
 
   queryOptions(value) {
-
-    if (this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-      ? this.props.wf[this.state.currentWorkflow].currentNode.label
-      : ""] && Object.keys(this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-        ? this.props.wf[this.state.currentWorkflow].currentNode.label
-        : ""]).indexOf("ajaxURL") >= 0) {
-      let queryPath = this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-        ? this.props.wf[this.state.currentWorkflow].currentNode.label
-        : ""].ajaxURL;
-
-      if (queryPath !== "" && this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-        ? this.props.wf[this.state.currentWorkflow].currentNode.label
-        : ""].ajaxURLDummies) {
-        Object.keys(this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+    if (
+      this.props.app.configs[
+        this.props.wf &&
+        this.props.wf[this.state.currentWorkflow] &&
+        this.props.wf[this.state.currentWorkflow].currentNode &&
+        this.props.wf[this.state.currentWorkflow].currentNode.label
           ? this.props.wf[this.state.currentWorkflow].currentNode.label
-          : ""].ajaxURLDummies).forEach(fieldName => {
-            if (this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][fieldName]) {
-              queryPath = queryPath.replace(this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                : ""].ajaxURLDummies[fieldName], this.props.wf.responses[this.state.currentWorkflow][fieldName]);
-            }
-          });
+          : ""
+      ] &&
+      Object.keys(
+        this.props.app.configs[
+          this.props.wf &&
+          this.props.wf[this.state.currentWorkflow] &&
+          this.props.wf[this.state.currentWorkflow].currentNode &&
+          this.props.wf[this.state.currentWorkflow].currentNode.label
+            ? this.props.wf[this.state.currentWorkflow].currentNode.label
+            : ""
+        ]
+      ).indexOf("ajaxURL") >= 0
+    ) {
+      let queryPath = this.props.app.configs[
+        this.props.wf &&
+        this.props.wf[this.state.currentWorkflow] &&
+        this.props.wf[this.state.currentWorkflow].currentNode &&
+        this.props.wf[this.state.currentWorkflow].currentNode.label
+          ? this.props.wf[this.state.currentWorkflow].currentNode.label
+          : ""
+      ].ajaxURL;
+
+      if (
+        queryPath !== "" &&
+        this.props.app.configs[
+          this.props.wf &&
+          this.props.wf[this.state.currentWorkflow] &&
+          this.props.wf[this.state.currentWorkflow].currentNode &&
+          this.props.wf[this.state.currentWorkflow].currentNode.label
+            ? this.props.wf[this.state.currentWorkflow].currentNode.label
+            : ""
+        ].ajaxURLDummies
+      ) {
+        Object.keys(
+          this.props.app.configs[
+            this.props.wf &&
+            this.props.wf[this.state.currentWorkflow] &&
+            this.props.wf[this.state.currentWorkflow].currentNode &&
+            this.props.wf[this.state.currentWorkflow].currentNode.label
+              ? this.props.wf[this.state.currentWorkflow].currentNode.label
+              : ""
+          ].ajaxURLDummies
+        ).forEach(fieldName => {
+          if (
+            this.props.wf.responses &&
+            this.props.wf.responses[this.state.currentWorkflow] &&
+            this.props.wf.responses[this.state.currentWorkflow][fieldName]
+          ) {
+            queryPath = queryPath.replace(
+              this.props.app.configs[
+                this.props.wf &&
+                this.props.wf[this.state.currentWorkflow] &&
+                this.props.wf[this.state.currentWorkflow].currentNode &&
+                this.props.wf[this.state.currentWorkflow].currentNode.label
+                  ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                  : ""
+              ].ajaxURLDummies[fieldName],
+              this.props.wf.responses[this.state.currentWorkflow][fieldName]
+            );
+          }
+        });
       }
 
-      this
-        .props
-        .fetchData(queryPath + (value
-          ? value
-          : ""));
+      this.props.fetchData(queryPath + (value ? value : ""));
     }
   }
 
   async navBack() {
+    if (
+      this.state.currentWorkflow &&
+      this.props.wf[this.state.currentWorkflow] &&
+      this.props.wf[this.state.currentWorkflow].currentNode &&
+      this.props.wf[this.state.currentWorkflow].currentNode.label ===
+        "Immediate Parallel Repeat Test 1 & 2 Results"
+    ) {
+      this.props.clearField(
+        "Immediate Repeat Test 1 Result",
+        this.state.currentWorkflow
+      );
 
-    if (this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "Immediate Parallel Repeat Test 1 & 2 Results") {
+      this.props.clearField(
+        "Immediate Repeat Test 2 Result",
+        this.state.currentWorkflow
+      );
 
-      this.props.clearField("Immediate Repeat Test 1 Result", this.state.currentWorkflow);
-
-      this.props.clearField("Immediate Repeat Test 2 Result", this.state.currentWorkflow);
-
-      this.props.clearField("Immediate Parallel Repeat Test 1 & 2 Results", this.state.currentWorkflow);
-
+      this.props.clearField(
+        "Immediate Parallel Repeat Test 1 & 2 Results",
+        this.state.currentWorkflow
+      );
     }
 
-    if (this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && (this.props.wf[this.state.currentWorkflow].currentNode.label === "HTS Referral Slips Recipients" || this.props.wf[this.state.currentWorkflow].currentNode.label === "Comments")) {
+    if (
+      this.state.currentWorkflow &&
+      this.props.wf[this.state.currentWorkflow] &&
+      this.props.wf[this.state.currentWorkflow].currentNode &&
+      (this.props.wf[this.state.currentWorkflow].currentNode.label ===
+        "HTS Referral Slips Recipients" ||
+        this.props.wf[this.state.currentWorkflow].currentNode.label ===
+          "Comments")
+    ) {
+      this.props.clearField(
+        "HTS Referral Slips Recipients",
+        this.state.currentWorkflow
+      );
 
-      this.props.clearField("HTS Referral Slips Recipients", this.state.currentWorkflow);
-
-      this.props.clearField("HTS Family Referral Slips", this.state.currentWorkflow);
-
+      this.props.clearField(
+        "HTS Family Referral Slips",
+        this.state.currentWorkflow
+      );
     }
 
     if (this.props.app.fieldPos <= 0) {
       return;
     }
 
-    await this
-      .props
-      .clearDataStructs();
+    await this.props.clearDataStructs();
 
-    await this
-      .props
-      .clearCache();
+    await this.props.clearCache();
 
-    await this
-      .props
-      .updateApp({
-        fieldPos: this.props.app.fieldPos - 1,
-        reversing: true
-      });
+    await this.props.updateApp({
+      fieldPos: this.props.app.fieldPos - 1,
+      reversing: true
+    });
 
-    await this
-      .props
-      .goBackward(this.state.currentWorkflow);
+    await this.props.goBackward(this.state.currentWorkflow);
 
-    await this
-      .props
-      .updateApp({
-        reversing: false
-      });
+    await this.props.updateApp({
+      reversing: false
+    });
 
     await this.queryOptions("");
 
     if (this.props.app.selectedTask === "Backdata Entry") {
-
       await this.props.updateApp({ isDirty: false });
 
-      if (this.props.wf && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow]) {
-
-        Object.keys(this.props.wf.responses[this.state.currentWorkflow]).forEach(async (field) => {
-
-          if (["Register Number (from cover)", "Testing Date"].indexOf(field) < 0)
+      if (
+        this.props.wf &&
+        this.props.wf.responses &&
+        this.props.wf.responses[this.state.currentWorkflow]
+      ) {
+        Object.keys(
+          this.props.wf.responses[this.state.currentWorkflow]
+        ).forEach(async field => {
+          if (
+            ["Register Number (from cover)", "Testing Date"].indexOf(field) < 0
+          )
             this.props.clearField(field, this.state.currentWorkflow);
-
-        })
-
+        });
       }
-
     }
-
   }
 
   async navNext(value) {
-
-    if (this.props.app.currentSection === "home" && !this.props.app.formActive) {
-
+    if (
+      this.props.app.currentSection === "home" &&
+      !this.props.app.formActive
+    ) {
       this.switchPage("patient");
-
     } else if (this.props.app.formActive) {
-
       const valid = await validated(this.props, this.state);
 
-      if (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "Service Delivery Point" && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Service Delivery Point"]) {
-        this
-          .props
-          .updateApp({
-            activeLocation: this.props.wf.responses[this.state.currentWorkflow]["Service Delivery Point"]
-          });
+      if (
+        this.props.wf &&
+        this.props.wf[this.state.currentWorkflow] &&
+        this.props.wf[this.state.currentWorkflow].currentNode &&
+        this.props.wf[this.state.currentWorkflow].currentNode.label ===
+          "Service Delivery Point" &&
+        this.props.wf.responses &&
+        this.props.wf.responses[this.state.currentWorkflow] &&
+        this.props.wf.responses[this.state.currentWorkflow][
+          "Service Delivery Point"
+        ]
+      ) {
+        this.props.updateApp({
+          activeLocation: this.props.wf.responses[this.state.currentWorkflow][
+            "Service Delivery Point"
+          ]
+        });
       }
 
-      if ((this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-        ? this.props.wf[this.state.currentWorkflow].currentNode.type
-        : "") && (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
+      if (
+        (this.props.wf &&
+        this.props.wf[this.state.currentWorkflow] &&
+        this.props.wf[this.state.currentWorkflow].currentNode &&
+        this.props.wf[this.state.currentWorkflow].currentNode.type
           ? this.props.wf[this.state.currentWorkflow].currentNode.type
-          : "") !== "exit" && valid.valid) {
+          : "") &&
+        (this.props.wf &&
+        this.props.wf[this.state.currentWorkflow] &&
+        this.props.wf[this.state.currentWorkflow].currentNode &&
+        this.props.wf[this.state.currentWorkflow].currentNode.type
+          ? this.props.wf[this.state.currentWorkflow].currentNode.type
+          : "") !== "exit" &&
+        valid.valid
+      ) {
+        await this.props.clearCache();
 
-        await this
-          .props
-          .clearCache();
+        await this.props.updateApp({
+          fieldPos: this.props.app.fieldPos + 1
+        });
 
-        await this
-          .props
-          .updateApp({
-            fieldPos: this.props.app.fieldPos + 1
-          });
-
-        await this
-          .props
-          .goForward(this.state.currentWorkflow, value);
+        await this.props.goForward(this.state.currentWorkflow, value);
 
         await this.queryOptions("");
-
       } else if (!valid.valid) {
-
-        this
-          .props
-          .showErrorMsg((valid.title ? valid.title : "Invalid Entry"), valid.message);
-
-      } else if ((this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-        ? this.props.wf[this.state.currentWorkflow].currentNode.type
-        : "") === "exit") {
-
-        this
-          .props
-          .updateApp({ formActive: false, selectedTask: "" });
-
+        this.props.showErrorMsg(
+          valid.title ? valid.title : "Invalid Entry",
+          valid.message
+        );
+      } else if (
+        (this.props.wf &&
+        this.props.wf[this.state.currentWorkflow] &&
+        this.props.wf[this.state.currentWorkflow].currentNode &&
+        this.props.wf[this.state.currentWorkflow].currentNode.type
+          ? this.props.wf[this.state.currentWorkflow].currentNode.type
+          : "") === "exit"
+      ) {
+        this.props.updateApp({ formActive: false, selectedTask: "" });
       }
-
     } else {
-
       this.switchPage("home");
-
     }
-
   }
 
   handleOnKeyDown(event) {
-
     const valid = validated(this.props, this.state);
 
     if (event.keyCode === 13 && valid.valid) {
-      this
-        .props
-        .clearCache();
+      this.props.clearCache();
 
       this.navNext(event.target.value);
     }
   }
 
   async handleInputChange(field, e) {
-    this
-      .props
-      .handleInputChange(field, e.target.value, this.state.currentWorkflow);
+    this.props.handleInputChange(
+      field,
+      e.target.value,
+      this.state.currentWorkflow
+    );
 
     this.queryOptions(e.target.value);
   }
 
   async registerAnonymous() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -1062,67 +1109,67 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["PatientRegistration"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["PatientRegistration"].data
+    );
 
-    await this
-      .props
-      .goForward(this.state.currentWorkflow, "Yes");
+    await this.props.goForward(this.state.currentWorkflow, "Yes");
 
-    this
-      .props
-      .updateApp({
-        selectedTask: "Anonymous Registration",
-        formActive: true,
-        currentSection: "registration",
-        configs: Object.assign({}, (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].configs
-          ? this.props.app.data[this.props.app.module]["PatientRegistration"].configs
-          : {})),
-        summaryIgnores: Object.assign([], (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-          ? this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-          : {})),
-        sectionHeader: "Anonymous Registration",
-        fieldPos: 0
-      });
+    this.props.updateApp({
+      selectedTask: "Anonymous Registration",
+      formActive: true,
+      currentSection: "registration",
+      configs: Object.assign(
+        {},
+        this.props.app.data &&
+          this.props.app.module &&
+          this.props.app.data[this.props.app.module] &&
+          this.props.app.data[this.props.app.module]["PatientRegistration"] &&
+          this.props.app.data[this.props.app.module]["PatientRegistration"]
+            .configs
+          ? this.props.app.data[this.props.app.module]["PatientRegistration"]
+              .configs
+          : {}
+      ),
+      summaryIgnores: Object.assign(
+        [],
+        this.props.app.data &&
+          this.props.app.module &&
+          this.props.app.data[this.props.app.module] &&
+          this.props.app.data[this.props.app.module]["PatientRegistration"] &&
+          this.props.app.data[this.props.app.module]["PatientRegistration"]
+            .ignores
+          ? this.props.app.data[this.props.app.module]["PatientRegistration"]
+              .ignores
+          : {}
+      ),
+      sectionHeader: "Anonymous Registration",
+      fieldPos: 0
+    });
   }
 
   async cancelForm() {
-
-    if (this.$("btnNext"))
-      this.$("btnNext").className = "green nav-buttons";
+    if (this.$("btnNext")) this.$("btnNext").className = "green nav-buttons";
 
     await this.setState({ busy: true });
 
     if (this.props.app.dual) {
-
       if (this.props.app.sectionHeader === "Transcribe in Register") {
-
         let activeSession;
 
         if (this.props.app.currentId === this.props.app.clientId) {
-
           activeSession = "primary";
-
         } else if (this.props.app.currentId === this.props.app.partnerId) {
-
           activeSession = "secondary";
-
         }
 
-        await this
-          .props
-          .clearCache();
+        await this.props.clearCache();
 
-        await this
-          .props
-          .clearDataStructs();
+        await this.props.clearDataStructs();
 
         if (activeSession) {
-
-          await this
-            .props
-            .clearWorkflow(activeSession);
+          await this.props.clearWorkflow(activeSession);
 
           const payload = {
             patientActivated: this.props.app.patientActivated,
@@ -1135,23 +1182,19 @@ class App extends Component {
           };
 
           if (activeSession === "primary") {
-
             payload.primary = {
               summary: true,
               formActive: false,
               selectedTask: "",
               fieldPos: 0
-            }
-
+            };
           } else if (activeSession === "secondary") {
-
             payload.secondary = {
               summary: true,
               formActive: false,
               selectedTask: "",
               fieldPos: 0
-            }
-
+            };
           }
 
           payload.summary = true;
@@ -1162,39 +1205,23 @@ class App extends Component {
 
           payload.fieldPos = 0;
 
-          await this
-            .props
-            .updateApp(payload);
-
+          await this.props.updateApp(payload);
         }
-
       } else if (this.props.app.formActive) {
-
         let activeSession;
 
         if (this.props.app.currentId === this.props.app.clientId) {
-
           activeSession = "primary";
-
         } else if (this.props.app.currentId === this.props.app.partnerId) {
-
           activeSession = "secondary";
-
         }
 
-        await this
-          .props
-          .clearCache();
+        await this.props.clearCache();
 
-        await this
-          .props
-          .clearDataStructs();
+        await this.props.clearDataStructs();
 
         if (activeSession) {
-
-          await this
-            .props
-            .clearWorkflow(activeSession);
+          await this.props.clearWorkflow(activeSession);
 
           const payload = {
             patientActivated: this.props.app.patientActivated,
@@ -1207,23 +1234,19 @@ class App extends Component {
           };
 
           if (activeSession === "primary") {
-
             payload.primary = {
               summary: true,
               formActive: false,
               selectedTask: "",
               fieldPos: 0
-            }
-
+            };
           } else if (activeSession === "secondary") {
-
             payload.secondary = {
               summary: true,
               formActive: false,
               selectedTask: "",
               fieldPos: 0
-            }
-
+            };
           }
 
           payload.summary = true;
@@ -1234,28 +1257,16 @@ class App extends Component {
 
           payload.fieldPos = 0;
 
-          await this
-            .props
-            .updateApp(payload);
-
+          await this.props.updateApp(payload);
         }
-
       }
-
     } else if (this.props.app.sectionHeader === "Transcribe in Register") {
+      await this.props.clearCache();
 
-      await this
-        .props
-        .clearCache();
-
-      await this
-        .props
-        .clearDataStructs();
+      await this.props.clearDataStructs();
 
       ["primary", "secondary"].forEach(workflow => {
-        this
-          .props
-          .clearWorkflow(workflow);
+        this.props.clearWorkflow(workflow);
       });
 
       const payload = {
@@ -1277,24 +1288,14 @@ class App extends Component {
         secondSummary: null
       };
 
-      await this
-        .props
-        .updateApp(payload);
-
+      await this.props.updateApp(payload);
     } else {
+      await this.props.clearCache();
 
-      await this
-        .props
-        .clearCache();
-
-      await this
-        .props
-        .clearDataStructs();
+      await this.props.clearDataStructs();
 
       ["primary", "secondary"].forEach(workflow => {
-        this
-          .props
-          .clearWorkflow(workflow);
+        this.props.clearWorkflow(workflow);
       });
 
       const payload = {
@@ -1315,8 +1316,9 @@ class App extends Component {
         secondSummary: null
       };
 
-      if (["registration", "admin"].indexOf(this.props.app.currentSection) >= 0) {
-
+      if (
+        ["registration", "admin"].indexOf(this.props.app.currentSection) >= 0
+      ) {
         payload.currentSection = "home";
         payload.clientId = null;
         payload.partnerId = null;
@@ -1325,265 +1327,277 @@ class App extends Component {
         payload.currentId = null;
 
         this.checkBarcode();
-
       }
 
-      await this
-        .props
-        .updateApp(payload);
-
+      await this.props.updateApp(payload);
     }
 
     await this.setState({ busy: false, scanID: null });
-
   }
 
   async cancelSession() {
+    if (this.$("btnNext")) this.$("btnNext").className = "green nav-buttons";
 
-    if (this.$("btnNext"))
-      this.$("btnNext").className = "green nav-buttons";
-
-    if (!this.props.app.formActive && this.props.app.dual && this.props.app.patientActivated && ((this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.clientId][this.props.app.module] && this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits && this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits.filter((e) => {
-      return Object.keys(e)[0] === this.props.app.selectedVisit && Object
-        .keys(e[this.props.app.selectedVisit])
-        .length > 0
-    }).length > 0) || (this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.partnerId][this.props.app.module] && this.props.app.patientData[this.props.app.partnerId][this.props.app.module].visits && this.props.app.patientData[this.props.app.partnerId][this.props.app.module].visits.filter((e) => {
-      return Object.keys(e)[0] === this.props.app.selectedVisit && Object
-        .keys(e[this.props.app.selectedVisit])
-        .length > 0
-    }).length > 0))) {
-
-      this
-        .props
-        .showConfirmMsg("Confirm", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
+    if (
+      !this.props.app.formActive &&
+      this.props.app.dual &&
+      this.props.app.patientActivated &&
+      ((this.props.app.clientId &&
+        this.props.app.patientData &&
+        this.props.app.patientData[this.props.app.clientId] &&
+        this.props.app.selectedVisit &&
+        this.props.app.module &&
+        this.props.app.patientData[this.props.app.clientId][
+          this.props.app.module
+        ] &&
+        this.props.app.patientData[this.props.app.clientId][
+          this.props.app.module
+        ].visits &&
+        this.props.app.patientData[this.props.app.clientId][
+          this.props.app.module
+        ].visits.filter(e => {
+          return (
+            Object.keys(e)[0] === this.props.app.selectedVisit &&
+            Object.keys(e[this.props.app.selectedVisit]).length > 0
+          );
+        }).length > 0) ||
+        (this.props.app.partnerId &&
+          this.props.app.patientData &&
+          this.props.app.patientData[this.props.app.partnerId] &&
+          this.props.app.selectedVisit &&
+          this.props.app.module &&
+          this.props.app.patientData[this.props.app.partnerId][
+            this.props.app.module
+          ] &&
+          this.props.app.patientData[this.props.app.partnerId][
+            this.props.app.module
+          ].visits &&
+          this.props.app.patientData[this.props.app.partnerId][
+            this.props.app.module
+          ].visits.filter(e => {
+            return (
+              Object.keys(e)[0] === this.props.app.selectedVisit &&
+              Object.keys(e[this.props.app.selectedVisit]).length > 0
+            );
+          }).length > 0))
+    ) {
+      this.props.showConfirmMsg(
+        "Confirm",
+        "Visit not complete. All captured entries in the visit will be deleted. Would you" +
           " want to delete them?",
-          "Delete", async () => {
-
-            let ids = (!this.props.app.clientId
-              ? []
-              : (this.props.app.patientData[this.props.app.clientId][this.props.app.module].visits.map((e) => {
-                return Object
-                  .keys(e[this.props.app.selectedVisit])
-                  .map((r) => {
-                    return e[this.props.app.selectedVisit][r].encounterId
-                  })
-                  .reduce((a, e, i) => {
-                    if (e)
-                      a.push(e);
-                    return a;
-                  }, [])
-              }).reduce((a, e, i) => {
-                if (e)
-                  a = e;
-                return a
-              }, []))).concat(!this.props.app.partnerId
-                ? []
-                : (this.props.app.patientData[this.props.app.partnerId][this.props.app.module].visits.map((e) => {
-                  return Object
-                    .keys(e[this.props.app.selectedVisit])
-                    .map((r) => {
-                      return e[this.props.app.selectedVisit][r].encounterId
+        "Delete",
+        async () => {
+          let ids = (!this.props.app.clientId
+            ? []
+            : this.props.app.patientData[this.props.app.clientId][
+                this.props.app.module
+              ].visits
+                .map(e => {
+                  return Object.keys(e[this.props.app.selectedVisit])
+                    .map(r => {
+                      return e[this.props.app.selectedVisit][r].encounterId;
                     })
                     .reduce((a, e, i) => {
-                      if (e)
-                        a.push(e);
+                      if (e) a.push(e);
                       return a;
-                    }, [])
-                }).reduce((a, e, i) => {
-                  if (e)
-                    a = e;
-                  return a
-                }, [])));
-
-            await this
-              .props
-              .voidMultipleEncounters("/programs/void_multiple_encounters", {
-                encounterIds: ids,
-                id: this.props.app.clientId,
-                partnerId: this.props.app.partnerId,
-                visitDate: this.props.app.selectedVisit
-              });
-
-            await this
-              .props
-              .clearCache();
-
-            await this
-              .props
-              .clearDataStructs();
-
-            ["primary", "secondary"].forEach(workflow => {
-              this
-                .props
-                .clearWorkflow(workflow);
-            });
-
-            let nextPage = !this.props.app.patientActivated
-              ? "patient"
-              : "home";
-
-            let payload = {
-              patientActivated: false,
-              selectedVisit: new Date().format("d mmm YYYY"),
-              currentId: null,
-              formActive: false,
-              selectedTask: "",
-              fieldPos: 0,
-              configs: {},
-              summaryIgnores: [],
-              dual: false,
-              currentTab: null,
-              activeReport: null,
-              clientId: null,
-              partnerId: null,
-              currentPatient: {},
-              partner: {},
-              scanID: null,
-              primary: {},
-              secondary: {},
-              isDirty: false,
-              firstSummary: null,
-              secondSummary: null
-            };
-
-            if (nextPage)
-              payload.currentSection = nextPage;
-
-            if (this.props.app.currentSection === "reports") {
-              payload.currentSection = "home";
-            }
-
-            payload.currentPatient = {};
-            payload.partner = {};
-            payload.dual = false;
-
-            this
-              .props
-              .updateApp(payload);
-
-          });
-
-    } else if (!this.props.app.formActive && this.props.app.patientActivated && this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId] && this.props.app.selectedVisit && this.props.app.module && this.props.app.patientData[this.props.app.currentId][this.props.app.module] && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits.filter((e) => {
-      return Object.keys(e)[0] === this.props.app.selectedVisit && Object
-        .keys(e[this.props.app.selectedVisit])
-        .length > 0
-    }).length > 0) {
-
-      this
-        .props
-        .showConfirmMsg("Confirm", "Visit not complete. All captured entries in the visit will be deleted. Would you" +
-          " want to delete them?",
-          "Delete", async () => {
-
-            let ids = this
-              .props
-              .app
-              .patientData[this.props.app.currentId][this.props.app.module]
-              .visits
-              .map((e) => {
-                return Object
-                  .keys(e[this.props.app.selectedVisit])
-                  .map((r) => {
-                    return e[this.props.app.selectedVisit][r].encounterId
+                    }, []);
+                })
+                .reduce((a, e, i) => {
+                  if (e) a = e;
+                  return a;
+                }, [])
+          ).concat(
+            !this.props.app.partnerId
+              ? []
+              : this.props.app.patientData[this.props.app.partnerId][
+                  this.props.app.module
+                ].visits
+                  .map(e => {
+                    return Object.keys(e[this.props.app.selectedVisit])
+                      .map(r => {
+                        return e[this.props.app.selectedVisit][r].encounterId;
+                      })
+                      .reduce((a, e, i) => {
+                        if (e) a.push(e);
+                        return a;
+                      }, []);
                   })
                   .reduce((a, e, i) => {
-                    if (e)
-                      a.push(e);
+                    if (e) a = e;
                     return a;
                   }, [])
-              })
-              .reduce((a, e, i) => {
-                if (e)
-                  a = e;
-                return a
-              }, []);
+          );
 
-            await this
-              .props
-              .voidMultipleEncounters("/programs/void_multiple_encounters", {
-                encounterIds: ids,
-                id: this.props.app.currentId,
-                visitDate: this.props.app.selectedVisit
-              });
-
-            await this
-              .props
-              .clearCache();
-
-            await this
-              .props
-              .clearDataStructs();
-
-            ["primary", "secondary"].forEach(workflow => {
-              this
-                .props
-                .clearWorkflow(workflow);
-            });
-
-            let nextPage = !this.props.app.patientActivated
-              ? "patient"
-              : "home";
-
-            let payload = {
-              patientActivated: false,
-              selectedVisit: new Date().format("d mmm YYYY"),
-              currentId: null,
-              formActive: false,
-              selectedTask: "",
-              fieldPos: 0,
-              configs: {},
-              summaryIgnores: [],
-              dual: false,
-              currentTab: null,
-              activeReport: null,
-              clientId: null,
-              partnerId: null,
-              currentPatient: {},
-              partner: {},
-              scanID: null,
-              primary: {},
-              secondary: {},
-              isDirty: false,
-              firstSummary: null,
-              secondSummary: null
-            };
-
-            if (nextPage)
-              payload.currentSection = nextPage;
-
-            if (this.props.app.currentSection === "reports") {
-              payload.currentSection = "home";
+          await this.props.voidMultipleEncounters(
+            "/programs/void_multiple_encounters",
+            {
+              encounterIds: ids,
+              id: this.props.app.clientId,
+              partnerId: this.props.app.partnerId,
+              visitDate: this.props.app.selectedVisit
             }
+          );
 
-            payload.currentPatient = {};
-            payload.partner = {};
-            payload.dual = false;
+          await this.props.clearCache();
 
-            this
-              .props
-              .updateApp(payload);
+          await this.props.clearDataStructs();
 
+          ["primary", "secondary"].forEach(workflow => {
+            this.props.clearWorkflow(workflow);
           });
 
+          let nextPage = !this.props.app.patientActivated ? "patient" : "home";
+
+          let payload = {
+            patientActivated: false,
+            selectedVisit: new Date().format("d mmm YYYY"),
+            currentId: null,
+            formActive: false,
+            selectedTask: "",
+            fieldPos: 0,
+            configs: {},
+            summaryIgnores: [],
+            dual: false,
+            currentTab: null,
+            activeReport: null,
+            clientId: null,
+            partnerId: null,
+            currentPatient: {},
+            partner: {},
+            scanID: null,
+            primary: {},
+            secondary: {},
+            isDirty: false,
+            firstSummary: null,
+            secondSummary: null
+          };
+
+          if (nextPage) payload.currentSection = nextPage;
+
+          if (this.props.app.currentSection === "reports") {
+            payload.currentSection = "home";
+          }
+
+          payload.currentPatient = {};
+          payload.partner = {};
+          payload.dual = false;
+
+          this.props.updateApp(payload);
+        }
+      );
+    } else if (
+      !this.props.app.formActive &&
+      this.props.app.patientActivated &&
+      this.props.app.currentId &&
+      this.props.app.patientData &&
+      this.props.app.patientData[this.props.app.currentId] &&
+      this.props.app.selectedVisit &&
+      this.props.app.module &&
+      this.props.app.patientData[this.props.app.currentId][
+        this.props.app.module
+      ] &&
+      this.props.app.patientData[this.props.app.currentId][
+        this.props.app.module
+      ].visits &&
+      this.props.app.patientData[this.props.app.currentId][
+        this.props.app.module
+      ].visits.filter(e => {
+        return (
+          Object.keys(e)[0] === this.props.app.selectedVisit &&
+          Object.keys(e[this.props.app.selectedVisit]).length > 0
+        );
+      }).length > 0
+    ) {
+      this.props.showConfirmMsg(
+        "Confirm",
+        "Visit not complete. All captured entries in the visit will be deleted. Would you" +
+          " want to delete them?",
+        "Delete",
+        async () => {
+          let ids = this.props.app.patientData[this.props.app.currentId][
+            this.props.app.module
+          ].visits
+            .map(e => {
+              return Object.keys(e[this.props.app.selectedVisit])
+                .map(r => {
+                  return e[this.props.app.selectedVisit][r].encounterId;
+                })
+                .reduce((a, e, i) => {
+                  if (e) a.push(e);
+                  return a;
+                }, []);
+            })
+            .reduce((a, e, i) => {
+              if (e) a = e;
+              return a;
+            }, []);
+
+          await this.props.voidMultipleEncounters(
+            "/programs/void_multiple_encounters",
+            {
+              encounterIds: ids,
+              id: this.props.app.currentId,
+              visitDate: this.props.app.selectedVisit
+            }
+          );
+
+          await this.props.clearCache();
+
+          await this.props.clearDataStructs();
+
+          ["primary", "secondary"].forEach(workflow => {
+            this.props.clearWorkflow(workflow);
+          });
+
+          let nextPage = !this.props.app.patientActivated ? "patient" : "home";
+
+          let payload = {
+            patientActivated: false,
+            selectedVisit: new Date().format("d mmm YYYY"),
+            currentId: null,
+            formActive: false,
+            selectedTask: "",
+            fieldPos: 0,
+            configs: {},
+            summaryIgnores: [],
+            dual: false,
+            currentTab: null,
+            activeReport: null,
+            clientId: null,
+            partnerId: null,
+            currentPatient: {},
+            partner: {},
+            scanID: null,
+            primary: {},
+            secondary: {},
+            isDirty: false,
+            firstSummary: null,
+            secondSummary: null
+          };
+
+          if (nextPage) payload.currentSection = nextPage;
+
+          if (this.props.app.currentSection === "reports") {
+            payload.currentSection = "home";
+          }
+
+          payload.currentPatient = {};
+          payload.partner = {};
+          payload.dual = false;
+
+          this.props.updateApp(payload);
+        }
+      );
     } else {
+      await this.props.clearCache();
 
-      await this
-        .props
-        .clearCache();
-
-      await this
-        .props
-        .clearDataStructs();
+      await this.props.clearDataStructs();
 
       ["primary", "secondary"].forEach(workflow => {
-        this
-          .props
-          .clearWorkflow(workflow);
+        this.props.clearWorkflow(workflow);
       });
 
-      let nextPage = !this.props.app.patientActivated
-        ? "patient"
-        : "home";
+      let nextPage = !this.props.app.patientActivated ? "patient" : "home";
 
       let payload = {
         patientActivated: false,
@@ -1609,56 +1623,37 @@ class App extends Component {
         secondSummary: null
       };
 
-      if (nextPage)
-        payload.currentSection = nextPage;
+      if (nextPage) payload.currentSection = nextPage;
 
       if (this.props.app.currentSection === "reports") {
         payload.currentSection = "home";
 
-        await this
-          .props
-          .resetRawData();
+        await this.props.resetRawData();
 
-        await this
-          .props
-          .resetPepfarData();
-
+        await this.props.resetPepfarData();
       }
 
       payload.currentPatient = {};
       payload.partner = {};
       payload.dual = false;
 
-      this
-        .props
-        .updateApp(payload);
-
+      this.props.updateApp(payload);
     }
-
   }
 
   sendBarcode(uri) {
-
     let ifrm = document.createElement("iframe");
 
     ifrm.setAttribute("src", uri);
 
-    document
-      .body
-      .appendChild(ifrm);
+    document.body.appendChild(ifrm);
 
-    setTimeout(function () {
-
-      document
-        .body
-        .removeChild(ifrm);
-
+    setTimeout(function() {
+      document.body.removeChild(ifrm);
     }, 1000);
-
   }
 
   async doPrint() {
-
     const client = this.props.app.patientData[this.props.app.clientId];
     const data = {
       npid: this.props.app.npid || this.props.app.clientId || "",
@@ -1674,306 +1669,262 @@ class App extends Component {
     await this.setState({ busy: false, printingLabel: null });
 
     if (this.props.app.canPrint !== true) {
-
       this.tmrHandle = null;
-
     } else {
-
       await this.props.updateApp({ canPrint: null });
 
       this.tmrHandle = null;
-
     }
 
-    return
-
+    return;
   }
 
   async submitForm() {
-
     await this.props.updateApp({ processing: true });
 
     if (this.props.app.sectionHeader === "Transcribe in Register") {
+      await this.props.clearDataStructs();
 
-      await this
-        .props
-        .clearDataStructs();
+      const data = Object.assign(
+        {},
+        this.props.wf.responses[this.state.currentWorkflow]
+      );
 
-      const data = Object.assign({}, this.props.wf.responses[this.state.currentWorkflow]);
-
-      await this
-        .props
+      await this.props
         .submitForm(this.props.app.configs.action, Object.assign({}, data))
-        .catch((e) => {
-          this
-            .props
-            .showErrorMsg('Error', e)
+        .catch(e => {
+          this.props.showErrorMsg("Error", e);
         });
 
-      await this.props.flagRegisterFilled(this.props.app.currentId, this.props.app.module, this.props.app.selectedVisit, this.props.app.entryCode);
+      await this.props.flagRegisterFilled(
+        this.props.app.currentId,
+        this.props.app.module,
+        this.props.app.selectedVisit,
+        this.props.app.entryCode
+      );
 
       if (this.props.app.dual) {
-
-        if (this.props.app.flagged && this.props.app.clientId && this.props.app.partnerId && this.props.app.flagged[this.props.app.clientId] && this.props.app.flagged[this.props.app.partnerId]) {
-
+        if (
+          this.props.app.flagged &&
+          this.props.app.clientId &&
+          this.props.app.partnerId &&
+          this.props.app.flagged[this.props.app.clientId] &&
+          this.props.app.flagged[this.props.app.partnerId]
+        ) {
           this.switchPage("home");
-
         } else {
-
           this.cancelForm();
 
           if (this.props.app.currentId)
-            this
-              .props
-              .fetchVisits(this.props.app.currentId);
-
+            this.props.fetchVisits(this.props.app.currentId);
         }
-
       } else if (this.props.app.patientActivated) {
-
         this.switchPage("home");
-
       } else {
-
         this.cancelSession();
-
       }
-
     } else if (this.props.app.currentSection === "registration") {
-
-      this
-        .props
-        .submitForm(this.props.app.configs.action, Object.assign({}, this.props.wf.responses[this.state.currentWorkflow], {
-          primaryId: this.props.app.currentId,
-          date: this.props.app.selectedVisit && new Date(this.props.app.selectedVisit)
-            ? new Date(this.props.app.selectedVisit).getTime()
-            : new Date().getTime(),
-          program: this.props.app.module,
-          group: this.state.currentWorkflow,
-          location: this.props.app.currentLocation,
-          user: this.props.app.activeUser
-        }))
-        .catch((e) => {
-          this
-            .props
-            .showErrorMsg('Error', this.props.app.errorMessage);
+      this.props
+        .submitForm(
+          this.props.app.configs.action,
+          Object.assign(
+            {},
+            this.props.wf.responses[this.state.currentWorkflow],
+            {
+              primaryId: this.props.app.currentId,
+              date:
+                this.props.app.selectedVisit &&
+                new Date(this.props.app.selectedVisit)
+                  ? new Date(this.props.app.selectedVisit).getTime()
+                  : new Date().getTime(),
+              program: this.props.app.module,
+              group: this.state.currentWorkflow,
+              location: this.props.app.currentLocation,
+              user: this.props.app.activeUser
+            }
+          )
+        )
+        .catch(e => {
+          this.props.showErrorMsg("Error", this.props.app.errorMessage);
         });
-
     } else if (this.props.app.configs.action) {
-
       if (this.props.app.sectionHeader === "HTS Visit") {
-
-        if (this.props.wf && this.props.wf.responses && this.state.currentWorkflow && this.props.wf.responses[this.state.currentWorkflow] && Object.keys(this.props.wf.responses[this.state.currentWorkflow]).indexOf("Client gives consent to be tested?") && this.props.wf.responses[this.state.currentWorkflow]["Client gives consent to be tested?"] === "No") {
-
+        if (
+          this.props.wf &&
+          this.props.wf.responses &&
+          this.state.currentWorkflow &&
+          this.props.wf.responses[this.state.currentWorkflow] &&
+          Object.keys(
+            this.props.wf.responses[this.state.currentWorkflow]
+          ).indexOf("Client gives consent to be tested?") &&
+          this.props.wf.responses[this.state.currentWorkflow][
+            "Client gives consent to be tested?"
+          ] === "No"
+        ) {
           return false;
-
         }
 
         await this.props.updateApp({ processing: true });
-
       }
 
       const selectedTask = this.props.app.selectedTask;
 
-      await this
-        .props
-        .clearDataStructs();
+      await this.props.clearDataStructs();
 
       let currentEncounter = this.props.app.sectionHeader;
 
-      await this
-        .props
-        .submitForm(this.props.app.configs.action, Object.assign({}, this.props.app.currentSection !== "registration"
-          ? {
-            [currentEncounter]: this.props.wf.responses[this.state.currentWorkflow]
-          }
-          : this.props.wf.responses[this.state.currentWorkflow], {
-            primaryId: this.props.app.currentId,
-            date: this.props.app.selectedVisit && new Date(this.props.app.selectedVisit)
-              ? new Date(this.props.app.selectedVisit).getTime()
-              : new Date().getTime(),
-            program: this.props.app.module,
-            group: this.state.currentWorkflow,
-            location: this.props.app.currentLocation,
-            user: this.props.app.activeUser
-          })).then(() => {
-
-            if (this.props.app.sectionHeader === "Close Register") {
-
-              this.props.showInfoMsg("Confirmation", "Register closed");
-
-            } else if (this.props.app.sectionHeader === "Change Password") {
-
-              this.props.showInfoMsg("Confirmation", "Password changed");
-
+      await this.props
+        .submitForm(
+          this.props.app.configs.action,
+          Object.assign(
+            {},
+            this.props.app.currentSection !== "registration"
+              ? {
+                  [currentEncounter]: this.props.wf.responses[
+                    this.state.currentWorkflow
+                  ]
+                }
+              : this.props.wf.responses[this.state.currentWorkflow],
+            {
+              primaryId: this.props.app.currentId,
+              date:
+                this.props.app.selectedVisit &&
+                new Date(this.props.app.selectedVisit)
+                  ? new Date(this.props.app.selectedVisit).getTime()
+                  : new Date().getTime(),
+              program: this.props.app.module,
+              group: this.state.currentWorkflow,
+              location: this.props.app.currentLocation,
+              user: this.props.app.activeUser
             }
-
-          })
-        .catch((e) => {
-          this
-            .props
-            .showErrorMsg('Error', this.props.app.errorMessage);
+          )
+        )
+        .then(() => {
+          if (this.props.app.sectionHeader === "Close Register") {
+            this.props.showInfoMsg("Confirmation", "Register closed");
+          } else if (this.props.app.sectionHeader === "Change Password") {
+            this.props.showInfoMsg("Confirmation", "Password changed");
+          }
+        })
+        .catch(e => {
+          this.props.showErrorMsg("Error", this.props.app.errorMessage);
         });
 
       if (selectedTask === "Add User") {
-
         await this.props.fetchUsers();
-
       }
 
       if (this.props.app.infoMessage !== null) {
-
         await this.props.showInfoMsg("Info", this.props.app.infoMessage);
 
         await this.props.updateApp({ infoMessage: null });
-
       }
 
-      await this
-        .props
+      await this.props
         .clearWorkflow(this.state.currentWorkflow)
         .then(async () => {
-
           await this.autoReroute(this.state.currentWorkflow, currentEncounter);
 
           if (this.props.app.currentId)
-            this
-              .props
-              .fetchVisits(this.props.app.currentId);
-
+            this.props.fetchVisits(this.props.app.currentId);
         });
 
       if (this.props.app.sectionHeader === "HTS Visit") {
-
-        const entryCode = this.props
-          .app
-          .patientData[this.props.app.currentId][this.props.app.module]
-          .visits
-          .filter((e) => {
-            return Object.keys(e)[0] === this.props.app.selectedVisit
+        const entryCode = this.props.app.patientData[this.props.app.currentId][
+          this.props.app.module
+        ].visits
+          .filter(e => {
+            return Object.keys(e)[0] === this.props.app.selectedVisit;
           })
-          .map((e) => {
-            return Object.keys(e[Object.keys(e)[0]])
-          }).sort().pop();
+          .map(e => {
+            return Object.keys(e[Object.keys(e)[0]]);
+          })
+          .sort()
+          .pop();
 
         this.transcribe(entryCode);
-
       } else {
-
         this.props.updateApp({ processing: false });
-
       }
-
     }
-
   }
 
   async autoReroute(group, currentEncounter) {
-
     let nextTask;
 
     for (let i = 0; i < this.props.app.order.length; i++) {
-
-      if (!nextTask && currentEncounter === this.props.app.order[i] && i + 1 < this.props.app.order.length) {
-
+      if (
+        !nextTask &&
+        currentEncounter === this.props.app.order[i] &&
+        i + 1 < this.props.app.order.length
+      ) {
         nextTask = this.props.app.order[i + 1];
 
         break;
-
       }
-
     }
 
     if (nextTask) {
-
       if (group === "secondary") {
-
-        await this
-          .props
-          .updateApp({
+        await this.props.updateApp({
+          sectionHeader: nextTask,
+          secondary: {
             sectionHeader: nextTask,
-            secondary: {
-              sectionHeader: nextTask,
-              summary: false
-            }
-          });
-
+            summary: false
+          }
+        });
       } else {
-
-        await this
-          .props
-          .updateApp({
+        await this.props.updateApp({
+          sectionHeader: nextTask,
+          primary: {
             sectionHeader: nextTask,
-            primary: {
-              sectionHeader: nextTask,
-              summary: false
-            }
-          });
-
+            summary: false
+          }
+        });
       }
 
       await this.navigateToRoute(nextTask, "/", group);
-
     } else {
-
       if (this.props.app.dual) {
-
         if (group === "primary") {
-
-          await this
-            .props
-            .updateApp({
-              primary: {
-                summary: true
-              }
-            });
-
+          await this.props.updateApp({
+            primary: {
+              summary: true
+            }
+          });
         } else {
-
-          await this
-            .props
-            .updateApp({
-              secondary: {
-                summary: true
-              }
-            });
-
+          await this.props.updateApp({
+            secondary: {
+              summary: true
+            }
+          });
         }
-
       } else {
-
         this.cancelForm();
-
       }
-
     }
-
   }
 
   async voidEncounter(encounter, encounterId) {
-
-    this
-      .props
-      .showConfirmMsg("Confirmation", "Do you really want to delete '" + encounter + "'?", "Delete", async () => {
-
-        await this
-          .props
-          .voidEncounter("/programs/void_encounter", {
-            encounter: encounter,
-            date: new Date(this.props.app.selectedVisit)
-              ? new Date(this.props.app.selectedVisit).getTime()
-              : new Date().getTime(),
-            program: this.props.app.module,
-            primaryId: this.props.app.currentId,
-            encounterId
-          });
-
-      });
-
+    this.props.showConfirmMsg(
+      "Confirmation",
+      "Do you really want to delete '" + encounter + "'?",
+      "Delete",
+      async () => {
+        await this.props.voidEncounter("/programs/void_encounter", {
+          encounter: encounter,
+          date: new Date(this.props.app.selectedVisit)
+            ? new Date(this.props.app.selectedVisit).getTime()
+            : new Date().getTime(),
+          program: this.props.app.module,
+          primaryId: this.props.app.currentId,
+          encounterId
+        });
+      }
+    );
   }
 
   async findOrRegisterPatient() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -1982,47 +1933,69 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["PatientRegistration"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["PatientRegistration"].data
+    );
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Find or Register Client",
-        formActive: true,
-        currentSection: "registration",
-        configs: Object.assign({}, (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].configs
-          ? this.props.app.data[this.props.app.module]["PatientRegistration"].configs
-          : {})),
-        summaryIgnores: Object.assign([], (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-          ? this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-          : {})),
-        sectionHeader: "Find or Register Client"
-      });
+    await this.props.updateApp({
+      selectedTask: "Find or Register Client",
+      formActive: true,
+      currentSection: "registration",
+      configs: Object.assign(
+        {},
+        this.props.app.data &&
+          this.props.app.module &&
+          this.props.app.data[this.props.app.module] &&
+          this.props.app.data[this.props.app.module]["PatientRegistration"] &&
+          this.props.app.data[this.props.app.module]["PatientRegistration"]
+            .configs
+          ? this.props.app.data[this.props.app.module]["PatientRegistration"]
+              .configs
+          : {}
+      ),
+      summaryIgnores: Object.assign(
+        [],
+        this.props.app.data &&
+          this.props.app.module &&
+          this.props.app.data[this.props.app.module] &&
+          this.props.app.data[this.props.app.module]["PatientRegistration"] &&
+          this.props.app.data[this.props.app.module]["PatientRegistration"]
+            .ignores
+          ? this.props.app.data[this.props.app.module]["PatientRegistration"]
+              .ignores
+          : {}
+      ),
+      sectionHeader: "Find or Register Client"
+    });
 
-    await this
-      .props
-      .handleInputChange(this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+    await this.props.handleInputChange(
+      this.props.wf &&
+        this.props.wf[this.state.currentWorkflow] &&
+        this.props.wf[this.state.currentWorkflow].currentNode &&
+        this.props.wf[this.state.currentWorkflow].currentNode.label
         ? this.props.wf[this.state.currentWorkflow].currentNode.label
-        : "", "", this.state.currentWorkflow);
+        : "",
+      "",
+      this.state.currentWorkflow
+    );
 
     await this.queryOptions("");
   }
 
   async switchWorkflow(targetWorkflow) {
-
     return new Promise(async resolve => {
-
       const activeWorkflow = this.state.currentWorkflow;
 
-      await this.setState({ suspendedWorkflow: activeWorkflow, currentWorkflow: targetWorkflow });
+      await this.setState({
+        suspendedWorkflow: activeWorkflow,
+        currentWorkflow: targetWorkflow
+      });
 
       let currentId;
       let payload = {};
 
       if (targetWorkflow === "secondary") {
-
         [
           "formActive",
           "selectedTask",
@@ -2033,16 +2006,16 @@ class App extends Component {
           "configs",
           "summaryIgnores"
         ].forEach(field => {
-
-          if (this.props.app.secondary[field] || (typeof this.props.app.secondary[field] === "boolean" && Object.keys(this.props.app.secondary).indexOf(field)))
-            payload[field] = this.props.app.secondary[field]
-
-        })
+          if (
+            this.props.app.secondary[field] ||
+            (typeof this.props.app.secondary[field] === "boolean" &&
+              Object.keys(this.props.app.secondary).indexOf(field))
+          )
+            payload[field] = this.props.app.secondary[field];
+        });
 
         currentId = String(this.props.app.partnerId);
-
       } else {
-
         [
           "formActive",
           "selectedTask",
@@ -2053,51 +2026,75 @@ class App extends Component {
           "configs",
           "summaryIgnores"
         ].forEach(field => {
-
-          if (this.props.app.primary[field] || (typeof this.props.app.primary[field] === "boolean" && Object.keys(this.props.app.primary).indexOf(field)))
-            payload[field] = this.props.app.primary[field]
-
-        })
+          if (
+            this.props.app.primary[field] ||
+            (typeof this.props.app.primary[field] === "boolean" &&
+              Object.keys(this.props.app.primary).indexOf(field))
+          )
+            payload[field] = this.props.app.primary[field];
+        });
 
         currentId = String(this.props.app.clientId);
-
       }
 
       payload.currentId = currentId;
 
       if (!payload.selectedVisit)
-        payload.selectedVisit = (new Date()).format("d mmm YYYY");
+        payload.selectedVisit = new Date().format("d mmm YYYY");
 
-      payload.currentPatient = this.props.app.patientData[currentId]
+      payload.currentPatient = this.props.app.patientData[currentId];
 
       if (payload.sectionHeader === "Find or Register Client") {
-
-        payload.configs = Object.assign({}, (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].configs
-          ? this.props.app.data[this.props.app.module]["PatientRegistration"].configs
-          : {}));
-        payload.summaryIgnores = Object.assign([], (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module]["PatientRegistration"] && this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-          ? this.props.app.data[this.props.app.module]["PatientRegistration"].ignores
-          : {}));
-
-      } else if (this.props.app.data && this.props.app.module && payload.selectedTask && this.props.app.data[this.props.app.module] && this.props.app.data[this.props.app.module][payload.selectedTask]) {
-
-        payload.configs = Object.assign({}, this.props.app.data[this.props.app.module][payload.selectedTask].configs);
-        payload.summaryIgnores = Object.assign([], this.props.app.data[this.props.app.module][payload.selectedTask].ignores);
-
+        payload.configs = Object.assign(
+          {},
+          this.props.app.data &&
+            this.props.app.module &&
+            this.props.app.data[this.props.app.module] &&
+            this.props.app.data[this.props.app.module]["PatientRegistration"] &&
+            this.props.app.data[this.props.app.module]["PatientRegistration"]
+              .configs
+            ? this.props.app.data[this.props.app.module]["PatientRegistration"]
+                .configs
+            : {}
+        );
+        payload.summaryIgnores = Object.assign(
+          [],
+          this.props.app.data &&
+            this.props.app.module &&
+            this.props.app.data[this.props.app.module] &&
+            this.props.app.data[this.props.app.module]["PatientRegistration"] &&
+            this.props.app.data[this.props.app.module]["PatientRegistration"]
+              .ignores
+            ? this.props.app.data[this.props.app.module]["PatientRegistration"]
+                .ignores
+            : {}
+        );
+      } else if (
+        this.props.app.data &&
+        this.props.app.module &&
+        payload.selectedTask &&
+        this.props.app.data[this.props.app.module] &&
+        this.props.app.data[this.props.app.module][payload.selectedTask]
+      ) {
+        payload.configs = Object.assign(
+          {},
+          this.props.app.data[this.props.app.module][payload.selectedTask]
+            .configs
+        );
+        payload.summaryIgnores = Object.assign(
+          [],
+          this.props.app.data[this.props.app.module][payload.selectedTask]
+            .ignores
+        );
       }
 
-      await this
-        .props
-        .updateApp(payload)
+      await this.props.updateApp(payload);
 
       resolve();
-
     });
-
   }
 
   async backdataEntry() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -2106,60 +2103,46 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Backdata Entry"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Backdata Entry"].data
+    );
 
-    this
-      .props
-      .updateApp({
-        selectedTask: "Backdata Entry",
-        formActive: true,
-        currentSection: "home",
-        sectionHeader: "Backdata Entry",
-        fieldPos: 0,
-        configs: {
-          "Testing Date": {
-            fieldType: "date",
-            validationRule: "^\\d+\\s[A-Za-z]+\\s\\d{4}$",
-            validationMessage: "Enter valid date (day, month, year)",
-            hiddenButtons: [
-              "clear",
-              "/",
-              ".",
-              "abc",
-              "qwe",
-              "Unknown"
-            ],
-            placeholder: new Date().format("d mmm YYYY"),
-            maxDate: new Date().format("YYYY-mm-dd"),
-            // minDate: new Date((new Date()).setDate(-10)).format("d mmm YYYY"),
-            format: "d mmm YYYY"
-          },
-          "Register Number (from cover)": {
-            fieldType: "number",
-            hiddenButtons: [
-              "/",
-              ".",
-              "-",
-              "abc",
-              "qwe",
-              "Unknown",
-              "del"
-            ],
-            ajaxURL: '/programs/fetch_active_registers?q=',
-            lockList: true,
-            validationMessage: "Select register number from list",
-            title: "Missing Data"
-          },
-          "Enter Data": {
-            customComponent: "BackdataEntry",
-            properties: {},
-            optional: true
-          },
-          action: null
+    this.props.updateApp({
+      selectedTask: "Backdata Entry",
+      formActive: true,
+      currentSection: "home",
+      sectionHeader: "Backdata Entry",
+      fieldPos: 0,
+      configs: {
+        "Testing Date": {
+          fieldType: "date",
+          validationRule: "^\\d+\\s[A-Za-z]+\\s\\d{4}$",
+          validationMessage: "Enter valid date (day, month, year)",
+          hiddenButtons: ["clear", "/", ".", "abc", "qwe", "Unknown"],
+          placeholder: new Date().format("d mmm YYYY"),
+          maxDate: new Date().format("YYYY-mm-dd"),
+          // minDate: new Date((new Date()).setDate(-10)).format("d mmm YYYY"),
+          format: "d mmm YYYY"
         },
-        summaryIgnores: Object.assign([], [
+        "Register Number (from cover)": {
+          fieldType: "number",
+          hiddenButtons: ["/", ".", "-", "abc", "qwe", "Unknown", "del"],
+          ajaxURL: "/programs/fetch_active_registers?q=",
+          lockList: true,
+          validationMessage: "Select register number from list",
+          title: "Missing Data"
+        },
+        "Enter Data": {
+          customComponent: "BackdataEntry",
+          properties: {},
+          optional: true
+        },
+        action: null
+      },
+      summaryIgnores: Object.assign(
+        [],
+        [
           "Age",
           "Age Group",
           "Client Risk Category",
@@ -2179,55 +2162,54 @@ class App extends Component {
           "Partner HIV Status",
           "Number of Items Given:HTS Family Ref Slips",
           "Appointment Date Given"
-        ])
-      });
-
+        ]
+      )
+    });
   }
 
   async handleNextButtonClicks() {
-
-    if (this.$("btnNext").className.match(/gray/i))
-      return;
+    if (this.$("btnNext").className.match(/gray/i)) return;
 
     if (this.props.app.sectionHeader === "Print Label") {
-
       const valid = await validated(this.props, this.state);
 
       if (!valid.valid) {
-
-        this
-          .props
-          .showErrorMsg((valid.title ? valid.title : "Invalid Entry"), valid.message);
+        this.props.showErrorMsg(
+          valid.title ? valid.title : "Invalid Entry",
+          valid.message
+        );
 
         return;
-
       }
 
-      await this.props.fetchLabelId(this.props.wf.responses[this.state.currentWorkflow]["Label Text"]);
+      await this.props.fetchLabelId(
+        this.props.wf.responses[this.state.currentWorkflow]["Label Text"]
+      );
 
       const label = this.props.app.printId;
 
       if (label === null || !label)
-        return this.props.showErrorMsg('Error', 'Label printing failed');
+        return this.props.showErrorMsg("Error", "Label printing failed");
 
-      const data = "\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,\"" + label + "\"\nB10,100,0,1,5,15,120,N,\"" + label + "\"\nP1\n";
+      const data =
+        '\nN\nq801\nQ329,026\nZT\nA50,50,0,2,2,2,N,"' +
+        label +
+        '"\nB10,100,0,1,5,15,120,N,"' +
+        label +
+        '"\nP1\n';
 
-      const uri = 'data:application/label; charset=utf-8; filename=label.lbl; disposition=inline,' + encodeURIComponent(data);
+      const uri =
+        "data:application/label; charset=utf-8; filename=label.lbl; disposition=inline," +
+        encodeURIComponent(data);
 
       this.sendBarcode(uri);
 
-      await this
-        .props
-        .clearCache();
+      await this.props.clearCache();
 
-      await this
-        .props
-        .clearDataStructs();
+      await this.props.clearDataStructs();
 
       ["primary", "secondary"].forEach(workflow => {
-        this
-          .props
-          .clearWorkflow(workflow);
+        this.props.clearWorkflow(workflow);
       });
 
       this.props.updateApp({ sectionHeader: null });
@@ -2235,117 +2217,279 @@ class App extends Component {
       this.switchPage("home");
 
       return;
-
     }
 
-    if (this.props.wf && this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label && this.props.app.configs && this.props.app.configs[this.props.wf[this.state.currentWorkflow].currentNode.label] && Object.keys(this.props.app.configs[this.props.wf[this.state.currentWorkflow].currentNode.label]).indexOf("onUnLoad") >= 0) {
-
-      this
-        .props
-        .app
-        .configs[this.props.wf[this.state.currentWorkflow].currentNode.label]
-        .onUnLoad();
-
+    if (
+      this.props.wf &&
+      this.state.currentWorkflow &&
+      this.props.wf[this.state.currentWorkflow] &&
+      this.props.wf[this.state.currentWorkflow].currentNode &&
+      this.props.wf[this.state.currentWorkflow].currentNode.label &&
+      this.props.app.configs &&
+      this.props.app.configs[
+        this.props.wf[this.state.currentWorkflow].currentNode.label
+      ] &&
+      Object.keys(
+        this.props.app.configs[
+          this.props.wf[this.state.currentWorkflow].currentNode.label
+        ]
+      ).indexOf("onUnLoad") >= 0
+    ) {
+      this.props.app.configs[
+        this.props.wf[this.state.currentWorkflow].currentNode.label
+      ].onUnLoad();
     }
 
     if (this.props.dde.ddeSearchActive) {
-
-      await this
-        .props
-        .handleInputChange(this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+      await this.props.handleInputChange(
+        this.props.wf &&
+          this.props.wf[this.state.currentWorkflow] &&
+          this.props.wf[this.state.currentWorkflow].currentNode &&
+          this.props.wf[this.state.currentWorkflow].currentNode.label
           ? this.props.wf[this.state.currentWorkflow].currentNode.label
-          : "", (this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-            ? this.props.wf[this.state.currentWorkflow].currentNode.label
-            : ""]
-            ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+          : "",
+        this.props.wf.responses &&
+          this.props.wf.responses[this.state.currentWorkflow] &&
+          this.props.wf.responses[this.state.currentWorkflow][
+            this.props.wf &&
+            this.props.wf[this.state.currentWorkflow] &&
+            this.props.wf[this.state.currentWorkflow].currentNode &&
+            this.props.wf[this.state.currentWorkflow].currentNode.label
               ? this.props.wf[this.state.currentWorkflow].currentNode.label
-              : ""]
-            : ""), this.state.currentWorkflow);
+              : ""
+          ]
+          ? this.props.wf.responses[this.state.currentWorkflow][
+              this.props.wf &&
+              this.props.wf[this.state.currentWorkflow] &&
+              this.props.wf[this.state.currentWorkflow].currentNode &&
+              this.props.wf[this.state.currentWorkflow].currentNode.label
+                ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                : ""
+            ]
+          : "",
+        this.state.currentWorkflow
+      );
 
-      await this
-        .props
-        .goForward(this.state.currentWorkflow, (this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-          ? this.props.wf[this.state.currentWorkflow].currentNode.label
-          : "Yes"]
-          ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-            ? this.props.wf[this.state.currentWorkflow].currentNode.label
-            : "Yes"]
-          : "Yes"));
-
-    } else if (this.props.app.formActive && (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-      ? this.props.wf[this.state.currentWorkflow].currentNode.type
-      : "") === "exit") {
-
+      await this.props.goForward(
+        this.state.currentWorkflow,
+        this.props.wf.responses &&
+          this.props.wf.responses[this.state.currentWorkflow] &&
+          this.props.wf.responses[this.state.currentWorkflow][
+            this.props.wf &&
+            this.props.wf[this.state.currentWorkflow] &&
+            this.props.wf[this.state.currentWorkflow].currentNode &&
+            this.props.wf[this.state.currentWorkflow].currentNode.label
+              ? this.props.wf[this.state.currentWorkflow].currentNode.label
+              : "Yes"
+          ]
+          ? this.props.wf.responses[this.state.currentWorkflow][
+              this.props.wf &&
+              this.props.wf[this.state.currentWorkflow] &&
+              this.props.wf[this.state.currentWorkflow].currentNode &&
+              this.props.wf[this.state.currentWorkflow].currentNode.label
+                ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                : "Yes"
+            ]
+          : "Yes"
+      );
+    } else if (
+      this.props.app.formActive &&
+      (this.props.wf &&
+      this.props.wf[this.state.currentWorkflow] &&
+      this.props.wf[this.state.currentWorkflow].currentNode &&
+      this.props.wf[this.state.currentWorkflow].currentNode.type
+        ? this.props.wf[this.state.currentWorkflow].currentNode.type
+        : "") === "exit"
+    ) {
       return;
-
     } else if (this.props.app.formActive) {
-
       if (this.props.app.isDirty) {
-
-        this
-          .props
-          .showInfoMsg("Unsaved Data", "You have unsaved data. Please save or " + (this.props.app.selectedTask === "Backdata Entry" ? "delete" : "clear") + " to proceed!");
-
+        this.props.showInfoMsg(
+          "Unsaved Data",
+          "You have unsaved data. Please save or " +
+            (this.props.app.selectedTask === "Backdata Entry"
+              ? "delete"
+              : "clear") +
+            " to proceed!"
+        );
       } else {
-
-        this.navNext(this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-          ? this.props.wf[this.state.currentWorkflow].currentNode.label
-          : ""]
-          ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-            ? this.props.wf[this.state.currentWorkflow].currentNode.label
-            : ""]
-          : "");
-
+        this.navNext(
+          this.props.wf.responses &&
+            this.props.wf.responses[this.state.currentWorkflow] &&
+            this.props.wf.responses[this.state.currentWorkflow][
+              this.props.wf &&
+              this.props.wf[this.state.currentWorkflow] &&
+              this.props.wf[this.state.currentWorkflow].currentNode &&
+              this.props.wf[this.state.currentWorkflow].currentNode.label
+                ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                : ""
+            ]
+            ? this.props.wf.responses[this.state.currentWorkflow][
+                this.props.wf &&
+                this.props.wf[this.state.currentWorkflow] &&
+                this.props.wf[this.state.currentWorkflow].currentNode &&
+                this.props.wf[this.state.currentWorkflow].currentNode.label
+                  ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                  : ""
+              ]
+            : ""
+        );
       }
-
     } else if (this.props.app.patientActivated) {
-
       this.switchPage("home");
-
     } else {
-
       this.findOrRegisterPatient();
-
     }
   }
 
   async fetchNextTask(currentId, group) {
-
     let nextTask;
 
-    let selectedVisit = (this.props.app.selectedVisit
+    let selectedVisit = this.props.app.selectedVisit
       ? this.props.app.selectedVisit
-      : (new Date()).format("d mmm YYYY"));
+      : new Date().format("d mmm YYYY");
 
     for (let task of this.props.app.order) {
-
-      if (currentId && this.props.app.patientData && this.props.app.module && selectedVisit && this.props.app.patientData[currentId] && this.props.app.patientData[currentId][this.props.app.module] && this.props.app.patientData[currentId][this.props.app.module].visits && this.props.app.patientData[currentId][this.props.app.module].visits.filter((e) => {
-        return Object.keys(e)[0] === selectedVisit
-      }) && this.props.app.patientData[currentId][this.props.app.module].visits.filter((e) => {
-        return Object.keys(e)[0] === selectedVisit
-      })[0] && this.props.app.patientData[currentId][this.props.app.module].visits.filter((e) => {
-        return Object.keys(e)[0] === selectedVisit
-      })[0][selectedVisit] && !this.props.app.patientData[currentId][this.props.app.module].visits.filter((e) => {
-        return Object.keys(e)[0] === selectedVisit
-      })[0][selectedVisit][task]) {
-
+      if (
+        currentId &&
+        this.props.app.patientData &&
+        this.props.app.module &&
+        selectedVisit &&
+        this.props.app.patientData[currentId] &&
+        this.props.app.patientData[currentId][this.props.app.module] &&
+        this.props.app.patientData[currentId][this.props.app.module].visits &&
+        this.props.app.patientData[currentId][
+          this.props.app.module
+        ].visits.filter(e => {
+          return Object.keys(e)[0] === selectedVisit;
+        }) &&
+        this.props.app.patientData[currentId][
+          this.props.app.module
+        ].visits.filter(e => {
+          return Object.keys(e)[0] === selectedVisit;
+        })[0] &&
+        this.props.app.patientData[currentId][
+          this.props.app.module
+        ].visits.filter(e => {
+          return Object.keys(e)[0] === selectedVisit;
+        })[0][selectedVisit] &&
+        !this.props.app.patientData[currentId][
+          this.props.app.module
+        ].visits.filter(e => {
+          return Object.keys(e)[0] === selectedVisit;
+        })[0][selectedVisit][task]
+      ) {
         nextTask = task;
 
         break;
-
       }
-
     }
 
     if (nextTask) {
-
-      await this
-        .props
-        .updateApp({
+      await this.props.updateApp({
+        sectionHeader: nextTask,
+        [group]: {
           sectionHeader: nextTask,
+          selectedTask: nextTask,
+          summary: false,
+          forceSummary: false,
+          formActive: true,
+          fieldPos: 0,
+          selectedVisit: this.props.app.selectedVisit
+        },
+        currentId,
+        selectedTask: nextTask,
+        formActive: true,
+        fieldPos: 0,
+        [this.state.currentWorkflow.match(/second/i)
+          ? "secondSummary"
+          : "firstSummary"]: false
+      });
+
+      await this.navigateToRoute(nextTask, "/", group);
+
+      await this.props.handleInputChange(
+        "Do you have a partner?",
+        "Yes",
+        group
+      );
+
+      await this.props.handleInputChange("Partner present?", "Yes", group);
+    } else if (
+      currentId &&
+      this.props.app.patientData &&
+      this.props.app.module &&
+      this.props.app.selectedVisit &&
+      this.props.app.patientData[currentId] &&
+      this.props.app.patientData[currentId][this.props.app.module] &&
+      this.props.app.patientData[currentId][this.props.app.module].visits &&
+      this.props.app.patientData[currentId][
+        this.props.app.module
+      ].visits.filter(e => {
+        return Object.keys(e)[0] === this.props.app.selectedVisit;
+      }) &&
+      this.props.app.patientData[currentId][
+        this.props.app.module
+      ].visits.filter(e => {
+        return Object.keys(e)[0] === this.props.app.selectedVisit;
+      }).length > 0 &&
+      this.props.app.patientData[currentId][
+        this.props.app.module
+      ].visits.filter(e => {
+        return Object.keys(e)[0] === this.props.app.selectedVisit;
+      })[0][this.props.app.selectedVisit] &&
+      Object.keys(
+        this.props.app.patientData[currentId][
+          this.props.app.module
+        ].visits.filter(e => {
+          return Object.keys(e)[0] === this.props.app.selectedVisit;
+        })[0][this.props.app.selectedVisit]
+      ).length >= this.props.app.order.length
+    ) {
+      await this.props.updateApp({
+        [group]: {
+          sectionHeader: "Visit Details for " + this.props.app.selectedTask,
+          summary: true,
+          forceSummary: false,
+          formActive: false,
+          fieldPos: 0,
+          selectedVisit: this.props.app.selectedVisit
+        },
+        formActive: false,
+        selectedTask: null,
+        fieldPos: 0,
+        sectionHeader: null,
+        [this.state.currentWorkflow.match(/second/i)
+          ? "secondSummary"
+          : "firstSummary"]: true
+      });
+    } else {
+      if (
+        this.props.app.order.length > 0 &&
+        !(
+          currentId &&
+          this.props.app.patientData &&
+          this.props.app.module &&
+          this.props.app.selectedVisit &&
+          this.props.app.patientData[currentId] &&
+          this.props.app.patientData[currentId][this.props.app.module] &&
+          this.props.app.patientData[currentId][this.props.app.module].visits &&
+          this.props.app.patientData[currentId][
+            this.props.app.module
+          ].visits.filter(e => {
+            return Object.keys(e)[0] === this.props.app.selectedVisit;
+          }) &&
+          this.props.app.patientData[currentId][
+            this.props.app.module
+          ].visits.filter(e => {
+            return Object.keys(e)[0] === this.props.app.selectedVisit;
+          })[0]
+        )
+      ) {
+        await this.props.updateApp({
           [group]: {
-            sectionHeader: nextTask,
-            selectedTask: nextTask,
+            sectionHeader: this.props.app.order[0],
+            selectedTask: this.props.app.order[0],
             summary: false,
             forceSummary: false,
             formActive: true,
@@ -2353,171 +2497,144 @@ class App extends Component {
             selectedVisit: this.props.app.selectedVisit
           },
           currentId,
-          selectedTask: nextTask,
           formActive: true,
+          selectedTask: this.props.app.order[0],
           fieldPos: 0,
-          [this.state.currentWorkflow.match(/second/i) ? "secondSummary" : "firstSummary"]: false
+          sectionHeader: this.props.app.order[0],
+          [this.state.currentWorkflow.match(/second/i)
+            ? "secondSummary"
+            : "firstSummary"]: false
         });
-
-      await this.navigateToRoute(nextTask, "/", group);
-
-      await this
-        .props
-        .handleInputChange("Do you have a partner?", "Yes", group);
-
-      await this
-        .props
-        .handleInputChange("Partner present?", "Yes", group);
-
-    } else if (currentId && this.props.app.patientData && this.props.app.module && this.props.app.selectedVisit && this.props.app.patientData[currentId] && this.props.app.patientData[currentId][this.props.app.module] && this.props.app.patientData[currentId][this.props.app.module].visits && this.props.app.patientData[currentId][this.props.app.module].visits.filter((e) => {
-      return Object.keys(e)[0] === this.props.app.selectedVisit
-    }) && this.props.app.patientData[currentId][this.props.app.module].visits.filter((e) => {
-      return Object.keys(e)[0] === this.props.app.selectedVisit
-    }).length > 0 && this.props.app.patientData[currentId][this.props.app.module].visits.filter((e) => {
-      return Object.keys(e)[0] === this.props.app.selectedVisit
-    })[0][this.props.app.selectedVisit] && Object.keys(this.props.app.patientData[currentId][this.props.app.module].visits.filter((e) => {
-      return Object.keys(e)[0] === this.props.app.selectedVisit
-    })[0][this.props.app.selectedVisit]).length >= this.props.app.order.length) {
-
-      await this
-        .props
-        .updateApp({
-          [group]: {
-            sectionHeader: "Visit Details for " + this.props.app.selectedTask,
-            summary: true,
-            forceSummary: false,
-            formActive: false,
-            fieldPos: 0,
-            selectedVisit: this.props.app.selectedVisit
-          },
-          formActive: false,
-          selectedTask: null,
-          fieldPos: 0,
-          sectionHeader: null,
-          [this.state.currentWorkflow.match(/second/i) ? "secondSummary" : "firstSummary"]: true
-        });
-
-    } else {
-
-      if (this.props.app.order.length > 0 && !(currentId && this.props.app.patientData && this.props.app.module && this.props.app.selectedVisit && this.props.app.patientData[currentId] && this.props.app.patientData[currentId][this.props.app.module] && this.props.app.patientData[currentId][this.props.app.module].visits && this.props.app.patientData[currentId][this.props.app.module].visits.filter((e) => {
-        return Object.keys(e)[0] === this.props.app.selectedVisit
-      }) && this.props.app.patientData[currentId][this.props.app.module].visits.filter((e) => {
-        return Object.keys(e)[0] === this.props.app.selectedVisit
-      })[0])) {
-
-        await this
-          .props
-          .updateApp({
-            [group]: {
-              sectionHeader: this.props.app.order[0],
-              selectedTask: this.props.app.order[0],
-              summary: false,
-              forceSummary: false,
-              formActive: true,
-              fieldPos: 0,
-              selectedVisit: this.props.app.selectedVisit
-            },
-            currentId,
-            formActive: true,
-            selectedTask: this.props.app.order[0],
-            fieldPos: 0,
-            sectionHeader: this.props.app.order[0],
-            [this.state.currentWorkflow.match(/second/i) ? "secondSummary" : "firstSummary"]: false
-          });
 
         await this.navigateToRoute(this.props.app.order[0], "/", group);
 
-        await this
-          .props
-          .handleInputChange("Do you have a partner?", "Yes", group);
+        await this.props.handleInputChange(
+          "Do you have a partner?",
+          "Yes",
+          group
+        );
 
-        await this
-          .props
-          .handleInputChange("Partner present?", "Yes", group);
-
+        await this.props.handleInputChange("Partner present?", "Yes", group);
       }
-
     }
-
   }
 
   async handleClearClicks() {
-
-    if (this.props.dde.ddeSearchActive && this.$('btnClear') && this.$('btnClear').innerHTML === "New Client") {
-
-      await this
-        .props
-        .handleInputChange(this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+    if (
+      this.props.dde.ddeSearchActive &&
+      this.$("btnClear") &&
+      this.$("btnClear").innerHTML === "New Client"
+    ) {
+      await this.props.handleInputChange(
+        this.props.wf &&
+          this.props.wf[this.state.currentWorkflow] &&
+          this.props.wf[this.state.currentWorkflow].currentNode &&
+          this.props.wf[this.state.currentWorkflow].currentNode.label
           ? this.props.wf[this.state.currentWorkflow].currentNode.label
-          : "", "No", this.state.currentWorkflow);
+          : "",
+        "No",
+        this.state.currentWorkflow
+      );
 
-      await this
-        .props
-        .clearDataStructs();
+      await this.props.clearDataStructs();
 
       this.navNext("No");
-
-    } else if (!this.props.app.formActive && this.props.app.dual && (this.props.app.dual && ((this.props.app.primary.summary || this.props.app.primary.forceSummary) || (this.props.app.secondary.summary || this.props.app.secondary.forceSummary)))) {
-
+    } else if (
+      !this.props.app.formActive &&
+      this.props.app.dual &&
+      (this.props.app.dual &&
+        (this.props.app.primary.summary ||
+          this.props.app.primary.forceSummary ||
+          (this.props.app.secondary.summary ||
+            this.props.app.secondary.forceSummary)))
+    ) {
       this.fetchNextTask(this.props.app.currentId, this.state.currentWorkflow);
-
     } else {
+      if (
+        this.state.currentWorkflow &&
+        this.props.wf[this.state.currentWorkflow] &&
+        this.props.wf[this.state.currentWorkflow].currentNode &&
+        this.props.wf[this.state.currentWorkflow].currentNode.label ===
+          "Immediate Parallel Repeat Test 1 & 2 Results"
+      ) {
+        this.props.clearField(
+          "Immediate Repeat Test 1 Result",
+          this.state.currentWorkflow
+        );
 
-      if (this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "Immediate Parallel Repeat Test 1 & 2 Results") {
+        this.props.clearField(
+          "Immediate Repeat Test 2 Result",
+          this.state.currentWorkflow
+        );
 
-        this.props.clearField("Immediate Repeat Test 1 Result", this.state.currentWorkflow);
-
-        this.props.clearField("Immediate Repeat Test 2 Result", this.state.currentWorkflow);
-
-        this.props.clearField("Immediate Parallel Repeat Test 1 & 2 Results", this.state.currentWorkflow);
-
+        this.props.clearField(
+          "Immediate Parallel Repeat Test 1 & 2 Results",
+          this.state.currentWorkflow
+        );
       }
 
-      if (this.state.currentWorkflow && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "First Pass Parallel Test 1 & 2 Results") {
+      if (
+        this.state.currentWorkflow &&
+        this.props.wf[this.state.currentWorkflow] &&
+        this.props.wf[this.state.currentWorkflow].currentNode &&
+        this.props.wf[this.state.currentWorkflow].currentNode.label ===
+          "First Pass Parallel Test 1 & 2 Results"
+      ) {
+        this.props.clearField(
+          "First Pass Test 1 Result",
+          this.state.currentWorkflow
+        );
 
-        this.props.clearField("First Pass Test 1 Result", this.state.currentWorkflow);
+        this.props.clearField(
+          "First Pass Test 2 Result",
+          this.state.currentWorkflow
+        );
 
-        this.props.clearField("First Pass Test 2 Result", this.state.currentWorkflow);
-
-        this.props.clearField("First Pass Parallel Test 1 & 2 Results", this.state.currentWorkflow);
-
+        this.props.clearField(
+          "First Pass Parallel Test 1 & 2 Results",
+          this.state.currentWorkflow
+        );
       }
 
-      this
-        .props
-        .handleInputChange(this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+      this.props.handleInputChange(
+        this.props.wf &&
+          this.props.wf[this.state.currentWorkflow] &&
+          this.props.wf[this.state.currentWorkflow].currentNode &&
+          this.props.wf[this.state.currentWorkflow].currentNode.label
           ? this.props.wf[this.state.currentWorkflow].currentNode.label
-          : "", "", this.state.currentWorkflow);
+          : "",
+        "",
+        this.state.currentWorkflow
+      );
 
-      this
-        .queryOptions(this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+      this.queryOptions(
+        this.props.wf &&
+          this.props.wf[this.state.currentWorkflow] &&
+          this.props.wf[this.state.currentWorkflow].currentNode &&
+          this.props.wf[this.state.currentWorkflow].currentNode.label
           ? this.props.wf[this.state.currentWorkflow].currentNode.label
-          : "");
-
+          : ""
+      );
     }
-
   }
 
   async setReportingPeriod() {
-
-    await this
-      .props
-      .setPeriod({
-        start: {
-          reportMonth: this.props.app.report.start.reportMonth,
-          reportYear: this.props.app.report.start.reportYear,
-          reportDate: this.props.app.report.start.reportDate
-        },
-        end: {
-          reportMonth: this.props.app.report.end.reportMonth,
-          reportYear: this.props.app.report.end.reportYear,
-          reportDate: this.props.app.report.end.reportDate
-        },
-        location: this.props.app.report.location,
-        test: this.props.app.report.test,
-        testType: this.props.app.report.testType,
-        modality: this.props.app.report.modality
-      });
+    await this.props.setPeriod({
+      start: {
+        reportMonth: this.props.app.report.start.reportMonth,
+        reportYear: this.props.app.report.start.reportYear,
+        reportDate: this.props.app.report.start.reportDate
+      },
+      end: {
+        reportMonth: this.props.app.report.end.reportMonth,
+        reportYear: this.props.app.report.end.reportYear,
+        reportDate: this.props.app.report.end.reportDate
+      },
+      location: this.props.app.report.location,
+      test: this.props.app.report.test,
+      testType: this.props.app.report.testType,
+      modality: this.props.app.report.modality
+    });
 
     const monthlReport = [
       "Male",
@@ -2572,172 +2689,207 @@ class App extends Component {
       December: 11
     };
 
-    const startNumericalMonth = monthValues[this.props.app.report.start.reportMonth];
+    const startNumericalMonth =
+      monthValues[this.props.app.report.start.reportMonth];
     const startYear = this.props.app.report.start.reportYear;
-    const endNumericalMonth = monthValues[this.props.app.report.end.reportMonth];
+    const endNumericalMonth =
+      monthValues[this.props.app.report.end.reportMonth];
     const endYear = this.props.app.report.end.reportYear;
 
-    await this.props.updateReportField('numericalMonth', startNumericalMonth, 'start');
-    await this.props.updateReportField('reportYear', startYear, 'start');
-    await this.props.updateReportField('reportDate', startYear, 'start');
-    await this.props.updateReportField('numericalMonth', endNumericalMonth, 'end');
-    await this.props.updateReportField('reportYear', endYear, 'end');
-    await this.props.updateReportField('reportDate', endYear, 'end');
+    await this.props.updateReportField(
+      "numericalMonth",
+      startNumericalMonth,
+      "start"
+    );
+    await this.props.updateReportField("reportYear", startYear, "start");
+    await this.props.updateReportField("reportDate", startYear, "start");
+    await this.props.updateReportField(
+      "numericalMonth",
+      endNumericalMonth,
+      "end"
+    );
+    await this.props.updateReportField("reportYear", endYear, "end");
+    await this.props.updateReportField("reportDate", endYear, "end");
 
     if (this.props.app.activeReport === "monthly report") {
-
       monthlReport.forEach(field => {
-
-        this
-          .props
-          .fetchReport("/reports?f=" + encodeURIComponent(field) + "&sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&sd=" + this.props.reports.start.reportDate + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&ed=" + this.props.reports.end.reportDate + "&l=" + encodeURIComponent(this.props.reports.location));
+        this.props.fetchReport(
+          "/reports?f=" +
+            encodeURIComponent(field) +
+            "&sm=" +
+            this.props.dialog.start.numericalMonth +
+            "&sy=" +
+            this.props.reports.start.reportYear +
+            "&sd=" +
+            this.props.reports.start.reportDate +
+            "&em=" +
+            this.props.dialog.end.numericalMonth +
+            "&ey=" +
+            this.props.reports.end.reportYear +
+            "&ed=" +
+            this.props.reports.end.reportDate +
+            "&l=" +
+            encodeURIComponent(this.props.reports.location)
+        );
       });
-
     } else if (this.props.app.activeReport === "daily register") {
+      await this.props.resetRawData();
 
-      await this
-        .props
-        .resetRawData();
-
-      this
-        .props
-        .fetchDailyRegister(this.props.dialog.start.numericalMonth, this.props.dialog.start.reportYear, this.props.reports.location, this.props.reports.testType, this.props.reports.test);
-
+      this.props.fetchDailyRegister(
+        this.props.dialog.start.numericalMonth,
+        this.props.dialog.start.reportYear,
+        this.props.reports.location,
+        this.props.reports.testType,
+        this.props.reports.test
+      );
     } else if (this.props.app.activeReport === "raw data report") {
+      await this.props.resetRawData();
 
-      await this
-        .props
-        .resetRawData();
-
-      this
-        .props
-        .fetchRaw("/raw", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.start.reportDate, this.props.reports.end.reportDate);
-
+      this.props.fetchRaw(
+        "/raw",
+        this.props.dialog.start.numericalMonth,
+        this.props.reports.start.reportYear,
+        this.props.dialog.end.numericalMonth,
+        this.props.reports.end.reportYear,
+        this.props.reports.start.reportDate,
+        this.props.reports.end.reportDate
+      );
     } else if (this.props.app.activeReport === "pepfar report") {
+      await this.props.resetPepfarData();
 
-      await this
-        .props
-        .resetPepfarData();
-
-      this
-        .props
-        .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality, 0, 20, this.props.reports.start.reportDate, this.props.reports.end.reportDate);
-
+      this.props.fetchPepfarData(
+        "/full_disaggregated",
+        this.props.dialog.start.numericalMonth,
+        this.props.reports.start.reportYear,
+        this.props.dialog.end.numericalMonth,
+        this.props.reports.end.reportYear,
+        this.props.reports.modality,
+        0,
+        20,
+        this.props.reports.start.reportDate,
+        this.props.reports.end.reportDate
+      );
     }
-
   }
 
   async scrollPepfarData(startPos, endPos) {
-
-    if (!this.props.reports || (this.props.reports && !this.props.reports.start) || (this.props.reports && !this.props.reports.end))
+    if (
+      !this.props.reports ||
+      (this.props.reports && !this.props.reports.start) ||
+      (this.props.reports && !this.props.reports.end)
+    )
       return;
 
-    this
-      .props
-      .fetchPepfarData("/full_disaggregated", this.props.dialog.start.numericalMonth, this.props.reports.start.reportYear, this.props.dialog.end.numericalMonth, this.props.reports.end.reportYear, this.props.reports.modality, startPos, endPos, this.props.reports.start.reportDate, this.props.reports.end.reportDate);
-
+    this.props.fetchPepfarData(
+      "/full_disaggregated",
+      this.props.dialog.start.numericalMonth,
+      this.props.reports.start.reportYear,
+      this.props.dialog.end.numericalMonth,
+      this.props.reports.end.reportYear,
+      this.props.reports.modality,
+      startPos,
+      endPos,
+      this.props.reports.start.reportDate,
+      this.props.reports.end.reportDate
+    );
   }
 
   async selectPatient(activePatient) {
+    await this.props.updateApp({ ignore: true });
 
-    await this
-      .props
-      .updateApp({ ignore: true });
+    await this.props.selectPatient(activePatient);
 
-    await this
-      .props
-      .selectPatient(activePatient);
-
-    await this
-      .props
-      .updateApp({ ignore: false });
-
+    await this.props.updateApp({ ignore: false });
   }
 
-  downloadCSV(headers = [], data = [], filename = "download", delimiter = '\t') {
-
+  downloadCSV(
+    headers = [],
+    data = [],
+    filename = "download",
+    delimiter = "\t"
+  ) {
     if (this.props.app.activeReport === "pepfar report") {
-
-      Axios
-        .get("/full_disaggregated?sm=" + this.props.dialog.start.numericalMonth + "&sy=" + this.props.reports.start.reportYear + "&em=" + this.props.dialog.end.numericalMonth + "&ey=" + this.props.reports.end.reportYear + "&d=1" + (this.props.reports.modality ? "&m=" + this.props.reports.modality : "") + "&sd=" + this.props.reports.start.reportDate + "&ed=" + this.props.reports.end.reportDate)
-        .then(response => {
-          FileDownload(response.data, 'report.csv');
-        })
-
+      Axios.get(
+        "/full_disaggregated?sm=" +
+          this.props.dialog.start.numericalMonth +
+          "&sy=" +
+          this.props.reports.start.reportYear +
+          "&em=" +
+          this.props.dialog.end.numericalMonth +
+          "&ey=" +
+          this.props.reports.end.reportYear +
+          "&d=1" +
+          (this.props.reports.modality
+            ? "&m=" + this.props.reports.modality
+            : "") +
+          "&sd=" +
+          this.props.reports.start.reportDate +
+          "&ed=" +
+          this.props.reports.end.reportDate
+      ).then(response => {
+        FileDownload(response.data, "report.csv");
+      });
     } else {
-
       try {
-
-        let csv = headers.join(delimiter) + '\n';
+        let csv = headers.join(delimiter) + "\n";
 
         for (let record of data) {
-
           let row = [];
 
           for (let title of headers) {
-
-            row.push((String(record[title]).length > 0
-              ? record[title]
-              : ""));
-
+            row.push(String(record[title]).length > 0 ? record[title] : "");
           }
 
-          csv += row.join(delimiter) + '\n';
-
+          csv += row.join(delimiter) + "\n";
         }
 
-        let hiddenElement = document.createElement('a');
-        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-        hiddenElement.target = '_blank';
-        hiddenElement.download = filename + '.csv';
+        let hiddenElement = document.createElement("a");
+        hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
+        hiddenElement.target = "_blank";
+        hiddenElement.download = filename + ".csv";
 
         document.body.appendChild(hiddenElement);
 
         hiddenElement.click();
 
         document.body.removeChild(hiddenElement);
-
       } catch (e) {
-
         this.showErrorMsg("CSV Download Error", e);
-
       }
-
     }
-
   }
 
   loadEntryCodes() {
-
     const currentId = this.props.app.currentId;
 
     const selectedVisit = this.props.app.selectedVisit;
 
     const module = this.props.app.module;
 
-    if (!this.props.app.patientData || (this.props.app.patientData && !this.props.app.patientData[currentId]) || (this.props.app.patientData[currentId] && !this.props.app.patientData[currentId][module]) || (this.props.app.patientData[currentId][module] && !this.props.app.patientData[currentId][module].visits))
+    if (
+      !this.props.app.patientData ||
+      (this.props.app.patientData && !this.props.app.patientData[currentId]) ||
+      (this.props.app.patientData[currentId] &&
+        !this.props.app.patientData[currentId][module]) ||
+      (this.props.app.patientData[currentId][module] &&
+        !this.props.app.patientData[currentId][module].visits)
+    )
       return [];
 
-    let entryCodes = this
-      .props
-      .app
-      .patientData[currentId][module]
-      .visits
-      .filter((e) => {
-        return Object.keys(e)[0] === selectedVisit
+    let entryCodes = this.props.app.patientData[currentId][module].visits
+      .filter(e => {
+        return Object.keys(e)[0] === selectedVisit;
       })
-      .map((e) => {
-        return Object.keys(e[Object.keys(e)[0]])
+      .map(e => {
+        return Object.keys(e[Object.keys(e)[0]]);
       })[0];
 
     // this.props.setData(entryCodes);
 
     return entryCodes;
-
   }
 
   async transcribe(entryCode) {
-
     await this.setState({ currentWorkflow: this.state.currentWorkflow });
 
     await this.setState({
@@ -2746,23 +2898,15 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .updateApp({ entryCode: (Array.isArray(entryCode) ? entryCode.sort().pop() : entryCode) });
+    await this.props.updateApp({
+      entryCode: Array.isArray(entryCode) ? entryCode.sort().pop() : entryCode
+    });
 
     const configs = {
       "Register Number (from cover)": {
         fieldType: "number",
-        hiddenButtons: [
-          "del",
-          "/",
-          ".",
-          "-",
-          "abc",
-          "qwe",
-          "Unknown"
-        ],
-        ajaxURL: '/programs/fetch_active_registers?q=',
+        hiddenButtons: ["del", "/", ".", "-", "abc", "qwe", "Unknown"],
+        ajaxURL: "/programs/fetch_active_registers?q=",
         lockList: true
       },
       "Select Entry Code": {
@@ -2773,50 +2917,53 @@ class App extends Component {
         visible: false,
         condition: "!String('{{entryCode}}').match(/^ec/i)"
       },
-      "Display": {
+      Display: {
         customComponent: "Transcribe",
         properties: {},
         optional: true
       },
-      action: '/programs/save_register_number'
+      action: "/programs/save_register_number"
     };
 
-    const summaryIgnores = Object.assign([], ["Display", "encounterId", "id", "client"]);
+    const summaryIgnores = Object.assign(
+      [],
+      ["Display", "encounterId", "id", "client"]
+    );
 
-    await this
-      .props
-      .updateApp({
-        [this.state.currentWorkflow]: {
-          selectedTask: "Transcribe",
-          formActive: true,
-          sectionHeader: "Transcribe in Register",
-          fieldPos: 0,
-          configs,
-          summaryIgnores
-        },
+    await this.props.updateApp({
+      [this.state.currentWorkflow]: {
         selectedTask: "Transcribe",
         formActive: true,
         sectionHeader: "Transcribe in Register",
         fieldPos: 0,
         configs,
-        summaryIgnores,
-        processing: false
-      });
+        summaryIgnores
+      },
+      selectedTask: "Transcribe",
+      formActive: true,
+      sectionHeader: "Transcribe in Register",
+      fieldPos: 0,
+      configs,
+      summaryIgnores,
+      processing: false
+    });
 
-    await this
-      .props
-      .loadData(this.props.app.module, this.props.app.selectedTask, configs, summaryIgnores);
+    await this.props.loadData(
+      this.props.app.module,
+      this.props.app.selectedTask,
+      configs,
+      summaryIgnores
+    );
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Transcribe"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Transcribe"].data
+    );
 
     this.queryOptions("");
-
   }
 
   async addRegister() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -2825,82 +2972,89 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["HTS Registers"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["HTS Registers"].data
+    );
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Add Register",
-        formActive: true,
-        currentSection: "admin",
-        configs: {
-          "Register Number": {
-            fieldType: "number",
-            hiddenButtons: [
-              "/",
-              "qwe",
-              "abc",
-              "Unknown",
-              ".",
-              "-"
-            ],
-            ajaxURL: '/programs/fetch_active_registers?q=',
-            validationRule: "^[1-9]$|^[1-9][0-9]$|^[1-9][0-9][0-9]$",
-            validationMessage: "Expecting a number between 1 and 999 only"
-          },
-          "Location Type": {
-            options: [
-              "Community", "Health Facility", "Standalone"
-            ],
-            className: "longSelectList",
-            onUnLoad: () => {
-
-              if (this.props.app.configs && Object.keys(this.props.app.configs).indexOf("Service Delivery Point") >= 0) {
-
-                this.props.app.configs["Service Delivery Point"].options = locations[(this.props.wf && this.state.currentWorkflow && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Location Type"]
-                  ? this.props.wf.responses[this.state.currentWorkflow]["Location Type"]
-                  : "")].sort();
-
-              }
-
-            }
-          },
-          "Service Delivery Point": {
-            options: locations[this.props.wf && this.state.currentWorkflow && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Location Type"]
-              ? this.props.wf.responses[this.state.currentWorkflow]["Location Type"]
-              : ""],
-            className: "longSelectList"
-          },
-          "HTS Location": {
-            fieldType: "text",
-            ajaxURL: "/list_locations?name=",
-            lockList: true
-          },
-          "Register Type": {
-            options: [
-              "Regular",
-              "Self-Test"
-            ]
-          },
-          action: "/programs/add_register"
+    await this.props.updateApp({
+      selectedTask: "Add Register",
+      formActive: true,
+      currentSection: "admin",
+      configs: {
+        "Register Number": {
+          fieldType: "number",
+          hiddenButtons: ["/", "qwe", "abc", "Unknown", ".", "-"],
+          ajaxURL: "/programs/fetch_active_registers?q=",
+          validationRule: "^[1-9]$|^[1-9][0-9]$|^[1-9][0-9][0-9]$",
+          validationMessage: "Expecting a number between 1 and 999 only"
         },
-        summaryIgnores: [],
-        sectionHeader: "Add Register",
-        fieldPos: 0
-      });
+        "Location Type": {
+          options: ["Community", "Health Facility", "Standalone"],
+          className: "longSelectList",
+          onUnLoad: () => {
+            if (
+              this.props.app.configs &&
+              Object.keys(this.props.app.configs).indexOf(
+                "Service Delivery Point"
+              ) >= 0
+            ) {
+              this.props.app.configs[
+                "Service Delivery Point"
+              ].options = locations[
+                this.props.wf &&
+                this.state.currentWorkflow &&
+                this.props.wf.responses &&
+                this.props.wf.responses[this.state.currentWorkflow] &&
+                this.props.wf.responses[this.state.currentWorkflow][
+                  "Location Type"
+                ]
+                  ? this.props.wf.responses[this.state.currentWorkflow][
+                      "Location Type"
+                    ]
+                  : ""
+              ].sort();
+            }
+          }
+        },
+        "Service Delivery Point": {
+          options:
+            locations[
+              this.props.wf &&
+              this.state.currentWorkflow &&
+              this.props.wf.responses &&
+              this.props.wf.responses[this.state.currentWorkflow] &&
+              this.props.wf.responses[this.state.currentWorkflow][
+                "Location Type"
+              ]
+                ? this.props.wf.responses[this.state.currentWorkflow][
+                    "Location Type"
+                  ]
+                : ""
+            ],
+          className: "longSelectList"
+        },
+        "HTS Location": {
+          fieldType: "text",
+          ajaxURL: "/list_locations?name=",
+          lockList: true
+        },
+        "Register Type": {
+          options: ["Regular", "Self-Test"]
+        },
+        action: "/programs/add_register"
+      },
+      summaryIgnores: [],
+      sectionHeader: "Add Register",
+      fieldPos: 0
+    });
 
-    this
-      .props
-      .fetchRegisterStats();
+    this.props.fetchRegisterStats();
 
     this.queryOptions("");
-
   }
 
   async closeRegister() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -2909,57 +3063,42 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Close Register"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Close Register"].data
+    );
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Close Register",
-        formActive: true,
-        currentSection: "admin",
-        configs: {
-          "Register Number": {
-            fieldType: "number",
-            hiddenButtons: [
-              "clear",
-              "/",
-              "qwe",
-              "abc",
-              "Unknown",
-              ".",
-              "-"
-            ],
-            ajaxURL: '/programs/fetch_active_registers?q='
-          },
-          "Location Type": {
-            options: [
-              "Community", "Health Facility", "Standalone"
-            ],
-            "className": "longSelectList"
-          },
-          "Service Delivery Point": {
-            options: locations,
-            "className": "longSelectList"
-          },
-          action: "/programs/close_register"
+    await this.props.updateApp({
+      selectedTask: "Close Register",
+      formActive: true,
+      currentSection: "admin",
+      configs: {
+        "Register Number": {
+          fieldType: "number",
+          hiddenButtons: ["clear", "/", "qwe", "abc", "Unknown", ".", "-"],
+          ajaxURL: "/programs/fetch_active_registers?q="
         },
-        summaryIgnores: [],
-        sectionHeader: "Close Register",
-        fieldPos: 0
-      });
+        "Location Type": {
+          options: ["Community", "Health Facility", "Standalone"],
+          className: "longSelectList"
+        },
+        "Service Delivery Point": {
+          options: locations,
+          className: "longSelectList"
+        },
+        action: "/programs/close_register"
+      },
+      summaryIgnores: [],
+      sectionHeader: "Close Register",
+      fieldPos: 0
+    });
 
-    this
-      .props
-      .fetchRegisterStats();
+    this.props.fetchRegisterStats();
 
     this.queryOptions("");
-
   }
 
   async findEnteredRecord() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -2968,61 +3107,53 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Find Entered Record"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Find Entered Record"].data
+    );
 
-    this
-      .props
-      .updateApp({
-        selectedTask: "Find Entered Record",
-        formActive: true,
-        currentSection: "home",
-        sectionHeader: "Find Entered Record",
-        fieldPos: 0,
-        configs: {
-          "Entry Code": {
-            customComponent: "EntryCode",
-            optional: true,
-            properties: {
-              label: "Entry Code"
-            }
-          },
-          "Display Match": {
-            customComponent: "FindEnteredRecord",
-            properties: {},
-            optional: true
-          },
-          action: null
+    this.props.updateApp({
+      selectedTask: "Find Entered Record",
+      formActive: true,
+      currentSection: "home",
+      sectionHeader: "Find Entered Record",
+      fieldPos: 0,
+      configs: {
+        "Entry Code": {
+          customComponent: "EntryCode",
+          optional: true,
+          properties: {
+            label: "Entry Code"
+          }
         },
-        summaryIgnores: Object.assign([], ["Display Match", "Entry Code"])
-      });
-
+        "Display Match": {
+          customComponent: "FindEnteredRecord",
+          properties: {},
+          optional: true
+        },
+        action: null
+      },
+      summaryIgnores: Object.assign([], ["Display Match", "Entry Code"])
+    });
   }
 
   checkIfUsernameValid(token) {
-
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       // Do the usual XHR stuff
       var req = new XMLHttpRequest();
-      req.open('GET', '/username_valid/' + token);
+      req.open("GET", "/username_valid/" + token);
 
-      req.onload = function () {
+      req.onload = function() {
         // This is called even on 404 etc
         // so check the status
         if (req.status === 200) {
           // Resolve the promise with the response text
           if (JSON.parse(req.response).valid === true) {
-
             resolve(true);
-
           } else {
-
             reject(false);
-
           }
-        }
-        else {
+        } else {
           // Otherwise reject with the status text
           // which will hopefully be a meaningful error
           reject(Error(req.statusText));
@@ -3030,18 +3161,16 @@ class App extends Component {
       };
 
       // Handle network errors
-      req.onerror = function () {
+      req.onerror = function() {
         reject(Error("Network Error"));
       };
 
       // Make the request
       req.send();
     });
-
   }
 
   async addUser() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -3050,66 +3179,79 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Add User"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Add User"].data
+    );
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Add User",
-        formActive: true,
-        currentSection: "user management",
-        configs: {
-          "Username": {
-            fieldType: "dha",
-            textCase: "upper",
-            validator: this.checkIfUsernameValid, // algorithm.decode,
-            validationMessage: "Invalid ID format entered"
-          },
-          "Password": {
-            fieldType: "password",
-            textCase: "lower"
-          },
-          "Confirm Password": {
-            fieldType: "password",
-            textCase: "lower",
-            onUnLoad: () => {
-              if (this.props.wf && this.props.wf.responses && this.state.currentWorkflow && this.props.wf.responses[this.state.currentWorkflow] && Object.keys(this.props.wf.responses[this.state.currentWorkflow]).indexOf("Password") >= 0 && Object.keys(this.props.wf.responses[this.state.currentWorkflow]).indexOf("Confirm Password") >= 0 && this.props.wf.responses[this.state.currentWorkflow]["Confirm Password"].trim().length > 0 && this.props.wf.responses[this.state.currentWorkflow]["Password"] !== this.props.wf.responses[this.state.currentWorkflow]["Confirm Password"]) {
-
-                this.props.showErrorMsg("Invalid Data", "Password mismatch");
-
-                this.navBack();
-
-              }
-            }
-          },
-          "Role": {
-            options: [
-              "Admin", "Counselor", "HTS Coordinator"
-            ],
-            className: "longSelectList"
-          },
-          "First Name": {
-            fieldType: "text"
-          },
-          "Last Name": {
-            fieldType: "text"
-          },
-          "Gender": {
-            options: ["Female", "Male"]
-          },
-          action: "/user/add_user"
+    await this.props.updateApp({
+      selectedTask: "Add User",
+      formActive: true,
+      currentSection: "user management",
+      configs: {
+        Username: {
+          fieldType: "dha",
+          textCase: "upper",
+          validator: this.checkIfUsernameValid, // algorithm.decode,
+          validationMessage: "Invalid ID format entered"
         },
-        summaryIgnores: [],
-        sectionHeader: "Add User",
-        fieldPos: 0
-      });
+        Password: {
+          fieldType: "password",
+          textCase: "lower"
+        },
+        "Confirm Password": {
+          fieldType: "password",
+          textCase: "lower",
+          onUnLoad: () => {
+            if (
+              this.props.wf &&
+              this.props.wf.responses &&
+              this.state.currentWorkflow &&
+              this.props.wf.responses[this.state.currentWorkflow] &&
+              Object.keys(
+                this.props.wf.responses[this.state.currentWorkflow]
+              ).indexOf("Password") >= 0 &&
+              Object.keys(
+                this.props.wf.responses[this.state.currentWorkflow]
+              ).indexOf("Confirm Password") >= 0 &&
+              this.props.wf.responses[this.state.currentWorkflow][
+                "Confirm Password"
+              ].trim().length > 0 &&
+              this.props.wf.responses[this.state.currentWorkflow][
+                "Password"
+              ] !==
+                this.props.wf.responses[this.state.currentWorkflow][
+                  "Confirm Password"
+                ]
+            ) {
+              this.props.showErrorMsg("Invalid Data", "Password mismatch");
 
+              this.navBack();
+            }
+          }
+        },
+        Role: {
+          options: ["Admin", "Counselor", "HTS Coordinator"],
+          className: "longSelectList"
+        },
+        "First Name": {
+          fieldType: "text"
+        },
+        "Last Name": {
+          fieldType: "text"
+        },
+        Gender: {
+          options: ["Female", "Male"]
+        },
+        action: "/user/add_user"
+      },
+      summaryIgnores: [],
+      sectionHeader: "Add User",
+      fieldPos: 0
+    });
   }
 
   deactivateAllPrograms() {
-
     const payload = {
       module: null,
       icon: null,
@@ -3123,56 +3265,42 @@ class App extends Component {
       userManagementActive: false
     };
 
-    this
-      .props
-      .updateApp(payload);
-
+    this.props.updateApp(payload);
   }
 
   async login() {
-
-    await this
-      .props
-      .login(this.props.wf && this.props.wf.responses && this.props.wf.responses['primary']
-        ? this.props.wf.responses['primary']
-        : {})
-      .catch(e => { });
+    await this.props
+      .login(
+        this.props.wf &&
+          this.props.wf.responses &&
+          this.props.wf.responses["primary"]
+          ? this.props.wf.responses["primary"]
+          : {}
+      )
+      .catch(e => {});
 
     if (this.props.app.activeUser && this.props.app.activeUser !== "") {
-
-      this
-        .props
-        .initApp("/programs?role=" + (this.props.app.role
-          ? this.props.app.role
-          : "regular"));
-
+      this.props.initApp(
+        "/programs?role=" +
+          (this.props.app.role ? this.props.app.role : "regular")
+      );
     } else {
-
-      this
-        .props
-        .showErrorMsg("Login Error", "Wrong username or password");
-
+      this.props.showErrorMsg("Login Error", "Wrong username or password");
     }
-
   }
 
   logout() {
-
     this.deactivateAllPrograms();
 
-    this.setCookie('username', '', 1);
-    this.setCookie('role', '', 1);
-    this.setCookie('location', '', 1);
-    this.setCookie('accessToken', '', 1);
+    this.setCookie("username", "", 1);
+    this.setCookie("role", "", 1);
+    this.setCookie("location", "", 1);
+    this.setCookie("accessToken", "", 1);
 
-    this
-      .props
-      .logout(this.props.app.accessToken);
-
+    this.props.logout(this.props.app.accessToken);
   }
 
   async editUser(username, firstName, lastName, gender, role) {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -3181,75 +3309,75 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Edit User"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Edit User"].data
+    );
 
     if (firstName) {
-
-      await this
-        .props
-        .handleInputChange("First Name", firstName, this.state.currentWorkflow);
-
+      await this.props.handleInputChange(
+        "First Name",
+        firstName,
+        this.state.currentWorkflow
+      );
     }
 
     if (lastName) {
-
-      await this
-        .props
-        .handleInputChange("Last Name", lastName, this.state.currentWorkflow);
-
+      await this.props.handleInputChange(
+        "Last Name",
+        lastName,
+        this.state.currentWorkflow
+      );
     }
 
     if (gender) {
-
-      await this
-        .props
-        .handleInputChange("Gender", gender, this.state.currentWorkflow);
-
+      await this.props.handleInputChange(
+        "Gender",
+        gender,
+        this.state.currentWorkflow
+      );
     }
 
     if (role) {
-
-      await this
-        .props
-        .handleInputChange("Role", role, this.state.currentWorkflow);
-
+      await this.props.handleInputChange(
+        "Role",
+        role,
+        this.state.currentWorkflow
+      );
     }
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Edit User",
-        formActive: true,
-        currentSection: "user management",
-        configs: {
-          "Role": {
-            options: [
-              "Admin", "Counselor", "HTS Coordinator", "Registration Clerk"
-            ],
-            className: "longSelectList"
-          },
-          "First Name": {
-            fieldType: "text"
-          },
-          "Last Name": {
-            fieldType: "text"
-          },
-          "Gender": {
-            options: ["Female", "Male"]
-          },
-          action: "/user/update_user/" + username
+    await this.props.updateApp({
+      selectedTask: "Edit User",
+      formActive: true,
+      currentSection: "user management",
+      configs: {
+        Role: {
+          options: [
+            "Admin",
+            "Counselor",
+            "HTS Coordinator",
+            "Registration Clerk"
+          ],
+          className: "longSelectList"
         },
-        summaryIgnores: [],
-        sectionHeader: "Edit User",
-        fieldPos: 0
-      });
-
+        "First Name": {
+          fieldType: "text"
+        },
+        "Last Name": {
+          fieldType: "text"
+        },
+        Gender: {
+          options: ["Female", "Male"]
+        },
+        action: "/user/update_user/" + username
+      },
+      summaryIgnores: [],
+      sectionHeader: "Edit User",
+      fieldPos: 0
+    });
   }
 
   async changePassword(username) {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -3258,40 +3386,37 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Change Password"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Change Password"].data
+    );
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Change Password",
-        formActive: true,
-        currentSection: "user management",
-        configs: {
-          "Current Password": {
-            fieldType: "password",
-            textCase: "lower"
-          },
-          "New Password": {
-            fieldType: "password",
-            textCase: "lower"
-          },
-          "Confirm Password": {
-            fieldType: "password",
-            textCase: "lower"
-          },
-          action: "/user/change_password/" + username
+    await this.props.updateApp({
+      selectedTask: "Change Password",
+      formActive: true,
+      currentSection: "user management",
+      configs: {
+        "Current Password": {
+          fieldType: "password",
+          textCase: "lower"
         },
-        summaryIgnores: [],
-        sectionHeader: "Change Password",
-        fieldPos: 0
-      });
-
+        "New Password": {
+          fieldType: "password",
+          textCase: "lower"
+        },
+        "Confirm Password": {
+          fieldType: "password",
+          textCase: "lower"
+        },
+        action: "/user/change_password/" + username
+      },
+      summaryIgnores: [],
+      sectionHeader: "Change Password",
+      fieldPos: 0
+    });
   }
 
   async filterReport() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -3300,162 +3425,155 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Report Filter"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Report Filter"].data
+    );
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Report Filter",
-        formActive: true,
-        currentSection: "reports",
-        configs: {
-          "Start Month": {
-            options: [
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December"
-            ],
-            className: "longSelectList",
-            autoNext: true
-          },
-          "Start Year": {
-            fieldType: "number",
-            min: ((new Date()).getFullYear() - 10),
-            max: (new Date()).getFullYear(),
-            hiddenButtons: [
-              "clear",
-              "/",
-              ".",
-              "-",
-              "abc",
-              "qwe",
-              "Unknown"
-            ],
-            validationMessage: `Expecting years between\n${((new Date()).getFullYear() - 10)} and ${(new Date()).getFullYear()}`,
-            onUnLoad: () => {
+    await this.props.updateApp({
+      selectedTask: "Report Filter",
+      formActive: true,
+      currentSection: "reports",
+      configs: {
+        "Start Month": {
+          options: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+          ],
+          className: "longSelectList",
+          autoNext: true
+        },
+        "Start Year": {
+          fieldType: "number",
+          min: new Date().getFullYear() - 10,
+          max: new Date().getFullYear(),
+          hiddenButtons: ["clear", "/", ".", "-", "abc", "qwe", "Unknown"],
+          validationMessage: `Expecting years between\n${new Date().getFullYear() -
+            10} and ${new Date().getFullYear()}`,
+          onUnLoad: () => {
+            if (
+              this.props.app.configs &&
+              Object.keys(this.props.app.configs).indexOf("End Year") >= 0
+            ) {
+              const minYear =
+                this.props.wf &&
+                this.state.currentWorkflow &&
+                this.props.wf.responses &&
+                this.props.wf.responses[this.state.currentWorkflow] &&
+                this.props.wf.responses[this.state.currentWorkflow][
+                  "Start Year"
+                ]
+                  ? Number(
+                      this.props.wf.responses[this.state.currentWorkflow][
+                        "Start Year"
+                      ]
+                    )
+                  : new Date().getFullYear() - 10;
 
-              if (this.props.app.configs && Object.keys(this.props.app.configs).indexOf("End Year") >= 0) {
+              this.props.app.configs["End Year"].min = minYear;
 
-                const minYear = (this.props.wf && this.state.currentWorkflow && this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow]["Start Year"]
-                  ? Number(this.props.wf.responses[this.state.currentWorkflow]["Start Year"])
-                  : ((new Date()).getFullYear() - 10));
-
-                this.props.app.configs["End Year"].min = minYear;
-
-                this.props.app.configs["End Year"].validationMessage = `Expecting years between\n${minYear} and ${(new Date()).getFullYear()}`;
-
-              }
-
+              this.props.app.configs[
+                "End Year"
+              ].validationMessage = `Expecting years between\n${minYear} and ${new Date().getFullYear()}`;
             }
-          },
-          "Ask End Month?": {
-            visible: false,
-            condition: "'{{activeReport}}' !== 'daily register'"
-          },
-          "Filter by Modality?": {
-            visible: true,
-            options: [
-              "Yes",
-              "No"
-            ]
-          },
-          "Pepfar report?": {
-            visible: false,
-            condition: "'{{activeReport}}' === 'pepfar report'"
-          },
-          "End Month": {
-            options: [
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December"
-            ],
-            className: "longSelectList",
-            autoNext: true
-          },
-          "Modality": {
-            options: modalities,
-            className: "longSelectList",
-            autoNext: true
-          },
-          "End Year": {
-            fieldType: "number",
-            min: ((new Date()).getFullYear() - 10),
-            max: (new Date()).getFullYear(),
-            hiddenButtons: [
-              "clear",
-              "/",
-              ".",
-              "-",
-              "abc",
-              "qwe",
-              "Unknown"
-            ],
-            validationMessage: `Expecting years between\n${((new Date()).getFullYear() - 10)} and ${(new Date()).getFullYear()}`
-          },
-          "Ask Location?": {
-            visible: false,
-            condition: "'{{activeReport}}' === 'daily register' || '{{activeReport}}' === 'monthly report'"
-          },
-          "Location": {
-            ajaxURL: "/programs/fetch_locations",
-            lockList: true,
-            className: "longSelectList"
-          },
-          "Ask Test?": {
-            visible: false,
-            condition: "'{{activeReport}}' === 'daily register'"
-          },
-          "Test": {
-            options: (tests
-              ? Object.keys(tests).map(e => {
-                return tests[e]
-              })
-              : []),
-            className: "longSelectList"
-          },
-          "Start Date": {
-            fieldType: 'days',
-            yearField: 'Start Year',
-            monthField: 'Start Month',
-            hiddenButtons: ['Unknown'],
-            condition: "'{{activeReport}}' !== 'daily register'"
-          },
-          "End Date": {
-            fieldType: 'days',
-            yearField: 'End Year',
-            monthField: 'End Month',
-            hiddenButtons: ['Unknown']
           }
         },
-        summaryIgnores: [],
-        sectionHeader: "Report Filter",
-        fieldPos: 0
-      });
-
+        "Ask End Month?": {
+          visible: false,
+          condition: "'{{activeReport}}' !== 'daily register'"
+        },
+        "Filter by Modality?": {
+          visible: true,
+          options: ["Yes", "No"]
+        },
+        "Pepfar report?": {
+          visible: false,
+          condition: "'{{activeReport}}' === 'pepfar report'"
+        },
+        "End Month": {
+          options: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+          ],
+          className: "longSelectList",
+          autoNext: true
+        },
+        Modality: {
+          options: modalities,
+          className: "longSelectList",
+          autoNext: true
+        },
+        "End Year": {
+          fieldType: "number",
+          min: new Date().getFullYear() - 10,
+          max: new Date().getFullYear(),
+          hiddenButtons: ["clear", "/", ".", "-", "abc", "qwe", "Unknown"],
+          validationMessage: `Expecting years between\n${new Date().getFullYear() -
+            10} and ${new Date().getFullYear()}`
+        },
+        "Ask Location?": {
+          visible: false,
+          condition:
+            "'{{activeReport}}' === 'daily register' || '{{activeReport}}' === 'monthly report'"
+        },
+        Location: {
+          ajaxURL: "/programs/fetch_locations",
+          lockList: true,
+          className: "longSelectList"
+        },
+        "Ask Test?": {
+          visible: false,
+          condition: "'{{activeReport}}' === 'daily register'"
+        },
+        Test: {
+          options: tests
+            ? Object.keys(tests).map(e => {
+                return tests[e];
+              })
+            : [],
+          className: "longSelectList"
+        },
+        "Start Date": {
+          fieldType: "days",
+          yearField: "Start Year",
+          monthField: "Start Month",
+          hiddenButtons: ["Unknown"],
+          condition: "'{{activeReport}}' !== 'daily register'"
+        },
+        "End Date": {
+          fieldType: "days",
+          yearField: "End Year",
+          monthField: "End Month",
+          hiddenButtons: ["Unknown"]
+        }
+      },
+      summaryIgnores: [],
+      sectionHeader: "Report Filter",
+      fieldPos: 0
+    });
   }
 
   async printLabel() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -3464,59 +3582,70 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Print Label"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Print Label"].data
+    );
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Print Label",
-        formActive: true,
-        currentSection: "user management",
-        configs: {
-          "Select Workstation": {
-            fieldType: "text",
-            ajaxURL: "/list_locations?name=",
-            lockList: true
-          },
-          action: null
+    await this.props.updateApp({
+      selectedTask: "Print Label",
+      formActive: true,
+      currentSection: "user management",
+      configs: {
+        "Select Workstation": {
+          fieldType: "text",
+          ajaxURL: "/list_locations?name=",
+          lockList: true
         },
-        summaryIgnores: [],
-        sectionHeader: "Print Label",
-        fieldPos: 0
-      });
+        action: null
+      },
+      summaryIgnores: [],
+      sectionHeader: "Print Label",
+      fieldPos: 0
+    });
 
     this.queryOptions("");
-
   }
 
-  printBarcode(data = {
-    npid: "",
-    first_name: "",
-    family_name: "",
-    date_of_birth_estimated: "",
-    date_of_birth: "",
-    gender: "",
-    residence: ""
-  }) {
+  printBarcode(
+    data = {
+      npid: "",
+      first_name: "",
+      family_name: "",
+      date_of_birth_estimated: "",
+      date_of_birth: "",
+      gender: "",
+      residence: ""
+    }
+  ) {
+    const text =
+      '\nN\nq801\nQ329,026\nZT\nB10,180,0,1,5,15,120,N,"' +
+      data.npid +
+      '"\nA40,50,0,2,2,2,N,"' +
+      data.first_name +
+      " " +
+      data.family_name +
+      '"\nA40,96,0,2,2,2,N,"' +
+      data.npid.replace(/\B(?=([A-Za-z0-9]{3})+(?![A-Za-z0-9]))/g, "-") +
+      " " +
+      (parseInt(data.date_of_birth_estimated, 10) === 1 ? "~" : "") +
+      (String(new Date(data.date_of_birth)) !== "Invalid Date"
+        ? new Date(data.date_of_birth).format("dd/mmm/YYYY")
+        : "") +
+      "(" +
+      (data.gender ? String(data.gender).substring(0, 1) : "") +
+      ')"\nA40,142,0,2,2,2,N,"' +
+      data.residence +
+      '"\nP1\n';
 
-    const text = "\nN\nq801\nQ329,026\nZT\nB10,180,0,1,5,15,120,N,\"" + data.npid + "\"\nA40,50,0,2,2,2,N,\"" + data.first_name + " " + data.family_name + "\"\nA40,96,0,2,2,2,N,\"" + data
-      .npid
-      .replace(/\B(?=([A-Za-z0-9]{3})+(?![A-Za-z0-9]))/g, "-") + " " + (parseInt(data.date_of_birth_estimated, 10) === 1
-        ? "~"
-        : "") + (String((new Date(data.date_of_birth))) !== "Invalid Date"
-          ? (new Date(data.date_of_birth)).format("dd/mmm/YYYY")
-          : "") + "(" + (data.gender ? String(data.gender).substring(0, 1) : "") + ")\"\nA40,142,0,2,2,2,N,\"" + data.residence + "\"\nP1\n";
-
-    const uri = 'data:application/label; charset=utf-8; filename=label.lbl; disposition=inline,' + encodeURIComponent(text);
+    const uri =
+      "data:application/label; charset=utf-8; filename=label.lbl; disposition=inline," +
+      encodeURIComponent(text);
 
     this.sendBarcode(uri);
-
   }
 
   async addLocation() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -3525,31 +3654,28 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Add Location"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Add Location"].data
+    );
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Add Location",
-        formActive: true,
-        currentSection: "add location",
-        configs: {
-          "Location Name": {
-            fieldType: "text"
-          },
-          action: "/add_location"
+    await this.props.updateApp({
+      selectedTask: "Add Location",
+      formActive: true,
+      currentSection: "add location",
+      configs: {
+        "Location Name": {
+          fieldType: "text"
         },
-        summaryIgnores: [],
-        sectionHeader: "Add Location",
-        fieldPos: 0
-      });
-
+        action: "/add_location"
+      },
+      summaryIgnores: [],
+      sectionHeader: "Add Location",
+      fieldPos: 0
+    });
   }
 
   async findUser() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -3558,32 +3684,29 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Find User"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Find User"].data
+    );
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Find User",
-        formActive: true,
-        currentSection: "find user",
-        configs: {
-          "Username": {
-            fieldType: "dha",
-            textCase: "upper"
-          },
-          action: "/find_user"
+    await this.props.updateApp({
+      selectedTask: "Find User",
+      formActive: true,
+      currentSection: "find user",
+      configs: {
+        Username: {
+          fieldType: "dha",
+          textCase: "upper"
         },
-        summaryIgnores: [],
-        sectionHeader: "Find User",
-        fieldPos: 0
-      });
-
+        action: "/find_user"
+      },
+      summaryIgnores: [],
+      sectionHeader: "Find User",
+      fieldPos: 0
+    });
   }
 
   async addVillages() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -3592,72 +3715,67 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Add Village"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Add Village"].data
+    );
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Add Village",
-        formActive: true,
-        currentSection: "add village",
-        configs: {
-          Region: {
-            ajaxURL: "/dde/search_by_region?name=",
-            autoNext: true,
-            lockList: true,
-            validationMessage: "Region \n must be entered",
-            title: "Missing Data",
-            className: "longSelectList"
-          },
-          District: {
-            ajaxURL: "/dde/search_by_district?region=REGION&district=",
-            ajaxURLDummies: {
-              Region: "REGION",
-              autoNext: true
-            },
-            fieldType: "text",
-            validationMessage: "District \n must be entered",
-            title: "Missing Data"
-          },
-          "T/A": {
-            ajaxURL: "/dde/search_by_t_a?district=DISTRICT&ta=",
-            ajaxURLDummies: {
-              District: "DISTRICT"
-            },
-            fieldType: "text",
-            validationMessage: "T/A \n must be entered",
-            title: "Missing Data"
-          },
-          Village: {
-            ajaxURL: "/dde/search_by_village?ta=TA&village=",
-            ajaxURLDummies: {
-              TA: "T/A"
-            },
-            fieldType: "text",
-            validationMessage: "Village \n must be entered",
-            title: "Missing Data"
-          },
-          action: "/add_village"
+    await this.props.updateApp({
+      selectedTask: "Add Village",
+      formActive: true,
+      currentSection: "add village",
+      configs: {
+        Region: {
+          ajaxURL: "/dde/search_by_region?name=",
+          autoNext: true,
+          lockList: true,
+          validationMessage: "Region \n must be entered",
+          title: "Missing Data",
+          className: "longSelectList"
         },
-        summaryIgnores: [],
-        sectionHeader: "Add Village",
-        fieldPos: 0
-      });
+        District: {
+          ajaxURL: "/dde/search_by_district?region=REGION&district=",
+          ajaxURLDummies: {
+            Region: "REGION",
+            autoNext: true
+          },
+          fieldType: "text",
+          validationMessage: "District \n must be entered",
+          title: "Missing Data"
+        },
+        "T/A": {
+          ajaxURL: "/dde/search_by_t_a?district=DISTRICT&ta=",
+          ajaxURLDummies: {
+            District: "DISTRICT"
+          },
+          fieldType: "text",
+          validationMessage: "T/A \n must be entered",
+          title: "Missing Data"
+        },
+        Village: {
+          ajaxURL: "/dde/search_by_village?ta=TA&village=",
+          ajaxURLDummies: {
+            TA: "T/A"
+          },
+          fieldType: "text",
+          validationMessage: "Village \n must be entered",
+          title: "Missing Data"
+        },
+        action: "/add_village"
+      },
+      summaryIgnores: [],
+      sectionHeader: "Add Village",
+      fieldPos: 0
+    });
 
     this.queryOptions("");
-
   }
 
   redirectToPortal() {
-
     window.location = this.props.app.portal_url;
-
   }
 
   async showUserStats() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -3666,131 +3784,110 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["Show User Stats"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["Show User Stats"].data
+    );
 
-    await this
-      .props
-      .updateApp({
-        selectedTask: "Show User Stats",
-        formActive: true,
-        currentSection: "show user stats",
-        configs: {
-          "Start Month": {
-            options: [
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December"
-            ],
-            className: "longSelectList",
-            title: "Missing Data",
-            message: "Start Month \n must be selected"
-          },
-          "End Month": {
-            options: [
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December"
-            ],
-            className: "longSelectList",
-            title: "Missing Data",
-            message: "Start Month \n must be selected"
-          },
-          "Start Year": {
-            fieldType: "number",
-            validationRule: "^\\d{4}$",
-            min: "thisYear - 10",
-            max: "thisYear",
-            validationMessage: "Start Year \n must between {{thisYear - 10}} and {{thisYear}}",
-            hiddenButtons: [
-              "clear",
-              "/",
-              ".",
-              "-",
-              "abc",
-              "qwe",
-              "Unknown"
-            ]
-          },
-          "End Year": {
-            fieldType: "number",
-            validationRule: "^\\d{4}$",
-            min: "thisYear - 10",
-            max: "thisYear",
-            validationMessage: "End Year \n must between {{thisYear - 10}} and {{thisYear}}",
-            hiddenButtons: [
-              "clear",
-              "/",
-              ".",
-              "-",
-              "abc",
-              "qwe",
-              "Unknown"
-            ]
-          },
-          "Start Date": {
-            fieldType: "days",
-            yearField: "Start Year",
-            monthField: "Start Month",
-            title: "Missing Data",
-            message: "Start Date \n must be entered",
-            validationRule: "^\\d+$",
-            validationMessage: "Start Date \n must be entered",
-            hiddenButtons: [
-              "Unknown"
-            ]
-          },
-          "End Date": {
-            fieldType: "days",
-            yearField: "End Year",
-            monthField: "End Month",
-            title: "Missing Data",
-            message: "End Date \n must be entered",
-            validationRule: "^\\d+$",
-            validationMessage: "End Date \n must be entered",
-            hiddenButtons: [
-              "Unknown"
-            ]
-          },
-          "Display Stats": {
-            customComponent: "ShowUserStats",
-            properties: {
-              label: "User Stats"
-            },
-            optional: true
-          },
-          action: null
+    await this.props.updateApp({
+      selectedTask: "Show User Stats",
+      formActive: true,
+      currentSection: "show user stats",
+      configs: {
+        "Start Month": {
+          options: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+          ],
+          className: "longSelectList",
+          title: "Missing Data",
+          message: "Start Month \n must be selected"
         },
-        summaryIgnores: [],
-        sectionHeader: "Show User Stats",
-        fieldPos: 0
-      });
+        "End Month": {
+          options: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+          ],
+          className: "longSelectList",
+          title: "Missing Data",
+          message: "Start Month \n must be selected"
+        },
+        "Start Year": {
+          fieldType: "number",
+          validationRule: "^\\d{4}$",
+          min: "thisYear - 10",
+          max: "thisYear",
+          validationMessage:
+            "Start Year \n must between {{thisYear - 10}} and {{thisYear}}",
+          hiddenButtons: ["clear", "/", ".", "-", "abc", "qwe", "Unknown"]
+        },
+        "End Year": {
+          fieldType: "number",
+          validationRule: "^\\d{4}$",
+          min: "thisYear - 10",
+          max: "thisYear",
+          validationMessage:
+            "End Year \n must between {{thisYear - 10}} and {{thisYear}}",
+          hiddenButtons: ["clear", "/", ".", "-", "abc", "qwe", "Unknown"]
+        },
+        "Start Date": {
+          fieldType: "days",
+          yearField: "Start Year",
+          monthField: "Start Month",
+          title: "Missing Data",
+          message: "Start Date \n must be entered",
+          validationRule: "^\\d+$",
+          validationMessage: "Start Date \n must be entered",
+          hiddenButtons: ["Unknown"]
+        },
+        "End Date": {
+          fieldType: "days",
+          yearField: "End Year",
+          monthField: "End Month",
+          title: "Missing Data",
+          message: "End Date \n must be entered",
+          validationRule: "^\\d+$",
+          validationMessage: "End Date \n must be entered",
+          hiddenButtons: ["Unknown"]
+        },
+        "Display Stats": {
+          customComponent: "ShowUserStats",
+          properties: {
+            label: "User Stats"
+          },
+          optional: true
+        },
+        action: null
+      },
+      summaryIgnores: [],
+      sectionHeader: "Show User Stats",
+      fieldPos: 0
+    });
 
     this.queryOptions("");
-
   }
 
   async artReferral() {
-
     await this.setState({ currentWorkflow: "primary" });
 
     await this.setState({
@@ -3799,150 +3896,143 @@ class App extends Component {
       })
     });
 
-    await this
-      .props
-      .loadWorkflow(this.state.currentWorkflow, this.props.app.data[this.props.app.module]["ART Referral"].data);
+    await this.props.loadWorkflow(
+      this.state.currentWorkflow,
+      this.props.app.data[this.props.app.module]["ART Referral"].data
+    );
 
-    this
-      .props
-      .updateApp({
-        selectedTask: "ART Referral",
-        formActive: true,
-        currentSection: "home",
-        sectionHeader: "ART Referral",
-        fieldPos: 0,
-        configs: {
-          "Start Month": {
-            options: [
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December"
-            ],
-            className: "longSelectList",
-            title: "Missing Data",
-            message: "Start Month \n must be selected"
-          },
-          "End Month": {
-            options: [
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December"
-            ],
-            className: "longSelectList",
-            title: "Missing Data",
-            message: "Start Month \n must be selected"
-          },
-          "Start Year": {
-            fieldType: "number",
-            validationRule: "^\\d{4}$",
-            min: "thisYear - 10",
-            max: "thisYear",
-            validationMessage: "Start Year \n must between {{thisYear - 10}} and {{thisYear}}",
-            hiddenButtons: [
-              "clear",
-              "/",
-              ".",
-              "-",
-              "abc",
-              "qwe",
-              "Unknown"
-            ]
-          },
-          "End Year": {
-            fieldType: "number",
-            validationRule: "^\\d{4}$",
-            min: "thisYear - 10",
-            max: "thisYear",
-            validationMessage: "End Year \n must between {{thisYear - 10}} and {{thisYear}}",
-            hiddenButtons: [
-              "clear",
-              "/",
-              ".",
-              "-",
-              "abc",
-              "qwe",
-              "Unknown"
-            ]
-          },
-          "Start Date": {
-            fieldType: "days",
-            yearField: "Start Year",
-            monthField: "Start Month",
-            title: "Missing Data",
-            message: "Start Date \n must be entered",
-            validationRule: "^\\d+$",
-            validationMessage: "Start Date \n must be entered",
-            hiddenButtons: [
-              "Unknown"
-            ]
-          },
-          "End Date": {
-            fieldType: "days",
-            yearField: "End Year",
-            monthField: "End Month",
-            title: "Missing Data",
-            message: "End Date \n must be entered",
-            validationRule: "^\\d+$",
-            validationMessage: "End Date \n must be entered",
-            hiddenButtons: [
-              "Unknown"
-            ]
-          },
-          "Referral Outcome": {
-            customComponent: "ReferralOutcome",
-            properties: {
-              label: "Referral Outcome"
-            },
-            optional: true
-          },
-          action: null
+    this.props.updateApp({
+      selectedTask: "ART Referral",
+      formActive: true,
+      currentSection: "home",
+      sectionHeader: "ART Referral",
+      fieldPos: 0,
+      configs: {
+        "Start Month": {
+          options: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+          ],
+          className: "longSelectList",
+          title: "Missing Data",
+          message: "Start Month \n must be selected"
         },
-        summaryIgnores: Object.assign([], ["Referral Outcome"])
-      });
-
+        "End Month": {
+          options: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+          ],
+          className: "longSelectList",
+          title: "Missing Data",
+          message: "Start Month \n must be selected"
+        },
+        "Start Year": {
+          fieldType: "number",
+          validationRule: "^\\d{4}$",
+          min: "thisYear - 10",
+          max: "thisYear",
+          validationMessage:
+            "Start Year \n must between {{thisYear - 10}} and {{thisYear}}",
+          hiddenButtons: ["clear", "/", ".", "-", "abc", "qwe", "Unknown"]
+        },
+        "End Year": {
+          fieldType: "number",
+          validationRule: "^\\d{4}$",
+          min: "thisYear - 10",
+          max: "thisYear",
+          validationMessage:
+            "End Year \n must between {{thisYear - 10}} and {{thisYear}}",
+          hiddenButtons: ["clear", "/", ".", "-", "abc", "qwe", "Unknown"]
+        },
+        "Start Date": {
+          fieldType: "days",
+          yearField: "Start Year",
+          monthField: "Start Month",
+          title: "Missing Data",
+          message: "Start Date \n must be entered",
+          validationRule: "^\\d+$",
+          validationMessage: "Start Date \n must be entered",
+          hiddenButtons: ["Unknown"]
+        },
+        "End Date": {
+          fieldType: "days",
+          yearField: "End Year",
+          monthField: "End Month",
+          title: "Missing Data",
+          message: "End Date \n must be entered",
+          validationRule: "^\\d+$",
+          validationMessage: "End Date \n must be entered",
+          hiddenButtons: ["Unknown"]
+        },
+        "Referral Outcome": {
+          customComponent: "ReferralOutcome",
+          properties: {
+            label: "Referral Outcome"
+          },
+          optional: true
+        },
+        action: null
+      },
+      summaryIgnores: Object.assign([], ["Referral Outcome"])
+    });
   }
 
-
-
   render() {
-
-    const nextLabel = (this.props.app.currentSection === "home" || this.props.app.currentSection === "registration"
-      ? this.props.app.formActive
-        ? (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-          ? this.props.wf[this.state.currentWorkflow].currentNode.type
-          : "") === "exit" || (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label === "Enter Data")
+    const nextLabel =
+      this.props.app.currentSection === "home" ||
+      this.props.app.currentSection === "registration"
+        ? this.props.app.formActive
+          ? (this.props.wf &&
+            this.props.wf[this.state.currentWorkflow] &&
+            this.props.wf[this.state.currentWorkflow].currentNode &&
+            this.props.wf[this.state.currentWorkflow].currentNode.type
+              ? this.props.wf[this.state.currentWorkflow].currentNode.type
+              : "") === "exit" ||
+            (this.props.wf &&
+              this.props.wf[this.state.currentWorkflow] &&
+              this.props.wf[this.state.currentWorkflow].currentNode &&
+              this.props.wf[this.state.currentWorkflow].currentNode.label ===
+                "Enter Data")
+            ? "Finish"
+            : "Next"
+          : "Realtime Data Entry"
+        : this.props.app.formActive
+        ? (this.props.wf &&
+          this.props.wf[this.state.currentWorkflow] &&
+          this.props.wf[this.state.currentWorkflow].currentNode &&
+          this.props.wf[this.state.currentWorkflow].currentNode.type
+            ? this.props.wf[this.state.currentWorkflow].currentNode.type
+            : "") === "exit"
           ? "Finish"
-          : "Next" : "Realtime Data Entry" : this.props.app.formActive
-        ? (this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-          ? this.props.wf[this.state.currentWorkflow].currentNode.type
-          : "") === "exit"
-          ? "Finish"
-          : "Next" : "Finish");
+          : "Next"
+        : "Finish";
 
     const buttons = [
       {
         id: "btnRegister",
         buttonClass: "green nav-buttons",
         onMouseDown: () => {
-          this.findOrRegisterPatient()
+          this.findOrRegisterPatient();
         },
         label: "Find or Register Client",
         extraStyles: {
@@ -3950,51 +4040,69 @@ class App extends Component {
           marginTop: "15px",
           marginRight: "15px"
         },
-        disabled: this.props.app.module !== "Registration"
-          ? true
-          : false,
-        inactive: this.props.app.module === "" && !this.props.app.formActive
-          ? true
-          : false
-      }, {
+        disabled: this.props.app.module !== "Registration" ? true : false,
+        inactive:
+          this.props.app.module === "" && !this.props.app.formActive
+            ? true
+            : false
+      },
+      {
         id: "btnCancel",
         buttonClass: "red nav-buttons",
         onMouseDown: () => {
-
-          if (this.props.app.working)
-            return;
+          if (this.props.app.working) return;
 
           if (this.props.app.selectedTask === "Report Filter")
-            return this.props.updateApp({ selectedTask: "reports", formActive: false, configs: {} });
+            return this.props.updateApp({
+              selectedTask: "reports",
+              formActive: false,
+              configs: {}
+            });
 
           this.props.app.currentSection === "home" && !this.props.app.formActive
-            ? !this.props.app.activeUser ? this.redirectToPortal() : this.logout()
-            : this.props.app.formActive && this.props.app.currentSection !== "reports"
-              ? this.cancelForm()
-              : this.cancelSession();
-
+            ? !this.props.app.activeUser
+              ? this.redirectToPortal()
+              : this.logout()
+            : this.props.app.formActive &&
+              this.props.app.currentSection !== "reports"
+            ? this.cancelForm()
+            : this.cancelSession();
         },
-        label: this.props.app.currentSection === "home" && !this.props.app.formActive
-          ? this.props.app.activeUser ? "Logout" : "Home"
-          : "Cancel",
+        label:
+          this.props.app.currentSection === "home" && !this.props.app.formActive
+            ? this.props.app.activeUser
+              ? "Logout"
+              : "Home"
+            : "Cancel",
         extraStyles: {
           cssFloat: "left",
           marginTop: "15px",
           marginLeft: "15px"
         },
-        disabled: ((this.props.app.userManagementActive === true && !this.props.app.formActive) || !this.props.app.activeUser
-          ? (!this.props.app.activeUser && this.props.app.redirect_to_portal ? false : true)
-          : false)
-      }, {
+        disabled:
+          (this.props.app.userManagementActive === true &&
+            !this.props.app.formActive) ||
+          !this.props.app.activeUser
+            ? !this.props.app.activeUser && this.props.app.redirect_to_portal
+              ? false
+              : true
+            : false
+      },
+      {
         id: "btnNext",
-        buttonClass: (this.props.app.processing ?
-          "gray nav-buttons" :
-          (this.props.app.data && this.props.app.module && this.props.app.data[this.props.app.module] &&
+        buttonClass: this.props.app.processing
+          ? "gray nav-buttons"
+          : this.props.app.data &&
+            this.props.app.module &&
+            this.props.app.data[this.props.app.module] &&
             this.props.app.data[this.props.app.module]["PatientRegistration"] &&
-            this.props.app.data[this.props.app.module]["PatientRegistration"].data
-            ? "green nav-buttons"
-            : (this.props.app.sectionHeader === "Find or Register Client" &&
-              Object.keys(this.props.app.currentPatient).length > 0 ? "green nav-buttons" : "gray nav-buttons"))),
+            this.props.app.data[this.props.app.module]["PatientRegistration"]
+              .data
+          ? "green nav-buttons"
+          : this.props.app.sectionHeader === "Find or Register Client" &&
+            Object.keys(this.props.app.currentPatient).length > 0
+          ? "green nav-buttons"
+          : "gray nav-buttons",
         onMouseDown: () => {
           this.handleNextButtonClicks();
         },
@@ -4004,13 +4112,23 @@ class App extends Component {
           marginTop: "15px",
           marginRight: "15px"
         },
-        disabled: (this.props.app.currentSection === "reports" || (["HTS"].indexOf(this.props.app.module) < 0) || this.props.app.userManagementActive === true) && this.props.app.selectedTask !== "Report Filter"
-          ? true
-          : false,
-        inactive: (this.props.app.module === "" && !this.props.app.formActive) || (this.props.app.silentProcessing && !this.props.app.patientActivated) || (nextLabel === "Realtime Data Entry" && this.props.app.activeRegisters <= 0)
-          ? true
-          : false
-      }, {
+        disabled:
+          (this.props.app.currentSection === "reports" ||
+            ["HTS"].indexOf(this.props.app.module) < 0 ||
+            this.props.app.userManagementActive === true) &&
+          this.props.app.selectedTask !== "Report Filter"
+            ? true
+            : false,
+        inactive:
+          (this.props.app.module === "" && !this.props.app.formActive) ||
+          (this.props.app.silentProcessing &&
+            !this.props.app.patientActivated) ||
+          (nextLabel === "Realtime Data Entry" &&
+            this.props.app.activeRegisters <= 0)
+            ? true
+            : false
+      },
+      {
         id: "btnBD",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
@@ -4021,13 +4139,21 @@ class App extends Component {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: this.props.app.currentSection !== "home" || this.props.app.formActive || this.props.app.module !== "HTS" || this.props.app.userManagementActive === true
-          ? true
-          : false,
-        inactive: (this.props.app.module === "" && !this.props.app.formActive) || (nextLabel === "Realtime Data Entry" && this.props.app.activeRegisters <= 0)
-          ? true
-          : false
-      }, {
+        disabled:
+          this.props.app.currentSection !== "home" ||
+          this.props.app.formActive ||
+          this.props.app.module !== "HTS" ||
+          this.props.app.userManagementActive === true
+            ? true
+            : false,
+        inactive:
+          (this.props.app.module === "" && !this.props.app.formActive) ||
+          (nextLabel === "Realtime Data Entry" &&
+            this.props.app.activeRegisters <= 0)
+            ? true
+            : false
+      },
+      {
         id: "btnNext",
         buttonClass: "green nav-buttons",
         onMouseDown: () => {
@@ -4037,21 +4163,19 @@ class App extends Component {
             this.deactivateAllPrograms();
           }
         },
-        label: this.props.app.formActive
-          ? "Next"
-          : "Finish",
+        label: this.props.app.formActive ? "Next" : "Finish",
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px",
           marginRight: "15px"
         },
-        disabled: this.props.app.userManagementActive !== true
-          ? true
-          : false,
-        inactive: this.props.app.module === "" && !this.props.app.formActive
-          ? true
-          : false
-      }, {
+        disabled: this.props.app.userManagementActive !== true ? true : false,
+        inactive:
+          this.props.app.module === "" && !this.props.app.formActive
+            ? true
+            : false
+      },
+      {
         id: "btnAddUser",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
@@ -4061,20 +4185,18 @@ class App extends Component {
             this.addUser();
           }
         },
-        label: this.props.app.formActive
-          ? "Clear"
-          : "Add User",
+        label: this.props.app.formActive ? "Clear" : "Add User",
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: this.props.app.userManagementActive !== true
-          ? true
-          : false,
-        inactive: this.props.app.module === "" && !this.props.app.formActive
-          ? true
-          : false
-      }, {
+        disabled: this.props.app.userManagementActive !== true ? true : false,
+        inactive:
+          this.props.app.module === "" && !this.props.app.formActive
+            ? true
+            : false
+      },
+      {
         id: "btnBack",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
@@ -4085,139 +4207,218 @@ class App extends Component {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: !this.props.app.formActive || (this.props.app.formActive && (this.props.app.fieldPos < 1 || (this.$('u14HelpText') && this.$('u14HelpText').innerHTML.trim() === 'Partner present')))
-          ? true
-          : false,
-        inactive: this.props.app.module === "" && !this.props.app.formActive
-          ? true
-          : false
-      }, {
+        disabled:
+          !this.props.app.formActive ||
+          (this.props.app.formActive &&
+            (this.props.app.fieldPos < 1 ||
+              (this.$("u14HelpText") &&
+                this.$("u14HelpText").innerHTML.trim() === "Partner present")))
+            ? true
+            : false,
+        inactive:
+          this.props.app.module === "" && !this.props.app.formActive
+            ? true
+            : false
+      },
+      {
         id: "btnClear",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
           this.handleClearClicks();
         },
-        label: (!this.props.app.formActive && this.props.app.dual && (this.props.app.dual && ((this.props.app.primary.summary || this.props.app.primary.forceSummary) || (this.props.app.secondary.summary || this.props.app.secondary.forceSummary)))
-          ? "HTS Visit"
-          : "Clear"),
+        label:
+          !this.props.app.formActive &&
+          this.props.app.dual &&
+          (this.props.app.dual &&
+            (this.props.app.primary.summary ||
+              this.props.app.primary.forceSummary ||
+              (this.props.app.secondary.summary ||
+                this.props.app.secondary.forceSummary)))
+            ? "HTS Visit"
+            : "Clear",
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: (!this.props.app.formActive || this.props.app.selectedTask === "Backdata Entry" || this.props.app.userManagementActive === true) && !(this.props.app.dual && ((this.props.app.primary.summary || this.props.app.primary.forceSummary) || (this.props.app.secondary.summary || this.props.app.secondary.forceSummary)))
-          ? true
-          : false,
-        inactive: this.props.app.module === "" && !this.props.app.formActive
-          ? true
-          : false
-      }, {
+        disabled:
+          (!this.props.app.formActive ||
+            this.props.app.selectedTask === "Backdata Entry" ||
+            this.props.app.userManagementActive === true) &&
+          !(
+            this.props.app.dual &&
+            (this.props.app.primary.summary ||
+              this.props.app.primary.forceSummary ||
+              (this.props.app.secondary.summary ||
+                this.props.app.secondary.forceSummary))
+          )
+            ? true
+            : false,
+        inactive:
+          this.props.app.module === "" && !this.props.app.formActive
+            ? true
+            : false
+      },
+      {
         id: "btnPeriod",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
           this.filterReport();
         },
-        label: (["monthly report", "pepfar report", "daily register"].indexOf(this.props.app.activeReport) >= 0
-          ? "Set Reporting Period"
-          : "Set Reporting Period"),
+        label:
+          ["monthly report", "pepfar report", "daily register"].indexOf(
+            this.props.app.activeReport
+          ) >= 0
+            ? "Set Reporting Period"
+            : "Set Reporting Period",
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px",
           marginRight: "15px"
         },
-        disabled: this.props.app.currentSection !== "reports" || this.props.app.selectedTask === "Report Filter"
-          ? true
-          : false,
-        inactive: this.props.app.module === "" && !this.props.app.formActive
-          ? true
-          : false
-      }, {
+        disabled:
+          this.props.app.currentSection !== "reports" ||
+          this.props.app.selectedTask === "Report Filter"
+            ? true
+            : false,
+        inactive:
+          this.props.app.module === "" && !this.props.app.formActive
+            ? true
+            : false
+      },
+      {
         id: "btnDownloadCSV",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
-          this.downloadCSV(this.props.reports.dataHeaders, this.props.reports.rawData, (this.props.app.activeReport
-            ? String(this.props.app.activeReport).trim().replace(/\s/g, "_")
-            : null));
+          this.downloadCSV(
+            this.props.reports.dataHeaders,
+            this.props.reports.rawData,
+            this.props.app.activeReport
+              ? String(this.props.app.activeReport)
+                  .trim()
+                  .replace(/\s/g, "_")
+              : null
+          );
         },
         label: "Download CSV",
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: this.props.app.currentSection !== "reports" || this.props.app.activeReport === "monthly report" || this.props.app.selectedTask === "Report Filter"
-          ? true
-          : false,
-        inactive: this.props.app.module === "" && !this.props.app.formActive
-          ? true
-          : false
-      }, {
+        disabled:
+          this.props.app.currentSection !== "reports" ||
+          this.props.app.activeReport === "monthly report" ||
+          this.props.app.selectedTask === "Report Filter"
+            ? true
+            : false,
+        inactive:
+          this.props.app.module === "" && !this.props.app.formActive
+            ? true
+            : false
+      },
+      {
+        id: "btnDownloadPng",
+        buttonClass: "blue nav-buttons",
+        onMouseDown: async () => {
+          await Html2PngService('#monthlyReportTable', `monthlyReport`);
+        },
+        label: "Download",
+        extraStyles: {
+          cssFloat: "right",
+          marginTop: "15px"
+        },
+        disabled:
+          this.props.app.currentSection !== "reports" ||
+          this.props.app.activeReport !== "monthly report" ||
+          this.props.app.selectedTask === "Report Filter"
+            ? true
+            : false,
+        inactive:
+          this.props.app.module === "" && !this.props.app.formActive
+            ? true
+            : false
+      },
+      {
         id: "btnTranscribe",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
-
-          const entryCode = this.props
-            .app
-            .patientData[this.props.app.currentId][this.props.app.module]
-            .visits
-            .filter((e) => {
-              return Object.keys(e)[0] === this.props.app.selectedVisit
+          const entryCode = this.props.app.patientData[
+            this.props.app.currentId
+          ][this.props.app.module].visits
+            .filter(e => {
+              return Object.keys(e)[0] === this.props.app.selectedVisit;
             })
-            .map((e) => {
-              return Object.keys(e[Object.keys(e)[0]])
-            }).sort().pop();
+            .map(e => {
+              return Object.keys(e[Object.keys(e)[0]]);
+            })
+            .sort()
+            .pop();
 
           this.transcribe(entryCode);
-
         },
         label: "Transcribe",
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: true // !this.props.app.patientActivated || this.props.app.formActive 
+        disabled: true // !this.props.app.patientActivated || this.props.app.formActive
           ? true
           : false,
-        inactive: this.props.app.module === "" && !this.props.app.formActive
-          ? true
-          : false
-      }, {
+        inactive:
+          this.props.app.module === "" && !this.props.app.formActive
+            ? true
+            : false
+      },
+      {
         id: "btnSearch",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
-          this.findEnteredRecord()
+          this.findEnteredRecord();
         },
         label: "Find Entered Record",
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: this.props.app.currentSection !== "home" || this.props.app.formActive || this.props.app.module !== "HTS" || this.props.app.userManagementActive === true
-          ? true
-          : false,
-        inactive: this.props.app.module === "" && !this.props.app.formActive
-          ? true
-          : false
-      }, {
+        disabled:
+          this.props.app.currentSection !== "home" ||
+          this.props.app.formActive ||
+          this.props.app.module !== "HTS" ||
+          this.props.app.userManagementActive === true
+            ? true
+            : false,
+        inactive:
+          this.props.app.module === "" && !this.props.app.formActive
+            ? true
+            : false
+      },
+      {
         id: "btnART",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
-          this.artReferral()
+          this.artReferral();
         },
         label: "ART Referral",
         extraStyles: {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: this.props.app.currentSection !== "home" || this.props.app.formActive || this.props.app.module !== "HTS" || this.props.app.userManagementActive === true
-          ? true
-          : false,
-        inactive: this.props.app.module === "" && !this.props.app.formActive
-          ? true
-          : false
-      }, {
+        disabled:
+          this.props.app.currentSection !== "home" ||
+          this.props.app.formActive ||
+          this.props.app.module !== "HTS" ||
+          this.props.app.userManagementActive === true
+            ? true
+            : false,
+        inactive:
+          this.props.app.module === "" && !this.props.app.formActive
+            ? true
+            : false
+      },
+      {
         id: "btnLogin",
         buttonClass: "green nav-buttons",
         onMouseDown: () => {
-          this.login(this)
+          this.login(this);
         },
         label: "Login",
         extraStyles: {
@@ -4225,10 +4426,9 @@ class App extends Component {
           marginTop: "15px",
           marginRight: "15px"
         },
-        disabled: this.props.app.activeUser
-          ? true
-          : false
-      }, {
+        disabled: this.props.app.activeUser ? true : false
+      },
+      {
         id: "btnPrint",
         buttonClass: "blue nav-buttons",
         onMouseDown: () => {
@@ -4249,9 +4449,14 @@ class App extends Component {
           cssFloat: "right",
           marginTop: "15px"
         },
-        disabled: !this.props.app.patientActivated || (this.props.app.patientActivated && this.props.app.formActive)
-          ? (this.props.app.patientActivated && this.props.app.selectedTask === "Transcribe" ? false : true)
-          : false
+        disabled:
+          !this.props.app.patientActivated ||
+          (this.props.app.patientActivated && this.props.app.formActive)
+            ? this.props.app.patientActivated &&
+              this.props.app.selectedTask === "Transcribe"
+              ? false
+              : true
+            : false
       }
     ];
 
@@ -4267,34 +4472,39 @@ class App extends Component {
             height: "100vh",
             backgroundColor: "rgba(128, 128, 128, 0.1)",
             zIndex: "1001",
-            display: (this.props.dde.processing || this.props.app.processing || this.props.reports.processing
-              ? "block"
-              : "none")
-          }} />
+            display:
+              this.props.dde.processing ||
+              this.props.app.processing ||
+              this.props.reports.processing
+                ? "block"
+                : "none"
+          }}
+        />
         <div
           style={{
             position: "absolute",
             left: "calc(50vw - 20px)",
             top: "calc(50vh - 20px)"
-          }}>
+          }}
+        >
           <ClipLoader
             color={"#123abc"}
-            loading={this.props.dde.processing || this.props.app.processing || this.props.reports.processing}
-            size={50} />
+            loading={
+              this.props.dde.processing ||
+              this.props.app.processing ||
+              this.props.reports.processing
+            }
+            size={50}
+          />
         </div>
         <Alert
           alerts={this.props.alerts}
-          close={this
-            .props
-            .closeMsg
-            .bind(this)}
-          updateAlertKey={this.props.updateAlertKey.bind(this)} />
+          close={this.props.closeMsg.bind(this)}
+          updateAlertKey={this.props.updateAlertKey.bind(this)}
+        />
         <Dialog
           dialog={this.props.dialog}
-          close={this
-            .props
-            .closeDialog
-            .bind(this)}
+          close={this.props.closeDialog.bind(this)}
           incrementReportMonth={this.props.incrementReportMonth}
           incrementReportYear={this.props.incrementReportYear}
           decrementReportMonth={this.props.decrementReportMonth}
@@ -4303,478 +4513,536 @@ class App extends Component {
           scrollLocationDown={this.props.scrollLocationDown}
           scrollTestUp={this.props.scrollTestUp}
           scrollTestDown={this.props.scrollTestDown}
-          setReportingPeriod={this
-            .setReportingPeriod
-            .bind(this)}
-          app={this.props.app} />{" "} {(!this.props.app.activeUser || !this.props.app.location)
-            ? <Login
-              handleDirectInputChange={this.props.handleInputChange}
-              app={this.props.app}
-              responses={this.props.wf.responses}
-              label="Scan Workstation Location"
-              queryOptions={this
-                .queryOptions
-                .bind(this)}
-              group="primary"
-              setLocation={this
-                .props
-                .setLocation
-                .bind(this)}
-              showErrorMsg={this
-                .props
-                .showErrorMsg
-                .bind(this)} />
-            : this.props.app.currentSection === "reports"
-              ? (<ReportsViewer
-                activeReport={this.props.app.activeReport}
-                reports={this.props.reports}
-                setDataHeaders={this
-                  .props
-                  .setDataHeaders
-                  .bind(this)}
-                app={this.props.app}
-                dialog={this.props.dialog}
-                responses={this.props.wf.responses}
-                configs={this.props.app.configs}
-                label={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
+          setReportingPeriod={this.setReportingPeriod.bind(this)}
+          app={this.props.app}
+        />{" "}
+        {!this.props.app.activeUser || !this.props.app.location ? (
+          <Login
+            handleDirectInputChange={this.props.handleInputChange}
+            app={this.props.app}
+            responses={this.props.wf.responses}
+            label="Scan Workstation Location"
+            queryOptions={this.queryOptions.bind(this)}
+            group="primary"
+            setLocation={this.props.setLocation.bind(this)}
+            showErrorMsg={this.props.showErrorMsg.bind(this)}
+          />
+        ) : this.props.app.currentSection === "reports" ? (
+          <ReportsViewer
+            activeReport={this.props.app.activeReport}
+            reports={this.props.reports}
+            setDataHeaders={this.props.setDataHeaders.bind(this)}
+            app={this.props.app}
+            dialog={this.props.dialog}
+            responses={this.props.wf.responses}
+            configs={this.props.app.configs}
+            label={
+              this.props.wf &&
+              this.props.wf[this.state.currentWorkflow] &&
+              this.props.wf[this.state.currentWorkflow].currentNode &&
+              this.props.wf[this.state.currentWorkflow].currentNode.label
+                ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                : ""
+            }
+            selectedTask={this.props.app.selectedTask}
+            sectionHeader={this.props.app.sectionHeader}
+            handleDirectInputChange={this.props.handleInputChange}
+            queryOptions={this.queryOptions.bind(this)}
+            group={this.state.currentWorkflow}
+            navNext={this.navNext.bind(this)}
+            data={this.props.data}
+            options={
+              this.props.wf &&
+              this.props.wf[this.state.currentWorkflow] &&
+              this.props.wf[this.state.currentWorkflow].currentNode &&
+              this.props.wf[this.state.currentWorkflow].currentNode.options
+                ? this.props.wf[this.state.currentWorkflow].currentNode.options
+                : null
+            }
+            scrollPepfarData={this.scrollPepfarData.bind(this)}
+          />
+        ) : this.props.app.userManagementActive === true ? (
+          <UsersViewer
+            editUser={this.editUser.bind(this)}
+            activateUser={this.props.activateUser.bind(this)}
+            blockUser={this.props.blockUser.bind(this)}
+            activeSection={this.props.app.currentSection}
+            handleSwitchProgram={this.switchProgram.bind(this)}
+            handleVisitUrl={this.navigateToVisit.bind(this)}
+            programs={this.props.app.programs}
+            handleNavigateToUrl={this.navigateToRoute.bind(this)}
+            module={this.props.app.module}
+            selectedVisit={this.props.app.selectedVisit}
+            tasks={this.props.app.tasks}
+            selectedTask={this.props.app.selectedTask}
+            userDashTasks={this.props.app.userDashTasks}
+            formActive={this.props.app.formActive}
+            responses={this.props.wf.responses}
+            label={
+              this.props.wf &&
+              this.props.wf[this.state.currentWorkflow] &&
+              this.props.wf[this.state.currentWorkflow].currentNode &&
+              this.props.wf[this.state.currentWorkflow].currentNode.label
+                ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                : ""
+            }
+            handleDirectInputChange={this.props.handleInputChange}
+            configs={this.props.app.configs}
+            value={
+              this.props.wf.responses &&
+              this.props.wf.responses[this.state.currentWorkflow] &&
+              this.props.wf.responses[this.state.currentWorkflow][
+                this.props.wf &&
+                this.props.wf[this.state.currentWorkflow] &&
+                this.props.wf[this.state.currentWorkflow].currentNode &&
+                this.props.wf[this.state.currentWorkflow].currentNode.label
                   ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                  : ""}
-                selectedTask={this.props.app.selectedTask}
-                sectionHeader={this.props.app.sectionHeader}
-                handleDirectInputChange={this.props.handleInputChange}
-                queryOptions={this
-                  .queryOptions
-                  .bind(this)}
-                group={this.state.currentWorkflow}
-                navNext={this
-                  .navNext
-                  .bind(this)}
-                data={this.props.data}
-                options={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.options
-                  ? this.props.wf[this.state.currentWorkflow].currentNode.options
-                  : null}
-                scrollPepfarData={this
-                  .scrollPepfarData
-                  .bind(this)} />)
-              : this.props.app.userManagementActive === true
-                ? <UsersViewer
-                  editUser={this
-                    .editUser
-                    .bind(this)}
-                  activateUser={this
-                    .props
-                    .activateUser
-                    .bind(this)}
-                  blockUser={this
-                    .props
-                    .blockUser
-                    .bind(this)}
-                  activeSection={this.props.app.currentSection}
-                  handleSwitchProgram={this
-                    .switchProgram
-                    .bind(this)}
-                  handleVisitUrl={this
-                    .navigateToVisit
-                    .bind(this)}
-                  programs={this.props.app.programs}
-                  handleNavigateToUrl={this
-                    .navigateToRoute
-                    .bind(this)}
-                  module={this.props.app.module}
-                  selectedVisit={this.props.app.selectedVisit}
-                  tasks={this.props.app.tasks}
-                  selectedTask={this.props.app.selectedTask}
-                  userDashTasks={this.props.app.userDashTasks}
-                  formActive={this.props.app.formActive}
-                  responses={this.props.wf.responses}
-                  label={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                    ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                    : ""}
-                  handleDirectInputChange={this.props.handleInputChange}
-                  configs={this.props.app.configs}
-                  value={this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                    ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                    : ""]
-                    ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                      ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                      : ""]
-                    : ""}
-                  type={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-                    ? this.props.wf[this.state.currentWorkflow].currentNode.type
-                    : ""}
-                  summaryIgnores={this.props.app.summaryIgnores}
-                  sectionHeader={this.props.app.sectionHeader}
-                  processing={this.props.app.processing}
-                  options={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.options
-                    ? this.props.wf[this.state.currentWorkflow].currentNode.options
-                    : null}
-                  order={this.props.app.order}
-                  fieldType={this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                    ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                    : ""] && this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                      ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                      : ""].fieldType
-                    ? this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                      ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                      : ""].fieldType
-                    : "text"}
-                  visits={this.props.app.patientData && this.props.app.currentId && this.props.app.today && this.props.app.module && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId][this.props.app.module] && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits
-                    ? this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits
-                    : []}
-                  handleVoidEncounter={this
-                    .voidEncounter
-                    .bind(this)}
-                  handleInputChange={this
-                    .handleInputChange
-                    .bind(this)}
-                  queryOptions={this
-                    .queryOptions
-                    .bind(this)}
-                  data={this.props.data}
-                  navNext={this
-                    .navNext
-                    .bind(this)}
-                  dual={this.props.app.dual}
-                  group={this.state.currentWorkflow}
-                  fetchPatientData={this
-                    .props
-                    .fetchPatientData
-                    .bind(this)}
-                  goForward={this
-                    .props
-                    .goForward
-                    .bind(this)}
-                  activeWorkflow={this.state.currentWorkflow}
-                  switchWorkflow={this
-                    .switchWorkflow
-                    .bind(this)}
-                  wf={this.props.wf}
-                  cancelForm={this
-                    .cancelForm
-                    .bind(this)}
-                  currentPatient={this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId]
-                    ? this.props.app.patientData[this.props.app.currentId]
-                    : {}}
-                  nextBDRow={(this.props.bd && this.props.bd.lastRow
-                    ? this.props.bd.lastRow
-                    : null)}
-                  currentEditRow={(this.props.bd && this.props.bd.currentRow
-                    ? this.props.bd.currentRow
-                    : {})}
-                  fetchLastBDRow={this
-                    .props
-                    .fetchLastBDRow
-                    .bind(this)}
-                  saveBDRow={this
-                    .props
-                    .saveBDRow
-                    .bind(this)}
-                  fetchEditRow={this
-                    .props
-                    .fetchEditRow
-                    .bind(this)}
-                  saveEditRow={this
-                    .props
-                    .saveEditRow
-                    .bind(this)}
-                  ddeResults={this.props.dde.matches.hits}
-                  ddeCurrentPatient={this.props.dde.currentPatient}
-                  searchByNameAndGender={this
-                    .props
-                    .searchByNameAndGender
-                    .bind(this)}
-                  selectPatient={this
-                    .selectPatient
-                    .bind(this)}
-                  updateApp={this
-                    .props
-                    .updateApp
-                    .bind(this)}
-                  showErrorMsg={this
-                    .props
-                    .showErrorMsg
-                    .bind(this)}
-                  handleNextButtonClicks={this
-                    .handleNextButtonClicks
-                    .bind(this)}
-                  icon={this.props.app.icon}
-                  currentTab={this.props.app.currentTab}
-                  app={this.props.app}
-                  searchByIdentifier={this.props.searchByIdentifier}
-                  firstSummary={this.props.app.firstSummary}
-                  secondSummary={this.props.app.secondSummary}
-                  client={this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId]
-                    ? this.props.app.patientData[this.props.app.clientId]
-                    : {}}
-                  partner={this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId]
-                    ? this.props.app.patientData[this.props.app.partnerId]
-                    : {}}
-                  showConfirmMsg={this
-                    .props
-                    .showConfirmMsg
-                    .bind(this)}
-                  showInfoMsg={this
-                    .props
-                    .showInfoMsg
-                    .bind(this)}
-                  addRegister={this
-                    .addRegister
-                    .bind(this)}
-                  closeRegister={this
-                    .closeRegister
-                    .bind(this)}
-                  fetchRegisterStats={this
-                    .props
-                    .fetchRegisterStats
-                    .bind(this)}
-                  fetchVisitSummaries={this
-                    .props
-                    .fetchVisitSummaries
-                    .bind(this)}
-                  reports={this.props.reports}
-                  fetchUsers={this
-                    .props
-                    .fetchUsers
-                    .bind(this)}
-                  findUser={this.findUser.bind(this)}
-                  updatePassword={this.props.updatePassword.bind(this)} />
-                : (
-                  <div>
-                    <Topbar
-                      patientActivated={this.props.app.patientActivated}
-                      module={this.props.app.module}
-                      icon={this.props.app.icon}
-                      handleCheckBarcode={this
-                        .checkBarcode
-                        .bind(this)}
-                      today={this.props.app.today}
-                      facility={this.props.app.facility}
-                      user={this.props.app.user}
-                      location={this.props.app.location}
-                      data={{}}
-                      age={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].age
-                        ? this.props.app.patientData[this.props.app.currentId].age
-                        : ""}
-                      primaryId={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].npid
-                        ? this.props.app.patientData[this.props.app.currentId].npid
-                        : ""}
-                      otherId={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].otherId
-                        ? this.props.app.patientData[this.props.app.currentId].otherId
-                        : ""}
-                      otherIdLabel={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].otherIdType
-                        ? this.props.app.patientData[this.props.app.currentId].otherIdType
-                        : ""}
-                      gender={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].gender
-                        ? this.props.app.patientData[this.props.app.currentId].gender
-                        : ""}
-                      patientName={this.props.app.currentId && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId].patientName
-                        ? this.props.app.patientData[this.props.app.currentId].patientName
-                        : ""}
-                      patientData={this.props.app.patientData}
-                      currentId={this.props.app.currentId}
-                      title={this.props.wf && this.props.wf.currentNode && this.props.wf.currentNode.label
-                        ? this.props.wf.currentNode.label
-                        : ""}
-                      switchWorkflow={this
-                        .switchWorkflow
-                        .bind(this)}
-                      selectedTask={this.props.app.selectedTask}
-                      app={this.props.app}
-                      activeWorkflow={this.state.currentWorkflow}
-                      client={this.props.app.dual === true && this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId]
-                        ? this.props.app.patientData[this.props.app.partnerId]
-                        : (!this.props.app.dual && this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId]
-                          ? this.props.app.patientData[this.props.app.currentId]
-                          : {})}
-                      partner={this.props.app.dual === true && this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId]
-                        ? this.props.app.patientData[this.props.app.clientId]
-                        : {}}
-                      wf={this.props.wf} />
-                    <Container
-                      handleCheckBarcode={this
-                        .checkBarcode
-                        .bind(this)}
-                      saveReferralOutcome={this.props.saveReferralOutcome}
-                      fetchARTReferral={this.props.fetchARTReferral}
-                      activeSection={this.props.app.currentSection}
-                      handleSwitchProgram={this
-                        .switchProgram
-                        .bind(this)}
-                      handleVisitUrl={this
-                        .navigateToVisit
-                        .bind(this)}
-                      programs={this.props.app.programs}
-                      handleNavigateToUrl={this
-                        .navigateToRoute
-                        .bind(this)}
-                      module={this.props.app.module}
-                      selectedVisit={this.props.app.selectedVisit}
-                      tasks={this.props.app.tasks}
-                      selectedTask={this.props.app.selectedTask}
-                      userDashTasks={this.props.app.userDashTasks}
-                      formActive={this.props.app.formActive}
-                      responses={this.props.wf.responses}
-                      label={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                        ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                        : ""}
-                      handleDirectInputChange={this.props.handleInputChange}
-                      configs={this.props.app.configs}
-                      value={this.props.wf.responses && this.props.wf.responses[this.state.currentWorkflow] && this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                        ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                        : ""]
-                        ? this.props.wf.responses[this.state.currentWorkflow][this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                          ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                          : ""]
-                        : ""}
-                      type={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.type
-                        ? this.props.wf[this.state.currentWorkflow].currentNode.type
-                        : ""}
-                      summaryIgnores={this.props.app.summaryIgnores}
-                      sectionHeader={this.props.app.sectionHeader}
-                      processing={this.props.app.processing}
-                      options={this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.options
-                        ? this.props.wf[this.state.currentWorkflow].currentNode.options
-                        : null}
-                      order={this.props.app.order}
-                      fieldType={this.props.app && this.props.app.configs && this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                        ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                        : ""] && this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                          ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                          : ""].fieldType
-                        ? this.props.app.configs[this.props.wf && this.props.wf[this.state.currentWorkflow] && this.props.wf[this.state.currentWorkflow].currentNode && this.props.wf[this.state.currentWorkflow].currentNode.label
-                          ? this.props.wf[this.state.currentWorkflow].currentNode.label
-                          : ""].fieldType
-                        : "text"}
-                      visits={this.props.app.patientData && this.props.app.currentId && this.props.app.today && this.props.app.module && this.props.app.patientData[this.props.app.currentId] && this.props.app.patientData[this.props.app.currentId][this.props.app.module] && this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits
-                        ? this.props.app.patientData[this.props.app.currentId][this.props.app.module].visits
-                        : []}
-                      handleVoidEncounter={this
-                        .voidEncounter
-                        .bind(this)}
-                      handleInputChange={this
-                        .handleInputChange
-                        .bind(this)}
-                      queryOptions={this
-                        .queryOptions
-                        .bind(this)}
-                      data={this.props.data}
-                      navNext={this
-                        .navNext
-                        .bind(this)}
-                      dual={this.props.app.dual}
-                      group={this.state.currentWorkflow}
-                      fetchPatientData={this
-                        .props
-                        .fetchPatientData
-                        .bind(this)}
-                      goForward={this
-                        .props
-                        .goForward
-                        .bind(this)}
-                      activeWorkflow={this.state.currentWorkflow}
-                      switchWorkflow={this
-                        .switchWorkflow
-                        .bind(this)}
-                      wf={this.props.wf}
-                      cancelForm={this
-                        .cancelForm
-                        .bind(this)}
-                      currentPatient={this.props.app.currentId && this.props.app.patientData && this.props.app.patientData[this.props.app.currentId]
-                        ? this.props.app.patientData[this.props.app.currentId]
-                        : {}}
-                      nextBDRow={(this.props.bd && this.props.bd.lastRow
-                        ? this.props.bd.lastRow
-                        : null)}
-                      currentEditRow={(this.props.bd && this.props.bd.currentRow
-                        ? this.props.bd.currentRow
-                        : {})}
-                      fetchLastBDRow={this
-                        .props
-                        .fetchLastBDRow
-                        .bind(this)}
-                      saveBDRow={this
-                        .props
-                        .saveBDRow
-                        .bind(this)}
-                      fetchEditRow={this
-                        .props
-                        .fetchEditRow
-                        .bind(this)}
-                      saveEditRow={this
-                        .props
-                        .saveEditRow
-                        .bind(this)}
-                      ddeResults={this.props.dde.matches.hits}
-                      ddeCurrentPatient={this.props.dde.currentPatient}
-                      searchByNameAndGender={this
-                        .props
-                        .searchByNameAndGender
-                        .bind(this)}
-                      selectPatient={this
-                        .selectPatient
-                        .bind(this)}
-                      updateApp={this
-                        .props
-                        .updateApp
-                        .bind(this)}
-                      showErrorMsg={this
-                        .props
-                        .showErrorMsg
-                        .bind(this)}
-                      handleNextButtonClicks={this
-                        .handleNextButtonClicks
-                        .bind(this)}
-                      icon={this.props.app.icon}
-                      currentTab={this.props.app.currentTab}
-                      app={this.props.app}
-                      searchByIdentifier={this.props.searchByIdentifier}
-                      firstSummary={this.props.app.firstSummary}
-                      secondSummary={this.props.app.secondSummary}
-                      client={this.props.app.clientId && this.props.app.patientData && this.props.app.patientData[this.props.app.clientId]
-                        ? this.props.app.patientData[this.props.app.clientId]
-                        : {}}
-                      partner={this.props.app.partnerId && this.props.app.patientData && this.props.app.patientData[this.props.app.partnerId]
-                        ? this.props.app.patientData[this.props.app.partnerId]
-                        : {}}
-                      showConfirmMsg={this
-                        .props
-                        .showConfirmMsg
-                        .bind(this)}
-                      showInfoMsg={this
-                        .props
-                        .showInfoMsg
-                        .bind(this)}
-                      addRegister={this
-                        .addRegister
-                        .bind(this)}
-                      closeRegister={this
-                        .closeRegister
-                        .bind(this)}
-                      fetchRegisterStats={this
-                        .props
-                        .fetchRegisterStats
-                        .bind(this)}
-                      fetchVisitSummaries={this
-                        .props
-                        .fetchVisitSummaries
-                        .bind(this)}
-                      reports={this.props.reports}
-                      changePassword={this
-                        .changePassword
-                        .bind(this)}
-                      transcribe={this
-                        .transcribe
-                        .bind(this)}
-                      printLabel={this
-                        .printLabel
-                        .bind(this)}
-                      addLocation={this.addLocation.bind(this)}
-                      clearField={this.props.clearField.bind(this)}
-                      addVillages={this.addVillages.bind(this)}
-                      showUserStats={this.showUserStats.bind(this)}
-                      fetchFilteredVisitSummaries={this.props.fetchFilteredVisitSummaries} />
-                  </div>
-                )}
+                  : ""
+              ]
+                ? this.props.wf.responses[this.state.currentWorkflow][
+                    this.props.wf &&
+                    this.props.wf[this.state.currentWorkflow] &&
+                    this.props.wf[this.state.currentWorkflow].currentNode &&
+                    this.props.wf[this.state.currentWorkflow].currentNode.label
+                      ? this.props.wf[this.state.currentWorkflow].currentNode
+                          .label
+                      : ""
+                  ]
+                : ""
+            }
+            type={
+              this.props.wf &&
+              this.props.wf[this.state.currentWorkflow] &&
+              this.props.wf[this.state.currentWorkflow].currentNode &&
+              this.props.wf[this.state.currentWorkflow].currentNode.type
+                ? this.props.wf[this.state.currentWorkflow].currentNode.type
+                : ""
+            }
+            summaryIgnores={this.props.app.summaryIgnores}
+            sectionHeader={this.props.app.sectionHeader}
+            processing={this.props.app.processing}
+            options={
+              this.props.wf &&
+              this.props.wf[this.state.currentWorkflow] &&
+              this.props.wf[this.state.currentWorkflow].currentNode &&
+              this.props.wf[this.state.currentWorkflow].currentNode.options
+                ? this.props.wf[this.state.currentWorkflow].currentNode.options
+                : null
+            }
+            order={this.props.app.order}
+            fieldType={
+              this.props.app.configs[
+                this.props.wf &&
+                this.props.wf[this.state.currentWorkflow] &&
+                this.props.wf[this.state.currentWorkflow].currentNode &&
+                this.props.wf[this.state.currentWorkflow].currentNode.label
+                  ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                  : ""
+              ] &&
+              this.props.app.configs[
+                this.props.wf &&
+                this.props.wf[this.state.currentWorkflow] &&
+                this.props.wf[this.state.currentWorkflow].currentNode &&
+                this.props.wf[this.state.currentWorkflow].currentNode.label
+                  ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                  : ""
+              ].fieldType
+                ? this.props.app.configs[
+                    this.props.wf &&
+                    this.props.wf[this.state.currentWorkflow] &&
+                    this.props.wf[this.state.currentWorkflow].currentNode &&
+                    this.props.wf[this.state.currentWorkflow].currentNode.label
+                      ? this.props.wf[this.state.currentWorkflow].currentNode
+                          .label
+                      : ""
+                  ].fieldType
+                : "text"
+            }
+            visits={
+              this.props.app.patientData &&
+              this.props.app.currentId &&
+              this.props.app.today &&
+              this.props.app.module &&
+              this.props.app.patientData[this.props.app.currentId] &&
+              this.props.app.patientData[this.props.app.currentId][
+                this.props.app.module
+              ] &&
+              this.props.app.patientData[this.props.app.currentId][
+                this.props.app.module
+              ].visits
+                ? this.props.app.patientData[this.props.app.currentId][
+                    this.props.app.module
+                  ].visits
+                : []
+            }
+            handleVoidEncounter={this.voidEncounter.bind(this)}
+            handleInputChange={this.handleInputChange.bind(this)}
+            queryOptions={this.queryOptions.bind(this)}
+            data={this.props.data}
+            navNext={this.navNext.bind(this)}
+            dual={this.props.app.dual}
+            group={this.state.currentWorkflow}
+            fetchPatientData={this.props.fetchPatientData.bind(this)}
+            goForward={this.props.goForward.bind(this)}
+            activeWorkflow={this.state.currentWorkflow}
+            switchWorkflow={this.switchWorkflow.bind(this)}
+            wf={this.props.wf}
+            cancelForm={this.cancelForm.bind(this)}
+            currentPatient={
+              this.props.app.currentId &&
+              this.props.app.patientData &&
+              this.props.app.patientData[this.props.app.currentId]
+                ? this.props.app.patientData[this.props.app.currentId]
+                : {}
+            }
+            nextBDRow={
+              this.props.bd && this.props.bd.lastRow
+                ? this.props.bd.lastRow
+                : null
+            }
+            currentEditRow={
+              this.props.bd && this.props.bd.currentRow
+                ? this.props.bd.currentRow
+                : {}
+            }
+            fetchLastBDRow={this.props.fetchLastBDRow.bind(this)}
+            saveBDRow={this.props.saveBDRow.bind(this)}
+            fetchEditRow={this.props.fetchEditRow.bind(this)}
+            saveEditRow={this.props.saveEditRow.bind(this)}
+            ddeResults={this.props.dde.matches.hits}
+            ddeCurrentPatient={this.props.dde.currentPatient}
+            searchByNameAndGender={this.props.searchByNameAndGender.bind(this)}
+            selectPatient={this.selectPatient.bind(this)}
+            updateApp={this.props.updateApp.bind(this)}
+            showErrorMsg={this.props.showErrorMsg.bind(this)}
+            handleNextButtonClicks={this.handleNextButtonClicks.bind(this)}
+            icon={this.props.app.icon}
+            currentTab={this.props.app.currentTab}
+            app={this.props.app}
+            searchByIdentifier={this.props.searchByIdentifier}
+            firstSummary={this.props.app.firstSummary}
+            secondSummary={this.props.app.secondSummary}
+            client={
+              this.props.app.clientId &&
+              this.props.app.patientData &&
+              this.props.app.patientData[this.props.app.clientId]
+                ? this.props.app.patientData[this.props.app.clientId]
+                : {}
+            }
+            partner={
+              this.props.app.partnerId &&
+              this.props.app.patientData &&
+              this.props.app.patientData[this.props.app.partnerId]
+                ? this.props.app.patientData[this.props.app.partnerId]
+                : {}
+            }
+            showConfirmMsg={this.props.showConfirmMsg.bind(this)}
+            showInfoMsg={this.props.showInfoMsg.bind(this)}
+            addRegister={this.addRegister.bind(this)}
+            closeRegister={this.closeRegister.bind(this)}
+            fetchRegisterStats={this.props.fetchRegisterStats.bind(this)}
+            fetchVisitSummaries={this.props.fetchVisitSummaries.bind(this)}
+            reports={this.props.reports}
+            fetchUsers={this.props.fetchUsers.bind(this)}
+            findUser={this.findUser.bind(this)}
+            updatePassword={this.props.updatePassword.bind(this)}
+          />
+        ) : (
+          <div>
+            <Topbar
+              patientActivated={this.props.app.patientActivated}
+              module={this.props.app.module}
+              icon={this.props.app.icon}
+              handleCheckBarcode={this.checkBarcode.bind(this)}
+              today={this.props.app.today}
+              facility={this.props.app.facility}
+              user={this.props.app.user}
+              location={this.props.app.location}
+              data={{}}
+              age={
+                this.props.app.currentId &&
+                this.props.app.patientData[this.props.app.currentId] &&
+                this.props.app.patientData[this.props.app.currentId].age
+                  ? this.props.app.patientData[this.props.app.currentId].age
+                  : ""
+              }
+              primaryId={
+                this.props.app.currentId &&
+                this.props.app.patientData[this.props.app.currentId] &&
+                this.props.app.patientData[this.props.app.currentId].npid
+                  ? this.props.app.patientData[this.props.app.currentId].npid
+                  : ""
+              }
+              otherId={
+                this.props.app.currentId &&
+                this.props.app.patientData[this.props.app.currentId] &&
+                this.props.app.patientData[this.props.app.currentId].otherId
+                  ? this.props.app.patientData[this.props.app.currentId].otherId
+                  : ""
+              }
+              otherIdLabel={
+                this.props.app.currentId &&
+                this.props.app.patientData[this.props.app.currentId] &&
+                this.props.app.patientData[this.props.app.currentId].otherIdType
+                  ? this.props.app.patientData[this.props.app.currentId]
+                      .otherIdType
+                  : ""
+              }
+              gender={
+                this.props.app.currentId &&
+                this.props.app.patientData[this.props.app.currentId] &&
+                this.props.app.patientData[this.props.app.currentId].gender
+                  ? this.props.app.patientData[this.props.app.currentId].gender
+                  : ""
+              }
+              patientName={
+                this.props.app.currentId &&
+                this.props.app.patientData[this.props.app.currentId] &&
+                this.props.app.patientData[this.props.app.currentId].patientName
+                  ? this.props.app.patientData[this.props.app.currentId]
+                      .patientName
+                  : ""
+              }
+              patientData={this.props.app.patientData}
+              currentId={this.props.app.currentId}
+              title={
+                this.props.wf &&
+                this.props.wf.currentNode &&
+                this.props.wf.currentNode.label
+                  ? this.props.wf.currentNode.label
+                  : ""
+              }
+              switchWorkflow={this.switchWorkflow.bind(this)}
+              selectedTask={this.props.app.selectedTask}
+              app={this.props.app}
+              activeWorkflow={this.state.currentWorkflow}
+              client={
+                this.props.app.dual === true &&
+                this.props.app.partnerId &&
+                this.props.app.patientData &&
+                this.props.app.patientData[this.props.app.partnerId]
+                  ? this.props.app.patientData[this.props.app.partnerId]
+                  : !this.props.app.dual &&
+                    this.props.app.currentId &&
+                    this.props.app.patientData &&
+                    this.props.app.patientData[this.props.app.currentId]
+                  ? this.props.app.patientData[this.props.app.currentId]
+                  : {}
+              }
+              partner={
+                this.props.app.dual === true &&
+                this.props.app.clientId &&
+                this.props.app.patientData &&
+                this.props.app.patientData[this.props.app.clientId]
+                  ? this.props.app.patientData[this.props.app.clientId]
+                  : {}
+              }
+              wf={this.props.wf}
+            />
+            <Container
+              handleCheckBarcode={this.checkBarcode.bind(this)}
+              saveReferralOutcome={this.props.saveReferralOutcome}
+              fetchARTReferral={this.props.fetchARTReferral}
+              activeSection={this.props.app.currentSection}
+              handleSwitchProgram={this.switchProgram.bind(this)}
+              handleVisitUrl={this.navigateToVisit.bind(this)}
+              programs={this.props.app.programs}
+              handleNavigateToUrl={this.navigateToRoute.bind(this)}
+              module={this.props.app.module}
+              selectedVisit={this.props.app.selectedVisit}
+              tasks={this.props.app.tasks}
+              selectedTask={this.props.app.selectedTask}
+              userDashTasks={this.props.app.userDashTasks}
+              formActive={this.props.app.formActive}
+              responses={this.props.wf.responses}
+              label={
+                this.props.wf &&
+                this.props.wf[this.state.currentWorkflow] &&
+                this.props.wf[this.state.currentWorkflow].currentNode &&
+                this.props.wf[this.state.currentWorkflow].currentNode.label
+                  ? this.props.wf[this.state.currentWorkflow].currentNode.label
+                  : ""
+              }
+              handleDirectInputChange={this.props.handleInputChange}
+              configs={this.props.app.configs}
+              value={
+                this.props.wf.responses &&
+                this.props.wf.responses[this.state.currentWorkflow] &&
+                this.props.wf.responses[this.state.currentWorkflow][
+                  this.props.wf &&
+                  this.props.wf[this.state.currentWorkflow] &&
+                  this.props.wf[this.state.currentWorkflow].currentNode &&
+                  this.props.wf[this.state.currentWorkflow].currentNode.label
+                    ? this.props.wf[this.state.currentWorkflow].currentNode
+                        .label
+                    : ""
+                ]
+                  ? this.props.wf.responses[this.state.currentWorkflow][
+                      this.props.wf &&
+                      this.props.wf[this.state.currentWorkflow] &&
+                      this.props.wf[this.state.currentWorkflow].currentNode &&
+                      this.props.wf[this.state.currentWorkflow].currentNode
+                        .label
+                        ? this.props.wf[this.state.currentWorkflow].currentNode
+                            .label
+                        : ""
+                    ]
+                  : ""
+              }
+              type={
+                this.props.wf &&
+                this.props.wf[this.state.currentWorkflow] &&
+                this.props.wf[this.state.currentWorkflow].currentNode &&
+                this.props.wf[this.state.currentWorkflow].currentNode.type
+                  ? this.props.wf[this.state.currentWorkflow].currentNode.type
+                  : ""
+              }
+              summaryIgnores={this.props.app.summaryIgnores}
+              sectionHeader={this.props.app.sectionHeader}
+              processing={this.props.app.processing}
+              options={
+                this.props.wf &&
+                this.props.wf[this.state.currentWorkflow] &&
+                this.props.wf[this.state.currentWorkflow].currentNode &&
+                this.props.wf[this.state.currentWorkflow].currentNode.options
+                  ? this.props.wf[this.state.currentWorkflow].currentNode
+                      .options
+                  : null
+              }
+              order={this.props.app.order}
+              fieldType={
+                this.props.app &&
+                this.props.app.configs &&
+                this.props.app.configs[
+                  this.props.wf &&
+                  this.props.wf[this.state.currentWorkflow] &&
+                  this.props.wf[this.state.currentWorkflow].currentNode &&
+                  this.props.wf[this.state.currentWorkflow].currentNode.label
+                    ? this.props.wf[this.state.currentWorkflow].currentNode
+                        .label
+                    : ""
+                ] &&
+                this.props.app.configs[
+                  this.props.wf &&
+                  this.props.wf[this.state.currentWorkflow] &&
+                  this.props.wf[this.state.currentWorkflow].currentNode &&
+                  this.props.wf[this.state.currentWorkflow].currentNode.label
+                    ? this.props.wf[this.state.currentWorkflow].currentNode
+                        .label
+                    : ""
+                ].fieldType
+                  ? this.props.app.configs[
+                      this.props.wf &&
+                      this.props.wf[this.state.currentWorkflow] &&
+                      this.props.wf[this.state.currentWorkflow].currentNode &&
+                      this.props.wf[this.state.currentWorkflow].currentNode
+                        .label
+                        ? this.props.wf[this.state.currentWorkflow].currentNode
+                            .label
+                        : ""
+                    ].fieldType
+                  : "text"
+              }
+              visits={
+                this.props.app.patientData &&
+                this.props.app.currentId &&
+                this.props.app.today &&
+                this.props.app.module &&
+                this.props.app.patientData[this.props.app.currentId] &&
+                this.props.app.patientData[this.props.app.currentId][
+                  this.props.app.module
+                ] &&
+                this.props.app.patientData[this.props.app.currentId][
+                  this.props.app.module
+                ].visits
+                  ? this.props.app.patientData[this.props.app.currentId][
+                      this.props.app.module
+                    ].visits
+                  : []
+              }
+              handleVoidEncounter={this.voidEncounter.bind(this)}
+              handleInputChange={this.handleInputChange.bind(this)}
+              queryOptions={this.queryOptions.bind(this)}
+              data={this.props.data}
+              navNext={this.navNext.bind(this)}
+              dual={this.props.app.dual}
+              group={this.state.currentWorkflow}
+              fetchPatientData={this.props.fetchPatientData.bind(this)}
+              goForward={this.props.goForward.bind(this)}
+              activeWorkflow={this.state.currentWorkflow}
+              switchWorkflow={this.switchWorkflow.bind(this)}
+              wf={this.props.wf}
+              cancelForm={this.cancelForm.bind(this)}
+              currentPatient={
+                this.props.app.currentId &&
+                this.props.app.patientData &&
+                this.props.app.patientData[this.props.app.currentId]
+                  ? this.props.app.patientData[this.props.app.currentId]
+                  : {}
+              }
+              nextBDRow={
+                this.props.bd && this.props.bd.lastRow
+                  ? this.props.bd.lastRow
+                  : null
+              }
+              currentEditRow={
+                this.props.bd && this.props.bd.currentRow
+                  ? this.props.bd.currentRow
+                  : {}
+              }
+              fetchLastBDRow={this.props.fetchLastBDRow.bind(this)}
+              saveBDRow={this.props.saveBDRow.bind(this)}
+              fetchEditRow={this.props.fetchEditRow.bind(this)}
+              saveEditRow={this.props.saveEditRow.bind(this)}
+              ddeResults={this.props.dde.matches.hits}
+              ddeCurrentPatient={this.props.dde.currentPatient}
+              searchByNameAndGender={this.props.searchByNameAndGender.bind(
+                this
+              )}
+              selectPatient={this.selectPatient.bind(this)}
+              updateApp={this.props.updateApp.bind(this)}
+              showErrorMsg={this.props.showErrorMsg.bind(this)}
+              handleNextButtonClicks={this.handleNextButtonClicks.bind(this)}
+              icon={this.props.app.icon}
+              currentTab={this.props.app.currentTab}
+              app={this.props.app}
+              searchByIdentifier={this.props.searchByIdentifier}
+              firstSummary={this.props.app.firstSummary}
+              secondSummary={this.props.app.secondSummary}
+              client={
+                this.props.app.clientId &&
+                this.props.app.patientData &&
+                this.props.app.patientData[this.props.app.clientId]
+                  ? this.props.app.patientData[this.props.app.clientId]
+                  : {}
+              }
+              partner={
+                this.props.app.partnerId &&
+                this.props.app.patientData &&
+                this.props.app.patientData[this.props.app.partnerId]
+                  ? this.props.app.patientData[this.props.app.partnerId]
+                  : {}
+              }
+              showConfirmMsg={this.props.showConfirmMsg.bind(this)}
+              showInfoMsg={this.props.showInfoMsg.bind(this)}
+              addRegister={this.addRegister.bind(this)}
+              closeRegister={this.closeRegister.bind(this)}
+              fetchRegisterStats={this.props.fetchRegisterStats.bind(this)}
+              fetchVisitSummaries={this.props.fetchVisitSummaries.bind(this)}
+              reports={this.props.reports}
+              changePassword={this.changePassword.bind(this)}
+              transcribe={this.transcribe.bind(this)}
+              printLabel={this.printLabel.bind(this)}
+              addLocation={this.addLocation.bind(this)}
+              clearField={this.props.clearField.bind(this)}
+              addVillages={this.addVillages.bind(this)}
+              showUserStats={this.showUserStats.bind(this)}
+              fetchFilteredVisitSummaries={
+                this.props.fetchFilteredVisitSummaries
+              }
+            />
+          </div>
+        )}
         <U13 buttons={buttons} version={this.props.app.version} />
       </div>
     );
@@ -4828,11 +5096,13 @@ const mapDispatchToProps = dispatch => {
     },
     submitForm: (url, payload) => {
       return new Promise((resolve, reject) => {
-        dispatch(submitForm(url, payload)).then(() => {
-          resolve();
-        }).catch((e) => {
-          reject();
-        })
+        dispatch(submitForm(url, payload))
+          .then(() => {
+            resolve();
+          })
+          .catch(e => {
+            reject();
+          });
       });
     },
     fetchJSON: (url, path, group, subGroup) => {
@@ -4887,7 +5157,7 @@ const mapDispatchToProps = dispatch => {
       return new Promise(resolve => {
         dispatch(saveBDRow(url, payload)).then(() => {
           resolve();
-        })
+        });
       });
     },
     searchByIdentifier: identifier => {
@@ -4946,7 +5216,9 @@ const mapDispatchToProps = dispatch => {
     },
     showInfoMsg: (msg, topic, deletePrompt, deleteLabel, deleteAction) => {
       return new Promise(resolve => {
-        dispatch(showInfoMsg(msg, topic, deletePrompt, deleteLabel, deleteAction));
+        dispatch(
+          showInfoMsg(msg, topic, deletePrompt, deleteLabel, deleteAction)
+        );
         resolve();
       });
     },
@@ -4980,25 +5252,25 @@ const mapDispatchToProps = dispatch => {
         resolve();
       });
     },
-    incrementReportMonth: (group) => {
+    incrementReportMonth: group => {
       return new Promise(resolve => {
         dispatch(incrementReportMonth(group));
         resolve();
       });
     },
-    incrementReportYear: (group) => {
+    incrementReportYear: group => {
       return new Promise(resolve => {
         dispatch(incrementReportYear(group));
         resolve();
       });
     },
-    decrementReportMonth: (group) => {
+    decrementReportMonth: group => {
       return new Promise(resolve => {
         dispatch(decrementReportMonth(group));
         resolve();
       });
     },
-    decrementReportYear: (group) => {
+    decrementReportYear: group => {
       return new Promise(resolve => {
         dispatch(decrementReportYear(group));
         resolve();
@@ -5020,61 +5292,61 @@ const mapDispatchToProps = dispatch => {
       return new Promise(resolve => {
         dispatch(setConfig(payload));
         resolve();
-      })
+      });
     },
     fetchVisits: (id, flashId) => {
       return new Promise(resolve => {
         dispatch(fetchVisits(id, flashId));
         resolve();
-      })
+      });
     },
     fetchRaw: (baseUrl, sMonth, sYear, eMonth, eYear, sDate, eDate) => {
       return new Promise(resolve => {
         dispatch(fetchRaw(baseUrl, sMonth, sYear, eMonth, eYear, sDate, eDate));
         resolve();
-      })
+      });
     },
     resetRawData: () => {
       return new Promise(resolve => {
         dispatch(resetRawData());
         resolve();
-      })
+      });
     },
-    setDataHeaders: (payload) => {
+    setDataHeaders: payload => {
       return new Promise(resolve => {
         dispatch(setDataHeaders(payload));
         resolve();
-      })
+      });
     },
     scrollLocationUp: () => {
       return new Promise(resolve => {
         dispatch(scrollLocationUp());
         resolve();
-      })
+      });
     },
     scrollLocationDown: () => {
       return new Promise(resolve => {
         dispatch(scrollLocationDown());
         resolve();
-      })
+      });
     },
     scrollTestUp: () => {
       return new Promise(resolve => {
         dispatch(scrollTestUp());
         resolve();
-      })
+      });
     },
     scrollTestDown: () => {
       return new Promise(resolve => {
         dispatch(scrollTestDown());
         resolve();
-      })
+      });
     },
     fetchDailyRegister: (sMonth, sYear, location, kitType, kitName) => {
       return new Promise(resolve => {
         dispatch(fetchDailyRegister(sMonth, sYear, location, kitType, kitName));
         resolve();
-      })
+      });
     },
     voidMultipleEncounters: (url, payload) => {
       return new Promise(resolve => {
@@ -5086,55 +5358,81 @@ const mapDispatchToProps = dispatch => {
       return new Promise(resolve => {
         dispatch(fetchRegisterStats(url));
         resolve();
-      })
+      });
     },
-    fetchEditRow: (url) => {
+    fetchEditRow: url => {
       return new Promise(resolve => {
         dispatch(fetchEditRow(url));
         resolve();
-      })
+      });
     },
     saveEditRow: (url, payload) => {
       return new Promise((resolve, reject) => {
-        dispatch(saveEditRow(url, payload)).then(() => {
-          resolve();
-        }).catch((e) => {
-          reject();
-        })
-      })
+        dispatch(saveEditRow(url, payload))
+          .then(() => {
+            resolve();
+          })
+          .catch(e => {
+            reject();
+          });
+      });
     },
     fetchVisitSummaries: (month, year) => {
       return new Promise(resolve => {
         dispatch(fetchVisitSummaries(month, year));
         resolve();
-      })
+      });
     },
-    logout: (token) => {
+    logout: token => {
       return new Promise(resolve => {
         dispatch(logout(token));
         resolve();
-      })
+      });
     },
-    login: async (payload) => {
+    login: async payload => {
       return await dispatch(login(payload));
     },
     setLocation: async (location, token) => {
       return await dispatch(setLocation(location, token));
     },
-    sessionValid: async (token) => {
+    sessionValid: async token => {
       return await dispatch(sessionValid(token));
     },
     fetchUsers: async (page = 1, pageSize = 6) => {
       return await dispatch(fetchUsers(page, pageSize));
     },
-    blockUser: async (username) => {
+    blockUser: async username => {
       return await dispatch(blockUser(username));
     },
-    activateUser: async (username) => {
+    activateUser: async username => {
       return await dispatch(activateUser(username));
     },
-    fetchPepfarData: async (baseUrl, sMonth, sYear, eMonth, eYear, modality, startPos, endPos, sDate, eDate) => {
-      return await dispatch(fetchPepfarData(baseUrl, sMonth, sYear, eMonth, eYear, modality, startPos, endPos, sDate, eDate));
+    fetchPepfarData: async (
+      baseUrl,
+      sMonth,
+      sYear,
+      eMonth,
+      eYear,
+      modality,
+      startPos,
+      endPos,
+      sDate,
+      eDate
+    ) => {
+      return await dispatch(
+        fetchPepfarData(
+          baseUrl,
+          sMonth,
+          sYear,
+          eMonth,
+          eYear,
+          modality,
+          startPos,
+          endPos,
+          sDate,
+          eDate
+        )
+      );
     },
     resetPepfarData: async () => {
       return await dispatch(resetPepfarData());
@@ -5145,14 +5443,24 @@ const mapDispatchToProps = dispatch => {
     resetErrorMessage: async () => {
       return await dispatch(resetErrorMessage());
     },
-    setData: async (data) => {
+    setData: async data => {
       return await dispatch(setData(data));
     },
     flagRegisterFilled: async (clientId, module, visitDate, entryCode) => {
-      return await dispatch(flagRegisterFilled(clientId, module, visitDate, entryCode));
+      return await dispatch(
+        flagRegisterFilled(clientId, module, visitDate, entryCode)
+      );
     },
-    updatePartnerRecord: async (clientId, concept, visitDate, valuecurrentUser, url) => {
-      return await dispatch(updatePartnerRecord(clientId, concept, visitDate, valuecurrentUser, url));
+    updatePartnerRecord: async (
+      clientId,
+      concept,
+      visitDate,
+      valuecurrentUser,
+      url
+    ) => {
+      return await dispatch(
+        updatePartnerRecord(clientId, concept, visitDate, valuecurrentUser, url)
+      );
     },
     clearField: async (field, group) => {
       return await dispatch(clearField(field, group));
@@ -5160,7 +5468,7 @@ const mapDispatchToProps = dispatch => {
     getVersion: async () => {
       return await dispatch(getVersion());
     },
-    usernameValid: async (username) => {
+    usernameValid: async username => {
       return await dispatch(usernameValid(username));
     },
     updatePassword: async (username, password) => {
@@ -5169,22 +5477,41 @@ const mapDispatchToProps = dispatch => {
     checkRedirectToPortal: async () => {
       return await dispatch(checkRedirectToPortal());
     },
-    fetchFilteredVisitSummaries: async (month1, year1, date1, month2, year2, date2) => {
-      return await dispatch(fetchFilteredVisitSummaries(month1, year1, date1, month2, year2, date2));
+    fetchFilteredVisitSummaries: async (
+      month1,
+      year1,
+      date1,
+      month2,
+      year2,
+      date2
+    ) => {
+      return await dispatch(
+        fetchFilteredVisitSummaries(month1, year1, date1, month2, year2, date2)
+      );
     },
     updateReportField: async (field, value, group) => {
       return await dispatch(updateReportField(field, value, group));
     },
-    fetchARTReferral: async (month1, year1, date1, month2, year2, date2, page) => {
-      return await dispatch(fetchARTReferral(month1, year1, date1, month2, year2, date2, page));
+    fetchARTReferral: async (
+      month1,
+      year1,
+      date1,
+      month2,
+      year2,
+      date2,
+      page
+    ) => {
+      return await dispatch(
+        fetchARTReferral(month1, year1, date1, month2, year2, date2, page)
+      );
     },
-    saveReferralOutcome: async (paylod) => {
+    saveReferralOutcome: async paylod => {
       return await dispatch(saveReferralOutcome(paylod));
     },
     updateAlertKey: async (key, value) => {
       return await dispatch(updateAlertKey(key, value));
     },
-    fetchLabelId: async (label) => {
+    fetchLabelId: async label => {
       return await dispatch(fetchLabelId(label));
     },
     fetchScreenTimout: async () => {
@@ -5193,4 +5520,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
