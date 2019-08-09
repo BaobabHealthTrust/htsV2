@@ -12,9 +12,16 @@ function createDownloadLink (payload, filename) {
   return link
 }
 
+function browserIsFirefox () {
+  return navigator.userAgent.indexOf('Firefox') !== -1
+}
+
 export default async (selector, filename) => {
   const element = document.querySelector(selector)
   const stream = (await elementToPng(element)).replace('image/png', 'image/octet-stream')
   const link = createDownloadLink(stream, filename)
+
+  browserIsFirefox() && document.body.appendChild(link)
   link.click()
+  browserIsFirefox() && link.remove()
 }
