@@ -18,7 +18,7 @@
   "dependencies": {
     "async": "^2.6.0",
     "axios": "^0.18.0",
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^5.0.0",
     "bfj": "^5.1.1",
     "body-parser": "~1.18.2",
     "chokidar": "^1.7.0",
