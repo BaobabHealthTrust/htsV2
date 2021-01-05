@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "async": "^2.6.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bcrypt": "^1.0.3",
     "bfj": "^5.1.1",
     "body-parser": "~1.18.2",
