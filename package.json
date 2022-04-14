@@ -16,7 +16,7 @@
     "discover-models": "./node_modules/.bin/loopback-discovery -d hts ."
   },
   "dependencies": {
-    "async": "^2.6.0",
+    "async": "^3.2.2",
     "axios": "^0.18.0",
     "bcrypt": "^1.0.3",
     "bfj": "^5.1.1",
